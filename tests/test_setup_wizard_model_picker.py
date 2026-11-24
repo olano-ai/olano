@@ -99,3 +99,25 @@ def test_setup_yes_skip_verify_exits_zero(tmp_path: Path):
             ],
         )
     assert result.exit_code == 0
+
+
+def test_doctor_model_probe_prints_text_not_content_blocks(monkeypatch):
+    """A list-content reply (OpenAI Responses, Anthropic) shows as its text."""
+    from types import SimpleNamespace
+
+    from olano.cli import main as cli_main
+
+    reply = SimpleNamespace(
+        content=[
+            {"type": "reasoning", "summary": []},
+            {"type": "text", "text": "OK", "annotations": [], "id": "msg_1"},
+        ]
+    )
+    model = SimpleNamespace(invoke=lambda _prompt: reply)
+    monkeypatch.setattr("olano.models.build_model", lambda _name: model)
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    ok, detail = cli_main._probe_model_connectivity("openai:gpt-5.4-mini")
+
+    assert ok is True
+    assert detail == "OK"

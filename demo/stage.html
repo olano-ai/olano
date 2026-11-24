@@ -1,0 +1,286 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Olano demo stage</title>
+<!-- The video's set. Landscape (1920x1080): captions on the left, the real dashboard in a browser
+     window on the right, a mouse pointer. Portrait (?layout=portrait, 1080x1920): captions above an
+     iPhone showing the dashboard's own phone layout, a fingertip and an iOS keyboard. A terminal
+     (window.stage.term*) replaces the app for the installation tutorials. -->
+<style>
+@font-face { font-family: 'InterDemo'; src: url(/__demo/inter.woff2) format('woff2'); font-weight: 100 900; font-display: block; }
+@font-face { font-family: 'MonoDemo'; src: url(/__demo/mono.woff2) format('woff2'); font-weight: 100 800; font-display: block; }
+:root { --ease: cubic-bezier(.32,.72,0,1); --brand: #ff6a3d; --ink: #f5f5f7; --dim: #a1a1aa; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; }
+body.portrait { width: 1080px; height: 1920px; }
+body { font-family: 'InterDemo', sans-serif; background: #0b0b0e; -webkit-font-smoothing: antialiased; color: var(--ink); }
+.bg { position: absolute; inset: 0;
+  background: radial-gradient(1200px 820px at 68% 46%, rgba(255,106,61,.13) 0%, rgba(255,106,61,0) 70%),
+              radial-gradient(900px 700px at 8% 96%, rgba(255,106,61,.10) 0%, rgba(255,106,61,0) 70%),
+              linear-gradient(180deg, #111115, #0a0a0c); }
+.portrait .bg { background: radial-gradient(1000px 1100px at 50% 64%, rgba(255,106,61,.13) 0%, rgba(255,106,61,0) 70%),
+              radial-gradient(800px 600px at 15% 0%, rgba(255,106,61,.08) 0%, rgba(255,106,61,0) 70%), linear-gradient(180deg, #111115, #0a0a0c); }
+
+/* captions: beside the window (16:9) or above the phone (9:16), never over the app */
+.captions { pointer-events: none; position: absolute; left: 66px; top: 0; bottom: 0; width: 440px; }
+.cap { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(calc(-50% + 24px)); opacity: 0;
+  transition: opacity .7s var(--ease), transform .9s var(--ease); }
+.cap.on { opacity: 1; transform: translateY(-50%); }
+.cap.out { opacity: 0; transform: translateY(calc(-50% - 18px)); transition-duration: .45s; }
+.eyebrow { font-size: 19px; font-weight: 700; color: var(--brand); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 20px; }
+.cap h1 { font-size: 60px; line-height: 1.05; font-weight: 700; letter-spacing: -.035em; margin: 0 0 22px; }
+.cap h1 code { font-family: 'MonoDemo', monospace; font-size: .74em; letter-spacing: -.03em; font-weight: 600; white-space: nowrap; }
+.cap h1, .cap p { text-wrap: balance; }
+.cap p { font-size: 26px; line-height: 1.36; color: var(--dim); font-weight: 450; margin: 0; letter-spacing: -.012em; }
+.cap p code { font-family: 'MonoDemo', monospace; font-size: .88em; color: #d4d4d8; }
+.steps { position: absolute; left: 66px; bottom: 84px; display: flex; gap: 9px; opacity: 0; transition: opacity .6s; }
+.steps.on { opacity: 1; }
+.steps i { width: 26px; height: 5px; border-radius: 3px; background: #2e2e35; transition: background .5s, width .5s var(--ease); }
+.steps i.on { background: var(--brand); width: 48px; }
+.mark { position: absolute; left: 66px; top: 62px; display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 26px; letter-spacing: -.03em; opacity: 0; transition: opacity .8s; }
+.mark.on { opacity: 1; }
+.mark img { width: 38px; height: 38px; border-radius: 9px; }
+.mark span i { color: var(--brand); font-style: normal; }
+.portrait .mark { display: none; }
+
+/* desktop: a browser window around the dashboard (1200x790 CSS px, drawn at 1.1x) */
+.win-wrap { --s: 1.1; position: absolute; left: 544px; top: 83px; width: 1200px; height: 830px; transform-origin: 0 0;
+  transform: scale(var(--s)); transition: transform 1.2s var(--ease), opacity 1s var(--ease); }
+.win-wrap.pre { transform: translateY(50px) scale(calc(var(--s) * .97)); opacity: 0; }
+.win-wrap.post { transform: translateY(-16px) scale(calc(var(--s) * .98)); opacity: 0; }
+.win { position: absolute; inset: 0; border-radius: 13px; overflow: hidden; background: #17171b;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 50px 110px -30px rgba(0,0,0,.8), 0 24px 50px -24px rgba(0,0,0,.6); }
+.bar { height: 40px; background: #26262c; display: flex; align-items: center; padding: 0 14px; gap: 8px; border-bottom: 1px solid rgba(0,0,0,.4); }
+.bar b { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.bar b:nth-child(2) { background: #febc2e; } .bar b:nth-child(3) { background: #28c840; }
+.bar .addr { margin: 0 auto; transform: translateX(-30px); width: 420px; height: 25px; border-radius: 7px; background: #17171b; color: #a1a1aa; font-size: 12.5px;
+  display: flex; align-items: center; justify-content: center; gap: 7px; letter-spacing: .005em; }
+.bar .addr svg { width: 11px; height: 11px; fill: #71717a; }
+.view { position: absolute; left: 0; right: 0; top: 40px; bottom: 0; background: #17171b; }
+.view iframe { position: absolute; inset: 0; width: 1200px; height: 790px; border: 0; display: block; }
+.portrait .win-wrap { display: none; }
+body:not(.portrait) .phone-wrap { display: none; }
+
+/* terminal (inside the window on desktop, its own window in portrait) */
+.term { position: absolute; inset: 0; background: #101014; color: #e4e4e7; font-family: 'MonoDemo', monospace; font-size: 17px; line-height: 1.5;
+  padding: 22px 26px; overflow: hidden; opacity: 0; pointer-events: none; transition: opacity .5s; z-index: 3; white-space: pre-wrap; word-break: break-all; }
+.term.on { opacity: 1; }
+.term .scroll { position: absolute; left: 26px; right: 26px; bottom: 22px; }
+.term .ps { color: #22c55e; } .term .dir { color: #60a5fa; }
+.term .dim { color: #71717a; } .term .ok { color: #22c55e; } .term .hi { color: var(--brand); font-weight: 650; } .term .warn { color: #fbbf24; } .term .b { color: #fff; font-weight: 650; }
+.term .cur { display: inline-block; width: .6em; height: 1.15em; background: #e4e4e7; vertical-align: -0.2em; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.term mark { background: rgba(255,106,61,.22); color: #fff; border-radius: 4px; padding: 1px 4px; box-shadow: 0 0 0 1.5px var(--brand); }
+.tw { display: none; }
+.portrait .tw { display: block; position: absolute; left: 50px; right: 50px; top: 600px; height: 1010px; border-radius: 22px; overflow: hidden; background: #101014;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.10), 0 50px 110px -30px rgba(0,0,0,.8); opacity: 0; transition: opacity .8s var(--ease), transform 1s var(--ease); transform: translateY(40px); }
+.portrait .tw.on { opacity: 1; transform: none; }
+.portrait .tw .bar { height: 54px; } .portrait .tw .bar b { width: 15px; height: 15px; }
+.portrait .tw .term { top: 54px; font-size: 21px; opacity: 1; }
+
+/* phone (portrait) */
+.phone-wrap { --s: 1.22; position: absolute; left: 276px; top: 540px; width: 433px; height: 892px; transform-origin: 0 0;
+  transform: scale(var(--s)); transition: transform 1.2s var(--ease), opacity 1s var(--ease); }
+.phone-wrap.pre { transform: translateY(60px) scale(calc(var(--s) * .96)); opacity: 0; }
+.phone-wrap.post { transform: translateY(-20px) scale(calc(var(--s) * .97)); opacity: 0; }
+.phone { position: absolute; inset: 0; border-radius: 72px;
+  background: linear-gradient(145deg, #4a4a4e, #232326 40%, #38383c);
+  box-shadow: 0 0 0 2px #77777d inset, 0 0 0 5px #1a1a1a inset, 0 60px 120px -30px rgba(0,0,0,.8), 0 30px 60px -20px rgba(0,0,0,.6); }
+.phone::before { content: ''; position: absolute; inset: 7px; border-radius: 66px; background: #000; }
+.btn-side { position: absolute; width: 5px; border-radius: 3px; background: linear-gradient(90deg,#2c2c2e,#5a5a5e); }
+.screen { position: absolute; left: 20px; top: 20px; width: 393px; height: 852px; border-radius: 54px; overflow: hidden; background: #1b1b1f; }
+.screen iframe { position: absolute; left: 0; top: 52px; width: 393px; height: 780px; border: 0; display: block; transition: height .42s var(--ease); }
+.screen.kbd iframe { height: 500px; }
+.status { position: absolute; left: 0; right: 0; top: 0; height: 54px; pointer-events: none; z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; padding: 6px 34px 0 50px; font-weight: 600; font-size: 17px; color: #fff; letter-spacing: -.02em; }
+.status svg { fill: #fff; } .status svg rect[fill=none] { stroke: #fff; }
+.status .icons { display: flex; gap: 6px; align-items: center; }
+.island { position: absolute; top: 11px; left: 50%; width: 124px; height: 36px; margin-left: -62px; background: #000; border-radius: 20px; z-index: 6; }
+.homebar { position: absolute; bottom: 8px; left: 50%; width: 136px; margin-left: -68px; height: 5px; border-radius: 3px; background: #f5f5f7; z-index: 9; pointer-events: none; }
+
+.portrait .captions { left: 70px; right: 70px; top: 205px; width: auto; height: 330px; }
+.portrait .cap { top: 0; transform: translateY(24px); text-align: center; }
+.portrait .cap.on { transform: none; }
+.portrait .cap.out { transform: translateY(-18px); }
+.portrait .eyebrow { font-size: 26px; margin-bottom: 18px; }
+.portrait .cap h1 { font-size: 82px; margin-bottom: 18px; }
+.portrait .cap p { font-size: 35px; max-width: 900px; margin: 0 auto; }
+.portrait .steps { display: none; }
+.portrait.term-mode .captions { top: 225px; }
+
+/* iOS keyboard (dark) */
+.kb { position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: #2b2b2f; z-index: 8; transform: translateY(100%);
+  transition: transform .42s var(--ease); padding: 8px 3px 0; }
+.kb.on { transform: translateY(0); }
+.kb .suggest { height: 36px; display: flex; justify-content: space-around; align-items: center; color: #e4e4e7; font-size: 16px; margin-bottom: 4px; }
+.kb .suggest span + span { border-left: 1px solid #4a4a50; }
+.kb .suggest span { flex: 1; text-align: center; }
+.kb .row { display: flex; justify-content: center; gap: 6px; margin-bottom: 11px; }
+.kb .k { width: 33px; height: 43px; background: #6b6b70; border-radius: 5px; box-shadow: 0 1px 0 #111; display: grid; place-items: center; font-size: 22px; color: #fff; transition: background .06s; }
+.kb .k.dark { background: #46464a; font-size: 15px; }
+.kb .k.hit { background: #9a9aa0; }
+.kb .wide { width: 45px; } .kb .space { width: 182px; font-size: 16px; } .kb .ret { width: 88px; font-size: 16px; }
+
+/* pointer: an arrow on desktop, a fingertip on the phone */
+.touch { position: absolute; left: 0; top: 0; z-index: 50; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
+.touch.show { opacity: 1; }
+.touch svg { display: block; width: 30px; height: 30px; margin: -3px 0 0 -6px; filter: drop-shadow(0 3px 5px rgba(0,0,0,.55)); transition: transform .12s var(--ease); transform-origin: 6px 3px; }
+.touch.down svg { transform: scale(.86); }
+.touch .dot { display: none; }
+.portrait .touch svg { display: none; }
+.portrait .touch .dot { display: block; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,.32) 60%, rgba(255,255,255,.22) 100%);
+  box-shadow: 0 0 0 1.5px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.6); transition: transform .25s var(--ease); }
+.portrait .touch.down .dot { transform: scale(.78); transition-duration: .09s; }
+.ripple { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; border: 2px solid rgba(255,106,61,.95);
+  pointer-events: none; z-index: 49; animation: rip .5s ease-out forwards; }
+.portrait .ripple { width: 70px; height: 70px; margin: -35px 0 0 -35px; border-color: rgba(255,255,255,.9); }
+@keyframes rip { from { transform: scale(.5); opacity: .95; } to { transform: scale(1.6); opacity: 0; } }
+
+/* end card */
+.end { pointer-events: none; position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transition: opacity .9s var(--ease); z-index: 100;
+  background: radial-gradient(900px 700px at 50% 45%, rgba(255,106,61,.16) 0%, rgba(255,106,61,0) 70%), #0b0b0e; }
+.end.on { opacity: 1; }
+.end .inner { text-align: center; transform: translateY(18px) scale(.98); transition: transform 1.2s var(--ease); }
+.end.on .inner { transform: none; }
+.end img { width: 128px; height: 128px; border-radius: 29px; box-shadow: 0 24px 60px -12px rgba(255,106,61,.5); }
+.end h2 { font-size: 88px; font-weight: 700; letter-spacing: -.045em; margin: 34px 0 12px; }
+.end h2 i { color: var(--brand); font-style: normal; }
+.end p { font-size: 32px; color: var(--dim); margin: 0; letter-spacing: -.015em; }
+.end .url { margin-top: 44px; font-size: 25px; font-weight: 600; color: var(--ink); display: flex; gap: 16px; justify-content: center; align-items: center; }
+.end .url span { color: var(--brand); }
+.end .url em { font-style: normal; color: #52525b; }
+.portrait .end h2 { font-size: 110px; } .portrait .end p { font-size: 42px; padding: 0 80px; } .portrait .end .url { font-size: 34px; flex-direction: column; gap: 14px; margin-top: 60px; }
+.portrait .end .url em { display: none; }
+.portrait .end img { width: 176px; height: 176px; border-radius: 40px; }
+</style></head>
+<body>
+<div class="bg"></div>
+<div class="mark" id="mark"><img src="/__demo/icon.svg" alt=""><span>olano<i>.ai</i></span></div>
+
+<div class="captions" id="captions"></div>
+<div class="steps" id="steps"></div>
+
+<div class="win-wrap pre" id="win">
+  <div class="win">
+    <div class="bar"><b></b><b></b><b></b><div class="addr"><svg viewBox="0 0 12 12"><path d="M3.5 5V3.5a2.5 2.5 0 0 1 5 0V5h.5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.200 0h2.600V3.500a1.300 1.300 0 0 0-2.600 0z"/></svg><span id="addr">localhost:3200</span></div></div>
+    <div class="view"><iframe id="app-d" src="about:blank"></iframe><div class="term" id="term-d"><div class="scroll"></div></div></div>
+  </div>
+</div>
+
+<div class="tw" id="tw"><div class="bar"><b></b><b></b><b></b></div><div class="term" id="term-p"><div class="scroll"></div></div></div>
+
+<div class="phone-wrap pre" id="phone">
+  <div class="btn-side" style="left:-3px;top:180px;height:34px"></div>
+  <div class="btn-side" style="left:-3px;top:245px;height:64px"></div>
+  <div class="btn-side" style="left:-3px;top:325px;height:64px"></div>
+  <div class="btn-side" style="right:-3px;top:270px;height:100px"></div>
+  <div class="phone"></div>
+  <div class="screen" id="screen">
+    <iframe id="app-p" src="about:blank"></iframe>
+    <div class="status"><span>9:41</span><span class="icons">
+      <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.3c2.4 0 4.6.9 6.3 2.5l1.2-1.2C14 1.6 11.4.6 8.5.6S3 1.6 1 3.6l1.2 1.2C3.9 3.2 6.1 2.3 8.5 2.3zm0 3.3c1.5 0 2.9.6 4 1.6l1.2-1.2c-1.4-1.3-3.2-2.1-5.2-2.1s-3.8.8-5.200 2.1l1.2 1.2c1.1-1 2.5-1.6 4-1.6zm0 3.3c.7 0 1.300.3 1.8.7L8.5 11.4 6.7 9.6c.5-.4 1.1-.7 1.8-.7z"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" opacity=".4"/><rect x="2" y="2" width="19" height="9" rx="2"/><path d="M24 4.5v4c.8-.3 1.3-1.1 1.3-2s-.5-1.7-1.3-2z" opacity=".4"/></svg>
+    </span></div>
+    <div class="island"></div>
+    <div class="kb" id="kb">
+      <div class="suggest" id="suggest"></div>
+      <div class="row" data-r="qwertyuiop"></div>
+      <div class="row" data-r="asdfghjkl"></div>
+      <div class="row"><div class="k dark wide">⇧</div><span class="row" style="margin:0;gap:6px" data-r="zxcvbnm"></span><div class="k dark wide">⌫</div></div>
+      <div class="row"><div class="k dark wide">123</div><div class="k dark wide">☺</div><div class="k space" data-k=" ">space</div><div class="k dark ret">return</div></div>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</div>
+
+<div class="touch" id="touch"><svg viewBox="0 0 24 24"><path d="M5 2.500v17.200l4.300-4.100 2.900 6.500 2.700-1.200-2.900-6.400h6.100z" fill="#fff" stroke="#111" stroke-width="1.3" stroke-linejoin="round"/></svg><div class="dot"></div></div>
+
+<div class="end" id="end"><div class="inner">
+  <img src="/__demo/icon.svg" alt="">
+  <h2 id="endname">olano<i>.ai</i></h2>
+  <p id="endline">Open source. Yours to run.</p>
+  <div class="url"><span>olano.ai</span><em>·</em>github.com/olano-ai/olano</div>
+</div></div>
+
+<script>
+const PORTRAIT = new URLSearchParams(location.search).get('layout') === 'portrait';
+if (PORTRAIT) document.body.classList.add('portrait');
+for (const row of document.querySelectorAll('[data-r]'))
+  for (const ch of row.dataset.r) { const k = document.createElement('div'); k.className = 'k'; k.dataset.k = ch; k.textContent = ch; row.appendChild(k); }
+const $ = (id) => document.getElementById(id);
+// The app's iframe is #app in either layout
+(PORTRAIT ? $('app-p') : $('app-d')).id = 'app';
+const termEl = PORTRAIT ? $('term-p') : $('term-d');
+const termBody = termEl.querySelector('.scroll');
+const touch = $('touch');
+let pos = PORTRAIT ? { x: 800, y: 1500 } : { x: 1500, y: 900 };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+function place(x, y) { pos = { x, y }; touch.style.left = x + 'px'; touch.style.top = y + 'px'; }
+function animate(ms, step) {
+  const t0 = performance.now();
+  return new Promise((res) => { const f = (t) => { const k = Math.min(1, (t - t0) / ms); step(ease(k)); k < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+}
+const esc = (s) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
+let termLine = null;
+const PROMPT = '<span class="ps">you@server</span>:<span class="dir">~</span>$ ';
+window.stage = {
+  // the flow's captions ({eyebrow, h1, p}) and the keyboard's word suggestions
+  setup(caps, words, nsteps) {
+    $('captions').innerHTML = caps.map((c, i) => `<div class="cap" id="c${i}"><div class="eyebrow">${c.eyebrow}</div><h1>${c.h1}</h1><p>${c.p ?? ''}</p></div>`).join('');
+    $('suggest').innerHTML = words.map((w) => `<span>${w}</span>`).join('');
+    $('steps').innerHTML = caps.map(() => '<i></i>').join('');
+  },
+  caption(i) {
+    document.querySelectorAll('.cap.on').forEach((c) => { c.classList.remove('on'); c.classList.add('out'); setTimeout(() => c.classList.remove('out'), 600); });
+    if (i != null) setTimeout(() => $('c' + i).classList.add('on'), 250);
+    $('steps').classList.toggle('on', i != null);
+    [...$('steps').children].forEach((s, n) => s.classList.toggle('on', n === i));
+    $('mark').classList.toggle('on', i != null);
+  },
+  appIn() { $(PORTRAIT ? 'phone' : 'win').classList.remove('pre'); },
+  // compatibility with the Birdhouse flows
+  phoneIn() { this.appIn(); },
+  address(t) { $('addr').textContent = t; },
+  time(t) { document.querySelector('.status > span').textContent = t; },
+  end() { $('end').classList.add('on'); },
+  brand(line) { $('endline').textContent = line; },
+  show(x, y) { if (x != null) place(x, y); touch.classList.add('show'); },
+  hide() { touch.classList.remove('show'); },
+  move(x, y, ms = 600) { const a = { ...pos }; touch.classList.add('show'); return animate(ms, (e) => place(a.x + (x - a.x) * e, a.y + (y - a.y) * e)); },
+  async press() { touch.classList.add('down'); await sleep(110); },
+  release() {
+    touch.classList.remove('down');
+    const r = document.createElement('div'); r.className = 'ripple'; r.style.left = pos.x + 'px'; r.style.top = pos.y + 'px';
+    document.body.appendChild(r); setTimeout(() => r.remove(), 600);
+  },
+  async swipe(dy, ms) { const a = { ...pos }; touch.classList.add('down'); await animate(ms, (e) => place(a.x, a.y + dy * e)); touch.classList.remove('down'); },
+  keyboard(on) { $('kb').classList.toggle('on', on); $('screen').classList.toggle('kbd', on); },
+  key(ch) { const k = document.querySelector(`.kb [data-k="${ch.toLowerCase()}"]`); if (k) { k.classList.add('hit'); setTimeout(() => k.classList.remove('hit'), 110); } },
+
+  // --- terminal ---
+  term(on) {
+    document.body.classList.toggle('term-mode', on);
+    termEl.classList.toggle('on', on);
+    if (PORTRAIT) { $('tw').classList.toggle('on', on); $('phone').style.display = on ? 'none' : ''; }
+  },
+  termClear() { termBody.innerHTML = ''; termLine = null; },
+  /** A fresh prompt line with a cursor. */
+  termPrompt() {
+    termBody.querySelectorAll('.cur').forEach((c) => c.remove());
+    termLine = document.createElement('div'); termLine.innerHTML = PROMPT + '<span class="cmd"></span><span class="cur"></span>';
+    termBody.appendChild(termLine);
+  },
+  /** One more character of the command being typed. */
+  termKey(ch) { if (termLine) termLine.querySelector('.cmd').textContent += ch; },
+  /** Output lines (HTML allowed: span.dim/.ok/.hi/.warn/.b, mark). */
+  termPrint(html) {
+    termBody.querySelectorAll('.cur').forEach((c) => c.remove());
+    const d = document.createElement('div'); d.innerHTML = html || '&nbsp;'; termBody.appendChild(d);
+    while (termBody.children.length > 60) termBody.firstChild.remove();
+  },
+  /** Replace the last output line (progress bars). */
+  termReplace(html) { const d = termBody.lastElementChild; if (d) d.innerHTML = html; },
+};
+</script>
+</body></html>

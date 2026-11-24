@@ -4430,8 +4430,18 @@ def _probe_model_connectivity(model_string: str) -> tuple[bool, str]:
     try:
         model = _run_quietly(build_model, model_string)
         result = _run_quietly(model.invoke, "Reply with exactly OK.")
-        content = result.content if isinstance(result.content, str) else str(result.content)
-        return True, content[:120]
+        # List content (OpenAI Responses models, Anthropic) is a list of blocks;
+        # printing it raw filled the doctor table with a dict dump.
+        raw = result.content
+        if isinstance(raw, str):
+            content = raw
+        else:
+            content = "".join(
+                str(block.get("text", "")) if isinstance(block, dict) else str(block)
+                for block in raw
+                if not isinstance(block, dict) or block.get("type") == "text"
+            )
+        return True, content.strip()[:120]
     except Exception as e:
         return False, str(e)
 
