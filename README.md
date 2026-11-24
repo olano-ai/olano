@@ -14,6 +14,8 @@ keeps the channels connected, runs the scheduler and serves a web dashboard
 It is built on LangChain's [Deep Agents](https://github.com/langchain-ai/deepagents)
 harness and [LangGraph](https://github.com/langchain-ai/langgraph).
 
+![Mission Control: an agent compares three suppliers, saves a report and hands back the file](docs/user-guide/assets/screenshots/chat.webp)
+
 **What deepagents provides, and what Olano adds.** deepagents is the agent
 harness: the agent loop, planning, a filesystem abstraction over pluggable
 backends, sub-agent delegation, context summarization, skill loading and
@@ -40,18 +42,19 @@ the server that supervises all of it.
 
 ## Quick start
 
-### Self-hosted with Docker (recommended)
+```bash
+curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash
+```
 
-Three containers from the public images: the runtime, the dashboard and
-Postgres. You need Docker Engine with the Compose plugin, 2 CPUs and 4 GB of
-RAM.
+That is the Docker install, the recommended one: three containers from the
+public images (the runtime, the dashboard and Postgres) in `~/olano`. It checks
+for Docker Engine with the Compose plugin (on Linux it offers to install them)
+and needs 2 CPUs and 4 GB of RAM. Options go after `bash -s --`:
 
 ```bash
-mkdir olano && cd olano
-for f in docker-compose.yml Caddyfile .env.example setup.sh; do
-  curl -fsSLO "https://raw.githubusercontent.com/olano-ai/olano/main/deploy/self-host/$f"
-done
-bash setup.sh                       # add --host olano.example.com for a public https hostname
+curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash -s -- --host olano.example.com   # public https hostname
+curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash -s -- --sandbox                  # a Docker shell sandbox per agent
+curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash -s -- --source                   # from source instead of Docker
 ```
 
 Open **http://localhost:3200**. The setup wizard creates your admin account,
@@ -66,12 +69,14 @@ backups and the options.
 
 Requirements: Python 3.11 or newer (CI runs 3.13) and [uv](https://docs.astral.sh/uv/).
 Optional: Node.js (dashboard build, WhatsApp bridge) and Docker (shell sandbox,
-Postgres).
+Postgres). The `--source` one-liner above clones into `~/olano-src` and does
+the same as:
 
 ```bash
 git clone https://github.com/olano-ai/olano.git
 cd olano
 ./install.sh        # Python, uv, deps, Node, Docker, Chromium, pre-commit; idempotent
+                    # (./install.sh --docker from a clone is the Docker install)
 # or, with Python and uv already present:
 uv sync
 ```
