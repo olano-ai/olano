@@ -346,19 +346,38 @@ if [ "$SANDBOX" = "on" ]; then
     warn "The sandbox image pull failed; using the olano-sandbox:latest already on this machine."
   else
     warn "The sandbox image pull failed and no olano-sandbox:latest exists here, so agents"
-    warn "would have no shell at all. Sign in to a registry that can read it (docker login"
-    warn "ghcr.io) and re-run, or re-run with --no-sandbox."
+    warn "would have no shell at all. The image is public, so this is usually the network:"
+    warn "check that this machine reaches ghcr.io and re-run, or re-run with --no-sandbox."
     exit 1
   fi
 fi
 
+# Every image the compose files name is already on this machine: a failed pull
+# (no network, a registry hiccup, Docker Hub's anonymous rate limit) can then
+# fall back to what is here instead of stopping, as the sandbox pull above does.
+all_images_local() {
+  local image found=0
+  while IFS= read -r image; do
+    [ -z "$image" ] && continue
+    found=1
+    docker image inspect "$image" >/dev/null 2>&1 || return 1
+  done < <(docker compose config --images 2>/dev/null)
+  [ "$found" -eq 1 ]
+}
+
 say "Pulling the images…"
 if ! docker compose pull; then
-  warn "The image pull failed. If the registry answered 'denied' or 'unauthorized', the"
-  warn "images are not readable from this machine: sign in with a GitHub account that can"
-  warn "read them (docker login ghcr.io) and re-run, or ask Olano for access. A network"
-  warn "error means retry; completed layers are kept between attempts."
-  exit 1
+  if all_images_local; then
+    warn "The image pull failed; starting with the images already on this machine."
+    warn "Re-run setup.sh later to update them."
+  else
+    warn "The image pull failed. The Olano images (ghcr.io) and Postgres (Docker Hub) are"
+    warn "public, so this is usually the network: re-run, and completed layers are kept."
+    warn "'429 Too Many Requests' from registry-1.docker.io is Docker Hub's limit on"
+    warn "anonymous pulls from your address; 'docker login' with a free Docker account"
+    warn "raises it."
+    exit 1
+  fi
 fi
 say "Starting…"
 docker compose up -d --remove-orphans
