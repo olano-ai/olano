@@ -193,7 +193,7 @@ dependencies = [
     "hubspot-api-client>=11.0.0",  # HubSpot CRM toolkit (HubSpotAgent)
     "web3>=7.16.0",
     "tweepy>=4.17.0",      # Twitter (X) toolkits
-    "facebook-business>=25.0.3",  # Meta Business SDK — Facebook + Instagram toolkits
+    "facebook-business>=27.0.1",  # Meta Business SDK — Facebook + Instagram toolkits
     "alpaca-trade-api>=0.26",
     # Trading / brokerage clients (Phase 6)
     "ib-insync>=0.9.86",   # Interactive Brokers (TWS/Gateway client)
