@@ -5,6 +5,9 @@ name: CI
 # do. This workflow keeps the billed-minute count low by (1) skipping runs that
 # can't change the outcome (docs-only churn) and (2) folding the fast static
 # checks onto a single runner instead of paying a per-job minimum for each.
+# A docs-only push starts no run at all; a docs-only pull request runs the
+# `changes` classifier and starts the test job with every step skipped, about
+# two billed minutes, so that branch protection can require the checks.
 #
 # ── Measured profile, so the next person does not re-derive it ───────────────
 # Run 1044 (push, with coverage) and 1043 (PR, without), both on main's tree:
@@ -60,22 +63,19 @@ on:
       - "assets/**"
       - "LICENSE"
       - ".gitignore"
-      # Trees this workflow cannot say anything about — see the note above the
-      # push trigger. Keep the two lists identical; Actions has no YAML anchors.
+      # Trees this workflow cannot say anything about (see the note above). The
+      # `changes` job applies the same list to pull requests as shell patterns;
+      # keep the two in step, since Actions has no YAML anchors.
       - "whatsapp-bridge/**"
   # Run on every pull request regardless of its base branch. No branch filter
   # here: a PR's checks should fire whatever it targets, so feature-branch work
   # is always tested before merge.
+  # Pull requests always start this workflow, docs-only ones included, so that
+  # branch protection can require its checks: a check that never starts would
+  # leave a docs-only pull request waiting forever. The `changes` job below
+  # does for pull requests what paths-ignore does for pushes, and the jobs it
+  # rules out report as passed without spending their runner time.
   pull_request:
-    paths-ignore:
-      - "*.md"
-      - "docs/**"
-      - "assets/**"
-      - "LICENSE"
-      - ".gitignore"
-      # Trees this workflow cannot say anything about — see the note above the
-      # push trigger. Keep the two lists identical; Actions has no YAML anchors.
-      - "whatsapp-bridge/**"
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -85,6 +85,60 @@ env:
   UV_SYSTEM_PYTHON: 1
 
 jobs:
+  # Is this a pull request that changes nothing the jobs below read? The rule
+  # is the push trigger's paths-ignore list, spelled as shell patterns: `*.md`
+  # at the repository root only (GitHub's `*` does not cross `/`, so a nested
+  # SKILL.md is code), and everything under docs/, assets/ and
+  # whatsapp-bridge/, plus LICENSE and .gitignore. Keep the two in step.
+  #
+  # Fail-safe by construction: anything but a clean "false" (a push, an API
+  # error, this job failing outright) runs every job. A skipped job counts as
+  # passed for branch protection, so a classifier that broke the other way
+  # would wave every pull request through.
+  changes:
+    name: Classify changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.classify.outputs.code }}
+    steps:
+      - name: Classify the changed files
+        id: classify
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -uo pipefail
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if ! files=$(gh api --paginate "repos/$REPO/pulls/$PR_NUMBER/files" --jq '.[].filename'); then
+            echo "::warning::could not list the changed files; running every job"
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          code=false
+          while IFS= read -r path; do
+            [ -z "$path" ] && continue
+            case "$path" in
+              docs/*|assets/*|whatsapp-bridge/*|LICENSE|.gitignore) ;;
+              */*) code=true ;;
+              *.md) ;;
+              *) code=true ;;
+            esac
+          done <<< "$files"
+          if [ -z "$files" ]; then code=true; fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" = false ]; then
+            echo "Docs-only pull request: lint, tests and the package build report as passed without running."
+          fi
+
   # Lint, format, type-check and the security scan all finish in seconds but
   # each used to be its own job — four rounded-up billed minutes for ~10s of
   # real work plus four runner spin-ups + four dependency installs. Folding
@@ -95,6 +149,8 @@ jobs:
   # ruff target-version=py311 + mypy validate the oldest supported interpreter.
   checks:
     name: Lint, Type & Security
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -181,6 +237,11 @@ jobs:
 
   test:
     name: Test (Python ${{ matrix.python-version }})
+    needs: changes
+    # A matrix job skipped as a whole reports under its unexpanded name, which
+    # never matches the required check, so this job always starts and its
+    # steps carry the docs-only gate instead.
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     # 25, not 15: the parallel suite is ~9 minutes on CI, and runner speed
     # varies by ~50% here (see the measurements on the test step below), so a
@@ -195,17 +256,25 @@ jobs:
         # (ruff target-version=py311 + mypy), which stays pinned at 3.11.
         python-version: ["3.13"]
     steps:
+      - name: Docs-only pull request
+        if: needs.changes.outputs.code == 'false'
+        run: echo "Docs-only pull request, nothing to test."
+
       - uses: actions/checkout@v7
+        if: needs.changes.outputs.code != 'false'
 
       - uses: astral-sh/setup-uv@v7
+        if: needs.changes.outputs.code != 'false'
         with:
           enable-cache: true
 
       - uses: actions/setup-python@v7
+        if: needs.changes.outputs.code != 'false'
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
+        if: needs.changes.outputs.code != 'false'
         run: uv sync --group dev
 
       # Coverage is only consumed from the post-merge report on the long-lived
@@ -243,7 +312,7 @@ jobs:
       # The suite is safe to parallelise because the autouse `lionclaw_home`
       # fixture gives every test its own tmp home; workers share no state.
       - name: Run tests
-        if: github.event_name == 'pull_request'
+        if: needs.changes.outputs.code != 'false' && github.event_name == 'pull_request'
         run: uv run pytest tests/ -q -n auto --dist loadfile
 
       # `COVERAGE_CORE=sysmon` is the single cheapest win in this file.
@@ -270,7 +339,7 @@ jobs:
       # back to the default core and still passes (verified on 3.11.15). It
       # degrades to slow, never to wrong or red.
       - name: Run tests with coverage
-        if: github.event_name != 'pull_request'
+        if: needs.changes.outputs.code != 'false' && github.event_name != 'pull_request'
         env:
           COVERAGE_CORE: sysmon
         run: >-
@@ -278,7 +347,7 @@ jobs:
           --cov=olano --cov-report=xml --cov-report=term-missing
 
       - name: Upload coverage
-        if: github.event_name != 'pull_request' && matrix.python-version == '3.13'
+        if: needs.changes.outputs.code != 'false' && github.event_name != 'pull_request' && matrix.python-version == '3.13'
         # The coverage artifact is an auxiliary output, not a correctness gate.
         # GitHub Actions artifact *storage quota* is an account-level infra/billing
         # limit ("Artifact storage quota has been hit") that fails the upload — and
@@ -306,6 +375,8 @@ jobs:
   # editing something.
   build:
     name: Build Package
+    needs: changes
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
