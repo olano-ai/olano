@@ -171,10 +171,18 @@ export function BrowserView({
   // A file the browser saved: a toast says where it went and offers the
   // Files screen. Declared, not presented from the hook: an overlay presented
   // from a hook in this view is gone a moment later (the picker was too).
-  const [lastSaved, setLastSaved] = useState<SavedBrowserFile | null>(null);
+  // Each save is its own toast (keyed by `n`): one toast reused across saves
+  // kept the first one's timer, so a picture saved right after a recording
+  // was told for a moment, or not at all when it landed while that toast was
+  // leaving (its dismissal then cleared the new file).
+  const [lastSaved, setLastSaved] = useState<{ file: SavedBrowserFile; n: number } | null>(null);
+  const savedCount = useRef(0);
+  // The toast sits under the header, never on it: on top it covered Done and
+  // the picture and record buttons for its whole six seconds.
+  const header = useRef<HTMLIonHeaderElement>(null);
   const showFiles = useAppLayout().settingsTab.files;
   const savedButtons = useMemo(() => {
-    const file = lastSaved;
+    const file = lastSaved?.file;
     if (!file || !showFiles) return [];
     const folder = file.relative.includes("/") ? file.relative.slice(0, file.relative.lastIndexOf("/")) : "";
     return [
@@ -190,7 +198,8 @@ export function BrowserView({
   }, [lastSaved, showFiles, browser, onClose, router]);
   function saved(file: SavedBrowserFile) {
     void haptic("light");
-    setLastSaved(file);
+    savedCount.current += 1;
+    setLastSaved({ file, n: savedCount.current });
   }
 
   /** Record the browser to a video, or stop and save it. */
@@ -242,7 +251,7 @@ export function BrowserView({
       }}
       className="olano-browser-view"
     >
-      <IonHeader>
+      <IonHeader ref={header}>
         <IonToolbar>
           <IonButtons slot="start">
             <IonButton onClick={onClose}>Done</IonButton>
@@ -398,13 +407,18 @@ export function BrowserView({
       </IonFooter>
       <PickerAlert browser={browser} picker={view.picker} />
       <IonToast
+        key={lastSaved?.n ?? 0}
         isOpen={!!lastSaved}
-        message={lastSaved ? savedFileLine(lastSaved) : ""}
+        message={lastSaved ? savedFileLine(lastSaved.file) : ""}
         duration={6000}
         position="top"
+        positionAnchor={header.current ?? undefined}
         color="dark"
         buttons={savedButtons}
-        onDidDismiss={() => setLastSaved(null)}
+        onDidDismiss={() => {
+          const shown = lastSaved?.n;
+          setLastSaved((current) => (current && current.n === shown ? null : current));
+        }}
       />
       <input
         ref={files}
