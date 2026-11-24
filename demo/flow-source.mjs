@@ -20,9 +20,9 @@ const P = '<span class="ok">PASS</span>  ', W = '<span class="warn">WARN</span> 
 
 export async function run(c) {
   const { app, S, sleep, tap, openApp, term, mark, PORTRAIT } = c;
-  const DW = PORTRAIT ? 16 : 30;
+  const DW = PORTRAIT ? 16 : 28;
   const row = (name, st, detail) => `│ ${name.padEnd(20)} │ ${st} │ ${(detail.length > DW ? detail.slice(0, DW - 1) + '…' : detail).padEnd(DW)} │`;
-  const line = (l, m, r) => l + '─'.repeat(22) + m + '─'.repeat(8) + m + '─'.repeat(PORTRAIT ? 18 : 32) + r;
+  const line = (l, m, r) => l + '─'.repeat(22) + m + '─'.repeat(8) + m + '─'.repeat(DW + 2) + r;
 
   mark('source');
   await term.on();

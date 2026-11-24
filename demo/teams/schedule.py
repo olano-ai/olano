@@ -69,24 +69,24 @@ TEAM = {
         "piper": [
             {
                 "steps": [
-                    {"wait": 0.5},
+                    {"wait": 0.3},
                     {
                         "tool": "read_file",
                         "args": {"file_path": "data/rent-ledger.csv"},
                         "result": LEDGER_CSV,
-                        "took": 0.8,
+                        "took": 0.5,
                     },
                     {
                         "tool": "write_file",
                         "args": {"file_path": "reports/rent-arrears.md"},
                         "result": "Updated file reports/rent-arrears.md",
-                        "took": 0.7,
+                        "took": 0.5,
                         "write": {
                             "reports/rent-arrears.md": "# Rent arrears\n\n"
                             + REPORT.split("Saved:")[0]
                         },
                     },
-                    {"text": REPORT, "wps": 60},
+                    {"text": REPORT, "wps": 300},
                 ]
             }
         ],

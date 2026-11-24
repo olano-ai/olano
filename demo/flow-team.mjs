@@ -35,10 +35,17 @@ export async function run({ app, S, sleep, tap, point, send, scroll, scrollTo, n
   mark('record');
   await S('caption', 2);
   await nav('/activity');
+  if (PORTRAIT) {       // a phone shows the list of conversations first
+    const thread = app.locator('[data-testid="a2a-rail"]').getByText('Three findings for the Tidewater launch').first();
+    await thread.waitFor({ timeout: 30000 });
+    await sleep(1800);
+    await tap(thread, { move: 700 });
+  }
   await app.getByText('What should we know before launching Tidewater?').first().waitFor({ timeout: 30000 });
+  await S('hide');
   await sleep(1600);
-  await scroll(PORTRAIT ? 420 : 330, 1600, '[data-testid="a2a-rail"] ~ *');
-  await sleep(3200);
+  if (!PORTRAIT) await scroll(330, 1600, '[data-testid="a2a-rail"] ~ *');
+  await sleep(PORTRAIT ? 3400 : 3200);
 
   mark('issues');
   await S('caption', 3);

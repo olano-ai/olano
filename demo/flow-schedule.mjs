@@ -60,9 +60,10 @@ export async function run({ app, frame, S, sleep, tap, point, type, keyboardOff,
   await nav('/scheduler');
   const row = app.locator('.card', { hasText: 'Rent arrears check' }).last();
   await row.waitFor();
-  await sleep(1300);
+  await scrollTo(row, PORTRAIT ? 250 : 300, 900).catch(() => {});
+  await sleep(900);
   await tap(row.locator('button[title="Run now"], button[aria-label="Run now"]').first(), { move: 900 });
-  await sleep(2600);
+  await sleep(4200);          // the run finishes before its conversation is opened
   await S('hide');
 
   mark('result');

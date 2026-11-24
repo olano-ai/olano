@@ -60,7 +60,7 @@ body { font-family: 'InterDemo', sans-serif; background: #0b0b0e; -webkit-font-s
 body:not(.portrait) .phone-wrap { display: none; }
 
 /* terminal (inside the window on desktop, its own window in portrait) */
-.term { position: absolute; inset: 0; background: #101014; color: #e4e4e7; font-family: 'MonoDemo', monospace; font-size: 17px; line-height: 1.5;
+.term { position: absolute; inset: 0; background: #101014; color: #e4e4e7; font-family: 'MonoDemo', monospace; font-size: 20px; line-height: 1.5;
   padding: 22px 26px; overflow: hidden; opacity: 0; pointer-events: none; transition: opacity .5s; z-index: 3; white-space: pre-wrap; word-break: break-all; }
 .term.on { opacity: 1; }
 .term .scroll { position: absolute; left: 26px; right: 26px; bottom: 22px; }
@@ -260,6 +260,9 @@ window.stage = {
 
   // --- terminal ---
   term(on) {
+    // the window is a terminal while it shows one: its title, not an address
+    if (on) { this._addr = $('addr').textContent; $('addr').textContent = 'you@server: ~'; } else if (this._addr) $('addr').textContent = this._addr;
+    document.querySelector('.addr svg').style.display = on ? 'none' : '';
     document.body.classList.toggle('term-mode', on);
     termEl.classList.toggle('on', on);
     if (PORTRAIT) { $('tw').classList.toggle('on', on); $('phone').style.display = on ? 'none' : ''; }
