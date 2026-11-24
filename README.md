@@ -1,9 +1,13 @@
 # Olano
 
 [![CI](https://github.com/olano-ai/olano/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/olano-ai/olano/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/olano-ai/olano)](https://github.com/olano-ai/olano/releases)
+[![Release](https://img.shields.io/github/v/release/olano-ai/olano?logo=github)](https://github.com/olano-ai/olano/releases)
+[![GitHub stars](https://img.shields.io/github/stars/olano-ai/olano?style=flat&logo=github)](https://github.com/olano-ai/olano/stargazers)
+[![Image pulls](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Folano-ai%2Folano%2Fstats%2Fbadges%2Fpulls.json)](https://github.com/orgs/olano-ai/packages?repo_name=olano)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white)](pyproject.toml)
 [![Docs](https://img.shields.io/badge/docs-docs.olano.ai-blue)](https://docs.olano.ai)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/olano-ai/olano)](https://github.com/olano-ai/olano/commits/main)
 
 Olano is a self-hosted runtime that runs a fleet of AI agents. Each agent has a
 configuration file (`agent.json5`), its own workspace on disk, a set of tools and
@@ -264,6 +268,14 @@ deepagents dependency is pinned to an exact release.
 Bug reports, ideas and pull requests are welcome. Start with
 [CONTRIBUTING.md](CONTRIBUTING.md); everyone taking part agrees to the
 [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Star history
+
+[![Star history chart](https://api.star-history.com/svg?repos=olano-ai/olano&type=Date)](https://star-history.com/#olano-ai/olano&Date)
+
+Daily counts of stars, forks, release downloads and container image pulls are
+recorded on the [`stats` branch](https://github.com/olano-ai/olano/tree/stats)
+(`history.csv`).
 
 ## License, security, acknowledgements
 
