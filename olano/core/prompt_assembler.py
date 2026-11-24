@@ -189,7 +189,7 @@ class PromptAssembler:
                 "writes reusable procedures as learned skills under skills/learned/, publishes "
                 "results as pages, and asks other agents on this deployment for capabilities "
                 "you lack. Outward actions the owner marked as needing approval (email, money, "
-                "identity edits by default) wait in Pulse → Approvals. When the user asks "
+                "identity edits by default) wait in Cortex → Self-Improve. When the user asks "
                 "about an item, report its real state from its folder (STATUS.md, "
                 "RESULTS.md, JOURNAL.md), never from memory of an earlier run."
             )
@@ -197,7 +197,7 @@ class PromptAssembler:
             lines.append(
                 "You run AUTONOMOUS with approvals: between conversations Cortex rates every "
                 "active item and develops the promising ones, but promotions to the next stage "
-                "and anything outward wait for the owner in Pulse → Approvals. Point the user "
+                "and anything outward wait for the owner in Cortex → Self-Improve. Point the user "
                 "there when they ask why something has not moved."
             )
         else:

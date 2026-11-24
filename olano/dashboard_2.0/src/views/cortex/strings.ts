@@ -66,7 +66,7 @@ export const STR: LocalDict = {
     "hint.projects":
       "Ideas/brainstorms/prototypes you promoted to real projects (README · PLAN · STATUS · JOURNAL)",
     "hint.skills": "Auto-learned skills waiting for your review — approve to keep, reject to discard",
-    "hint.improve": "Proposed improvements to the agent's personality, instructions, and memory",
+    "hint.improve": "Proposals waiting for your approval: improvements to the agent's personality, instructions and memory, and promotions of its ideas",
     "hint.checks": "Budget alerts, anomalies, and background service health",
     // toasts
     "toast.agentsFailed": "Could not load agents.",
@@ -384,7 +384,7 @@ export const STR: LocalDict = {
     "jobs.source.manual": "Started by hand",
     "jobs.source.autonomous": "Scheduled",
     "jobs.source.approved": "Approved in Pulse",
-    "jobs.kind.promote": "Create project",
+    "jobs.kind.promote": "Promote",
     "jobs.kind.explore": "Explore",
     "jobs.kind.optimize_workspace": "Optimize workspace",
     "jobs.kind.optimize_skills": "Optimize skills",
@@ -625,7 +625,7 @@ export const STR: LocalDict = {
     "hint.prototypes": "基于最有前景的想法搭建的原型与实验",
     "hint.projects": "你提升为正式项目的想法/头脑风暴/原型（README · PLAN · STATUS · JOURNAL）",
     "hint.skills": "等待你审核的自动学习技能——批准则保留，拒绝则丢弃",
-    "hint.improve": "对智能体的性格、指令和记忆提出的改进建议",
+    "hint.improve": "等待你批准的提议：对智能体的性格、指令和记忆的改进，以及其想法的晋升",
     "hint.checks": "预算告警、异常和后台服务健康状况",
     "toast.agentsFailed": "无法加载智能体。",
 
@@ -901,7 +901,7 @@ export const STR: LocalDict = {
     "jobs.source.manual": "手动启动",
     "jobs.source.autonomous": "计划运行",
     "jobs.source.approved": "在 Pulse 中批准",
-    "jobs.kind.promote": "创建项目",
+    "jobs.kind.promote": "晋升",
     "jobs.kind.explore": "探索",
     "jobs.kind.optimize_workspace": "优化工作区",
     "jobs.kind.optimize_skills": "优化技能",
@@ -1131,7 +1131,7 @@ export const STR: LocalDict = {
     "hint.projects":
       "Ideas/lluvias de ideas/prototipos que promoviste a proyectos reales (README · PLAN · STATUS · JOURNAL)",
     "hint.skills": "Habilidades aprendidas automáticamente que esperan tu revisión: aprueba para conservar, rechaza para descartar",
-    "hint.improve": "Mejoras propuestas a la personalidad, instrucciones y memoria del agente",
+    "hint.improve": "Propuestas que esperan tu aprobación: mejoras a la personalidad, instrucciones y memoria del agente, y promociones de sus ideas",
     "hint.checks": "Alertas de presupuesto, anomalías y salud de los servicios en segundo plano",
     "toast.agentsFailed": "No se pudieron cargar los agentes.",
 
@@ -1419,7 +1419,7 @@ export const STR: LocalDict = {
     "jobs.source.manual": "Iniciado a mano",
     "jobs.source.autonomous": "Programado",
     "jobs.source.approved": "Aprobado en Pulse",
-    "jobs.kind.promote": "Crear proyecto",
+    "jobs.kind.promote": "Promover",
     "jobs.kind.explore": "Explorar",
     "jobs.kind.optimize_workspace": "Optimizar espacio de trabajo",
     "jobs.kind.optimize_skills": "Optimizar habilidades",

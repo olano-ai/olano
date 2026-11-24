@@ -21,7 +21,7 @@ export const NEWBOT_STR: LocalDict = {
     "newbot.handleHelp":
       "The agent's permanent identifier, generated from its name (lowercase, e.g. `hillary` from `Hillary`). It is how other agents address this one and where its files live, and it can never be changed — so put anything you may want to change later in the name. If it is already taken, a number is added (`hillary-2`).",
     "newbot.nameHelp":
-      "Lowercase letters, numbers, dashes and underscores only, starting with a letter or a number — e.g. sales-helper. This name is permanent, and it is how you and other agents refer to this one.",
+      "What the agent is called: any name you like, such as Hillary, with capitals and spaces if you want them. It is shown on the agent's card and in its chats, and the agent introduces itself by it. Required. You can change it later; the permanent handle below is generated from it.",
     "newbot.kind": "What should it be good at?",
     "newbot.kindHelp":
       "Pick a ready-made template, or start from scratch. “Start from scratch” creates a general-purpose agent you describe yourself. An “Expert” arrives already set up for one job (its description says which). A “Team” is a lead agent that has its own specialists working under it — pick one when the job has several parts. Everything else — which model it uses, what it may do — is chosen for you and can be changed later by whoever owns the agent.",
@@ -64,7 +64,7 @@ export const NEWBOT_STR: LocalDict = {
     "newbot.handleHelp":
       "智能体的永久标识符，由名称自动生成（小写，例如由 `Hillary` 生成 `hillary`）。其他智能体用它来称呼这个智能体，它的文件也存放于此，且永远无法更改——因此以后可能想改的内容都请填在名称里。若已被占用，会自动追加数字（`hillary-2`）。",
     "newbot.nameHelp":
-      "只能使用小写字母、数字、连字符和下划线，且以字母或数字开头——例如 sales-helper。该名称是永久的，你和其他智能体都用它来指代这个智能体。",
+      "智能体的称呼：任意名字，例如 Hillary，可以包含大写字母和空格。它显示在智能体的卡片和对话中，智能体也用它来自我介绍。必填。以后可以修改；下面的永久标识符由它生成。",
     "newbot.kind": "它应该擅长什么？",
     "newbot.kindHelp":
       "选择一个现成模板，或从零开始。“从零开始”会创建一个由你自己描述用途的通用智能体。“专家”预先针对某一项工作配置好（其简介会说明是哪一项）。“团队”是一个带领若干专家的主管智能体——工作包含多个部分时选它。其余设置（使用哪个模型、允许做什么）都已为你选好，之后可由智能体拥有者修改。",
@@ -107,7 +107,7 @@ export const NEWBOT_STR: LocalDict = {
     "newbot.handleHelp":
       "El identificador permanente del agente, generado a partir de su nombre (en minúsculas, p. ej. `hillary` a partir de `Hillary`). Es como lo nombran otros agentes y donde viven sus archivos, y no se puede cambiar nunca — así que pon en el nombre todo lo que quizá quieras cambiar después. Si ya está en uso se añade un número (`hillary-2`).",
     "newbot.nameHelp":
-      "Solo minúsculas, números, guiones y guiones bajos, empezando por una letra o un número — por ejemplo ventas-ayuda. Este nombre es permanente y es como tú y otros agentes se refieren a él.",
+      "Cómo se llama el agente: el nombre que quieras, como Hillary, con mayúsculas y espacios si lo deseas. Se muestra en su tarjeta y en sus chats, y el agente se presenta con él. Obligatorio. Puedes cambiarlo después; el identificador permanente de abajo se genera a partir de él.",
     "newbot.kind": "¿En qué debe ser bueno?",
     "newbot.kindHelp":
       "Elige una plantilla lista o empieza desde cero. «Empezar desde cero» crea un agente de uso general que describes tú. Un «Experto» viene ya preparado para un trabajo concreto (su descripción dice cuál). Un «Equipo» es un agente responsable con sus propios especialistas debajo — elígelo cuando el trabajo tenga varias partes. Todo lo demás — qué modelo usa, qué puede hacer — se elige por ti y quien posea el agente puede cambiarlo después.",

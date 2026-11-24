@@ -146,6 +146,7 @@ def test_condense_hard_cuts_when_there_is_no_usable_space():
         ("heartbeat_merli@20260101T000000-ab12", ORIGIN_HEARTBEAT, CHANNEL_SCHEDULER),
         ("scheduled_merli_1a2b3c4d@20260101T000000-ab12", ORIGIN_SCHEDULED, CHANNEL_SCHEDULER),
         ("cog::merli", ORIGIN_AUTONOMOUS, ""),
+        ("kb-console-1f0c2a9e-7b1d-4c55-9a53-0d2e8f6a1b77", ORIGIN_AUTONOMOUS, ""),
         ("acp::marcus::luna", ORIGIN_PEER, ""),
         ("delegate::merli::sub", ORIGIN_PEER, ""),
         ("agent:main:telegram:dm:5550001234", ORIGIN_INTERACTIVE, "telegram"),

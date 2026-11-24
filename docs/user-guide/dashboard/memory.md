@@ -1,8 +1,9 @@
 # Memory
 
-What each agent remembers: `MEMORY.md` (durable facts) and the daily logs.
-Edit them directly — this is the fastest way to correct something an agent has
-learned wrongly. See [Memory and self-learning](../feature-guides/memory-and-self-learning.md).
+What each agent remembers. The tab shows `MEMORY.md` (durable facts); edit it
+directly, which is the fastest way to correct something an agent has learned
+wrongly. The daily logs are files, one per day, under `memories/` in the
+agent's workspace: open them from the [Files](files.md) tab. See [Memory and self-learning](../feature-guides/memory-and-self-learning.md).
 
 <figure markdown="span">
   ![The Memory tab showing MEMORY.md as an outline of sections and facts](../assets/screenshots/memory.webp){ loading=lazy }

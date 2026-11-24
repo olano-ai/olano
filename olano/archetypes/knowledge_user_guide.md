@@ -1608,9 +1608,10 @@ points at one turns the toggle on for you.
 
 ### Memory
 
-What each agent remembers: `MEMORY.md` (durable facts) and the daily logs.
-Edit them directly — this is the fastest way to correct something an agent has
-learned wrongly. See [Memory and self-learning](#memory-and-self-learning).
+What each agent remembers. The tab shows `MEMORY.md` (durable facts); edit it
+directly, which is the fastest way to correct something an agent has learned
+wrongly. The daily logs are files, one per day, under `memories/` in the
+agent's workspace: open them from the [Files](#files) tab. See [Memory and self-learning](#memory-and-self-learning).
 
 The page names the agent whose memory it shows in its own top bar, with an
 agent picker — it is the same selection the sidebar's agent list drives, so
@@ -3129,7 +3130,7 @@ the fleet, on for one agent" works.
 | `autonomous` | boolean \| null | `null` (inherit) | Whether it acts on its own initiative. |
 | `auto_approve` | boolean \| null | `null` (inherit) | Whether its own actions skip the approval queue. |
 | `intensity` | `"relaxed"` \| `"balanced"` \| `"aggressive"` \| null | `null` (inherit; relaxed) | How much background work it does. `null` follows the deployment's `cognition.intensity`, `"relaxed"` unless changed. |
-| `approval_required` | string[] | `["external_send","irreversible","identity_edit"]` | Categories that always need a human, whatever `auto_approve` says. `identity_edit` is any change to SOUL.md, AGENTS.md or IDENTITY.md; `external_send` is anything that sends something outside the deployment (email, calendar, posts, messages to other agents); `irreversible` is moving money or overwriting a stored secret. Applies both to the Fully Autonomous sweep of the approval queue and to tool calls made during a background run — a held item waits in **Pulse → Approvals** with its usual Approve / Reject buttons. Set it to `[]` for an agent whose owner wants everything unattended, or list only the categories to keep; unknown names are ignored. |
+| `approval_required` | string[] | `["external_send","irreversible","identity_edit"]` | Categories that always need a human, whatever `auto_approve` says. `identity_edit` is any change to SOUL.md, AGENTS.md or IDENTITY.md; `external_send` is anything that sends something outside the deployment (email, calendar, posts, messages to other agents); `irreversible` is moving money or overwriting a stored secret. Applies both to the Fully Autonomous sweep of the approval queue and to tool calls made during a background run — a held item waits in **Cortex → Self-Improve** with its usual Approve / Reject buttons. Set it to `[]` for an agent whose owner wants everything unattended, or list only the categories to keep; unknown names are ignored. |
 | `self_learning`, `brainstorming`, `idea_generation`, `prototyping`, `skills_optimization`, `workspace_optimization`, `memory_optimization`, `pulse` | boolean \| null | `null` (inherit) | Individual capabilities. |
 | `deep_self_learning` | boolean | `true` | Use the deep model for distillation. |
 | `memory_garden_cron` | string \| null | `null` (inherit) | When to tidy memory (merge duplicate facts in MEMORY.md, roll up old daily logs; snapshotted and undoable from Pulse). Standard 5-field cron, e.g. `"30 4 * * *"`. **Leave it `null` to follow the deployment's `intensity` preset** — once a day around 04:30 at every intensity, with the exact minute spread out per agent so a fleet does not all start at once. An explicit value is used exactly as written and is never spread. |
@@ -3138,7 +3139,7 @@ the fleet, on for one agent" works.
 | `workspace_optimize_cron` | string \| null | `null` (inherit) | When the self-optimization pass over the agent's identity and behavior files runs (snapshotted and undoable from Pulse). Standard 5-field cron. `null` follows the `intensity` preset (Sundays at 04:00 on `relaxed`/`balanced`, every third day on `aggressive`), spread per agent; an explicit value is used as written. |
 | `skill_librarian_cron` | string \| null | `null` (inherit) | When the learned-skill library is tidied — duplicates merged, survivors polished (snapshotted and undoable). Standard 5-field cron. `null` follows the `intensity` preset (Sundays at 04:30 on `relaxed`/`balanced`, every third day on `aggressive`), spread per agent; an explicit value is used as written. |
 | `max_deep_runs_per_day` | integer | `12` | Cost ceiling on heavy background work. |
-| `promote_threshold` | integer \| null | `null` (inherit; 8) | Score from 1 to 10 at or above which the Rate & Promote phase moves an item it recommends promoting to the next funnel stage on its own (brainstorm → idea → prototype → project). Only applies while Fully Autonomous (`auto_approve`) is on; otherwise every candidate waits as a card in **Pulse → Approvals**. Whole number 1 to 10; out-of-range values are pulled to the nearest end. `null` follows the deployment's `cognition.promote_threshold`. |
+| `promote_threshold` | integer \| null | `null` (inherit; 8) | Score from 1 to 10 at or above which the Rate & Promote phase moves an item it recommends promoting to the next funnel stage on its own (brainstorm → idea → prototype → project). Only applies while Fully Autonomous (`auto_approve`) is on; otherwise every candidate waits as a card in **Cortex → Self-Improve**. Whole number 1 to 10; out-of-range values are pulled to the nearest end. `null` follows the deployment's `cognition.promote_threshold`. |
 | `max_promotions_per_run` | integer \| null | `null` (inherit; 1) | How many items one Rate & Promote run may promote. Each promotion is a deep run and also counts against the daily cap. Whole number 0 to 5; `0` rates without ever promoting. |
 | `max_self_scheduled_tasks` | integer \| null | `null` (inherit; 6) | How many follow-up steps this agent may have pending at once from `cortex_schedule`, the tool it uses to continue a prototype or project after a run (they appear in **Scheduler** named `Cortex: <item>`). Two per item and at most hourly regardless. Whole number 0 to 20; `0` turns self-scheduling off. |
 | `auto_discard` | boolean \| null | `null` (inherit; on) | Whether a Fully Autonomous run may discard an item the reviewer rated 3 or lower with a "discard" recommendation. Reversible: the folder stays and **Restore** brings the item back. Has no effect while `auto_approve` is off. |
@@ -3429,7 +3430,7 @@ cloning and pushing private repositories ([`agent.json5` reference](#tools)), an
 | `deep_model` | string \| null | see note | Model for heavy background work. |
 | `worker_max_iterations` | integer | `100` | Step budget for one background reasoning run, for every agent that does not set its own. Counted in internal steps — about 4 per round of thinking plus tool use, so 100 allows roughly 25 rounds. A run that exceeds it stops with "hit its step limit" and its work is discarded. Whole number from 10 to 400; out-of-range values are pulled to the nearest end. Editable in **Cortex → Autonomy → Step budget**, "All agents" column. |
 | `worker_timeout_seconds` | integer | `1200` | Wall-clock seconds one background reasoning run may take, for every agent that does not set its own. Whole number from 30 to 7200 (default 1200 = 20 minutes). Raise it alongside `worker_max_iterations` — a large step budget behind a small time limit just fails on time instead. Editable in **Cortex → Autonomy → Time limit**, "All agents" column. |
-| `promote_threshold` | integer | `8` | Score (1 to 10) at or above which the Rate & Promote phase promotes an item it recommends promoting to the next funnel stage on its own, for every agent that does not set its own. Applies only under Fully Autonomous; with `auto_approve` off every candidate waits in **Pulse → Approvals**. Out-of-range values are pulled to the nearest end. |
+| `promote_threshold` | integer | `8` | Score (1 to 10) at or above which the Rate & Promote phase promotes an item it recommends promoting to the next funnel stage on its own, for every agent that does not set its own. Applies only under Fully Autonomous; with `auto_approve` off every candidate waits in **Cortex → Self-Improve**. Out-of-range values are pulled to the nearest end. |
 | `max_promotions_per_run` | integer | `1` | Items one Rate & Promote run may promote (each is a deep run, counted against the daily cap). 0 to 5; `0` rates without promoting. |
 | `max_self_scheduled_tasks` | integer | `6` | Follow-up steps an agent may hold pending at once from `cortex_schedule` (the Scheduler tab shows them as `Cortex: <item>`). 0 to 20; `0` turns self-scheduling off fleet-wide. |
 | `auto_discard` | boolean | `true` | Whether Fully Autonomous runs may discard items rated 3 or lower with a "discard" recommendation. Reversible from the card's **Restore**. |
@@ -4427,7 +4428,7 @@ background work skips the queue, but `cognition.approval_required` — default
 `["external_send", "irreversible", "identity_edit"]` — always needs a human,
 whatever `auto_approve` says. Anything that sends something outside, cannot be
 undone, or rewrites who the agent is, gets a person in the loop: the item waits
-in **Pulse → Approvals** instead of being applied, and a background run that
+in **Cortex → Self-Improve** instead of being applied, and a background run that
 tries such a step pauses on it the same way. So does a step the agent scheduled
 for itself from a background run (`cortex_schedule`, shown in **Scheduler** as
 `Cortex: <item>`): it runs under the same rule as the run that booked it, not
@@ -6639,7 +6640,7 @@ flowchart TB
     CX --> ID["Ideas, brainstorms,<br/>prototypes"]
     CX --> PU["Pulse<br/>suggestions"]
     PU --> YOU["You: at the start of a session,<br/>on a channel or in a daily digest"]
-    CX -. "outward, irreversible<br/>or identity-changing" .-> AP["Waits in Pulse, Approvals"]
+    CX -. "outward, irreversible<br/>or identity-changing" .-> AP["Waits in Cortex, Self-Improve"]
 ```
 
 **Cortex is off until you turn it on.** On a new deployment the **Cortex
@@ -6727,10 +6728,11 @@ itself:
   and the org chart apply to background runs exactly as they do in chat.
 - `cognition.approval_required` still holds on every one of those runs, the
   self-scheduled steps included: by default an email, a payment or an identity
-  edit waits in **Pulse → Approvals**, and the item's `STATUS.md` says so.
+  edit waits in **Cortex → Self-Improve** (the tab that lists everything Cortex
+  is holding for your approval), and the item's `STATUS.md` says so.
 
 **With Fully Autonomous off**, ratings are advice. Each promotion candidate
-becomes a card in **Pulse → Approvals** whose **Approve** does exactly what the
+becomes a card in **Cortex → Self-Improve** whose **Approve** does exactly what the
 autonomous run would have done; nothing is discarded, and Advance Work develops
 items without scheduling, publishing or reaching out.
 

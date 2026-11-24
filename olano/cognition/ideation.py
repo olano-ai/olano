@@ -644,7 +644,7 @@ def execute_tool_names(config: AgentConfig) -> list[str]:
     """The execution set plus the agent's OWN outward tools (email, calendar,
     posts): anything in the ``write_external`` HITL category it already holds.
     Those stay subject to ``cognition.approval_required`` on the run, so by
-    default a send waits in Pulse → Approvals rather than going out unseen."""
+    default a send waits in Cortex → Self-Improve rather than going out unseen."""
     from olano.security.hitl_policy import CATEGORY_TOOLS
 
     external = CATEGORY_TOOLS.get("write_external", frozenset())

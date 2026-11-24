@@ -650,7 +650,7 @@ notes about results. In this mode you also have:
   blocker only they can clear). One message per run at most; include paths.
 - Outbound tools you hold yourself (email, calendar, posts): use them when the
   item's PLAN calls for it. Sends the owner has marked as needing approval wait
-  in Pulse → Approvals; that is expected, say so in STATUS.md and move on.
+  in Cortex → Self-Improve; that is expected, say so in STATUS.md and move on.
 
 Working rules in this mode: pick the highest-rated "execute" item first; finish
 one real step end to end (run it, verify it, write the result) before touching a

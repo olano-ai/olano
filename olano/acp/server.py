@@ -95,6 +95,45 @@ def _record_acp_usage(agent_name: str, result: Any, prior_ids: set[str] | None) 
         logger.debug("acp: usage recording failed", exc_info=True)
 
 
+def _with_true_status(update: Any) -> Any:
+    """A tool-call update whose result is a failure says so.
+
+    deepagents-acp reports every live tool result as ``completed``, whatever
+    came back. A call Olano refused (a path outside the workspace, a blocked
+    command) or that raised reached the editor with a green tick over the
+    refusal text. The result's own text is the evidence, read with the one
+    definition the turn loop uses for a failed call.
+    """
+    if getattr(update, "session_update", None) != "tool_call_update":
+        return update
+    if getattr(update, "status", None) != "completed":
+        return update
+    from olano.core.tool_failures import is_failed_tool_result
+
+    text = "".join(
+        str(getattr(getattr(item, "content", None), "text", "") or "")
+        for item in (getattr(update, "content", None) or [])
+    )
+    if not is_failed_tool_result(None, text):
+        return update
+    return update.model_copy(update={"status": "failed"})
+
+
+class _TrueStatusClient:
+    """The editor connection, with tool results reported by what they were."""
+
+    def __init__(self, conn: Any) -> None:
+        self._conn = conn
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._conn, name)
+
+    async def session_update(self, *args: Any, **kwargs: Any) -> Any:
+        if "update" in kwargs:
+            kwargs["update"] = _with_true_status(kwargs["update"])
+        return await self._conn.session_update(*args, **kwargs)
+
+
 class ACPServer:
     """Wraps a compiled deepagent graph in an ACP server.
 
@@ -127,6 +166,8 @@ class ACPServer:
             # instantiation below does not raise — verified against 0.0.11.
             # Drop this once upstream implements the three methods.
             server = AgentServerACP(self.agent)  # type: ignore[abstract]
+            connect = server.on_connect
+            server.on_connect = lambda conn: connect(_TrueStatusClient(conn))  # type: ignore[method-assign]
             logger.info("Starting ACP stdio server for agent '%s'", self.agent_name)
             await run_agent(server)
         except ImportError:

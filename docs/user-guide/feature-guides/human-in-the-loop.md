@@ -58,7 +58,7 @@ background work skips the queue, but `cognition.approval_required` — default
 `["external_send", "irreversible", "identity_edit"]` — always needs a human,
 whatever `auto_approve` says. Anything that sends something outside, cannot be
 undone, or rewrites who the agent is, gets a person in the loop: the item waits
-in **Pulse → Approvals** instead of being applied, and a background run that
+in **Cortex → Self-Improve** instead of being applied, and a background run that
 tries such a step pauses on it the same way. So does a step the agent scheduled
 for itself from a background run (`cortex_schedule`, shown in **Scheduler** as
 `Cortex: <item>`): it runs under the same rule as the run that booked it, not
