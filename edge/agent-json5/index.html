@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="../assets/favicon.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
     
     
       
@@ -28,10 +28,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -5176,7 +5176,7 @@ the fleet, on for one agent" works.</p>
 <td><code>approval_required</code></td>
 <td>string[]</td>
 <td><code>["external_send","irreversible","identity_edit"]</code></td>
-<td>Categories that always need a human, whatever <code>auto_approve</code> says. <code>identity_edit</code> is any change to SOUL.md, AGENTS.md or IDENTITY.md; <code>external_send</code> is anything that sends something outside the deployment (email, calendar, posts, messages to other agents); <code>irreversible</code> is moving money or overwriting a stored secret. Applies both to the Fully Autonomous sweep of the approval queue and to tool calls made during a background run — a held item waits in <strong>Pulse → Approvals</strong> with its usual Approve / Reject buttons. Set it to <code>[]</code> for an agent whose owner wants everything unattended, or list only the categories to keep; unknown names are ignored.</td>
+<td>Categories that always need a human, whatever <code>auto_approve</code> says. <code>identity_edit</code> is any change to SOUL.md, AGENTS.md or IDENTITY.md; <code>external_send</code> is anything that sends something outside the deployment (email, calendar, posts, messages to other agents); <code>irreversible</code> is moving money or overwriting a stored secret. Applies both to the Fully Autonomous sweep of the approval queue and to tool calls made during a background run — a held item waits in <strong>Cortex → Self-Improve</strong> with its usual Approve / Reject buttons. Set it to <code>[]</code> for an agent whose owner wants everything unattended, or list only the categories to keep; unknown names are ignored.</td>
 </tr>
 <tr>
 <td><code>self_learning</code>, <code>brainstorming</code>, <code>idea_generation</code>, <code>prototyping</code>, <code>skills_optimization</code>, <code>workspace_optimization</code>, <code>memory_optimization</code>, <code>pulse</code></td>
@@ -5230,7 +5230,7 @@ the fleet, on for one agent" works.</p>
 <td><code>promote_threshold</code></td>
 <td>integer | null</td>
 <td><code>null</code> (inherit; 8)</td>
-<td>Score from 1 to 10 at or above which the Rate &amp; Promote phase moves an item it recommends promoting to the next funnel stage on its own (brainstorm → idea → prototype → project). Only applies while Fully Autonomous (<code>auto_approve</code>) is on; otherwise every candidate waits as a card in <strong>Pulse → Approvals</strong>. Whole number 1 to 10; out-of-range values are pulled to the nearest end. <code>null</code> follows the deployment's <code>cognition.promote_threshold</code>.</td>
+<td>Score from 1 to 10 at or above which the Rate &amp; Promote phase moves an item it recommends promoting to the next funnel stage on its own (brainstorm → idea → prototype → project). Only applies while Fully Autonomous (<code>auto_approve</code>) is on; otherwise every candidate waits as a card in <strong>Cortex → Self-Improve</strong>. Whole number 1 to 10; out-of-range values are pulled to the nearest end. <code>null</code> follows the deployment's <code>cognition.promote_threshold</code>.</td>
 </tr>
 <tr>
 <td><code>max_promotions_per_run</code></td>
@@ -5684,10 +5684,10 @@ agent. The common causes:</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   
