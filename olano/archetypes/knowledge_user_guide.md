@@ -226,7 +226,7 @@ started by one line on a Linux server, a Mac with Docker Desktop, or Windows
 with Docker Desktop and WSL 2:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/deploy/self-host/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash
 ```
 
 The installer checks for Docker with the Compose plugin (on Linux it offers to

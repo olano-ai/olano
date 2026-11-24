@@ -1199,7 +1199,8 @@ fi
 step "Done"
 cat <<EOF
 
-  ${BOLD}Olano is ready.${RESET}
+  ${BOLD}Olano is ready.${RESET} The code is in ${REPO_ROOT}; run what follows
+  from there (cd ${REPO_ROOT}). Then: uv run olano setup, and uv run olano dashboard.
 
   Activate the venv:
     source .venv/bin/activate
