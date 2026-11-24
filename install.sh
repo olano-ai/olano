@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 # ──────────────────────────────────────────────────────────────────────────────
-# Lionclaw bootstrap installer
+# Olano installer: Docker (the recommended self-host) or from source
 # ──────────────────────────────────────────────────────────────────────────────
-# What this script does, in order. Steps marked [default] always run; steps
-# marked [opt-in] only run when the matching flag is passed.
+# Quick install, no clone needed:
+#   curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash
+#       Docker install (recommended): runs deploy/self-host/install.sh, which
+#       checks for Docker and the Compose plugin, downloads the compose files
+#       into ~/olano (or $OLANO_DIR) and starts Olano on http://localhost:3200.
+#       Options after `bash -s --` go to setup.sh, e.g.
+#       `| bash -s -- --host olano.example.com --sandbox`.
+#   curl -fsSL https://raw.githubusercontent.com/olano-ai/olano/main/install.sh | bash -s -- --source
+#       From source: clones the repository into ~/olano-src (or $OLANO_SRC_DIR)
+#       and runs the steps below there.
+#
+# From a clone, ./install.sh is the from-source install (the steps below) and
+# ./install.sh --docker is the Docker install. OLANO_REF picks the branch or tag
+# both modes download (default main).
+#
+# From source, what this script does, in order. Steps marked [default] always
+# run; steps marked [opt-in] only run when the matching flag is passed.
 #
 #   1. [default] Detects OS (macOS / Linux) and the right package manager
 #   2. [default] Ensures Python ≥3.12 is available; installs 3.12 if missing
-#   3. [default] Installs `uv` (the Python package/venv manager Lionclaw uses)
+#   3. [default] Installs `uv` (the Python package/venv manager Olano uses)
 #   4. [default] Creates the project venv and installs Python deps via uv
 #   5. [default] Installs Node.js + npm (~70 MB; required for dashboard +
 #                WhatsApp bridge)
@@ -22,14 +37,14 @@
 #                (The coding-agent CLIs claude/codex are optional — they are not
 #                in the exec sandbox image either; the step prints the one-liner.)
 #                Disable with --minimal.
-#   6b.[default] Installs `ngrok` (the secure tunnel Lionclaw uses as its public
+#   6b.[default] Installs `ngrok` (the secure tunnel Olano uses as its public
 #                gateway — exposes the local runtime/dashboard/webhooks to the
 #                internet). Tiny (~10 MB). Disable with --no-ngrok.
 #   7. [default] Downloads Playwright Chromium browser (~150 MB).
 #                Firefox + WebKit are NEVER downloaded.  Disable with
 #                --no-chromium if you don't need browser tools.
 #   8. [default] Installs Docker (Linux Engine ~200 MB; macOS Desktop ~2 GB).
-#                Used by Lionclaw's lionclaw_docker backend, shell sandbox,
+#                Used by Olano's lionclaw_docker backend, shell sandbox,
 #                MCP servers, and other containerized services.  Disable with
 #                --no-docker.
 #   9. [default] Installs pre-commit git hooks (auto-formats / lints on
@@ -58,7 +73,7 @@
 #   • Firefox / WebKit Playwright browsers (~600 MB combined) — Chromium only
 #   • Tesseract, ML compilers, GPU drivers
 #
-# Usage:
+# Usage (from source):
 #   ./install.sh                   # full default bootstrap (recommended)
 #   ./install.sh --ibkr            # also pull IB Gateway image (paper trading)
 #   ./install.sh --gcloud          # also install Google Cloud SDK
@@ -287,6 +302,69 @@ WRAP
     fi
 }
 
+# ── Front door: Docker or from source ─────────────────────────────────────────
+# Piped from curl there is no checkout next to this script, and the useful
+# default is the Docker install, which needs none. From a clone the default
+# stays the from-source install, exactly as before; --docker and --source pick
+# explicitly either way.
+OLANO_REF="${OLANO_REF:-main}"
+OLANO_REPO_URL="${OLANO_REPO_URL:-https://github.com/olano-ai/olano.git}"
+INSTALL_MODE=""
+FORWARD_ARGS=()
+for arg in "$@"; do
+    case "$arg" in
+        --docker) INSTALL_MODE=docker ;;
+        --source) INSTALL_MODE=source ;;
+        *) FORWARD_ARGS+=("$arg") ;;
+    esac
+done
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd || pwd)"
+IN_CHECKOUT=0
+if [[ -f "$SCRIPT_DIR/pyproject.toml" && -d "$SCRIPT_DIR/olano" && -f "$SCRIPT_DIR/deploy/self-host/install.sh" ]]; then
+    IN_CHECKOUT=1
+fi
+if [[ -z "$INSTALL_MODE" ]]; then
+    if [[ "$IN_CHECKOUT" -eq 1 ]]; then INSTALL_MODE=source; else INSTALL_MODE=docker; fi
+fi
+
+if [[ "$INSTALL_MODE" == docker ]]; then
+    step "Installing Olano with Docker (recommended)"
+    info "From source instead: add --source (piped: | bash -s -- --source)."
+    if [[ "$IN_CHECKOUT" -eq 1 ]]; then
+        exec bash "$SCRIPT_DIR/deploy/self-host/install.sh" ${FORWARD_ARGS[@]+"${FORWARD_ARGS[@]}"}
+    fi
+    self_host="$(mktemp)"
+    url="https://raw.githubusercontent.com/olano-ai/olano/$OLANO_REF/deploy/self-host/install.sh"
+    if command -v curl >/dev/null 2>&1; then
+        curl -fsSL --retry 3 "$url" -o "$self_host"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -q -O "$self_host" "$url"
+    else
+        err "Neither curl nor wget is installed; install one and re-run."
+        exit 1
+    fi
+    exec bash "$self_host" ${FORWARD_ARGS[@]+"${FORWARD_ARGS[@]}"}
+fi
+
+if [[ "$IN_CHECKOUT" -eq 0 ]]; then
+    # --source without a clone: make one, then run its own copy of this script.
+    src_dir="${OLANO_SRC_DIR:-$HOME/olano-src}"
+    step "Installing Olano from source into $src_dir"
+    if ! command -v git >/dev/null 2>&1; then
+        err "git is required for a from-source install; install git and re-run."
+        exit 1
+    fi
+    if [[ -d "$src_dir/.git" ]]; then
+        info "Using the existing clone in $src_dir (git pull to update it)."
+    elif [[ -e "$src_dir" ]]; then
+        err "$src_dir exists and is not a git clone; set OLANO_SRC_DIR to another directory."
+        exit 1
+    else
+        git clone --branch "$OLANO_REF" "$OLANO_REPO_URL" "$src_dir"
+    fi
+    exec bash "$src_dir/install.sh" --source ${FORWARD_ARGS[@]+"${FORWARD_ARGS[@]}"}
+fi
+
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$REPO_ROOT"
 
@@ -333,6 +411,7 @@ OFFICE_EXPLICIT=0
 for arg in "$@"; do
     case "$arg" in
         --force-sync|--force) FORCE_SYNC=1 ;;
+        --docker|--source) ;;  # handled by the front door above
         --hf-embeddings)  WANT_HF_EMBEDDINGS=1 ;;
         --office)         WANT_OFFICE=1; OFFICE_EXPLICIT=1 ;;
         --no-office)      WANT_OFFICE=0 ;;
@@ -763,8 +842,8 @@ if [[ "$WANT_SYSTEM_CLIS" -eq 1 ]]; then
     fi
 fi
 
-# ── 6b. ngrok (default-on; Lionclaw's public gateway / secure tunnel) ─────────
-# ngrok exposes the local Lionclaw runtime (dashboard, webhooks, channel
+# ── 6b. ngrok (default-on; Olano's public gateway / secure tunnel) ─────────
+# ngrok exposes the local Olano runtime (dashboard, webhooks, channel
 # callbacks) to the internet over a secure tunnel. It's the gateway, so it's
 # installed by default. Tiny (~10 MB). Disable with --no-ngrok.
 if [[ "$WANT_NGROK" -eq 1 ]]; then
@@ -879,7 +958,7 @@ if [[ "$WANT_IBKR" -eq 1 ]]; then
     export IBKR_PAPER_PORT=4002    # IB Gateway paper port
     export IBKR_LIVE_PORT=4001     # IB Gateway live port
 
-  Lionclaw IBKR tools always default to mode='paper'.
+  Olano IBKR tools always default to mode='paper'.
 
 EOF
         else
@@ -1120,7 +1199,7 @@ fi
 step "Done"
 cat <<EOF
 
-  ${BOLD}Lionclaw is ready.${RESET}
+  ${BOLD}Olano is ready.${RESET}
 
   Activate the venv:
     source .venv/bin/activate
