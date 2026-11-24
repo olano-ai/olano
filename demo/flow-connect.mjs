@@ -121,7 +121,7 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await tap(app.getByRole('button', { name: 'Continue' }), { move: 500 });
   await app.getByText('Connect Slack').first().waitFor({ timeout: 60000 });
   await S('hide');
-  await sleep(3500);
+  await sleep(PORTRAIT ? 2200 : 3500);
 
   mark('end');
   await S('caption', null);

@@ -40,12 +40,12 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await S('appIn');
   await sleep(300);
   await S('caption', 0);
-  await sleep(1400);
+  await sleep(1000);
   if (PORTRAIT) {       // a phone shows the conversation; the agents are in a drawer
     await openRail();
-    await sleep(2200);
+    await sleep(1800);
     await tap(rail.locator('.simple-row', { hasText: 'poppy' }), { move: 700 });
-    await sleep(1000);
+    await sleep(700);
   } else {
     await point(rail.getByText('bram', { exact: true }), { move: 800 });
     await sleep(700);
@@ -58,22 +58,22 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
 
   mark('ask');
   await S('caption', 1);
-  await send('When can Biscuit come in for a booster?', { cps: 22 });
+  await send('When can Biscuit come in for a booster?', { cps: 26 });
   await chat.getByText('Shall I book one').first().waitFor({ timeout: 90000 });
-  await sleep(1700);
+  await sleep(1100);
 
   mark('detail');
   await S('caption', 2);
   const detail = app.locator('[data-testid="simple-detail-btn"]');
   await tap(detail, { move: 800 });
   await chat.getByText('Calling read_file').first().waitFor({ timeout: 30000 });
-  await sleep(2100);
+  await sleep(1800);
   await tap(detail, { move: 200 });
   await chat.locator('.simple-tool-card').first().waitFor({ timeout: 30000 });
   await S('hide');
   await sleep(1000);
   await scroll(600, 900, '[data-testid="simple-chat"] .simple-tool-card');
-  await sleep(1800);
+  await sleep(1500);
 
   mark('attach');
   await S('caption', 3);
@@ -84,10 +84,10 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await sleep(140);
   await S('release');
   await app.locator('[data-simple-shell] input[type=file]').first().setInputFiles(PHOTO);
-  await sleep(1100);
-  await send("Here is Biscuit's vaccination card.", { cps: 22 });
+  await sleep(800);
+  await send("Here is Biscuit's vaccination card.", { cps: 26 });
   await chat.getByText('due this week').first().waitFor({ timeout: 90000 });
-  await sleep(1600);
+  await sleep(1200);
 
   mark('new');
   await S('caption', 4);
@@ -97,7 +97,7 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   const name = d.locator('#simple-newbot-name');
   await name.waitFor({ timeout: 30000 });
   await sleep(600);
-  await type(name, 'Milo', { cps: 10 });
+  await type(name, 'Milo', { cps: 12 });
   await keyboardOff();
   await sleep(400);
   const about = d.locator('textarea').first();
@@ -115,7 +115,7 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await sleep(700);
   await send('Hi Milo!');
   await chat.getByText('draft their aftercare notes').first().waitFor({ timeout: 90000 });
-  await sleep(1800);
+  await sleep(1300);
 
   mark('end');
   await S('caption', null);

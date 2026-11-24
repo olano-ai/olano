@@ -101,18 +101,18 @@ TEAM = {
             },
             {
                 "steps": [
-                    {"wait": 0.8},
+                    {"wait": 0.5},
                     {
                         "tool": "read_file",
                         "args": {"file_path": "patients/biscuit-whitlock.md"},
                         "result": "Biscuit (Labrador, 4 years). Booster due: this month.",
-                        "took": 0.8,
+                        "took": 0.6,
                     },
                     {
                         "tool": "read_file",
                         "args": {"file_path": "diary/this-week.csv"},
                         "result": "Thursday, Dr. Okafor: 10:20, 14:40, 16:10",
-                        "took": 0.8,
+                        "took": 0.6,
                     },
                     {
                         "text": "Biscuit's booster is due this month, so Thursday works well. "

@@ -34,7 +34,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await sleep(1500);
   if (PORTRAIT) {       // a phone keeps the sidebar in a drawer
     await tap(app.locator('button[aria-label="Open navigation"]'), { move: 700 });
-    await sleep(2200);
+    await sleep(1800);
   } else {
     const side = app.locator('[data-testid="nav-bot-sections"]');
     await point(side.getByText('fern', { exact: true }), { move: 800 });
@@ -58,7 +58,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   const pick = (n) => d.locator('.simple-pick', { hasText: n }).first();
   await scrollTo(pick('otto'), PORTRAIT ? 480 : 500, 700);
   for (const n of ['mara', 'otto', 'fern']) { await tap(pick(n), { move: 450 }); await sleep(300); }
-  await sleep(1000);
+  await sleep(700);
   await tap(d.getByRole('button', { name: 'Create group' }), { move: 700, dispatch: true });
   await thread.getByText('Nobody has spoken').first().waitFor({ timeout: 60000 });
   await S('hide');
@@ -68,22 +68,22 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await S('caption', 2);
   await send("Can we service Lena's e-bike and fit new brake pads by Saturday?", { cps: 24 });
   await thread.getByText('is there a workshop slot').first().waitFor({ timeout: 90000 });
-  await sleep(1500);
+  await sleep(1000);
 
   mark('handoff');
   await S('caption', 3);
   await thread.getByText('Friday at 14:00').first().waitFor({ timeout: 120000 });
   await sleep(2600);
   await thread.getByText('put one aside').first().waitFor({ timeout: 120000 });
-  await sleep(3200);
+  await sleep(2600);
 
   mark('name');
   await S('caption', 4);
   const box = app.locator('textarea').last();
-  await type(box, '@f', { cps: 5 });
+  await type(box, '@f', { cps: 7 });
   const option = app.locator('.simple-mention-menu [role=option]', { hasText: 'fern' }).first();
   await option.waitFor({ timeout: 30000 });
-  await sleep(700);
+  await sleep(500);
   await point(option, { move: 500 });
   await S('press');
   await sleep(130);
@@ -95,7 +95,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await keyboardOff();
   await S('hide');
   await thread.getByText("Monday's order list").first().waitFor({ timeout: 90000 });
-  await sleep(2000);
+  await sleep(1600);
 
   mark('details');
   await S('caption', 5);
@@ -103,7 +103,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   const panel = app.locator('[data-testid="simple-group-info"]');
   await panel.getByText('Answers by default').first().waitFor({ timeout: 30000 });
   if (!PORTRAIT) await point(panel.getByText('Answers by default').first(), { move: 800, dx: 62, dy: 16 });
-  await sleep(3600);
+  await sleep(3200);
 
   mark('end');
   await S('caption', null);
