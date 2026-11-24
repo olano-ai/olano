@@ -1,6 +1,7 @@
-// Mixes a demo's voiceover and music (audio/<DEMO>/, from voiceover.mjs and music.py) for one recording: each line starts just
-// after its step (marks.json from record.mjs) and never overlaps the one before; the music ducks under
-// the voice, fades out with the end card and the whole mix is normalised to -14 LUFS (YouTube/Reels/TikTok).
+// Mixes a demo's voiceover (audio/<DEMO>/, from voiceover.mjs) for one recording: each line starts just
+// after its step (marks.json from record.mjs) and never overlaps the one before, and the mix is
+// normalised to -14 LUFS (YouTube/Reels/TikTok). With MUSIC=1 a music bed from music.py is added: it
+// ducks under the voice and fades out with the end card.
 //   node mix.mjs <frames dir> <ffmpeg>   ->  <frames dir>/mix.wav; prints the seconds to hold the last frame
 import fs from 'node:fs';
 import path from 'node:path';
@@ -33,16 +34,22 @@ const place = STEPS.map((s, i) => {
 const total = Math.max(videoEnd, t + 1.6);              // the end card holds until the last line has settled
 const hold = total - videoEnd;
 
-const inputs = place.flatMap(({ i }) => ['-i', path.join(A, `vo${i}.mp3`)]).concat(['-i', path.join(A, 'music.mp3')]);
+// Music is off by default (MUSIC=1 mixes in audio/<demo>/music.mp3 from music.py, ducked under the voice)
+const MUSIC = !!process.env.MUSIC && fs.existsSync(path.join(A, 'music.mp3'));
+const inputs = place.flatMap(({ i }) => ['-i', path.join(A, `vo${i}.mp3`)]).concat(MUSIC ? ['-i', path.join(A, 'music.mp3')] : []);
 const M = place.length;
 let fc = place.map(({ i, a, b, at }) =>
   `[${i}:a]atrim=${a.toFixed(3)}:${b.toFixed(3)},asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,adelay=${Math.round(at * 1000)}:all=1[v${i}]`).join(';');
 fc += `;${place.map(({ i }) => `[v${i}]`).join('')}amix=inputs=${M}:normalize=0,highpass=f=70,`
   + `acompressor=threshold=0.1:ratio=2.5:attack=8:release=120:makeup=1.5,apad,atrim=0:${total.toFixed(3)},asplit[vo][sc]`;
-fc += `;[${M}:a]aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:${total.toFixed(3)},volume=-15dB,`
-  + `afade=t=in:d=1.2,afade=t=out:st=${(total - 2.8).toFixed(3)}:d=2.8[m0]`;
-fc += `;[m0][sc]sidechaincompress=threshold=0.02:ratio=5:attack=60:release=700:knee=4[m]`;
-fc += `;[vo][m]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9,aresample=48000[out]`;
+if (MUSIC) {
+  fc += `;[${M}:a]aresample=48000,aformat=channel_layouts=stereo,apad,atrim=0:${total.toFixed(3)},volume=-15dB,`
+    + `afade=t=in:d=1.2,afade=t=out:st=${(total - 2.8).toFixed(3)}:d=2.8[m0]`;
+  fc += `;[m0][sc]sidechaincompress=threshold=0.02:ratio=5:attack=60:release=700:knee=4[m]`;
+  fc += `;[vo][m]amix=inputs=2:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=9,aresample=48000[out]`;
+} else {
+  fc += `;[sc]anullsink;[vo]loudnorm=I=-14:TP=-1.5:LRA=9,aresample=48000[out]`;
+}
 execFileSync(FF, ['-v', 'error', '-y', ...inputs, '-filter_complex', fc, '-map', '[out]', '-ar', '48000', '-c:a', 'pcm_s16le', path.join(D, 'mix.wav')], { stdio: ['ignore', 'ignore', 'inherit'] });
 for (const p of place) console.error(`  vo${p.i} ${p.at.toFixed(2)}–${(p.at + p.b - p.a).toFixed(2)} s`);
 console.error(`  video ${videoEnd.toFixed(2)} s, end card held +${hold.toFixed(2)} s`);

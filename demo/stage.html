@@ -265,7 +265,7 @@ window.stage = {
     document.querySelector('.addr svg').style.display = on ? 'none' : '';
     document.body.classList.toggle('term-mode', on);
     termEl.classList.toggle('on', on);
-    if (PORTRAIT) { $('tw').classList.toggle('on', on); $('phone').style.display = on ? 'none' : ''; }
+    if (PORTRAIT) { $('tw').classList.toggle('on', on); $('phone').style.opacity = on ? 0 : ''; $('phone').style.pointerEvents = on ? 'none' : ''; }
   },
   termClear() { termBody.innerHTML = ''; termLine = null; },
   /** A fresh prompt line with a cursor. */

@@ -9,7 +9,7 @@ DEMO=${DEMO:-tour}
 WORK=${DEMO_WORK:-$(cd "$(dirname "$0")" && pwd)/.work}
 FFMPEG=${FFMPEG:-ffmpeg}
 FF=$FFMPEG
-JOIN=${JOIN:-assistant}          # the assistant chapter keeps both questions
+JOIN=${JOIN:-}                   # steps that run on into the next one, e.g. JOIN="ask work"
 mkdir -p videos/clips
 for L in ${*:-portrait landscape}; do
   SRC=videos/olano-$DEMO-$L.mp4

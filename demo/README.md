@@ -1,20 +1,19 @@
 # Demo videos
 
 Short product films of Olano: the real dashboard in a browser window (or, in the phone format, in an
-iPhone), with captions, a pointer, a voiceover and soft music. Each one comes in landscape
+iPhone), with captions, a pointer and a voiceover. Each one comes in landscape
 (1920×1080, for YouTube and the website) and portrait (1080×1920, for Reels, Shorts and TikTok).
 
 Nothing is filmed or edited by hand. A script drives the real dashboard in headless Chromium and
-records it frame by frame; the voice is generated from the written lines, the music is composed in
-code, and one command rebuilds a video after a caption, a line or the dashboard itself changes.
+records it frame by frame; the voice is generated from the written lines, and one command rebuilds a video after a caption, a line or the dashboard itself changes.
 
 ```
  flow-<demo>.mjs ──► record.mjs ──► frames (JPEG) + marks.json (when each step starts)
    (the script)      (Chromium, stage.html,      │
                       the dashboard from         │   voiceover.mjs ──► audio/<demo>/vo0..N.mp3
-                      serve.py)                  │   music.py      ──► audio/<demo>/music.mp3
+                      serve.py)                  │
                                                  ▼
-                              build.sh ─► mix.mjs (voice on the marks, music ducked, −14 LUFS)
+                              build.sh ─► mix.mjs (voice on the marks, −14 LUFS)
                                          ─► ffmpeg ─► videos/olano-<demo>-<layout>.mp4 (H.264, 60 fps)
                                                        └─► clips.sh ─► videos/clips/ (one per chapter)
 ```
@@ -66,15 +65,18 @@ npm i @fontsource-variable/inter@5.1.0 @fontsource-variable/jetbrains-mono
 Then, from the repository root:
 
 ```bash
-SLOW=3 DEMO=tour demo/make.sh                 # both layouts: record, voice, music, build
+SLOW=3 DEMO=tour demo/make.sh                 # both layouts: record, voice, build
 SLOW=3 DEMO=chat demo/make.sh landscape       # one layout
 DEMO=tour demo/build.sh landscape             # rebuild from the frames already recorded
 ```
 
 A take runs the page at 1/`SLOW` speed (so a small machine still gets enough frames) and takes
 `SLOW` times the video's length. `make.sh` generates the voice when `audio/<demo>/` has none
-(needs `OPENAI_API_KEY`; only the written lines are sent) and fits the music to the take;
-`MUSIC=1` recomposes it after the timing changed.
+(needs `OPENAI_API_KEY`; only the written lines are sent). The lines are in `voiceover.mjs`, or in
+the flow itself as `export const voice = [...]`.
+
+The videos have no music. `MUSIC=1 demo/make.sh` composes an original piano bed fitted to the take
+(`music.py`, numpy) and mixes it under the voice.
 
 ```bash
 OPENAI_API_KEY=… node demo/voiceover.mjs chat 0 3   # only lines 0 and 3
@@ -82,8 +84,8 @@ node demo/chart.mjs demo/assets/chat-sales.json demo/assets/chat-sales.png
 DEMO=tour demo/clips.sh                             # one clip per chapter
 ```
 
-The finished MP4s (`videos/`) and the work folder are not committed; the scripts, the voice and
-music files and the chart are.
+The finished MP4s (`videos/`) and the work folder are not committed; the scripts, the voice
+files and the chart are.
 
 ### The installation tutorials
 
