@@ -1,0 +1,3183 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.0/feature-guides/channels-and-connectors/">
+      
+      
+        <link rel="prev" href="../revisions/">
+      
+      
+        <link rel="next" href="../cortex-and-pulse/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Channels and connectors - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#channels-and-connectors" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Channels and connectors
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked="">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#three-ways-to-connect-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three ways to connect WhatsApp
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-24-hour-window-and-why-a-scheduled-whatsapp-message-may-not-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 24-hour window, and why a scheduled WhatsApp message may not send
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whatsapp-business-the-agents-tools-and-who-may-use-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhatsApp Business: the agent's tools, and who may use which
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whatsapp-owners-files-and-repeated-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhatsApp owners, files and repeated messages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-replies-and-making-an-agent-stay-quiet-in-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group replies, and making an agent stay quiet in groups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replying-to-a-specific-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replying to a specific message
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-openai-compatible-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The OpenAI-compatible API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linkedin-outreach-profile-visits-connection-requests-inbox-and-posts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinkedIn outreach: profile visits, connection requests, inbox and posts
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#three-ways-to-connect-whatsapp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three ways to connect WhatsApp
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-24-hour-window-and-why-a-scheduled-whatsapp-message-may-not-send" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The 24-hour window, and why a scheduled WhatsApp message may not send
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whatsapp-business-the-agents-tools-and-who-may-use-which" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhatsApp Business: the agent's tools, and who may use which
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whatsapp-owners-files-and-repeated-messages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WhatsApp owners, files and repeated messages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-replies-and-making-an-agent-stay-quiet-in-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group replies, and making an agent stay quiet in groups
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#replying-to-a-specific-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Replying to a specific message
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-openai-compatible-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The OpenAI-compatible API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linkedin-outreach-profile-visits-connection-requests-inbox-and-posts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LinkedIn outreach: profile visits, connection requests, inbox and posts
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/feature-guides/channels-and-connectors.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="channels-and-connectors">Channels and connectors<a class="headerlink" href="#channels-and-connectors" title="Permanent link">¶</a></h1>
+<p>Channels are how people reach an agent. Configure them on the agent's
+<strong>Connectors</strong> tab, which documents every field for every connector.</p>
+<pre class="mermaid"><code>flowchart LR
+    P["A person on WhatsApp,&lt;br/&gt;Telegram, Slack, email, ..."] -- "message" --&gt; C["The agent's connector&lt;br/&gt;allowed senders and owners,&lt;br/&gt;rate limits, message policy"]
+    C --&gt; A["The agent"]
+    A -- "reply, on the same channel" --&gt; P</code></pre>
+<p>Supported: <strong>Telegram</strong>, <strong>Slack</strong>, <strong>Discord</strong>, <strong>WhatsApp</strong> (three
+connectors, see below), <strong>Signal</strong>,
+<strong>Email/IMAP</strong>, <strong>Matrix</strong>, <strong>Mattermost</strong>, <strong>SMS</strong>, <strong>Home Assistant</strong>,
+<strong>DingTalk</strong>, <strong>Feishu</strong> and <strong>Lark</strong>, <strong>WeCom (Enterprise WeChat)</strong>, <strong>WeChat
+(Weixin / iLink Bot)</strong>, <strong>QQ</strong>, <strong>BlueBubbles (iMessage)</strong>, <strong>DeBox</strong>, the
+<strong>OpenAI-compatible API</strong> (below), and inbound webhooks.</p>
+<p>Three of those names are easy to mix up:</p>
+<ul>
+<li><strong>Feishu</strong> and <strong>Lark</strong> are the same connector: Lark is Feishu's
+  international edition, run by ByteDance from a separate cloud with its own
+  App IDs. The picker offers each as its own row; the Lark row is the Feishu
+  form with <strong>Brand / region</strong> preset to Lark (saved as <code>extra.domain: "lark"</code>
+  under <code>type: "platform:feishu"</code>). An app created in one console never
+  authenticates on the other, so pick the row that matches where the app was
+  made.</li>
+<li><strong>WeChat (Weixin / iLink Bot)</strong> is the personal messenger: a WeChat account
+  linked by QR, no developer console. <strong>WeCom (Enterprise WeChat)</strong>, formerly
+  <em>WeChat Work</em>, is the company product: an AI Bot with a bot ID and secret
+  from the WeCom admin console. Asking an agent to <em>"connect WeChat"</em> gets the
+  personal one; say <strong>WeCom</strong>, <strong>Enterprise WeChat</strong> or <strong>WeChat Work</strong> for the
+  company product, and the agent offers only that.</li>
+</ul>
+<h2 id="three-ways-to-connect-whatsapp">Three ways to connect WhatsApp<a class="headerlink" href="#three-ways-to-connect-whatsapp" title="Permanent link">¶</a></h2>
+<p><strong>WhatsApp</strong> pairs by scanning a QR code with your phone, the way WhatsApp Web
+does. Nothing to register and no business account, but it drives a personal
+WhatsApp session, so it is best for your own number and small-scale use.</p>
+<p><strong>WhatsApp (Twilio Business API)</strong> connects through a Twilio account to a
+registered WhatsApp business sender. There is no QR code and no session to keep
+alive, and it is built for customer-facing traffic. Pick it when your WhatsApp
+business number already lives in Twilio, or you want Twilio's console, balance
+and usage reports.</p>
+<p><strong>WhatsApp (Meta Cloud API)</strong> connects straight to Meta's own WhatsApp Business
+Platform with your Meta app, with no provider in between. Templates, their
+approval status and the category WhatsApp bills each one under, and every
+delivery report come directly from Meta. Pick it when your number is in your own
+WhatsApp Business Account, or you want no second provider's fees or console.</p>
+<p>The two business connectors give an agent the same WhatsApp tools, with the
+same names and the same instructions (see
+<a href="#whatsapp-business-the-agents-tools-and-who-may-use-which">below</a>), so an
+agent's prompt does not change when you move from one to the other.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>WhatsApp</th>
+<th>WhatsApp (Twilio Business API)</th>
+<th>WhatsApp (Meta Cloud API)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How it connects</td>
+<td>Scan a QR code with your phone, like WhatsApp Web</td>
+<td>A Twilio account and a registered WhatsApp business sender</td>
+<td>Your own Meta app on the WhatsApp Business Platform</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Your own number, small-scale use</td>
+<td>Customer-facing traffic, a number already in Twilio</td>
+<td>A number in your own WhatsApp Business Account</td>
+</tr>
+<tr>
+<td>Group chats</td>
+<td>Yes</td>
+<td>No, one-to-one only</td>
+<td>No, one-to-one only</td>
+</tr>
+<tr>
+<td>Quoting the message being answered</td>
+<td>Yes</td>
+<td>No</td>
+<td>When <strong>Quote the message being answered</strong> is on</td>
+</tr>
+<tr>
+<td>Starting a conversation</td>
+<td>Any time</td>
+<td>Within 24 hours of the customer's last message, otherwise an approved template</td>
+<td>Within 24 hours of the customer's last message, otherwise an approved template</td>
+</tr>
+<tr>
+<td>Usage and billing reports</td>
+<td>None</td>
+<td>Twilio's balance and spend reports</td>
+<td>Per message, from Meta</td>
+</tr>
+</tbody>
+</table>
+<h5 id="setting-up-whatsapp-twilio-business-api">Setting up WhatsApp (Twilio Business API)<a class="headerlink" href="#setting-up-whatsapp-twilio-business-api" title="Permanent link">¶</a></h5>
+<p>Setting it up takes values from the Twilio console and nothing else:</p>
+<ol>
+<li>Log in at console.twilio.com. The <strong>Account Info</strong> panel on the home page
+   shows the <strong>Account SID</strong> (it starts with <code>AC</code>) and the <strong>Auth Token</strong> (click
+   <strong>Show</strong>). Enter both in the connector on the Connectors tab.</li>
+<li>To try it without waiting for Meta, use Twilio's WhatsApp sandbox: open
+   Messaging, Try it out, Send a WhatsApp message, and from your phone send the
+   join code shown there to +1 415 523 8886. Under <strong>Sandbox settings</strong> on the
+   same page, clear <strong>When a message comes in</strong> and save, or Twilio's demo
+   answers your messages as well.</li>
+<li>Enter <code>+14155238886</code> as the <strong>WhatsApp sender number</strong>, add your own phone
+   number under <strong>Allowed sender numbers</strong>, save and restart the agent.</li>
+</ol>
+<p>There is no webhook to configure. When the agent starts, the connector tells
+Twilio to deliver incoming messages to the deployment's own public address, and
+it checks every delivery against your Auth Token before the agent sees it. With
+your own registered number, anyone who writes to it reaches the agent. The
+shared sandbox number cannot open a conversation with a new number by itself, so
+there the agent hears only the numbers under <strong>Allowed sender numbers</strong>, and
+only once each has sent the join code (a join lasts three days; send it again
+after that). A listed number that has not joined yet is retried automatically.
+If a message does not arrive, the connector's diagnostics on the Connectors tab
+say whether incoming messages are set up and, if not, why. A self-hosted install
+needs a public https address Twilio can reach; Olano Cloud deployments always
+have one.</p>
+<p>Moving to your own number later means registering it as a WhatsApp sender
+(Messaging, Senders, WhatsApp senders), which requires Meta business
+verification; clear <strong>Allowed sender numbers</strong> then to accept everyone. Register
+a Twilio phone number or a number your business owns that is not on WhatsApp
+yet. When WhatsApp's sign-up offers <strong>Use a display name only</strong>, do not pick
+it: that gives a free number in area code 555, which Twilio does not support
+(see below). If the number was already routed somewhere else in Twilio (a
+Studio flow or another app), connecting it here sends its incoming messages to
+the agent instead, and the diagnostics name what was replaced.</p>
+<p>The <strong>WhatsApp sender number</strong> has to be one of the account's own WhatsApp
+senders, or the sandbox number. Any other number (a typo, a number registered
+on another Twilio account) fails in the worst way on WhatsApp: Twilio accepts
+every message and WhatsApp drops each one later. So the connector checks the
+number against the account when it starts: the <strong>sender</strong> row of its
+diagnostics turns red and names the numbers the account does have, and every
+send from it, ordinary or template, is refused with that reason until the
+number is corrected. <strong>whatsapp_sender_status</strong> shows the same list to the
+agent.</p>
+<p>One kind of number passes that check and still does not work: <strong>a free 555
+number from WhatsApp</strong> (a United States number starting +1 555, what <strong>Use a
+display name only</strong> gives at sign-up). The Twilio Console lists it as online
+under your WhatsApp Business Account, yet Twilio does not support these
+numbers: Twilio refuses to route its incoming messages (the diagnostics show
+<em>Invalid Address</em>) and templates sent from it fail with error 63027. The
+connector recognizes one: the <strong>sender</strong> row turns red and says so, and the
+agent explains it when a template fails. The fix is to register a Twilio phone
+number, or a number your business owns, as a WhatsApp sender on the same
+Twilio account and the same WhatsApp Business Account, then enter it as the
+<strong>WhatsApp sender number</strong>. Templates belong to the Business Account, not to a
+number, so the ones already approved send from the new number without another
+review.</p>
+<h5 id="setting-up-whatsapp-meta-cloud-api">Setting up WhatsApp (Meta Cloud API)<a class="headerlink" href="#setting-up-whatsapp-meta-cloud-api" title="Permanent link">¶</a></h5>
+<p>It takes two IDs, a token and your app's secret, all from Meta:</p>
+<ol>
+<li>In the Meta App Dashboard (developers.facebook.com/apps), create or open a
+   <strong>Business</strong> app and add the <strong>WhatsApp</strong> product. Under WhatsApp, <strong>API
+   Setup</strong>, copy the <strong>WhatsApp Business Account ID</strong> and the <strong>Phone number
+   ID</strong> of the number the agent should use (the phone number ID is a long
+   string of digits shown under the number, not the number itself).</li>
+<li>Create a token that does not expire: in Business settings
+   (business.facebook.com/settings), <strong>System users</strong>, add a system user,
+   assign it your app and the WhatsApp Business Account, then <strong>Generate
+   token</strong> with the <code>whatsapp_business_messaging</code> and
+   <code>whatsapp_business_management</code> permissions. The temporary token on the API
+   Setup page works for a first try but expires after 24 hours.</li>
+<li>In the App Dashboard, <strong>App settings</strong>, <strong>Basic</strong>, click <strong>Show</strong> next to
+   <strong>App secret</strong>.</li>
+<li>On the agent's Connectors tab add <strong>WhatsApp (Meta Cloud API)</strong>, enter the
+   token, both IDs and the app secret, save and restart the agent. The token and
+   the app secret are kept in the agent's vault, never in its configuration.</li>
+</ol>
+<p>There is no webhook to configure. When the agent starts, the connector
+subscribes your app to the WhatsApp Business Account (only if it is not
+subscribed yet) and points this one number's webhook at the deployment's own
+public address. Meta checks that address once, then delivers every message
+and delivery report for the number there, and the connector checks each
+delivery's signature against the app secret before the agent sees it. Without
+the app secret the agent can still send, but every incoming message is refused.
+Only the number's own webhook is changed, never the address set for the whole
+Business Account or the app, so several agents can share one Business Account
+and one app, each with its own number, and each hears only its own number. If
+the number was pointed at another address before, it is replaced and the
+diagnostics name the old one. If Meta refuses the setup, the diagnostics show
+the address and the verify token to enter by hand in the App Dashboard
+(WhatsApp, <strong>Configuration</strong>, subscribing the <strong>messages</strong> field). A
+self-hosted install needs a public https address Meta can reach; Olano Cloud
+deployments always have one.</p>
+<p>The connector checks everything it can when it starts, and its diagnostics on
+the Connectors tab show the result, one row each:</p>
+<ul>
+<li><strong>Connection</strong>: whether Meta accepts the token, and a warning when the token
+  expires within 7 days.</li>
+<li><strong>Permissions</strong>: whether the token holds the two permissions above, and for
+  this Business Account. Without <code>whatsapp_business_messaging</code> nothing can be
+  sent or received; without <code>whatsapp_business_management</code> the connector can
+  neither read templates nor set up incoming messages.</li>
+<li><strong>Sender</strong>: the number, its display name and whether Meta has it online. A
+  phone number ID that is not on the Business Account you entered turns this
+  row red and names the numbers that are; a token that cannot read the number
+  at all stops the connector.</li>
+<li><strong>Incoming</strong>: whether the webhook is set up, and when the last delivery
+  arrived.</li>
+<li><strong>Window</strong>: how many customers can currently receive an ordinary message
+  (see the next section).</li>
+</ul>
+<p><strong>Meta's test number</strong> from the API Setup page works for trying the connector,
+but it only delivers to up to five phone numbers you add on that page (under
+<strong>To</strong>). A send to anyone else fails, and the agent says why. For real
+customers, add your own number to the Business Account in WhatsApp Manager.</p>
+<p><strong>Allowed sender numbers</strong> (optional) limits who the agent answers. Leave it
+empty to answer everyone who writes to the number. Besides phone numbers it
+takes the ID Meta sends instead of a number for someone who hides it behind a
+WhatsApp username, such as <code>US.13491208655302741918</code>; the agent can reply to
+such a person as usual. <strong>Read receipts and typing indicator</strong> (on by default)
+marks each message read as it arrives and shows <em>typing...</em> while the agent
+prepares its answer. <strong>Quote the message being answered</strong> (off by default)
+makes each reply quote the person's message.</p>
+<h5 id="what-differs-between-the-connectors">What differs between the connectors<a class="headerlink" href="#what-differs-between-the-connectors" title="Permanent link">¶</a></h5>
+<p>All three connectors handle text, images, documents and voice notes in both
+directions, and all three transcribe an inbound voice note and can reply with
+generated speech. The differences worth knowing before you choose:</p>
+<ul>
+<li><strong>Quoting a specific message does not work outbound on the Twilio
+  connector.</strong> Twilio has no way to send a quoted reply, so the agent answers
+  in the conversation rather than threading onto one message. It still <em>sees</em>
+  which message a customer replied to. The QR connector quotes normally, and
+  the Meta connector quotes when <strong>Quote the message being answered</strong> is on.</li>
+<li><strong>Both business connectors start a conversation only with an approved
+  template.</strong> WhatsApp allows a business to send freely only within <strong>24
+  hours</strong> of the customer's last message, and otherwise only a template Meta
+  approved in advance. This is Meta's rule and applies to every business
+  connection, whichever provider carries it.</li>
+<li><strong>Groups work on the QR connector.</strong> The Meta connector answers one-to-one
+  chats only; a group message is ignored.</li>
+<li><strong>Account balance and spend reports are Twilio's.</strong> The Meta connector
+  reports instead, per message, whether Meta billed it and under which
+  category (see the tools below); Meta's own invoices are in WhatsApp Manager.</li>
+</ul>
+<h2 id="the-24-hour-window-and-why-a-scheduled-whatsapp-message-may-not-send">The 24-hour window, and why a scheduled WhatsApp message may not send<a class="headerlink" href="#the-24-hour-window-and-why-a-scheduled-whatsapp-message-may-not-send" title="Permanent link">¶</a></h2>
+<p>More than 24 hours after a customer's last message, WhatsApp delivers only
+<strong>pre-approved template messages</strong>, and it discards an ordinary message with no
+error at all. So that a message can never vanish silently, the agent refuses
+such a send and says the window has closed, instead of reporting success for
+something the customer never received.</p>
+<p>The Meta connector knows a window only from the messages it received itself,
+because Meta keeps no message history anyone can ask for: someone who last
+wrote before the connector was set up counts as outside the window until they
+write again. What it received is kept across restarts.</p>
+<p>Outside the window the agent sends an approved template instead: it lists the
+templates WhatsApp approved for the account, picks the one that fits, and fills
+in its placeholders (see the next section). There is nothing to set up for this
+on the Connectors tab. Attachments cannot be sent outside the window at all,
+with or without a template.</p>
+<p>This affects scheduled jobs, reminders and any other message the agent starts
+on its own. A scheduled job's reply to a WhatsApp chat is an ordinary message,
+so it arrives only if that person wrote in the last 24 hours. For a job that
+must reach someone either way, name the template in the job's instructions, for
+example <em>every Monday at 9, send the weekly_summary template to +1 555 123 4567
+with this week's total</em>. Replies to an incoming message are always inside the
+window and are never affected.</p>
+<h2 id="whatsapp-business-the-agents-tools-and-who-may-use-which">WhatsApp Business: the agent's tools, and who may use which<a class="headerlink" href="#whatsapp-business-the-agents-tools-and-who-may-use-which" title="Permanent link">¶</a></h2>
+<p>Beyond replying in a conversation, an agent with either business connector,
+WhatsApp (Twilio Business API) or WhatsApp (Meta Cloud API), gets one toolkit,
+<strong>WhatsApp Business</strong>. The tools have the same names, take the same values and
+answer in the same shape on both connectors, so one set of instructions works
+whichever carries the agent's number; when an agent has both, the tools use the
+Meta one. Every tool is listed on the connector's own panel (Connectors tab,
+edit the connector, the <strong>Tools</strong> section) with an on/off switch, and the same
+switches are on the agent's Tools tab. The tools come in two kinds, so the
+agent that talks to customers and the agent that manages the WhatsApp Business
+account can be different agents with different powers.</p>
+<p><strong>Everyday tools</strong>, on for every agent that has the connector. Switch one off
+to take it away from that agent.</p>
+<ul>
+<li><strong>whatsapp_template_list</strong> lists the templates WhatsApp approved for the
+  account, with their placeholders and buttons. On the Meta connector it also
+  shows each template's header and footer, and the category WhatsApp actually
+  bills it under, noting when WhatsApp moved it to another category than the
+  one it was created in.</li>
+<li><strong>whatsapp_template_send</strong> sends an approved template to a number: the only
+  message WhatsApp delivers to someone who has not written in the last 24
+  hours, and the way a business starts a conversation. The agent fills every
+  placeholder (a template is never sent with one left empty, and never unless
+  WhatsApp approved it), then waits a few seconds for WhatsApp's verdict and
+  says whether the message was delivered or why WhatsApp refused it, for
+  example a Twilio sandbox number that has not joined, or a recipient missing
+  from the list of Meta's test number. A line break inside a placeholder
+  becomes a space, because WhatsApp refuses one there. A template whose name
+  exists in several languages is sent in the language the agent names. On the
+  Meta connector a placeholder in the template's header is filled as
+  <code>header</code> and one in a button's link as <code>button_1</code>, <code>button_2</code> and so on, as
+  the list shows; an image, video or document header takes an https link to
+  the file.</li>
+<li><strong>whatsapp_message_status</strong> checks later whether a message was sent,
+  delivered or read, or why it failed. On the Meta connector it also says
+  whether Meta billed the message and under which category, or that it was
+  free (a reply inside the 24-hour window, for example).</li>
+<li><strong>whatsapp_window_status</strong> says whether the 24-hour window is open for a
+  number, so the agent knows whether an ordinary message or only a template
+  will arrive, and when the window closes.</li>
+</ul>
+<p><strong>Account administration</strong>, off until an administrator switches them on for
+the one agent that manages the account, because what they change or read
+belongs to the whole WhatsApp Business account (or Twilio account) and every
+agent on it. No agent can switch
+them on by itself, for itself or for another agent: it takes an administrator,
+on the connector panel or the Tools tab, or by asking AgentFather while signed
+in as one.</p>
+<ul>
+<li><strong>whatsapp_template_create</strong> creates a template and submits it to WhatsApp
+  for approval: the text with its placeholders, and optionally buttons, either
+  up to ten reply buttons the person answers with one tap, or up to two
+  website buttons and one phone button.
+  On the Meta connector a template goes to WhatsApp's review the moment it is
+  created, so there are no unsubmitted drafts; the agent shows you the text
+  first.</li>
+<li><strong>whatsapp_template_submit</strong> submits a template that was created without
+  submitting (Twilio). On the Meta connector, where creating already submits,
+  it says where the template stands instead.</li>
+<li><strong>whatsapp_template_status</strong> reports the approval status of one template or
+  of all of them, with WhatsApp's reason when it rejected one, and on the Meta
+  connector its quality rating and any change of category.</li>
+<li><strong>whatsapp_template_delete</strong> deletes a template. It needs the template's
+  name typed back, because a deleted template is gone for every agent on the
+  account and a replacement waits for WhatsApp's review again. On the Meta
+  connector it deletes the one language the agent picked, not every language
+  of that name.</li>
+<li><strong>whatsapp_sender_status</strong> lists the account's WhatsApp numbers: whether
+  each is online, Meta's quality rating, the daily messaging limit, and the
+  business profile.</li>
+<li><strong>whatsapp_profile_update</strong> changes the business profile customers see when
+  they open the business in WhatsApp: the about line, description, address,
+  email, website and category. The display name is changed in the Twilio
+  Console or in WhatsApp Manager, since Meta reviews it.</li>
+<li><strong>twilio_account_balance</strong> shows the Twilio account's balance (Twilio only).</li>
+<li><strong>twilio_usage_summary</strong> shows the WhatsApp spend for this month, last
+  month, today or yesterday, by category, with the account's total (Twilio
+  only; on Meta, billing is per message, above, and invoices are in WhatsApp
+  Manager).</li>
+</ul>
+<p>The managing agent uses its own connector's account when it has a business
+connector. Otherwise it needs keys in its vault, which the Tools tab asks for:
+<strong>WHATSAPP_META_ACCESS_TOKEN</strong> and <strong>WHATSAPP_META_WABA_ID</strong> for a Meta
+account, or <strong>TWILIO_ACCOUNT_SID</strong> and <strong>TWILIO_AUTH_TOKEN</strong> for a Twilio
+account.</p>
+<p>What keeps this safe:</p>
+<ul>
+<li><strong>Only the owner, or an administrator, can have the agent use any of these
+  tools.</strong> A customer writing to the agent on WhatsApp cannot make it list,
+  send, create or delete a template, or read the account, even on an agent
+  that holds the tools. Scheduled jobs you set up run with your authority, so a
+  reminder job can send a template.</li>
+<li><strong>Approval before acting.</strong> Under the Supervised and Locked-down security
+  profiles, every template send, creation, submission and deletion, and every
+  profile change, waits for your approval. The Trusted profile does not ask, so
+  choose Supervised for an agent whose template sends you want to review.</li>
+</ul>
+<p><strong>On Twilio, templates need your own WhatsApp number.</strong> Twilio's shared
+sandbox number (+1 415 523 8886) can send only Twilio's own three sample templates, never the
+ones you created, so from the sandbox every template send fails (Twilio error
+63027), even right after the person wrote to you. The agent says so instead of
+trying. Register your own number in the Twilio Console (Messaging, Senders,
+WhatsApp senders) and enter it as the connector's <strong>WhatsApp sender number</strong>;
+templates approved for your account then send from it. Ordinary replies work
+from the sandbox as before. If a send from your own number still comes back
+with error 63027, the agent reports the number's state and the WhatsApp
+Business Account it belongs to. A free 555 number from WhatsApp is not
+supported by Twilio (see above). A number that is not online delivers nothing.
+For an online number, the usual cause is that WhatsApp does not hold that
+template for its Business Account: it was approved while the Twilio account
+was connected to another Business Account, or deleted or disabled in WhatsApp
+Manager since. Look for it in WhatsApp Manager, under that Business Account,
+Message templates; if it is not there, creating and submitting the template
+again puts it there.
+<strong>whatsapp_sender_status</strong> shows every number with its account.</p>
+<p>On the Meta connector the same kind of failure reads <em>template does not exist</em>
+(error 132001): WhatsApp holds no approved template of that name, in that
+language, on the connector's Business Account. The agent names the Business
+Account to look in; WhatsApp Manager, Message templates, under that account,
+shows whether the template is there and in which languages.</p>
+<p>A typical conversation with the managing agent:</p>
+<ul>
+<li><em>"Create a utility template that tells a customer their order is ready, with
+  their name and order number, and a button to track it."</em> The agent drafts
+  it, shows you the draft, checks it against WhatsApp's rules, and submits it
+  once you agree.</li>
+<li><em>"Is the order-ready template approved yet?"</em> It asks WhatsApp and
+  answers with the status, or WhatsApp's reason if it was rejected.</li>
+<li><em>"Is our number online, and how much did WhatsApp cost us this month?"</em> It
+  reads the sender status and, on Twilio, the usage summary.</li>
+<li><em>"Send the order_ready template to +1 555 123 4567 for Maria, order 1042."</em>
+  That is the sending side, on the customer-facing agent.</li>
+</ul>
+<p>WhatsApp's rules for a template, which the agent checks before submitting so a
+review is not wasted: placeholders are either numbered {{1}}, {{2}} and so on
+without gaps, or named in lowercase such as {{first_name}}, never both in one
+template (the agent fills a named one by its name); two placeholders never sit
+side by side; the text neither starts nor ends with one; each placeholder needs
+at least two more words of fixed text around it; every placeholder has a
+realistic sample value for the reviewers; and the text is at most 1024
+characters (640 with website or phone buttons). A website button's address may
+end with one placeholder; button titles are at most 20 characters. <strong>UTILITY</strong>
+is for updates about something the customer asked for, like orders,
+appointments or account alerts. <strong>MARKETING</strong> is for promotions. One-time-code
+templates are built in the Twilio Console or in WhatsApp Manager.</p>
+<p>WhatsApp usually reviews a template within 24 hours. The status then reads
+<em>approved</em>, <em>rejected</em> (with a reason), or later <em>paused</em> or <em>disabled</em> if
+recipients block or report it. A submitted template cannot be edited: to change
+one, create a corrected copy under a new name. Meta bills each template message
+it delivers, and WhatsApp's policy requires that people agreed to receive
+messages from the business.</p>
+<h2 id="whatsapp-owners-files-and-repeated-messages">WhatsApp owners, files and repeated messages<a class="headerlink" href="#whatsapp-owners-files-and-repeated-messages" title="Permanent link">¶</a></h2>
+<p>These apply to the WhatsApp connector paired by QR code, except where a point
+names the business connectors.</p>
+<ul>
+<li><strong>Owners can be listed by phone number, on all three connectors.</strong> An entry
+  such as <code>+65 9123 4567</code> in <em>Owner numbers</em> is recognised as that person's
+  account whatever form WhatsApp, Twilio or Meta reports them in, including
+  WhatsApp's privacy identifiers; on the Meta connector a business-scoped user
+  ID works too. Owners can always write to the agent, even when the allowed
+  list omits them, and get the treatment described in
+  <a href="../human-in-the-loop/">Human in the loop (HITL) and approvals</a>. On the Twilio sandbox
+  number, also list an owner under <em>Allowed sender numbers</em>, because the
+  sandbox only hears numbers on that list.</li>
+<li><strong>Files sent to the agent are kept in its workspace.</strong> Documents
+  (spreadsheets, PDFs, Word files), videos and other files are saved in the
+  agent's <code>uploads/</code> folder, like photos. A document's text is also given to
+  the agent directly, but only the saved file has everything: a spreadsheet's
+  every row and its formulas, a template the agent can fill in. Files over
+  100 MB are not copied.</li>
+<li><strong>A message is answered once.</strong> When the linked phone reconnects, WhatsApp
+  can deliver messages again that the agent already handled. The connector
+  remembers the message ids it processed, including across restarts, and
+  ignores the repeats.</li>
+</ul>
+<h2 id="group-replies-and-making-an-agent-stay-quiet-in-groups">Group replies, and making an agent stay quiet in groups<a class="headerlink" href="#group-replies-and-making-an-agent-stay-quiet-in-groups" title="Permanent link">¶</a></h2>
+<p>Every group-capable connector (Telegram, WhatsApp, Discord, Slack, Matrix,
+Mattermost, DingTalk, DeBox) carries two independent selects under <strong>Behavior</strong>
+on its Connectors panel:</p>
+<ul>
+<li><strong>Group replies</strong> — which group messages get an answer. <em>All messages</em> (the
+  usual default) answers everything; <em>@mentions only</em> answers when the bot is
+  @mentioned, replied to, sent a <code>/command</code>, or matched by one of the wake-word
+  patterns on the same panel; <em>Never reply (silent)</em> answers nothing in groups.</li>
+<li><strong>Group listening &amp; history</strong> — which group messages the agent did <em>not</em>
+  answer are kept in its own local history, so it can be asked later what a
+  group discussed. Off by default, so nothing is stored until you turn it on.</li>
+</ul>
+<p>Direct messages are always answered, in every mode — these two settings govern
+group traffic only.</p>
+<p>Two things to know when you want an agent genuinely silent in groups:</p>
+<ul>
+<li><strong>Set both.</strong> <em>Never reply (silent)</em> stops the answers; <em>Group listening &amp;
+  history</em> set to <em>Off</em> (its default) stops the recording. They are separate
+  choices because "watch without answering" is the common case.</li>
+<li><strong>Restart the agent.</strong> A connector's settings are read when the agent starts,
+  so a saved change reaches the running connector only on its next restart —
+  the panel says as much at the top. Until then the form shows the new value
+  while the live connector still uses the old one. On WhatsApp you can confirm
+  which one is in force without waiting for someone to post: the connector's
+  <strong>Diagnose</strong> panel reports the modes the <em>running</em> connector resolved, in
+  words ("Group replies: none — never answers in groups"). If that disagrees
+  with the form, the agent has not been restarted since the change.</li>
+</ul>
+<p>Two deliberate exemptions survive <em>Never reply (silent)</em>: a group listed under
+<strong>Free-response chats</strong> on the same panel is answered anyway (a per-chat
+exemption is more specific than the global mode), and a <code>/command</code> is answered
+when its sender is listed under <strong>Allowed users</strong> or <strong>Owner users</strong> — the
+owner's way back in. With both of those user lists empty nobody is singled out,
+so in silent mode even a <code>/command</code> goes unanswered rather than letting any
+group member wake the agent.</p>
+<h2 id="replying-to-a-specific-message">Replying to a specific message<a class="headerlink" href="#replying-to-a-specific-message" title="Permanent link">¶</a></h2>
+<p>When someone long-presses an earlier message and taps <strong>Reply</strong>, the agent now
+sees what they are replying to. Before, a reply arrived looking like any other
+message — so "does this still apply?" reached the agent with no "this", and it
+had to guess or ask.</p>
+<p>The quoted message is shown to the agent above the new one, marked as a quote.
+It is treated as <strong>context, not instructions</strong>: quoting a message never gives
+its text authority over the agent, which matters in group chats where the
+quoted words were usually written by someone else. Long quotes are shortened.</p>
+<p><strong>Replying to a photo, a voice note or a file works too.</strong> Pointing at a
+picture and asking "what does this say?" is how people use chat, and a photo
+sent without a caption has no text to quote — so the agent is told what kind of
+attachment was quoted and is handed the file itself, saved into the agent's
+workspace exactly like an attachment sent directly to it. It can then look at
+the image, transcribe the voice note, or read the document, and answer about
+the thing you pointed at. If the file cannot be fetched — too large, or an old
+message whose copy has expired on the messaging service — the agent is told a
+reply happened and that the attachment was unavailable, rather than being left
+to guess.</p>
+<p>Text quoting works today on <strong>Telegram</strong>, <strong>WhatsApp</strong>, <strong>Discord</strong>,
+<strong>Feishu/Lark</strong> and <strong>WeCom</strong>. Quoted attachments work on <strong>WhatsApp</strong> (images,
+video, voice notes and documents), <strong>Telegram</strong> (photos, voice notes, audio and
+documents) and <strong>Discord</strong> (images and audio); on the others a quoted
+attachment is announced but not fetched. On <strong>Slack</strong>, <strong>Matrix</strong>, <strong>iMessage</strong>,
+<strong>Email</strong> and the two WhatsApp business connectors (<strong>Twilio</strong> and <strong>Meta Cloud
+API</strong>) the agent is told that a reply happened but not yet what was quoted. The remaining connectors do not report replies yet.</p>
+<p>Nothing to configure — it is on for every agent. On WhatsApp the feature lives
+in the bundled bridge, so it starts working after the agent's WhatsApp channel
+next restarts; your pairing is kept and you will not be asked to scan a QR
+again.</p>
+<h2 id="the-openai-compatible-api">The OpenAI-compatible API<a class="headerlink" href="#the-openai-compatible-api" title="Permanent link">¶</a></h2>
+<p>Add the <strong>OpenAI-compatible API</strong> connector to let any OpenAI-compatible app or
+SDK talk to one agent — Open WebUI, LobeChat, LibreChat, the official OpenAI
+client libraries, or your own code. The agent answers as itself: same prompt,
+same tools, same memory as on any other channel.</p>
+<p>The form shows you both things you need. Press the generate button beside
+<strong>API key</strong> to mint one (or paste your own), save it, and restart the agent.
+The <strong>API base URL</strong> field above it is the real address for this agent on this
+deployment — copy it as-is with the copy button; it is not a template to edit.
+Give your client that URL as its base URL and the key as its API key.</p>
+<p>The agent's name is a segment of that URL — that is what selects which agent
+answers, so several agents can each serve their own endpoint on one deployment.
+The model field your client sends is ignored (the agent <em>is</em> the model);
+<code>/v1/models</code> advertises the agent's name if the client wants to pick from a
+list.</p>
+<p><strong>The API key is required for that public URL.</strong> Without a real one it answers
+403 and the agent is reachable only from the deployment machine itself. Keys
+shorter than 8 characters, and obvious placeholders like <code>changeme</code>, count as
+missing.</p>
+<p>Available endpoints: <code>/v1/chat/completions</code> (streaming and non-streaming),
+<code>/v1/responses</code> (including <code>previous_response_id</code> chains), <code>/v1/runs</code> with
+<code>/v1/runs/{id}/events</code> for structured progress as an agent works, <code>/v1/models</code>
+and <code>/health</code>.</p>
+<p>Conversations continue automatically: a client that resends its conversation
+each turn is recognised and kept on one thread. To control that explicitly, send
+an <code>X-Olano-Session-Id</code> header — the same value continues the same conversation,
+a new value starts a fresh one. (That header needs the API key set; without one
+it is refused, so nobody can read another conversation by guessing ids.) A
+<code>system</code> message applies to that request only and is never stored.</p>
+<p><strong>Bind host</strong> and <strong>Bind port</strong> live under <strong>Advanced</strong> and most setups never
+touch them: the port is allocated per agent automatically, and the base URL
+above works regardless of either. Set them only when something on your own
+network must reach the agent's port directly. If you do expose it on the
+network, an API key is mandatory — the server refuses to start without one.</p>
+<p>To rotate the key, clear the current one, generate a new one and save the
+connector; the eye and copy buttons beside the field show and copy the value
+when you need it again.</p>
+<p><strong>The rule that causes the most confusion: credentials never go in
+<code>agent.json5</code>.</strong> Write the channel with its settings only —</p>
+<div class="highlight"><pre><span></span><code><span class="err">channels</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nv">type</span><span class="p">:</span><span class="w"> </span><span class="s">"telegram"</span><span class="p">,</span><span class="w"> </span><span class="nv">allowed_users</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"123456789"</span><span class="p">]</span><span class="w"> </span><span class="p">}]</span>
+</code></pre></div>
+<p>— and store the token in the vault under the name that connector expects
+(<code>TELEGRAM_BOT_TOKEN</code>, <code>SLACK_BOT_TOKEN</code> + <code>SLACK_APP_TOKEN</code>,
+<code>DISCORD_BOT_TOKEN</code>, and so on; the Connectors tab names the key for each).
+The Connectors tab does that for you: type the token into the connector's
+credential field and press <strong>Save</strong>, and it is stored in the vault as that
+agent's own value, never in <code>agent.json5</code>. If the vault cannot take it (for
+example, it is locked), nothing is saved and the message says why.</p>
+<p><strong>WhatsApp and WeChat (Weixin) don't start from a token — they pair by QR
+code.</strong> Their connector forms open on a <strong>Pair / Link</strong> button: click it, scan
+the QR with the phone that owns the account, and the credentials are issued
+and stored automatically (for WeChat the scanned login is also pinned to the
+agent, so several agents can each hold their own WeChat account). The
+credential fields for these two sit collapsed under the form as an advanced
+manual fallback — you never need them for a normal setup. Asking the agent in
+chat works too: it shows the same QR right in the conversation.</p>
+<p><strong>Two agents on the same platform need per-agent overrides.</strong> Every agent reads
+the same credential name, so if two agents both use the shared
+<code>TELEGRAM_BOT_TOKEN</code> they authenticate as the <em>same bot</em> — and one of them
+silently stops receiving messages. Store each agent's token as a per-agent
+override: ask the agent to connect itself (it sends a magic link and stores the
+token under its own name), or in the <strong>Vault</strong> page pick the agent when saving
+the key. Never paste a token into a chat — a magic link is how an agent
+collects one (<a href="../ask-the-agent/">Ask the agent: self-configuration, magic links and admin tools</a>).</p>
+<p>Restart the agent after adding a connector. A connector with no credential is
+skipped at boot and raises a dashboard notification naming the key to set, and
+the connector's diagnostics on the Connectors tab say the same. That is the
+symptom to look for when a bot never replies.</p>
+<p><strong>WhatsApp attachments need a current bridge.</strong> WhatsApp hands out media
+encrypted, so voice notes, photos, videos and files are decrypted by the local
+WhatsApp bridge before an agent ever sees them — which means an out-of-date
+bridge shows up as attachments that arrive with nothing in them. A voice note is
+the visible case: it carries no text of its own, so the agent is left answering
+an empty message and replies as if nothing had been said, while the same voice
+note on Telegram transcribes normally. Updating the deployment ships a current
+bridge and the agent restarts it on its own, keeping the existing pairing — no
+re-scanning a QR. If an attachment still cannot be read, the agent is told so
+explicitly and asks the sender to resend, rather than answering an empty
+message. Very large attachments are skipped by design; the ceiling is
+<code>WHATSAPP_MEDIA_MAX_BYTES</code> (25 MB by default), and the decrypted files are kept
+for <code>WHATSAPP_MEDIA_RETENTION_HOURS</code> (24) before being cleaned up.</p>
+<p><strong>For non-technical owners</strong>, an agent with the right tools can send a single
+secure link that walks the person through connecting their own accounts —
+scanning a QR for WhatsApp, pasting a validated bot token for Telegram or
+Slack — without any token passing through the chat.</p>
+<h2 id="linkedin-outreach-profile-visits-connection-requests-inbox-and-posts">LinkedIn outreach: profile visits, connection requests, inbox and posts<a class="headerlink" href="#linkedin-outreach-profile-visits-connection-requests-inbox-and-posts" title="Permanent link">¶</a></h2>
+<p>The <strong>LinkedIn</strong> connection on the Connections page can post as you, but
+LinkedIn does not let ordinary apps send connection requests, follow people,
+read messages or comment. The <strong>LinkedIn outreach</strong> toolkit does those things on
+your own LinkedIn account, in one of two ways: through Olano Cloud, as a paid
+add-on (of a managed deployment, or of your account for a self-hosted install
+running on an Olano API key), or through your own Unipile workspace (below),
+on any install. With neither, the tools say what is missing and do nothing.</p>
+<p><strong>Turning it on.</strong> First switch the <strong>LinkedIn outreach</strong> add-on on, in the
+place that matches your install:</p>
+<ul>
+<li><strong>An Olano Cloud deployment:</strong> in the Olano Cloud console, on the instance's
+  page, open the <strong>Plan</strong> tab, and under <strong>LinkedIn outreach</strong> choose how many
+  LinkedIn accounts to pay for (one seat per account, so one per agent that
+  will do outreach). You can also pick it while deploying a new instance, in
+  the Add-ons step. It takes effect right away.</li>
+<li><strong>A self-hosted install on an Olano API key</strong> (<a href="../../models-and-credits/#olano-credits-on-a-self-hosted-install">Models and credits</a>):
+  on <code>cloud.olano.ai</code>, under <strong>Billing</strong>, the <strong>LinkedIn outreach for your API
+  keys</strong> card. The seats are bought for your account on their own monthly
+  subscription and shared by every install using your API keys; the first
+  switch-on opens a checkout, and the seats appear once the payment is
+  confirmed.</li>
+</ul>
+<p>Either way you can add seats, disconnect an account or switch the add-on off
+from the same place later. See <a href="https://cloud.olano.ai">cloud.olano.ai</a> for the
+current price. Without the add-on the tools answer that it is not switched on,
+and say which of the two places to go.</p>
+<p>Then add the <strong>LinkedIn outreach</strong> toolkit to an agent (Tools tab, or ask the
+agent to add it with <code>self_add_toolkit</code>) and ask the agent to connect LinkedIn:
+it calls <code>linkedin_connect_account</code> and gives you a secure link. Open it, sign in to LinkedIn on that page (two-step verification, if you
+use it, happens there too) and approve. Your password never passes through the
+chat or the agent. The link expires after about an hour; ask for a new one if
+it lapses. Each agent has its own LinkedIn account, so two agents can work two
+different accounts (each uses one seat), and connecting a different account
+replaces the agent's current one. When every seat is taken, the agent says
+which agents hold them; add a seat or disconnect one first.</p>
+<p><strong>Using your own Unipile workspace instead.</strong> If you already have a
+<a href="https://www.unipile.com">Unipile</a> account, put its API key and DSN in the
+Vault as <code>UNIPILE_API_KEY</code> and <code>UNIPILE_DSN</code> (the DSN is shown in the Unipile
+dashboard, for example <code>api1.unipile.com:13111</code>; with or without <code>https://</code>).
+An agent can ask you for them with a secure link (<code>magic_link_request_secret</code>),
+so they never pass through the chat. As soon as both resolve for an agent, its
+LinkedIn tools talk to your workspace directly: no add-on and no credits,
+Unipile bills you, and it works on self-hosted installs too. Set them on one
+agent (its Vault override or <code>env</code>) to use them for that agent only. Which
+LinkedIn account of the workspace an agent uses:</p>
+<table>
+<thead>
+<tr>
+<th>How</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNIPILE_ACCOUNT_ID</code> in the Vault</td>
+<td>Always wins: the Unipile account id of the LinkedIn account this agent must use</td>
+</tr>
+<tr>
+<td>The sign-in link</td>
+<td>Ask the agent to connect LinkedIn: the account the link adds to your workspace becomes this agent's</td>
+</tr>
+<tr>
+<td>Automatic</td>
+<td>A workspace with exactly one LinkedIn account that no other agent uses is picked up without asking</td>
+</tr>
+</tbody>
+</table>
+<p>The same daily limits and the same approvals apply as on the managed service.
+Disconnecting deletes the account from your workspace only when it was added
+through the agent's sign-in link; an account you connected in the Unipile
+dashboard yourself is left there.</p>
+<p><strong>What the agent can then do:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Needs your approval</th>
+<th>Charged</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>linkedin_account_status</code></td>
+<td>Is LinkedIn connected, did the last sign-in link finish, what are the daily limits</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>linkedin_visit_profile</code></td>
+<td>Opens a member's profile, so they see the visit in "Who viewed your profile", and reads it</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_follow_profile</code></td>
+<td>Follows a member</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_send_invitation</code></td>
+<td>Sends a connection request, with a personal note (up to 300 characters) or without one</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_list_sent_invitations</code> / <code>linkedin_withdraw_invitation</code></td>
+<td>Lists pending requests you sent, and withdraws one. LinkedIn shows how long ago a pending request was sent only in its own words ("Sent today", "Sent 1 week ago"), never an exact time, so that is what the list shows</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>linkedin_list_conversations</code> / <code>linkedin_read_conversation</code></td>
+<td>Lists your inbox and reads one conversation, oldest message first</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>linkedin_send_message</code></td>
+<td>Replies in a conversation, or sends a first message to someone you are already connected with</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_list_posts</code></td>
+<td>Lists a member's recent posts (does not notify them)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>linkedin_comment_on_post</code></td>
+<td>Comments on a post, publicly, under your name</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_react_to_post</code></td>
+<td>Reacts to a post (like, celebrate, support, love, insightful, funny)</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><code>linkedin_disconnect_account</code></td>
+<td>Disconnects the account, which frees its seat for another agent</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>"Needs your approval" follows your approval settings: with the default
+settings, anything that speaks for you to another person waits for a yes on
+the Approvals page or in chat first.</p>
+<p><strong>What it costs.</strong> The add-on is billed with your subscription, per seat; adding
+a seat charges the rest of the current billing period right away, and removing
+one or switching the add-on off credits the unused part to your balance.
+Switching it off disconnects every LinkedIn account at once. On top of the
+seats, each charged action above costs a small amount of credits. Nothing is
+charged when LinkedIn refuses an action, or when nothing was sent (for example
+a connection request to someone you are already connected with). The agent
+tells you what each action cost; the Insights tab shows the total as
+<strong>LinkedIn outreach</strong>.</p>
+<p><strong>Daily limits.</strong> LinkedIn restricts accounts that act too fast, so each account
+has a rolling 24-hour limit per kind of action (visits, follows, connection
+requests, messages, comments, reactions). The agent can tell you the current
+limits with <code>linkedin_account_status</code>. When one is reached the agent stops and
+continues the next day. LinkedIn has limits of its own on top: a weekly cap on
+connection requests, and, on free accounts, only a few requests with a personal
+note per month. When LinkedIn refuses, the agent passes on LinkedIn's reason and
+can offer to send the request without a note.</p>
+<p><strong>Messages and posts are other people's words.</strong> What the agent reads in your
+inbox or in someone's posts is treated as information, never as instructions to
+the agent, so a message that says "ignore your instructions" changes nothing.</p>
+<p><strong>When LinkedIn signs you out.</strong> LinkedIn ends sessions on its own schedule. The
+agent then says the account needs reconnecting and offers a new sign-in link.</p>
+<p>LinkedIn's terms do not allow automating an account, and LinkedIn may restrict
+accounts it believes are automated. The limits above keep the pace well below
+what LinkedIn tolerates, but the risk stays with the account owner: keep the
+outreach personal and relevant.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../revisions/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Revisions">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Revisions
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../cortex-and-pulse/" class="md-footer__link md-footer__link--next" aria-label="Next: Cortex and Pulse">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Cortex and Pulse
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

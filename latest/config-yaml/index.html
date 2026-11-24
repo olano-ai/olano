@@ -1,0 +1,5106 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.0/config-yaml/">
+      
+      
+        <link rel="prev" href="../agent-json5/">
+      
+      
+        <link rel="next" href="../organization-yaml/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>config.yaml reference - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configyaml-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              config.yaml reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#root-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox-tool-bundles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox tool bundles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cognition-cortex-defaults-for-the-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cognition: — Cortex defaults for the fleet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#default_models-where-the-default-aliases-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        default_models: — where the default:* aliases point
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heartbeat:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-how-agents-pick-up-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        issues: — how agents pick up work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revisions-automatic-version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        revisions: — automatic version history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#push-notifications-to-the-mobile-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        push:, notifications to the mobile app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mobile_app-what-the-mobile-app-shows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mobile_app:, what the mobile app shows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage_budgets-token-ceilings-and-budget-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        usage_budgets: — token ceilings and budget warnings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disk_monitor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        disk_monitor:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp_health-keeping-mcp-connections-alive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mcp_health: — keeping MCP connections alive
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checkpoint_gc-trimming-conversation-history-on-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        checkpoint_gc:, trimming conversation history on disk
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduler-how-late-a-scheduled-job-may-still-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scheduler:, how late a scheduled job may still run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#peer_threads-how-much-two-agents-carry-between-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        peer_threads:, how much two agents carry between them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages-deployed-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pages:: deployed pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-browser-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        browser: (browser control)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-tracing-to-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        observability: (tracing to Langfuse)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context_window-compaction-and-oversized-tool-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        context_window: — compaction and oversized tool results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote_agents-fleet-rules-for-talking-to-outside-agents-a2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remote_agents: — fleet rules for talking to outside agents (A2A)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external_access-letting-outside-systems-reach-your-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        external_access: — letting outside systems reach your agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalog_sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        catalog_sync:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits-how-costs-are-displayed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        credits: — how costs are displayed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#magic_links-secure-links-for-connecting-people" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        magic_links: — secure links for connecting people
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt_refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prompt_refresh:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#speech-voice-in-and-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        speech: — voice in and out
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-vision-and-image-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        media: — vision and image generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web_search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        web_search:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate_limits-message-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_limits: — message caps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playground-the-prompt-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        playground: — the prompt sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self_serve_agents-let-people-make-their-own-bots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        self_serve_agents: — let people make their own bots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_autonomy-what-agents-may-change-about-themselves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agent_autonomy: — what agents may change about themselves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#groups-multi-bot-conversations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        groups: — multi-bot conversations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../feature-guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#root-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sandbox-tool-bundles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sandbox tool bundles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cognition-cortex-defaults-for-the-fleet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cognition: — Cortex defaults for the fleet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#default_models-where-the-default-aliases-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        default_models: — where the default:* aliases point
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heartbeat:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#issues-how-agents-pick-up-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        issues: — how agents pick up work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revisions-automatic-version-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        revisions: — automatic version history
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#push-notifications-to-the-mobile-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        push:, notifications to the mobile app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mobile_app-what-the-mobile-app-shows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mobile_app:, what the mobile app shows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage_budgets-token-ceilings-and-budget-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        usage_budgets: — token ceilings and budget warnings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disk_monitor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        disk_monitor:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp_health-keeping-mcp-connections-alive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mcp_health: — keeping MCP connections alive
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checkpoint_gc-trimming-conversation-history-on-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        checkpoint_gc:, trimming conversation history on disk
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduler-how-late-a-scheduled-job-may-still-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scheduler:, how late a scheduled job may still run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#peer_threads-how-much-two-agents-carry-between-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        peer_threads:, how much two agents carry between them
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pages-deployed-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pages:: deployed pages
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-browser-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        browser: (browser control)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-tracing-to-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        observability: (tracing to Langfuse)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context_window-compaction-and-oversized-tool-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        context_window: — compaction and oversized tool results
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote_agents-fleet-rules-for-talking-to-outside-agents-a2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remote_agents: — fleet rules for talking to outside agents (A2A)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external_access-letting-outside-systems-reach-your-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        external_access: — letting outside systems reach your agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalog_sync" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        catalog_sync:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits-how-costs-are-displayed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        credits: — how costs are displayed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#magic_links-secure-links-for-connecting-people" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        magic_links: — secure links for connecting people
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prompt_refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prompt_refresh:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#speech-voice-in-and-out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        speech: — voice in and out
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#media-vision-and-image-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        media: — vision and image generation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web_search" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        web_search:
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rate_limits-message-caps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate_limits: — message caps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#playground-the-prompt-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        playground: — the prompt sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self_serve_agents-let-people-make-their-own-bots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        self_serve_agents: — let people make their own bots
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_autonomy-what-agents-may-change-about-themselves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agent_autonomy: — what agents may change about themselves
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#groups-multi-bot-conversations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        groups: — multi-bot conversations
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/config-yaml.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="configyaml-reference"><code>config.yaml</code> reference<a class="headerlink" href="#configyaml-reference" title="Permanent link">¶</a></h1>
+<p>Deployment-wide settings at <code>~/.olano/config.yaml</code>. Almost every field here
+is editable from the dashboard's <strong>Config</strong> section (admin only), which is the
+recommended way — the forms validate as you type. A few keys have no form yet
+and are edited in the file directly; each says so in its description.</p>
+<p><strong>Out-of-range numbers are clamped, not rejected.</strong> If you write
+<code>poll_minutes: 9999</code> where the range is 1–1440, you get 1440 and no error.
+If you write something unparseable for a field, that field falls back to its
+default silently. Check the value the dashboard shows back after saving.</p>
+<p>Most changes apply on the next tick. The exceptions — the ports and team
+accounts — need a runtime restart, and the dashboard says so.</p>
+<p><strong>Every key and block in this section can also be changed from an AgentFather
+conversation</strong> ("set the disk warning threshold to 85%", "turn magic links
+off"). AgentFather reads the whole file, patches the field through the same
+validation a dashboard save gets, and reports honestly which keys were applied
+and which were ignored (with the reason) — if it says a key was ignored,
+nothing changed on disk. Each change surfaces an approval card first. Secrets
+never go in this file — they live in the vault.</p>
+<h2 id="root-keys">Root keys<a class="headerlink" href="#root-keys" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default_agent</code></td>
+<td>string</td>
+<td><code>"merli"</code></td>
+<td>The agent the dashboard chat and the simple chat open first, and the one API calls that name no agent go to.</td>
+</tr>
+<tr>
+<td><code>preferred_model</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Default model for new agents.</td>
+</tr>
+<tr>
+<td><code>runtime_api_port</code></td>
+<td>integer</td>
+<td><code>8765</code></td>
+<td>The runtime API port. <em>Restart required.</em></td>
+</tr>
+<tr>
+<td><code>dashboard_port</code></td>
+<td>integer</td>
+<td><code>3200</code></td>
+<td>The dashboard port. <em>Restart required.</em></td>
+</tr>
+<tr>
+<td><code>multi_user_enabled</code></td>
+<td>boolean | null</td>
+<td><code>null</code></td>
+<td><strong>Team accounts.</strong> Unset resolves by deployment type — on for managed deployments, off for a manual install. See <a href="../feature-guides/multi-user/">Multi-user: two different features</a>. <em>Restart required.</em></td>
+</tr>
+<tr>
+<td><code>ui_mode</code></td>
+<td><code>"advanced"</code> | <code>"simple"</code></td>
+<td><code>"advanced"</code></td>
+<td><strong>Single-user installs only.</strong> Which interface the operator sees: <code>advanced</code> is the full dashboard, <code>simple</code> is the stripped bot-chat app described in <a href="../dashboard/#two-interfaces-full-dashboard-and-simple-chat">The dashboard</a>. Team deployments ignore this and use each person's own <strong>Interface</strong> setting in <strong>Admin → Users</strong>. Edited in <code>config.yaml</code> directly — no dashboard form yet.</td>
+</tr>
+<tr>
+<td><code>highlights_all_agents</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Show highlights across every agent instead of the current one.</td>
+</tr>
+<tr>
+<td><code>extra_bind_roots</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra host directories agents may reach.</td>
+</tr>
+<tr>
+<td><code>archetype_dirs</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra directories to search for agent templates.</td>
+</tr>
+<tr>
+<td><code>egress_allow</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Domains every agent's tools may reach — bare domains like <code>api.github.com</code>, a domain covering its subdomains. Empty means every public destination is allowed. An agent whose own <code>egress_allow</code> is non-empty uses its list instead; an agent with an empty list inherits this one. Governs every outbound request a tool makes — web and HTTP tools, the headless browser, remote-agent calls and every integration toolkit — but not the sandbox shell. Edited in <strong>Config → Outbound access</strong>; applies to the next tool call. See <a href="../agent-json5/#security"><code>agent.json5</code> reference</a>.</td>
+</tr>
+<tr>
+<td><code>egress_deny</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Domains no agent's tools may reach, same format. Checked before the allow list. Every agent's own <code>egress_deny</code> is added to this list — an agent can block more, never less. Edited in <strong>Config → Outbound access</strong>.</td>
+</tr>
+<tr>
+<td><code>sandbox_tool_sets</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra tool bundles to install into the sandbox your agents run commands in. Empty means none — agents still get the standard toolkit (git, Python, Node, jq, sqlite3, ripgrep, tmux, ffmpeg, pandoc, PDF tools, and the GitHub command-line tool <code>gh</code> — present but not signed in, see <a href="#sandbox-tool-bundles">Sandbox tool bundles</a>). Accepts <code>"chinese"</code> (Alibaba, Tencent, Qiniu and Baidu cloud + storage SDKs, WeChat official APIs, Bilibili, <code>yt-dlp</code>) and <code>"coding"</code> (the <code>claude</code> and <code>codex</code> coding-agent command-line tools, each needing its own sign-in). A bundle installs <strong>once</strong>, in the background, into a shared area every agent sees, and stays there across restarts — so it costs its download size on your disk (the <code>chinese</code> bundle is around 740 MB). Turning a bundle back off stops future installs but does not delete what it already installed. Edited in <code>config.yaml</code> directly — no dashboard form yet. See <a href="#sandbox-tool-bundles">Sandbox tool bundles</a>.</td>
+</tr>
+<tr>
+<td><code>sandbox</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Resource ceilings for the sandbox each agent runs shell commands in: <code>memory</code> (a size like <code>4g</code> or <code>2048m</code>, minimum <code>6m</code>) and <code>cpus</code> (cores, <code>0.1</code>–<code>64</code>; <code>0.5</code> is half a core). Leave either unset for the automatic limit — 25% of the machine's RAM and 50% of its cores, never below 512m and half a core — so a bigger machine gives every agent more room with nothing to configure. These are ceilings, not reservations: an idle agent uses nothing. A single agent can override both in its own <code>agent.json5</code>, and the <code>LIONCLAW_SANDBOX_MEMORY</code> / <code>LIONCLAW_SANDBOX_CPUS</code> environment variables (also accepted as <code>OLANO_SANDBOX_MEMORY</code> / <code>OLANO_SANDBOX_CPUS</code>; lionclaw is Olano's previous name) override everything. Edited in <strong>Config → Sandbox resources</strong>. Changing a limit rebuilds each agent's sandbox on its next start: workspaces and installed tool bundles are kept, anything installed by hand inside the sandbox is not.</td>
+</tr>
+<tr>
+<td><code>checkpoint_backend</code></td>
+<td><code>"postgres"</code> | <code>"sqlite"</code></td>
+<td><code>"postgres"</code></td>
+<td>Where conversation state is stored.</td>
+</tr>
+<tr>
+<td><code>checkpoint_db_url</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Required when using <code>postgres</code>.</td>
+</tr>
+<tr>
+<td><code>store_backend</code></td>
+<td><code>"postgres"</code> | <code>"sqlite"</code></td>
+<td><code>"postgres"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>store_db_url</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mcp_relay_url</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Central relay for MCP sign-ins.</td>
+</tr>
+<tr>
+<td><code>instance_id</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>This deployment's identifier.</td>
+</tr>
+</tbody>
+</table>
+<p>Selecting <code>postgres</code> (including by leaving the default) <strong>without a URL is an
+error</strong>, not a silent fallback to SQLite. Set the URL, or switch the backend
+to <code>sqlite</code> for a zero-configuration single-machine install.</p>
+<h2 id="sandbox-tool-bundles">Sandbox tool bundles<a class="headerlink" href="#sandbox-tool-bundles" title="Permanent link">¶</a></h2>
+<p>When an agent runs a shell command on a managed deployment, it runs inside an
+isolated sandbox rather than on the machine itself. That sandbox comes with a
+standard toolkit — git, Python and pip, Node and npm, <code>jq</code>, <code>sqlite3</code>,
+ripgrep, <code>tmux</code>, <code>ffmpeg</code>, <code>pandoc</code>, PDF tools, <code>zstd</code>, and the GitHub (<code>gh</code>)
+and Google (<code>gog</code>) command-line tools, present but not signed in (see below) —
+which covers most of what agents actually do. (<code>tmux</code> is there so a long job
+outlives the command that started it: an agent can start a build in a detached
+session and read its output back on a later turn, and you can do the same from
+the Terminal tab without a browser reconnect killing it. <code>zstd</code> is there so
+<code>tar --zstd</code> can unpack the <code>.tar.zst</code> archives many projects now ship
+releases as.) The everyday shell commands are there too: <code>zip</code> and <code>unzip</code>,
+<code>7z</code>, <code>.tar.xz</code> and <code>.tar.bz2</code> support, <code>file</code>, <code>less</code>, <code>tree</code>, <code>ps</code>, <code>top</code>,
+<code>htop</code>, <code>free</code>, <code>pkill</code>, <code>ip</code>, <code>ping</code>, <code>dig</code>, <code>nc</code>, <code>ssh</code>, <code>scp</code>, <code>rsync</code> and
+<code>make</code>. Both <code>python</code> and <code>python3</code> work, so a command copied from
+documentation runs as written — and that holds on every kind of install, not
+just inside the sandbox: <code>python</code> and <code>pip</code> always resolve for an agent's shell
+commands, with a <code>python3</code>-only system simply forwarding to <code>python3</code>. The
+Terminal tab's shell sees the same tools an agent does (anything an agent
+<code>pip install</code>s or <code>npm install -g</code>s is on its PATH), and ships <code>vim</code> and <code>nano</code>
+so you can open and edit files there directly.</p>
+<p>Two heavier bundles are available but <strong>off by default</strong>, because each one
+costs real disk on your machine and most deployments never touch them:</p>
+<table>
+<thead>
+<tr>
+<th>Bundle</th>
+<th>What it adds</th>
+<th>Rough size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chinese</code></td>
+<td>Alibaba, Tencent, Qiniu and Baidu cloud + storage SDKs, the Tencent Cloud CLI, WeChat official APIs (Official Account, WeCom, Pay, MiniProgram), Bilibili, <code>yt-dlp</code></td>
+<td>~740 MB</td>
+</tr>
+<tr>
+<td><code>coding</code></td>
+<td>The <code>claude</code> and <code>codex</code> coding-agent command-line tools</td>
+<td>~620 MB</td>
+</tr>
+</tbody>
+</table>
+<p>There are two ways to turn one on. The easiest, and the only one that needs no
+file access, is to <strong>ask AgentFather</strong>: "enable the coding tool set for the
+sandbox" — it patches the deployment config for you and tells you what it did.
+Or edit <code>sandbox_tool_sets</code> in <code>~/.olano/config.yaml</code> yourself (this key has
+no form in the dashboard's Config section yet):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">sandbox_tool_sets</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chinese</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">coding</span>
+</code></pre></div>
+<p>The install runs once, in the background, the next time an agent starts a
+sandbox — nothing blocks and nothing restarts. It lands in a shared area that
+every agent on the deployment sees and that survives restarts and updates, so
+you pay for it once.</p>
+<p>Two things worth knowing. The coding command-line tools each need their own
+sign-in (a Claude subscription or API key; a ChatGPT or OpenAI login) —
+installing them does not authenticate them. And removing a bundle from the list
+stops future installs but leaves what it already installed in place; Olano will
+not delete tools you may still be using. If you want that space back, clear the
+bundle's folder from the <strong>Files</strong> tab under <code>sandbox/tools</code>.</p>
+<p>Agents can also install packages themselves at any time (<code>pip install</code>,
+<code>npm install -g</code>) — those land in the same shared area, and show up under
+<strong>Olano home</strong> in the Overview disk card.</p>
+<p><strong>Command-line tools in the sandbox are not signed in, and Olano never signs
+them in.</strong> The sandbox holds no credential — not the GitHub connection, not a
+vault key, nothing — so <code>gh</code>, <code>gog</code>, and anything you or an agent install
+there start out logged out and stay that way. That is deliberate: it is what
+keeps a stray command from reading a token it should never see. Whatever is
+installed in the sandbox beyond the standard toolkit is yours: unsupported,
+unauthenticated, and used at your own risk. You may sign a tool in yourself
+from the <strong>Terminal</strong> tab (<code>gh auth login</code>, say); that sign-in is your own, it
+is stored inside the sandbox only, and it lasts until the sandbox is rebuilt —
+a resource-limit change or an update does that. An agent will never do it for
+you and will never ask you for a token to do it. For everything the sandbox's
+tools would have reached, use the built-in integrations instead: the GitHub
+tools for repositories, issues and pull requests, the <code>git</code> toolkit for
+cloning and pushing private repositories (<a href="../agent-json5/#tools"><code>agent.json5</code> reference</a>), and the
+<strong>Connections</strong> page (account menu → Setup) to sign in once for all of them.</p>
+<h2 id="cognition-cortex-defaults-for-the-fleet"><code>cognition:</code> — Cortex defaults for the fleet<a class="headerlink" href="#cognition-cortex-defaults-for-the-fleet" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Master switch for the Cortex engine, off until you turn it on. While it is off, an agent that does not set its own <code>cognition.enabled</code> runs no background cognition at all: no scheduled phases, no distilling of conversations into memory, and no <code>cortex_*</code> tools in chat. Agents can override in either direction (<code>true</code> runs Cortex for that one agent while the fleet stays off). Editable in <strong>Cortex → Autonomy → Cortex engine</strong>, "All agents" column.</td>
+</tr>
+<tr>
+<td><code>autonomous</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Whether agents act on their own initiative.</td>
+</tr>
+<tr>
+<td><code>auto_approve</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Whether background work skips the approval queue.</td>
+</tr>
+<tr>
+<td><code>intensity</code></td>
+<td><code>"relaxed"</code> | <code>"balanced"</code> | <code>"aggressive"</code></td>
+<td><code>"relaxed"</code></td>
+<td>How much background work: each phase's schedule and the daily cap on deep runs (6 / 12 / 24). An unknown value reads as <code>"relaxed"</code>. Editable in <strong>Cortex → Autonomy → Cadence</strong>, "All agents" column.</td>
+</tr>
+<tr>
+<td><code>fast_model</code></td>
+<td>string</td>
+<td>see note</td>
+<td>Model for light background work.</td>
+</tr>
+<tr>
+<td><code>deep_model</code></td>
+<td>string | null</td>
+<td>see note</td>
+<td>Model for heavy background work.</td>
+</tr>
+<tr>
+<td><code>worker_max_iterations</code></td>
+<td>integer</td>
+<td><code>100</code></td>
+<td>Step budget for one background reasoning run, for every agent that does not set its own. Counted in internal steps — about 4 per round of thinking plus tool use, so 100 allows roughly 25 rounds. A run that exceeds it stops with "hit its step limit" and its work is discarded. Whole number from 10 to 400; out-of-range values are pulled to the nearest end. Editable in <strong>Cortex → Autonomy → Step budget</strong>, "All agents" column.</td>
+</tr>
+<tr>
+<td><code>worker_timeout_seconds</code></td>
+<td>integer</td>
+<td><code>1200</code></td>
+<td>Wall-clock seconds one background reasoning run may take, for every agent that does not set its own. Whole number from 30 to 7200 (default 1200 = 20 minutes). Raise it alongside <code>worker_max_iterations</code> — a large step budget behind a small time limit just fails on time instead. Editable in <strong>Cortex → Autonomy → Time limit</strong>, "All agents" column.</td>
+</tr>
+<tr>
+<td><code>promote_threshold</code></td>
+<td>integer</td>
+<td><code>8</code></td>
+<td>Score (1 to 10) at or above which the Rate &amp; Promote phase promotes an item it recommends promoting to the next funnel stage on its own, for every agent that does not set its own. Applies only under Fully Autonomous; with <code>auto_approve</code> off every candidate waits in <strong>Pulse → Approvals</strong>. Out-of-range values are pulled to the nearest end.</td>
+</tr>
+<tr>
+<td><code>max_promotions_per_run</code></td>
+<td>integer</td>
+<td><code>1</code></td>
+<td>Items one Rate &amp; Promote run may promote (each is a deep run, counted against the daily cap). 0 to 5; <code>0</code> rates without promoting.</td>
+</tr>
+<tr>
+<td><code>max_self_scheduled_tasks</code></td>
+<td>integer</td>
+<td><code>6</code></td>
+<td>Follow-up steps an agent may hold pending at once from <code>cortex_schedule</code> (the Scheduler tab shows them as <code>Cortex: &lt;item&gt;</code>). 0 to 20; <code>0</code> turns self-scheduling off fleet-wide.</td>
+</tr>
+<tr>
+<td><code>auto_discard</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Whether Fully Autonomous runs may discard items rated 3 or lower with a "discard" recommendation. Reversible from the card's <strong>Restore</strong>.</td>
+</tr>
+<tr>
+<td><code>worker_max_concurrency</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td>How many background reasoning runs may be talking to a model at the same time across the whole deployment — every agent's Cortex phases, self-learning and Pulse actions share the pool. A run that finds the pool full waits its turn; the wait does not count against its time limit. Whole number from 1 to 16; out-of-range values are pulled to the nearest end. Raise it on a large fleet with generous provider limits; lower it to 1 if a provider keeps answering "rate limit". Ordinary chat is never held by this.</td>
+</tr>
+<tr>
+<td><code>features.self_learning</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Distil conversations into memory.</td>
+</tr>
+<tr>
+<td><code>features.brainstorming</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.idea_generation</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.prototyping</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.skills_optimization</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.workspace_optimization</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.memory_optimization</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>features.pulse</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>On a managed deployment, leaving <code>fast_model</code> and <code>deep_model</code> unset resolves
+them to <code>olano:turbo</code> and <code>olano:pro</code> — so Cortex works out of the box on
+credits with no provider account. Setting either explicitly always wins;
+clearing it in the dashboard returns it to the deployment's own default rather
+than to a hardcoded provider model.</p>
+<p><strong>Resolution rule for every cognition setting:</strong> the agent wins when it has an
+opinion, the deployment applies when it doesn't.</p>
+<h2 id="default_models-where-the-default-aliases-point"><code>default_models:</code> — where the <code>default:*</code> aliases point<a class="headerlink" href="#default_models-where-the-default-aliases-point" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>turbo</code></td>
+<td>string</td>
+<td>unset</td>
+<td>The concrete <code>provider:model</code> behind <code>default:turbo</code>.</td>
+</tr>
+<tr>
+<td><code>pro</code></td>
+<td>string</td>
+<td>unset</td>
+<td>The concrete <code>provider:model</code> behind <code>default:pro</code>.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>string</td>
+<td>unset</td>
+<td>The concrete <code>provider:model</code> behind <code>default:max</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Editable in <strong>Config → Default models</strong>. An unset (or cleared) key falls back
+to the deployment's own built-in target — the matching Olano tier on a managed
+deployment, a bring-your-own-key model elsewhere. A target must be a concrete
+model: another <code>default:*</code> alias is rejected (aliases never chain), and so are
+the utility groups. Changes apply to each agent on its next boot or reload.
+See <a href="../models-and-credits/#deployment-default-models-default">Deployment default models (<code>default:*</code>)</a> for how the aliases behave.</p>
+<h2 id="heartbeat"><code>heartbeat:</code><a class="headerlink" href="#heartbeat" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Agents wake periodically to check <code>HEARTBEAT.md</code>.</td>
+</tr>
+<tr>
+<td><code>interval_minutes</code></td>
+<td>integer</td>
+<td><code>60</code></td>
+<td>Clamped 1–1440.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="issues-how-agents-pick-up-work"><code>issues:</code> — how agents pick up work<a class="headerlink" href="#issues-how-agents-pick-up-work" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto_process</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Agents pick up issues assigned to them automatically.</td>
+</tr>
+<tr>
+<td><code>poll_minutes</code></td>
+<td>integer</td>
+<td><code>15</code></td>
+<td>Clamped 1–1440.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="revisions-automatic-version-history"><code>revisions:</code> — automatic version history<a class="headerlink" href="#revisions-automatic-version-history" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Keep automatic version history.</td>
+</tr>
+<tr>
+<td><code>include_memory</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Include memory files. Turn off if you have data-deletion obligations — memory files carry distilled personal data.</td>
+</tr>
+<tr>
+<td><code>debounce_seconds</code></td>
+<td>integer</td>
+<td><code>45</code></td>
+<td>How long to wait for edits to settle before committing. Clamped 5–3600.</td>
+</tr>
+<tr>
+<td><code>max_file_kb</code></td>
+<td>integer</td>
+<td><code>51200</code></td>
+<td>Size limit for a tracked file, in KB. The default is 50 MB: GitHub warns about any file larger than that, and every version of a large file stays in history. The maximum is 100 MB (<code>102400</code>), because GitHub refuses any file larger than 100 MB. A file over it keeps its last recorded version in history (it is not recorded as deleted, and is not removed from GitHub) until it is back under the limit; the <strong>Revisions</strong> page lists such files. Clamped 16 to 102400.</td>
+</tr>
+<tr>
+<td><code>remote</code></td>
+<td>mapping</td>
+<td>not connected</td>
+<td>The GitHub repository the history syncs with (below).</td>
+</tr>
+</tbody>
+</table>
+<p><code>revisions.remote:</code> is written by <strong>Revisions → GitHub sync</strong> when you connect a
+repository. Nothing in it is secret, which matters because <code>config.yaml</code> is
+itself part of the history that gets pushed: the access token lives encrypted in
+the vault, never here.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The repository, as <code>https://github.com/&lt;owner&gt;/&lt;name&gt;.git</code>. Empty means not connected.</td>
+</tr>
+<tr>
+<td><code>branch</code></td>
+<td>string</td>
+<td><code>main</code></td>
+<td>The GitHub branch pushed to and pulled from.</td>
+</tr>
+<tr>
+<td><code>auth</code></td>
+<td><code>token</code> | <code>connection</code></td>
+<td><code>token</code></td>
+<td><code>token</code>: the access token pasted when connecting. <code>connection</code>: the GitHub account connected on the <strong>Connections</strong> page.</td>
+</tr>
+<tr>
+<td><code>sync</code></td>
+<td><code>manual</code> | <code>daily</code> | <code>on_commit</code></td>
+<td><code>manual</code></td>
+<td>When new commits are pushed on their own. <code>manual</code>: only with <strong>Push</strong>. <code>daily</code>: at most once every 24 hours, when there is something new. <code>on_commit</code>: right after each commit. Automatic pushing never forces; pulling is always manual. Unknown values read as <code>manual</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="push-notifications-to-the-mobile-app"><code>push:</code>, notifications to the mobile app<a class="headerlink" href="#push-notifications-to-the-mobile-app" title="Permanent link">¶</a></h2>
+<p>Notifications to the Olano app on people's phones. They are delivered through
+the Olano Cloud, so they work on a deployment that runs on Olano Cloud and not
+on a self-hosted one. Each person chooses on their own phone which kinds they
+receive; these keys are the deployment-wide limits. See
+<a href="../feature-guides/mobile-app/">The mobile app</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Send notifications at all. Takes effect at the next restart; phones that registered stay registered and receive nothing while it is off.</td>
+</tr>
+<tr>
+<td><code>previews</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Put the start of a reply, or a Cortex finding's title, into the notification. Off, a notification names the agent and the reason ("Replied to your message.") and nothing anyone wrote. On, that text passes through Apple's or Google's notification service on its way to the phone. Applies to the next notification.</td>
+</tr>
+<tr>
+<td><code>cortex_min_priority</code></td>
+<td><code>"urgent"</code> | <code>"normal"</code> | <code>"low"</code></td>
+<td><code>"urgent"</code></td>
+<td>The lowest Pulse priority that notifies. <code>urgent</code> notifies only for urgent findings; <code>normal</code> adds ordinary ones; <code>low</code> notifies for every finding. Cortex proposals waiting for approval notify whatever this says. An unknown value means <code>urgent</code>.</td>
+</tr>
+<tr>
+<td><code>alert_min_level</code></td>
+<td><code>"warn"</code> | <code>"error"</code></td>
+<td><code>"warn"</code></td>
+<td>The lowest bell-notification level that notifies administrators' phones. <code>warn</code> includes warnings and errors; <code>error</code> only errors. Each distinct problem notifies at most once every six hours. An unknown value means <code>warn</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mobile_app-what-the-mobile-app-shows"><code>mobile_app:</code>, what the mobile app shows<a class="headerlink" href="#mobile_app-what-the-mobile-app-shows" title="Permanent link">¶</a></h2>
+<p>How the Olano app looks to everyone who signs in to this deployment on a phone,
+administrators included. Edit it in the dashboard under <strong>Config, Mobile app</strong>.
+Phones download it when the app opens and every time it comes back to the
+foreground, so a change reaches a phone the next time it is opened, with no app
+update and no restart. Every switch defaults to shown, so a deployment that
+never sets the block looks as it always has. Hiding only removes an entry from
+the phone: the dashboard and everything behind it keep working, and nothing is
+deleted. See <a href="../feature-guides/mobile-app/#what-your-administrator-chooses">The mobile app</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cortex_tab</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Show the <strong>Cortex</strong> tab. Off, the tab is removed and a phone on a Cortex screen moves to Chats.</td>
+</tr>
+<tr>
+<td><code>inbox.enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Show the <strong>Inbox</strong> tab. Off, the tab and its badge are removed whatever the three keys below say. The tab is also removed when all three are off.</td>
+</tr>
+<tr>
+<td><code>inbox.approvals</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The Inbox's <strong>Approvals</strong> section (actions paused for a person, Cortex items waiting for approval). Off, it is hidden and stops counting toward the badge.</td>
+</tr>
+<tr>
+<td><code>inbox.alerts</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The Inbox's <strong>Alerts</strong> section (the deployment's notifications). Off, it is hidden and unread alerts stop counting toward the badge.</td>
+</tr>
+<tr>
+<td><code>inbox.issues</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The Inbox's <strong>Issues</strong> section.</td>
+</tr>
+<tr>
+<td><code>settings_tab.files</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The <strong>Files</strong> row in the app's Settings, and the Files entries on agent screens. Files an agent names in a reply still open from the chat.</td>
+</tr>
+<tr>
+<td><code>settings_tab.credits_usage</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The <strong>Credits and Usage</strong> row in the app's Settings (shown only on deployments that bill in credits).</td>
+</tr>
+<tr>
+<td><code>settings_tab.transcribe_on_phone</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>The <strong>Transcribe on this phone</strong> switch in the app's Settings. Off, every phone uses <code>transcribe_on_phone_default</code>, including phones where someone had chosen.</td>
+</tr>
+<tr>
+<td><code>transcribe_on_phone_default</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Where a voice note becomes words when the person has not chosen. <code>false</code>: the recording goes to the deployment's speech-to-text. <code>true</code>: a phone that can recognize speech (an iPhone with permission granted) transcribes it and sends only the words; any other phone still sends the recording.</td>
+</tr>
+</tbody>
+</table>
+<p>An unknown key or a value that is not <code>true</code> or <code>false</code> is refused when saved
+from the dashboard; in a hand-edited file it is ignored.</p>
+<h2 id="usage_budgets-token-ceilings-and-budget-warnings"><code>usage_budgets:</code> — token ceilings and budget warnings<a class="headerlink" href="#usage_budgets-token-ceilings-and-budget-warnings" title="Permanent link">¶</a></h2>
+<p>Every deployment carries six usage budgets: four token ceilings (input and
+output, each per-agent and deployment-wide) and two cost ceilings. A turn is
+<strong>refused</strong> once one is exhausted, and the refusal names the budget that
+stopped it. All six are shown in <strong>Config → Usage budgets</strong> with their current
+usage, and in <strong>Admin → Deployment</strong> alongside the rest of your entitlements.</p>
+<p>The token ceilings exist to stop a runaway loop, not to meter you, so this
+block lets you move them. Note what they count: <strong>every token an agent spends,
+including calls made on your own provider keys</strong> — so a token budget can stop a
+bring-your-own-key agent even though nothing was billed to Olano. If that is
+not what you want for a particular agent, raise or lift the ceiling here.</p>
+<p>The two cost budgets are <strong>not</strong> listed below and cannot be set here or in the
+file: they cap what Olano itself pays upstream, and they come down with your
+plan. Managed spend is separately limited by your credit balance, so lifting a
+token ceiling cannot make a deployment spend credits it does not have.</p>
+<p>Each token key takes three shapes, and they mean different things:</p>
+<table>
+<thead>
+<tr>
+<th>You write</th>
+<th>It means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>(key absent)</em></td>
+<td>Use your plan's ceiling. This is the default.</td>
+</tr>
+<tr>
+<td>a number, e.g. <code>50000000000</code></td>
+<td>Use this ceiling instead.</td>
+</tr>
+<tr>
+<td><code>unlimited</code></td>
+<td>No ceiling at all for this budget.</td>
+</tr>
+</tbody>
+</table>
+<p>The long form <code>{value: 50000000000, window: monthly}</code> is also accepted if you
+want a different reset window (<code>daily</code>, <code>weekly</code>, <code>monthly</code>, <code>lifetime</code>);
+windows reset in UTC — daily at midnight, weekly on Mondays, monthly on the 1st.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_tokens_per_agent</code></td>
+<td>integer | <code>unlimited</code></td>
+<td>plan's</td>
+<td>Input-token ceiling for any single agent.</td>
+</tr>
+<tr>
+<td><code>input_tokens_total</code></td>
+<td>integer | <code>unlimited</code></td>
+<td>plan's</td>
+<td>Input-token ceiling across the whole deployment.</td>
+</tr>
+<tr>
+<td><code>output_tokens_per_agent</code></td>
+<td>integer | <code>unlimited</code></td>
+<td>plan's</td>
+<td>Output-token ceiling for any single agent.</td>
+</tr>
+<tr>
+<td><code>output_tokens_total</code></td>
+<td>integer | <code>unlimited</code></td>
+<td>plan's</td>
+<td>Output-token ceiling across the whole deployment.</td>
+</tr>
+<tr>
+<td><code>alerts_enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Raise a dashboard notification as a budget fills. Turning this off silences <strong>every</strong> budget notification, including the one saying a budget is spent and turns are being refused.</td>
+</tr>
+<tr>
+<td><code>alert_percents</code></td>
+<td>integer[]</td>
+<td><code>[50, 60, 70, 80, 90, 95, 99]</code></td>
+<td>Percentages that raise a notification. Each fires once per budget per window; a turn that jumps several at once raises only the highest. Values must be 1–99 — 100% is always announced and needs no entry. Applies to all six budgets, cost included.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="nt">usage_budgets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">input_tokens_per_agent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50000000000</span>
+<span class="w">  </span><span class="nt">output_tokens_total</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unlimited</span>
+<span class="w">  </span><span class="nt">alert_percents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">50</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">75</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">90</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">99</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<p>On an unmanaged install nothing is counted or enforced at all, and the Config
+card says so — the ceilings only apply once a deployment is licensed.</p>
+<h2 id="disk_monitor"><code>disk_monitor:</code><a class="headerlink" href="#disk_monitor" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>string</td>
+<td><code>"/"</code></td>
+<td>Which filesystem to watch.</td>
+</tr>
+<tr>
+<td><code>check_interval_minutes</code></td>
+<td>integer</td>
+<td><code>30</code></td>
+<td>Clamped 5–1440.</td>
+</tr>
+<tr>
+<td><code>warn_percent</code></td>
+<td>integer</td>
+<td><code>80</code></td>
+<td>Warn at this usage. Clamped 50–99.</td>
+</tr>
+<tr>
+<td><code>cleanup_percent</code></td>
+<td>integer</td>
+<td><code>85</code></td>
+<td>Start cleaning at this usage. Clamped 50–99, and never below <code>warn_percent</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>disk_monitor.cleanup:</code></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>actions</code></td>
+<td>string[]</td>
+<td>all actions</td>
+<td>Which cleanups may run — everything is on by default. <code>olano_caches</code>, <code>revisions_gc</code>, <code>olano_stale_images</code>, <code>docker_image_prune</code>, <code>npm_cache</code>, <code>journald_vacuum</code> are safe (caches and old logs only); <code>docker_prune</code> is more aggressive (removes ALL unused Docker images/containers) — untick it if other software on the server relies on cached Docker data. Unknown names are ignored; the old name <code>lionclaw_caches</code> (lionclaw is Olano's previous name) still works.</td>
+</tr>
+<tr>
+<td><code>cooldown_minutes</code></td>
+<td>integer</td>
+<td><code>360</code></td>
+<td>Clamped 30–10080.</td>
+</tr>
+<tr>
+<td><code>force_interval_days</code></td>
+<td>integer</td>
+<td><code>0</code></td>
+<td>Run periodically regardless of usage. <code>0</code> = only on threshold. Clamped 0–90.</td>
+</tr>
+<tr>
+<td><code>journald_vacuum_size</code></td>
+<td>string</td>
+<td><code>"200M"</code></td>
+<td>Size to keep, e.g. <code>500M</code>, <code>2G</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>disk_monitor.scan:</code> — the daily "what is using my disk" report.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>interval_hours</code></td>
+<td>integer</td>
+<td><code>24</code></td>
+<td>1–168</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td>1–4</td>
+</tr>
+<tr>
+<td><code>agent_depth</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td>0–4</td>
+</tr>
+<tr>
+<td><code>time_budget_seconds</code></td>
+<td>integer</td>
+<td><code>600</code></td>
+<td>30–3600</td>
+</tr>
+<tr>
+<td><code>throttle_ms</code></td>
+<td>integer</td>
+<td><code>20</code></td>
+<td>0–1000</td>
+</tr>
+<tr>
+<td><code>max_entries</code></td>
+<td>integer</td>
+<td><code>400</code></td>
+<td>50–2000</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mcp_health-keeping-mcp-connections-alive"><code>mcp_health:</code> — keeping MCP connections alive<a class="headerlink" href="#mcp_health-keeping-mcp-connections-alive" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>check_interval_minutes</code></td>
+<td>integer</td>
+<td><code>10</code></td>
+<td>Clamped 1–1440.</td>
+</tr>
+<tr>
+<td><code>refresh_tokens</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Renew sign-ins before they expire. Leave this on — a token that lapses while the agent is idle can become unrecoverable.</td>
+</tr>
+<tr>
+<td><code>refresh_window_minutes</code></td>
+<td>integer</td>
+<td><code>20</code></td>
+<td>How far ahead of expiry to renew. Clamped 1–720.</td>
+</tr>
+<tr>
+<td><code>auto_reconnect</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Retry servers that timed out or errored, with backoff. A server that needs a sign-in you have not given is never retried — reconnecting cannot invent consent.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="checkpoint_gc-trimming-conversation-history-on-disk"><code>checkpoint_gc:</code>, trimming conversation history on disk<a class="headerlink" href="#checkpoint_gc-trimming-conversation-history-on-disk" title="Permanent link">¶</a></h2>
+<p>Conversation state is saved as a chain of checkpoints, one per step an agent
+takes, and nothing in the engine ever deletes an old one. A reply only ever
+needs the newest few, so the runtime sweeps the rest: after boot and then on a
+timer it removes, per conversation, every checkpoint older than the last full
+snapshot and the data only those checkpoints referenced. Conversations keep
+working exactly as before; what goes is history nothing can read back. Only
+the Postgres backend is swept; the SQLite backend is left alone. The sweep
+re-reads this block on every pass, and each pass is recorded in the runtime
+log with what it removed.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Master switch. Off, history grows without bound; a long-running deployment once reached 40 GB of it.</td>
+</tr>
+<tr>
+<td><code>interval_hours</code></td>
+<td>integer</td>
+<td><code>6</code></td>
+<td>How often a pass runs after the first. Clamped 1–168.</td>
+</tr>
+<tr>
+<td><code>boot_delay_minutes</code></td>
+<td>integer</td>
+<td><code>10</code></td>
+<td>How long after the agents start the first pass waits, so it never competes with the boot. Clamped 0–1440.</td>
+</tr>
+<tr>
+<td><code>keep_min</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>Checkpoints always kept per conversation, whatever the snapshots say. Clamped 1–1000.</td>
+</tr>
+<tr>
+<td><code>max_minutes</code></td>
+<td>integer</td>
+<td><code>30</code></td>
+<td>Budget per pass; a pass that runs out stops between conversations and the next one continues, largest first. Clamped 1–1440.</td>
+</tr>
+</tbody>
+</table>
+<p>Edited from <strong>Config → Conversation history cleanup</strong>.</p>
+<h2 id="scheduler-how-late-a-scheduled-job-may-still-run"><code>scheduler:</code>, how late a scheduled job may still run<a class="headerlink" href="#scheduler-how-late-a-scheduled-job-may-still-run" title="Permanent link">¶</a></h2>
+<p>A scheduled job is due at an instant, and the runtime is not always free at
+that instant: a long turn, a heavy page load or a restart can hold it past the
+minute. This block says what happens then. Inside the window the job runs late
+and its message says by how much; past it the firing is recorded as <em>skipped</em>
+in the job's history and a notification names it. Read when a job is
+registered, so a change applies on the next restart or the next time the job
+is saved. Applies to the Scheduler tab's tasks and to <code>schedule</code> entries in
+<code>agent.json5</code>; heartbeat polls and Cortex phases keep a short fixed window. See
+<a href="../feature-guides/scheduler-and-heartbeat/">Scheduler and heartbeat</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>misfire_grace_minutes</code></td>
+<td>integer</td>
+<td><code>360</code></td>
+<td>How late a firing may still run. Clamped 1–1440. Under the old fixed five minutes, a busy morning lost the day's run outright.</td>
+</tr>
+<tr>
+<td><code>catch_up_on_boot</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>At startup, run a job whose most recent due time fell inside the window with no run recorded since (the runtime was down or restarting at the time). <code>false</code> lets a restart drop it, as before.</td>
+</tr>
+<tr>
+<td><code>max_run_minutes</code></td>
+<td>integer</td>
+<td><code>180</code></td>
+<td>The wall clock one scheduled run (or heartbeat poll) may use. A run still going at the limit is stopped and recorded as failed with the reason; what it wrote is kept and the job's next firing runs. Only one run of a job executes at a time, so without a limit a run that never ended held its job forever. <code>0</code> removes the limit. Clamped 0–1440.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="peer_threads-how-much-two-agents-carry-between-them"><code>peer_threads:</code>, how much two agents carry between them<a class="headerlink" href="#peer_threads-how-much-two-agents-carry-between-them" title="Permanent link">¶</a></h2>
+<p>When one agent asks another for something with <code>talk_to_agent</code>, the pair shares
+one conversation thread, so the second agent remembers what the first already
+asked. Left unbounded that thread grows for the life of the deployment and every
+exchange carries all of it. These bounds retire the shared thread and start a
+fresh one; the old transcript stays readable in the Agent to Agent view.
+Agent-to-agent exchanges are mostly one-shot requests, so the defaults are
+short. Read at every exchange, so a change applies to the next one. Edited from
+<strong>Config → Agent-to-agent conversations</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rotate</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Master switch. Off, a pair keeps its one thread forever and the two bounds are ignored.</td>
+</tr>
+<tr>
+<td><code>max_age_days</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>A pair's thread is retired once its first exchange is this many days old. Clamped 1–365.</td>
+</tr>
+<tr>
+<td><code>max_turns</code></td>
+<td>integer</td>
+<td><code>200</code></td>
+<td>The same, once the thread's transcript holds this many rows. A row is one message, so an exchange is about two. Clamped 10–100000.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pages-deployed-pages"><code>pages:</code>: deployed pages<a class="headerlink" href="#pages-deployed-pages" title="Permanent link">¶</a></h2>
+<p>How pages published with <code>pages_deploy</code> are built, run and reached. Plain pages
+published with <code>pages_start</code> only serve files and ignore this block. Read again
+every few seconds, so changes apply without a restart. Edited from <strong>Config →
+Deployed pages</strong>. See <a href="../feature-guides/pages/">Pages</a> for the whole feature.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>services_enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Master switch. <code>false</code> runs no build, stops every page server within a few seconds (those pages answer <code>503</code>), and makes <code>pages_deploy</code> refuse. Static releases already built keep serving.</td>
+</tr>
+<tr>
+<td><code>max_services_per_agent</code></td>
+<td>integer</td>
+<td><code>5</code></td>
+<td>Server pages one agent may run at once. A deploy over the limit is refused, naming the agent's running servers. Static builds do not count. Clamped 1–50.</td>
+</tr>
+<tr>
+<td><code>health_interval_seconds</code></td>
+<td>integer</td>
+<td><code>30</code></td>
+<td>How often each running server's health path is requested. Any answer below <code>500</code> is healthy; three failures in a row restart the server. Clamped 5–3600.</td>
+</tr>
+<tr>
+<td><code>request_timeout_seconds</code></td>
+<td>integer</td>
+<td><code>120</code></td>
+<td>The longest a viewer's request waits for the server: for the first byte, and between chunks of a streamed answer. Past it the viewer gets <code>504</code>. Clamped 5–3600.</td>
+</tr>
+<tr>
+<td><code>max_request_body_mb</code></td>
+<td>integer</td>
+<td><code>25</code></td>
+<td>The largest request body forwarded to a server; bigger uploads get <code>413</code>. Clamped 1–1024.</td>
+</tr>
+<tr>
+<td><code>max_concurrent_requests</code></td>
+<td>integer</td>
+<td><code>64</code></td>
+<td>Requests in flight per server. Past it viewers get <code>503</code> with <code>Retry-After</code> instead of an unbounded queue. Applies the next time a server starts. Clamped 1–1024.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="browser-browser-control"><code>browser:</code> (browser control)<a class="headerlink" href="#browser-browser-control" title="Permanent link">¶</a></h2>
+<p>Whether agents get the browser tools at all, and where the browser runs. Off by
+default. Turning it on from the dashboard (Config → Browser) checks that the
+machine can carry the mode first and refuses with the reason if not; a value
+written into the file by hand that the machine cannot carry is applied one step
+lower (live → headless → off) and the Config card shows why. Changes apply
+within a minute: open browsers of the old mode are closed (sign-ins saved).
+See <a href="../feature-guides/browser/">Browser control</a> for what each mode does.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td>string</td>
+<td><code>off</code></td>
+<td><code>off</code>: no agent has a browser. <code>headless</code>: an invisible browser, one isolated session per agent (needs 1.5 GB of memory). <code>live</code>: a full browser per agent in its own container that you can watch and take over (needs 2 CPUs, about 4 GB, Docker, and a plan that includes it; the browser is downloaded when you turn it on). Anything else reads as <code>off</code>.</td>
+</tr>
+<tr>
+<td><code>provider</code></td>
+<td>string</td>
+<td><code>local</code></td>
+<td><code>local</code>: the browser runs on this machine. <code>remote</code>: agents connect to a hosted browser service at the DevTools address stored in the vault as <code>BROWSER_REMOTE_CDP_URL</code>; no browser memory is used here, and the live view is not available.</td>
+</tr>
+<tr>
+<td><code>max_sessions</code></td>
+<td>integer</td>
+<td><code>1</code></td>
+<td>How many agents may hold an open browser at once. Clamped 1–8. At the limit, the session idle longest is closed to make room.</td>
+</tr>
+<tr>
+<td><code>idle_timeout</code></td>
+<td>integer</td>
+<td><code>10</code></td>
+<td>Minutes without browser activity before an agent's browser is closed (sign-ins saved first). Clamped 1–240. A browser someone is watching is not closed for being idle.</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string</td>
+<td>empty</td>
+<td>The time zone every agent browser reports to websites, as a name such as <code>Europe/Madrid</code>. Empty: this machine's own clock. Set it to where the browser's proxy (<code>BROWSER_PROXY_URL</code> in the vault) has its address, so the two agree. A name this machine does not know reads as empty.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="observability-tracing-to-langfuse"><code>observability:</code> (tracing to Langfuse)<a class="headerlink" href="#observability-tracing-to-langfuse" title="Permanent link">¶</a></h2>
+<p>Sends every agent turn to a <a href="https://langfuse.com">Langfuse</a> project you run or
+subscribe to, as one trace: the turn, each model call and each tool call under
+it, with timings, token counts and credits, grouped by conversation. Off by
+default. Langfuse runs outside this deployment (Langfuse Cloud or your own
+server); nothing extra is installed here.</p>
+<p>This block is the one exception to the AgentFather rule above: an agent cannot
+change it, because it decides whether conversations leave this deployment. An
+admin changes it in the dashboard. The Langfuse keys never go in this file:
+they are kept in the vault, hidden from agents and from the Vault page, and
+saved through the Observability settings. If no keys are saved there, the
+<code>LANGFUSE_PUBLIC_KEY</code>, <code>LANGFUSE_SECRET_KEY</code> and <code>LANGFUSE_BASE_URL</code> environment
+variables of the server are used. Keys alone never turn tracing on.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">observability</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">langfuse</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://jp.cloud.langfuse.com</span>
+<span class="w">    </span><span class="nt">capture</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">metadata</span>
+<span class="w">    </span><span class="nt">sample_rate</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>langfuse.enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Trace this deployment's agent turns. An agent can override it either way (<code>observability</code> in <code>agent.json5</code>). Needs Langfuse keys, or nothing is traced.</td>
+</tr>
+<tr>
+<td><code>langfuse.host</code></td>
+<td>string</td>
+<td>empty</td>
+<td>The Langfuse address: <code>https://cloud.langfuse.com</code> (EU), <code>https://us.cloud.langfuse.com</code>, <code>https://jp.cloud.langfuse.com</code>, or your own server. Langfuse Cloud keys only work in the region they were created in. Empty uses the address saved with the keys, then the EU region. Must be <code>https://</code> (plain <code>http://</code> only for a server on this machine); anything else reads as empty.</td>
+</tr>
+<tr>
+<td><code>langfuse.capture</code></td>
+<td>string</td>
+<td><code>metadata</code></td>
+<td>What each trace contains. <code>metadata</code>: the structure of the turn, timings, token counts, credits, model and tool names, and errors as a level only; no message, tool argument, tool result or error text, and the person's id is replaced with a stable pseudonym. <code>full</code>: also messages, tool arguments and results and error text, so the trace shows exactly what the agent saw and said. In both modes every secret the agent could see (vault values, keys in its settings, credential-shaped text) is replaced with <code>[secret]</code>, and a managed Olano model is shown by its tier name. Anything but <code>full</code> reads as <code>metadata</code>.</td>
+</tr>
+<tr>
+<td><code>langfuse.sample_rate</code></td>
+<td>number</td>
+<td><code>1.0</code></td>
+<td>Share of turns traced, from <code>0.0</code> to <code>1.0</code>. A turn is traced whole or not at all. Clamped to the range.</td>
+</tr>
+<tr>
+<td><code>langfuse.environment</code></td>
+<td>string</td>
+<td>empty</td>
+<td>An environment name shown in Langfuse (<code>production</code>, <code>staging</code>): lowercase letters, digits, <code>-</code> and <code>_</code>, up to 40 characters, not starting with <code>langfuse</code>. Empty sends none.</td>
+</tr>
+<tr>
+<td><code>langfuse.trace_background</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Also trace background work (Cortex runs). Scheduled jobs and conversations are traced either way.</td>
+</tr>
+<tr>
+<td><code>langfuse.project_id</code></td>
+<td>string</td>
+<td>empty</td>
+<td>Written by the dashboard when you test the connection, and used to link from a conversation to its trace. You do not need to set it by hand.</td>
+</tr>
+</tbody>
+</table>
+<p>Tracing never slows down or breaks a turn: traces are sent in the background,
+and if Langfuse cannot be reached the turn goes ahead and the Observability
+settings show the error. Deleting a conversation here also deletes its traces
+in Langfuse, in the background, with the keys that agent's traces were sent with.</p>
+<p>Thumbs up and down on a traced reply in the chat are sent as a <code>user_feedback</code>
+score on that reply's trace (see <a href="../dashboard/chat/#rating-a-reply">Chat → Rating a reply</a>);
+the comment only when <code>capture</code> is <code>full</code>. The votes themselves are kept on the
+deployment whether or not tracing is on.</p>
+<h2 id="context_window-compaction-and-oversized-tool-results"><code>context_window:</code> — compaction and oversized tool results<a class="headerlink" href="#context_window-compaction-and-oversized-tool-results" title="Permanent link">¶</a></h2>
+<p>A conversation cannot grow past the model's context window, so two things
+bound it. <strong>Compaction</strong>: when a thread reaches the <em>trigger</em>, everything older
+than the <em>keep</em> budget is summarised into one paragraph, the full text of what
+was summarised is saved under the agent workspace's
+<code>.olano/conversation_history/</code> folder (the agent can read it back with its
+file tools), and from then on the model sees the summary plus the kept tail.
+<code>/compact</code> in the chat does the same on demand; it becomes available at half
+the trigger and reports how many messages it folded. A model can only remember
+what is in the kept tail, so an agent asked "which tools did you use?" right
+after a compaction answers from the summary. <strong>MCP result offload</strong>: a result
+from an MCP server larger than the limit is saved to
+<code>.olano/large_tool_results/&lt;call id&gt;</code> in the workspace and replaced in the
+conversation by a head-and-tail preview plus the file path; the agent reads
+the rest a part at a time. One page of search results is roughly the default
+limit, so a search-heavy task no longer spends a quarter of the window on one
+call.</p>
+<p>The keep and trigger each have two spellings: a <em>share of the window</em> when
+the model's window is known (the model catalog lists it, or the provider
+reports it), and an <em>absolute token count</em> used only when it is not (a model
+newer than the catalog, a self-hosted one). Both keep values must be below
+their trigger; the block corrects a keep at or above it, the dashboard refuses
+it. Changes reach an agent at its next start or reload. Every field can be
+overridden per agent (<a href="../agent-json5/#heartbeat-and-issues-inherit-by-default-blocks"><code>agent.json5</code> reference</a>)
+and edited in <strong>Config → Context window</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keep_fraction</code></td>
+<td>number</td>
+<td><code>0.35</code></td>
+<td>Share of the window kept verbatim after a compaction. Clamped 0.05–0.8. Lower frees more per compaction; higher keeps more of the session.</td>
+</tr>
+<tr>
+<td><code>keep_tokens</code></td>
+<td>integer</td>
+<td><code>40000</code></td>
+<td>The keep budget in tokens, when the window is unknown. Clamped 2000–2000000.</td>
+</tr>
+<tr>
+<td><code>trigger_fraction</code></td>
+<td>number</td>
+<td><code>0.85</code></td>
+<td>Share of the window at which compaction fires automatically. Clamped 0.3–0.98.</td>
+</tr>
+<tr>
+<td><code>trigger_tokens</code></td>
+<td>integer</td>
+<td><code>170000</code></td>
+<td>The trigger in tokens, when the window is unknown. Clamped 8000–4000000. Keep it below the smallest window your unknown models really have.</td>
+</tr>
+<tr>
+<td><code>mcp_result_token_limit</code></td>
+<td>integer</td>
+<td><code>5000</code></td>
+<td>MCP results above this many tokens (about four characters each) are saved to a workspace file. The conversation keeps the file path and a preview of about 1,000 tokens that follows the content: JSON keeps its structure with long lists sampled; tables and logs keep the header, the first and last lines, every error line and one example of each kind of line, with a count of what was left out. <code>0</code> turns the cap off. Clamped 0–200000. Results from Olano's own tools use a separate 20000-token offload.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remote_agents-fleet-rules-for-talking-to-outside-agents-a2a"><code>remote_agents:</code> — fleet rules for talking to outside agents (A2A)<a class="headerlink" href="#remote_agents-fleet-rules-for-talking-to-outside-agents-a2a" title="Permanent link">¶</a></h2>
+<p>The per-agent <code>remote_agents</code> list (<a href="../agent-json5/#remote_agents-external-agents-over-a2a"><code>agent.json5</code> reference</a>)
+decides <em>which</em> external agents an agent may reach; this block sets the rules
+every such call obeys.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Master switch. Off ⇒ no agent can reach any remote agent; the tools answer with an explanatory error rather than disappearing.</td>
+</tr>
+<tr>
+<td><code>allow_ad_hoc_discovery</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Whether <code>a2a_discover_agent</code> may read the Agent Card of a URL that is <strong>not</strong> in the calling agent's list. Sending a message is never ad hoc, in any mode.</td>
+</tr>
+<tr>
+<td><code>max_reply_chars</code></td>
+<td>integer</td>
+<td><code>20000</code></td>
+<td>Replies longer than this are truncated before the agent reads them. Clamped 500–500000.</td>
+</tr>
+<tr>
+<td><code>max_message_chars</code></td>
+<td>integer</td>
+<td><code>20000</code></td>
+<td>Longer outbound messages are refused. Clamped 500–500000.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="external_access-letting-outside-systems-reach-your-agents"><code>external_access:</code> — letting outside systems reach your agents<a class="headerlink" href="#external_access-letting-outside-systems-reach-your-agents" title="Permanent link">¶</a></h2>
+<p>Home-wide switches and policy for the <strong>inbound</strong> surfaces: the MCP endpoint
+at <code>&lt;public URL&gt;/api/mcp</code>, the per-agent A2A endpoints at
+<code>&lt;public URL&gt;/api/a2a/agents/&lt;agent&gt;</code>, and Olano's own OAuth sign-in for
+clients that cannot paste a token. Both surfaces are <strong>off by default</strong>; each
+agent still has to opt in on its <strong>External access</strong> tab
+(<a href="../agent-json5/#external_access-letting-outside-systems-reach-this-agent"><code>agent.json5</code> reference</a>). Edited
+from <strong>Config → External access</strong>, which also lists the tokens and OAuth
+clients. See <a href="../feature-guides/a2a-and-mcp/">Beyond the deployment: A2A and MCP</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mcp.enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Serve the MCP endpoint. Off answers 404 to everyone whatever the agents say. Applies immediately.</td>
+</tr>
+<tr>
+<td><code>a2a.enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Serve the A2A endpoints. Off answers 404. Applies immediately.</td>
+</tr>
+<tr>
+<td><code>require_https</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Refuse to serve any of this when the deployment's public URL is plain http (tokens travel in a header). Loopback and private-network URLs are exempt for development.</td>
+</tr>
+<tr>
+<td><code>token_ttl_days</code></td>
+<td>integer</td>
+<td><code>90</code></td>
+<td>Default lifetime of a bearer token minted without an explicit expiry; <code>0</code> = never expires. Clamped 0–3650.</td>
+</tr>
+<tr>
+<td><code>a2a_task_retention_days</code></td>
+<td>integer</td>
+<td><code>7</code></td>
+<td>How long the record of each inbound A2A call (task id, status, message, reply) stays retrievable by the caller through the protocol's task lookup before it is deleted. Only the A2A envelope: the conversation itself stays in the agent's thread and transcript, and the Agent to Agent view keeps its own log. Clamped 1–3650.</td>
+</tr>
+<tr>
+<td><code>allowed_hosts</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra <code>Host</code> header values accepted by the DNS-rebinding protection, on top of the public URL's host and loopback (<code>host:*</code> allows any port). Only needed when the endpoints are reached under another hostname.</td>
+</tr>
+<tr>
+<td><code>allowed_origins</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra browser <code>Origin</code> values to accept. Server-to-server clients send none.</td>
+</tr>
+<tr>
+<td><code>oauth.enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Olano's own OAuth 2.1 authorization server at <code>&lt;public URL&gt;/api/oauth</code>. It only answers while a surface above is on. Off ⇒ OAuth-only clients cannot connect; pasted tokens still work.</td>
+</tr>
+<tr>
+<td><code>oauth.dynamic_registration</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Accept RFC 7591 client registrations so an application can sign up by itself before its first sign-in. Registration grants nothing; the consent page does.</td>
+</tr>
+<tr>
+<td><code>oauth.access_token_minutes</code></td>
+<td>integer</td>
+<td><code>60</code></td>
+<td>Lifetime of the access tokens the sign-in issues. Clamped 5–1440.</td>
+</tr>
+<tr>
+<td><code>oauth.refresh_token_days</code></td>
+<td>integer</td>
+<td><code>30</code></td>
+<td>How long a client may keep renewing without a new consent; every refresh rotates the token. Clamped 1–365.</td>
+</tr>
+<tr>
+<td><code>jwt.issuer</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>With <code>jwt.jwks_url</code>, also accept access tokens issued by your own authorization server (Auth0, Keycloak, Okta, Entra…).</td>
+</tr>
+<tr>
+<td><code>jwt.jwks_url</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Where that issuer publishes its signing keys.</td>
+</tr>
+<tr>
+<td><code>jwt.audience</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The audience such a token must carry. Empty means the URL of the endpoint the token is presented to, which is what the standard requires: <code>&lt;public URL&gt;/api/mcp</code> for MCP, and the agent's own <code>&lt;public URL&gt;/api/a2a/agents/&lt;agent&gt;</code> for A2A (<code>&lt;public URL&gt;/api/a2a/agents</code> is accepted there too). A value set here replaces both.</td>
+</tr>
+<tr>
+<td><code>jwt.required_scopes</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Scopes every such token must include, in addition to the agent scopes (<code>agent:&lt;name&gt;</code> / <code>agents:*</code>) that decide reach.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="catalog_sync"><code>catalog_sync:</code><a class="headerlink" href="#catalog_sync" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Keep the model, MCP and agent catalogs current.</td>
+</tr>
+<tr>
+<td><code>manifest_poll_minutes</code></td>
+<td>integer</td>
+<td><code>60</code></td>
+<td>Clamped 15–1440.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="credits-how-costs-are-displayed"><code>credits:</code> — how costs are displayed<a class="headerlink" href="#credits-how-costs-are-displayed" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display</code></td>
+<td><code>"usd"</code> | <code>"credits"</code></td>
+<td><code>"usd"</code></td>
+<td>How costs are shown. Display only — the underlying accounting is unchanged.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="magic_links-secure-links-for-connecting-people"><code>magic_links:</code> — secure links for connecting people<a class="headerlink" href="#magic_links-secure-links-for-connecting-people" title="Permanent link">¶</a></h2>
+<p>A <strong>magic link</strong> is a short-lived, PIN-protected page an agent sends into a
+chat so someone with no dashboard account (and no server access) can finish one
+task on their own phone: sign in to a service, connect a messenger, edit an
+agent's instructions, hand over a credential, or edit a file. The link is
+single-use, and the agent is told the outcome in the same chat when it lands.</p>
+<p>Dashboard: <strong>Config → Magic links</strong> (and the mint UI under Connections).</p>
+<blockquote>
+<p>Renamed from <code>handshake:</code>. A config still using the old key keeps working —
+it is read as a fallback — and the first save from the dashboard rewrites it
+under <code>magic_links:</code>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Allow agents to send magic links. Off ⇒ nothing can mint one and existing links stop opening.</td>
+</tr>
+<tr>
+<td><code>ttl_minutes</code></td>
+<td>integer</td>
+<td><code>15</code></td>
+<td>Link lifetime. Clamped 2–1440.</td>
+</tr>
+<tr>
+<td><code>pin</code></td>
+<td><code>"required"</code> | <code>"off"</code></td>
+<td><code>"required"</code></td>
+<td>Whether links also need a PIN. A forwarded or leaked link is useless without it.</td>
+</tr>
+<tr>
+<td><code>max_pin_attempts</code></td>
+<td>integer</td>
+<td><code>5</code></td>
+<td>Wrong PINs before the link burns itself. Clamped 1–10.</td>
+</tr>
+<tr>
+<td><code>allow_groups</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Allow links to be minted from group chats, where every member sees the link and its PIN.</td>
+</tr>
+<tr>
+<td><code>owner_login.enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Let an agent send the owner a magic link that signs them into the dashboard.</td>
+</tr>
+<tr>
+<td><code>owner_login.auto_bind</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>On a single-admin deployment, skip the one-time password step.</td>
+</tr>
+<tr>
+<td><code>owner_login.session_hours</code></td>
+<td>integer</td>
+<td><code>24</code></td>
+<td>Clamped 1–720.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>How the outcome comes back.</strong> Whichever chat the link was sent from is told
+when it lands — you never have to ask "did that work?" or refresh anything. On a
+messenger the agent posts a ✅ or ⚠️ message saying what connected and whether
+the agent still needs a restart. In the dashboard chat the same result appears
+as a card in the same conversation:</p>
+<ul>
+<li>when the connection is already live — connecting messengers restarts the
+  agent for you, and signing in to an MCP server reloads its tools — the card
+  says so and there is nothing to do;</li>
+<li>when the agent has to restart before it can use what you just added (a new
+  API key, a newly connected service), the card says that and offers a
+  <strong>Restart</strong> button. Dashboard admins get the button; anyone else gets a line
+  asking an admin to restart it.</li>
+</ul>
+<p>The card stays in the conversation, so reopening the thread later — or opening
+it in another tab — still shows what happened. A link that expired or failed
+reports that instead, and never offers a restart.</p>
+<p><strong>Editing a file over a magic link.</strong> An agent can send a link that opens one
+file in an editable box (<code>magic_link_request_file_edit</code>, or <code>/olano connect edit &lt;path&gt;</code>,
+or the Connections mint form). A path relative to the agent's workspace edits
+that agent's own file; an absolute path edits a file anywhere the server can
+write, and only an admin agent or the dashboard may send one of those. The file
+must already exist, be text, and be under 256 KB; saving replaces the whole file
+with what the recipient submits. Whoever opens the link sees the file's current
+contents, so it should only go to someone meant to read that file.</p>
+<h2 id="prompt_refresh"><code>prompt_refresh:</code><a class="headerlink" href="#prompt_refresh" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Pick up edits to identity/instruction files without a restart.</td>
+</tr>
+<tr>
+<td><code>check_interval_minutes</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td>Clamped 1–1440.</td>
+</tr>
+<tr>
+<td><code>notify_threads</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Tell active conversations that the prompt changed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="speech-voice-in-and-out"><code>speech:</code> — voice in and out<a class="headerlink" href="#speech-voice-in-and-out" title="Permanent link">¶</a></h2>
+<p>Two identical blocks, <code>speech.stt</code> (speech to text) and <code>speech.tts</code>
+(text to speech):</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>provider</code></td>
+<td><code>"disabled"</code> | <code>"olano"</code> | <code>"openai"</code> | <code>"groq"</code> | <code>"qwen"</code> | <code>"custom"</code></td>
+<td><code>"disabled"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>For <code>provider: custom</code>.</td>
+</tr>
+<tr>
+<td><code>api_key_name</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Which vault entry holds the key.</td>
+</tr>
+<tr>
+<td><code>voice</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>TTS only.</td>
+</tr>
+<tr>
+<td><code>audio_format</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>TTS only: <code>aac</code>, <code>flac</code>, <code>m4a</code>, <code>mp3</code>, <code>opus</code>, <code>pcm</code>, <code>wav</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>On a managed deployment, an <code>stt</code> block with <strong>no <code>provider</code> key at all</strong>
+resolves to <code>olano</code> — voice notes transcribe on credits with no setup. An
+explicit <code>disabled</code> always wins. <code>tts</code> never turns itself on: voice replies
+stay off on every install until you pick a provider here or in Config →
+Speech (on a managed deployment, picking <code>olano</code> runs them on credits).</p>
+<p>To hear a voice before you keep it, press the play button beside <strong>Voice</strong> in
+Config → Speech. It reads two short sample sentences with the provider, model
+and voice currently picked in the form, even if you have not saved them yet,
+and pressing it again stops playback. Each preview is a real speech call,
+billed like a voice reply. If the provider cannot be reached or its key is
+missing, the error appears as a message instead.</p>
+<p>The mobile app uses both blocks too. A reply it reads aloud is spoken in the
+<code>tts</code> voice when one is set (each reading is billed like any other speech
+call), and in the phone's own voice when <code>tts</code> is off. On an iPhone, the phone
+turns voice notes into text itself, so they reach the agent as text and do not
+use <code>stt</code> unless the person turns that off in the app. See
+<a href="../feature-guides/mobile-app/#hearing-replies">Mobile app</a>.</p>
+<p>Transcription applies to voice notes on every messenger that carries them,
+WhatsApp included. If a voice note on one channel is answered as though nothing
+was said while the same words work elsewhere, the audio never reached the
+transcriber — not a speech setting. See
+<a href="../feature-guides/channels-and-connectors/">Channels and connectors</a> for the WhatsApp-specific case.</p>
+<h2 id="media-vision-and-image-generation"><code>media:</code> — vision and image generation<a class="headerlink" href="#media-vision-and-image-generation" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vision</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td><code>""</code> = decide automatically, <code>"olano"</code> = force the managed route, or a <code>"provider:model"</code> pin for your own key.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Same, for image generation and editing.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="web_search"><code>web_search:</code><a class="headerlink" href="#web_search" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>provider</code></td>
+<td><code>""</code> | <code>"olano"</code> | <code>"tavily"</code> | <code>"disabled"</code></td>
+<td><code>""</code> (auto)</td>
+<td><code>tavily</code> always needs <code>TAVILY_API_KEY</code> in the vault.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rate_limits-message-caps"><code>rate_limits:</code> — message caps<a class="headerlink" href="#rate_limits-message-caps" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>messages.per_minute</code></td>
+<td>integer | null</td>
+<td><code>null</code></td>
+<td><code>null</code> = unlimited. An explicit <code>0</code> blocks entirely.</td>
+</tr>
+<tr>
+<td><code>messages.per_hour</code></td>
+<td>integer | null</td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>messages.per_day</code></td>
+<td>integer | null</td>
+<td><code>null</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>per_platform.&lt;platform&gt;</code></td>
+<td>same three keys</td>
+<td><code>{}</code></td>
+<td>Per-connector overrides, e.g. <code>per_platform.telegram.per_minute</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>An agent's own <code>security.rate_limits</code> overrides these for that agent.</p>
+<h2 id="playground-the-prompt-sandbox"><code>playground:</code> — the prompt sandbox<a class="headerlink" href="#playground-the-prompt-sandbox" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Show the Playground tab. Off also skips generating its assets.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="self_serve_agents-let-people-make-their-own-bots"><code>self_serve_agents:</code> — let people make their own bots<a class="headerlink" href="#self_serve_agents-let-people-make-their-own-bots" title="Permanent link">¶</a></h2>
+<p><strong>On by default</strong>: every signed-in member gets a "New bot" button (most
+visibly in the simple view) and can create bots of their own, within the
+quota below. Admins can always create agents regardless of this block —
+nothing here applies to them.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>When <code>true</code> (the default), a non-admin member may create an agent for themselves. They become its <strong>owner</strong>, so they can edit and delete the one they made — and nothing else changes about what a member may do. Set <code>false</code> to make agent creation admin-only.</td>
+</tr>
+<tr>
+<td><code>max_per_user</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>How many agents one person may own before further creation is refused. Clamped to 1–100. Admins are not counted or limited.</td>
+</tr>
+<tr>
+<td><code>allowed_archetypes</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Which templates a member may build from. <strong>Empty means any template</strong>, which is the default. A non-empty list is strict: only those templates, and building from scratch is refused too — so use it when you want people choosing from a menu you curated rather than describing a bot freehand. Names are the template ids shown in the New bot picker.</td>
+</tr>
+</tbody>
+</table>
+<p>All three knobs are editable from the dashboard under <strong>Config → Member bot
+creation</strong> — changes apply on save, no restart. A member who creates a bot
+gets a bot that runs on your deployment and spends your credits;
+<code>max_per_user</code> is the ceiling on how much of that any one person can start,
+and <code>enabled: false</code> closes the door entirely if that is not a trade your
+deployment wants.</p>
+<h2 id="agent_autonomy-what-agents-may-change-about-themselves"><code>agent_autonomy:</code> — what agents may change about themselves<a class="headerlink" href="#agent_autonomy-what-agents-may-change-about-themselves" title="Permanent link">¶</a></h2>
+<p>Deployment-wide defaults for <strong>chat self-configuration</strong>: when someone asks a
+bot in conversation to "hook yourself up to Notion", "switch to a cheaper
+model", "rewrite your instructions" or "add a research helper", these switches
+decide whether the bot has the tools to do it. <strong>Everything is on by
+default.</strong> Each key is a boolean; the block is editable from <strong>Config → Agent
+self-configuration</strong>, and a single agent can override any switch in either
+direction from its own page (<strong>Agents → agent → Chat self-configuration</strong>,
+three-state with <em>Inherit</em>). Changes apply to the agent's next tool call — no
+restart.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>What the agent may do when <code>true</code> (the default)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>explore_archetypes</code></td>
+<td>Search and read the template library (read-only).</td>
+</tr>
+<tr>
+<td><code>change_model</code></td>
+<td>Switch its own model, from the models this deployment can actually reach. Applies after it restarts.</td>
+</tr>
+<tr>
+<td><code>modify_prompt</code></td>
+<td>Rewrite its own system prompt (full replacement; recorded in Config → Revisions under the agent's name).</td>
+</tr>
+<tr>
+<td><code>restart_self</code></td>
+<td>Restart itself so saved changes take effect — scheduled just after its reply, so the answer isn't cut off.</td>
+</tr>
+<tr>
+<td><code>add_subagents</code></td>
+<td>Add specialist subagents to itself, from scratch or drafted from a template.</td>
+</tr>
+<tr>
+<td><code>connect_mcps</code></td>
+<td><strong>Connect services (MCP servers and built-in toolkits).</strong> Find every supported way to reach a service (<code>self_find_integration</code>), add or remove an MCP server or a built-in toolkit on itself, and start the sign-in. OAuth and sign-in codes happen in the user's own browser; API keys go through the vault. Also lets it read an outside project's documentation before anyone installs it (<code>self_inspect_external</code>).</td>
+</tr>
+<tr>
+<td><code>connect_platforms</code></td>
+<td>Wire messaging channels onto itself — token platforms (Telegram, Discord, Slack) and WhatsApp by a QR code shown right in the chat.</td>
+</tr>
+<tr>
+<td><code>manage_skills</code></td>
+<td>List the skills it has and switch individual ones on or off <strong>for itself</strong> — the same switches on its Skills tab, writing the same <code>disabled_skills</code> list. It can never install, edit or delete a skill this way, and switching off a common skill leaves every other agent's copy alone. Applies after it restarts.</td>
+</tr>
+<tr>
+<td><code>magic_links</code></td>
+<td>Send <strong>magic links</strong> — the <code>magic_link_*</code> tools: sign a person in to a service or MCP server, collect an API key straight into the vault, connect messengers by QR or token, let someone edit its instructions or a file, open the dashboard on their phone. The default way a bot connects itself to anything, so it ships on. Off removes the whole family from the bot; a single link tool can also be switched off on its Tools tab. Owners only, group chats refused, and an approval card on the stricter profiles; <strong>Config → Magic links</strong> stays the hard off switch for the whole deployment and separately gates the dashboard link.</td>
+</tr>
+<tr>
+<td><code>external_access</code></td>
+<td>Publish itself for outside callers (MCP / A2A) and mint access tokens — <code>self_set_external_access</code> and <code>magic_link_mint_access_token</code>. The tools additionally refuse anyone who is not an administrator, so this only decides whether a bot holds them at all. Off removes them from the bot; the External access tab still works for admins.</td>
+</tr>
+</tbody>
+</table>
+<p>Four guardrails apply regardless of these switches. <strong>Only people who own the
+bot can make it change itself</strong> (see below). Every change is written through
+the same validated path the dashboard uses, so a broken edit is refused rather
+than half-saved. Every <code>agent.json5</code> change lands in <strong>Config → Revisions</strong>
+attributed to the acting agent, so it can be reviewed and rolled back. And on
+the stricter security profiles each self-change first raises a human approval
+card. These switches govern the <strong>agent acting on itself</strong> only — they grant
+nothing to humans and nothing over other agents.</p>
+<p><strong>Who may ask is a separate question from what the bot may change.</strong> The
+switches above decide what the bot is <em>capable</em> of; ownership decides who is
+allowed to trigger it. Anything that writes — model, instructions, subagents,
+MCP services, messaging channels, restart, sending a magic link — is limited to:</p>
+<ul>
+<li>an <strong>owner</strong> of that bot (whoever creates a bot owns it; more owners are
+  granted under <strong>Admin → Access</strong>, where the roles are <em>Owner</em> and <em>User</em>),</li>
+<li>any <strong>deployment admin</strong>, and</li>
+<li>on a messaging channel, a sender on that channel's <strong>allowed users</strong> list —
+  which is what keeps "pair yourself with WhatsApp" workable from a phone.</li>
+</ul>
+<p>Everyone else who may chat with the bot gets a plain refusal naming the
+remedy, and keeps the read-only half: it can still list the models it could
+switch to, the services it could connect, and the templates it could draw
+from. So a colleague you shared a bot with can explore what it <em>could</em> become
+and then ask you to approve it, rather than silently reconfiguring your bot.</p>
+<p>Two cases are refused outright, with no way to grant them: an agent asking
+<em>another</em> agent to reconfigure it, and a scheduled or background run trying to
+reconfigure the agent while nobody is watching.</p>
+<p>One built-in exception: an agent in <strong>customer-service mode</strong> (per-customer
+isolation — a support bot serving strangers on a shared channel) inherits
+<strong>off</strong> for every capability, whatever the deployment default says. A
+stranger must not be able to talk a support bot into rewiring itself. You can
+still enable an individual capability for such an agent deliberately, with an
+explicit <strong>On</strong> in its own Chat self-configuration card.</p>
+<h2 id="groups-multi-bot-conversations"><code>groups:</code> — multi-bot conversations<a class="headerlink" href="#groups-multi-bot-conversations" title="Permanent link">¶</a></h2>
+<p>On by default, and editable from the dashboard at <strong>Config → Group chats</strong> —
+no file editing needed. While it is off, group threads do not exist and every
+group address on the API answers "not found"; turning it off never deletes a
+group, and turning it back on restores every group and transcript untouched.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Group threads: one conversation several bots share, where you can address any member. Replies stream in word by word, the same as a one-to-one chat. Whether the bots then answer <em>each other</em> is the separate <code>autonomous</code> switch below.</td>
+</tr>
+<tr>
+<td><code>min_members</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td>Fewest bots in a group.</td>
+</tr>
+<tr>
+<td><code>max_members</code></td>
+<td>integer</td>
+<td><code>6</code></td>
+<td>Most bots in a group.</td>
+</tr>
+<tr>
+<td><code>autonomous</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td><strong>A second, separate switch, also on by default.</strong> With it on, a bot whose reply names <em>another</em> member by <code>@name</code> hands that member the next turn — so the bots carry on with each other without you in between, inside the two limits below. With it off, you post, the bots you named answer, and the thread waits for you.</td>
+</tr>
+<tr>
+<td><code>max_hops</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>How many bot-to-bot turns one message of yours may set off. Clamped to 1–10. When it runs out the thread stops and says so in the conversation.</td>
+</tr>
+<tr>
+<td><code>cascade_timeout_seconds</code></td>
+<td>integer</td>
+<td><code>180</code></td>
+<td>How long the whole chain may run before it stops itself, in seconds. Clamped to 10–1800.</td>
+</tr>
+</tbody>
+</table>
+<p><code>autonomous</code> is the one to think about. It is what makes a group a conversation
+rather than a switchboard, and it is also the setting that spends model calls
+nobody is watching, because one message from you can start a chain of bots
+answering each other. That is why the two limits exist, why the switch is
+separate from <code>enabled</code>, and why every stop — hop limit, timeout, or two bots
+going back and forth — is written into the conversation instead of the thread
+just going quiet. If you would rather relay every hand-off yourself, turn it off
+at <strong>Config → Group chats</strong>; the group surface stays exactly as it is. Raise
+<code>max_hops</code> only once you have watched a few chains and know what they cost you,
+and raise <code>cascade_timeout_seconds</code> with it — more turns under the same time
+limit only converts "out of turns" into "out of time".</p>
+<p>If you are upgrading from a release where this switch was off by default and
+your <code>config.yaml</code> never mentioned it, your groups start doing this after the
+upgrade. Set <code>autonomous: false</code> there, or switch it off in the dashboard, to
+keep the old behaviour.</p>
+<p><strong>Using groups.</strong> A <strong>Group chats</strong> section appears in the agent list of both
+interfaces — in the full dashboard, under your agents in the sidebar. Click a
+group to open it; right-click it to rename it; use <strong>New group chat…</strong> at the
+foot of the section (or right-click its heading) to start one, picking the
+agents in the order you want them to answer. Each group has a details panel —
+the ⓘ button in its header — for renaming it, adding an agent, removing one,
+or deleting the whole group; on a phone the panel fills the screen. Order
+matters: the first agent in the roster answers anything that doesn't name
+someone. The <strong>Add an agent</strong> button in a one-to-one chat's header is the
+other way in: it turns that conversation into a group (see the Chat section).</p>
+<p><strong>Sharing a group with a teammate.</strong> With team accounts on, the person who
+created a group (or an admin) can let other team accounts into it from the
+group's details panel, under <strong>People</strong>: pick a person from <strong>Share with a
+teammate</strong> and they see the group in their own sidebar, marked <strong>Shared</strong>, can
+read everything in it and post into it. The list offers only people who already
+have access to every agent in the group, because sharing never grants access
+to an agent; grant that first on the Admin page if the person you want is
+missing. For the same reason an agent can only be added to a shared group when
+everyone shared into it already has access to that agent. A shared person is a
+guest: they can leave from the details panel, and what they posted stays in the
+conversation under their name, but only the creator and admins can rename the
+group, add or remove agents, share it with more people, remove someone, or
+delete it. Admins see every group whether or not they are listed.</p>
+<p>The <strong>People</strong> section lists everyone in the room who is not an agent: the
+creator, the people it is shared with, and any admin who has posted. Each
+person's messages are labelled with their handle, and every agent in the group
+is told who is in the room on every turn, so it answers the person who asked
+and knows the others are reading. Once more than one person is in a group,
+one rule changes: <strong>a message that names no agent is for the other people</strong>,
+is saved, and wakes no agent, so "thanks Maria, I'll take it" does not cost a
+model call. The line under the message box says so, and typing <code>@</code> and an
+agent's name asks that agent exactly as before. A group with one person in it
+keeps answering with its first agent.</p>
+<p><strong>Addressing one agent, or several.</strong> Start a message with <code>@</code> and an agent's name
+to put it to that agent; typing <code>@</code> opens a list of the members to pick from. You
+can name more than one — <em>"@ana @luis @ravi what would each of you do here?"</em> —
+and then each of them takes its own turn, in the order you named them, and
+<strong>each one can see what the ones before it said</strong>, so they add to each other
+instead of writing the same answer three times. Name nobody and the group's
+first agent answers. A line under the message box says which of those is about to
+happen — <em>"ana answers"</em>, <em>"ana, luis answer, each in turn"</em> — and it changes as
+you type, so there is nothing to set before sending.</p>
+<p>Agents you did <strong>not</strong> name still read everything. They stay out of the way
+unless they are named — and any agent can bring a teammate in by writing
+<code>@their-name</code> in its own reply, which is what turns a group into a
+conversation rather than a switchboard. With <code>autonomous</code> on (the default) that
+mention wakes the other agent for the next turn; with it off, the mention marks
+who should pick the work up and the thread waits for you. When an agent answers a
+teammate that called on it, its message carries a small "↩ name" tag beside the
+"→ name" one, so you can always tell who is answering whom — and answering is
+not handing over: the chain only continues when a reply names somebody else.</p>
+<p>Every agent in a group is told, on every turn, who else is in the room and what
+each of them does (their description from the agent's own profile), that a
+message naming somebody else is context to read rather than a cue to answer,
+and which ways it has of reaching the others — so the group behaves like a room
+of colleagues rather than several agents that happen to share a page.</p>
+<p><strong>Watching them work.</strong> The group header has the same <strong>Quiet / Normal /
+Verbose</strong> control as a one-to-one chat, and it starts on <strong>Normal</strong> rather than
+Quiet: Normal shows one line per tool an agent uses — including it calling another
+agent or handing work to one of its own helpers — and Verbose adds each tool's
+full input and result plus the helper transcripts. In a group that activity is
+usually the point, which is why the starting level differs. The choice is
+remembered in your browser and applies to every group.</p>
+<p>The reply is laid out <strong>in the order it happened</strong>: what the agent said before
+it went to work, then what it did, then what it said afterwards — rather than a
+pile of tool lines above one block of text. That order is kept, so reopening the
+group later shows the same conversation you watched.</p>
+<p><strong>Files an agent makes.</strong> When an agent saves a file and names it in its reply,
+the group shows it: a picture appears inline, anything else gets a card with
+<strong>Download</strong> and <strong>Open in Files</strong>, and the file's name in the text becomes a
+link. Each agent has its own workspace, so a link goes to the files of the agent
+that made it. A file the agent later deletes stops being offered rather than
+leaving a dead link behind.</p>
+<p>When one agent asks another one directly, the transcript says so while it waits:
+a line reading <em>"maria is thinking…"</em>, with that agent's own face beside it,
+appears under the member doing the asking and clears the moment the answer
+comes back. It shows at every level, Quiet included, because it is about who is
+talking rather than about tools — and without it a group looks frozen for as
+long as the other agent takes. What that agent says comes back inside the asking
+agent's reply, not as its own message in the group; an agent pulled in with <code>@their
+name</code> is the other route, and that one does post its own message.</p>
+<p><strong>Renaming a group.</strong> Right-click a group in the sidebar and choose <strong>Rename</strong>,
+or open the group's info panel and use the pencil beside its name (that is the
+route on a phone, which has no right-click). One-to-one conversations rename the
+same way in both views: right-click the chat under its agent in the sidebar (or
+in the simple view's rail), use the pencil on a row of the chat page's
+conversation list, or type <code>/rename</code> followed by the name you want. A name is
+only a label — renaming changes nothing about the conversation, who is in it,
+or what the agents remember of it. The name shows everywhere the conversation
+is listed the moment it is saved.</p>
+<p><strong>Turning a one-to-one chat into a group.</strong> In any conversation, <strong>Add an agent</strong>
+in the header brings other agents in. The agent you were already talking to leads
+the new group, so it keeps answering by default, and the recent history is
+copied across labelled with who said what — so the agents you add can read what
+was discussed instead of starting blind. Long conversations are trimmed to the
+most recent messages and the group says so in the transcript. You can switch
+that copying off if you would rather start clean. Two things are worth knowing:
+your original one-to-one chat is left exactly as it was (this creates a
+separate conversation), and what an agent privately remembers of that chat does
+not transfer — every member, including the original one, starts the group with
+only what the transcript shows.</p>
+<p><strong>Letting bots use groups themselves.</strong> Adding <code>"groups"</code> to an agent's
+<code>tools:</code> list gives it four abilities: list the groups it belongs to, read a
+group's recent messages, post into a group (optionally addressing one member
+with <code>@name</code>), and create a new group for the person it is talking to. A bot
+does <strong>not</strong> need these to take part in a group it is already in — replying and
+<code>@mention</code>ing a teammate work with no tools at all; these are for reaching a
+group it is not currently being spoken to in. A bot
+can only see and speak in groups it is a <strong>member</strong> of, its own name is always
+stamped as the author, and whether an addressed member replies on its own
+still follows <code>autonomous</code> and its limits — a bot's post starts exactly the
+same bounded exchange a message of yours would, never more. Creating a group
+works only in a live conversation with a signed-in person (the group becomes
+theirs, in their sidebar); from a scheduled run the bot is told to ask a human
+instead.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../agent-json5/" class="md-footer__link md-footer__link--prev" aria-label="Previous: agent.json5 reference">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                agent.json5 reference
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../organization-yaml/" class="md-footer__link md-footer__link--next" aria-label="Next: organization.yaml, the org chart">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                organization.yaml, the org chart
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
