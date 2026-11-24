@@ -1,0 +1,7 @@
+# Who is asked to review a pull request, by path. GitHub requests a review from
+# the owners of every file a pull request touches; with "Require review from
+# Code Owners" on in the main ruleset, their approval is also required.
+# The last matching line wins, so a later, more specific path can name more
+# owners for part of the tree.
+
+*   @cchacons

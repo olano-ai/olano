@@ -184,12 +184,15 @@ bash setup.sh --olano-key sk-olano-...     # Olano credits from the first boot
 # or edit .env: ANTHROPIC_API_KEY=..., OPENAI_API_KEY=..., OLANO_CREDITS_KEY=...
 ```
 
-### If the image pull is denied
+### If the image pull fails
 
-`docker compose pull` answering `denied` or `unauthorized` means the images are
-not readable from your machine. Sign in with a GitHub account that can read
-them (`docker login ghcr.io`, a personal access token with `read:packages`)
-and re-run `setup.sh`, or ask Olano for access.
+The images are public: the Olano images on `ghcr.io` and Postgres on Docker
+Hub need no login. A failed `docker compose pull` is usually the network, so
+re-run `setup.sh`; layers that finished downloading are kept. When every image
+is already on the machine from an earlier run, `setup.sh` starts with those and
+says so. `429 Too Many Requests` from `registry-1.docker.io` is Docker Hub's
+limit on anonymous pulls from your address (common behind a shared office or
+cloud NAT); `docker login` with a free Docker account raises it.
 
 ## Day to day
 
