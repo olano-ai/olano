@@ -146,18 +146,22 @@ export function EndpointsCard({ status, agentName }: { status: ExternalStatus; a
   );
 }
 
-export function StatusBadge({ serving, enabled, https, requireHttps, originKnown }: {
+export function StatusBadge({ serving, enabled, https, requireHttps, originKnown, surfaceServing = serving }: {
   serving: boolean;
   enabled: boolean;
   https: boolean;
   requireHttps: boolean;
   originKnown: boolean;
+  /** The server's own verdict for the whole surface (`status.serving`). The server exempts
+   *  loopback and private-network origins from Require HTTPS, so a plain-http origin it does
+   *  serve must not read "Refused" here. Defaults to `serving`. */
+  surfaceServing?: boolean;
 }) {
   const t = useT(STR);
   let text = t("ext.status.off");
   let cls = "badge";
   if (enabled && !originKnown) text = t("ext.status.unknownOrigin");
-  else if (enabled && !https && requireHttps) text = t("ext.status.notHttps");
+  else if (enabled && !https && requireHttps && !surfaceServing) text = t("ext.status.notHttps");
   else if (serving) {
     text = t("ext.status.serving");
     cls = "badge admin";

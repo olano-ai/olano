@@ -33,7 +33,8 @@ export async function run({ app, S, sleep, tap, point, scroll, scrollTo, mark, P
   };
   const open = async (title) => {
     await card(title).waitFor({ timeout: 30000 });
-    await sleep(900);
+    if (PORTRAIT) await scrollTo(card(title), 300, 700).catch(() => {});
+    await sleep(PORTRAIT ? 300 : 900);
     await tap(card(title).getByRole('button', { name: 'Open', exact: true }), { move: 800 });
     await app.getByText('Files', { exact: true }).last().waitFor({ timeout: 30000 });
     await S('hide');
@@ -50,23 +51,23 @@ export async function run({ app, S, sleep, tap, point, scroll, scrollTo, mark, P
   await sleep(1800);
   await scrollTo(tab('Pulse'), PORTRAIT ? 70 : 90, 1400);
   if (!PORTRAIT) await point(card('Care card scans doubled'), { move: 900 });
-  await sleep(4600);
+  await sleep(3200);
 
   mark('brainstorm');
   await S('caption', 1);
   await openTab('Brainstorming');
   await card('Things customers ask').waitFor({ timeout: 30000 });
   await S('hide');
-  await sleep(2400);
+  await sleep(2000);
   await scroll(PORTRAIT ? 260 : 200, 1400);
-  await sleep(2400);
+  await sleep(1900);
 
   mark('ideas');
   await S('caption', 2);
   await scrollTo(tab('Pulse'), PORTRAIT ? 70 : 90, 700);
   await openTab('Ideas');
   await open('Text me when');
-  await sleep(5200);
+  await sleep(3300);
   await close();
 
   mark('approve');
@@ -75,25 +76,26 @@ export async function run({ app, S, sleep, tap, point, scroll, scrollTo, mark, P
   const approve = app.getByRole('button', { name: 'Approve', exact: true }).first();
   await approve.waitFor({ timeout: 30000 });
   await S('hide');
-  await sleep(3200);
+  if (PORTRAIT) await scrollTo(card('Promote idea to prototype'), 150, 900).catch(() => {});
+  await sleep(2100);
   await tap(approve, { move: 800 });
   await app.getByText('Agent is working on this').first().waitFor({ timeout: 60000 });
   await S('hide');
   await app.getByText('into prototype').first().waitFor({ timeout: 120000 });
-  await sleep(2600);
+  await sleep(1900);
 
   mark('prototype');
   await S('caption', 4);
   await openTab('Prototypes');
   await open('Back-in-stock texts');
-  await sleep(5200);
+  await sleep(3500);
   await close();
 
   mark('project');
   await S('caption', 5);
   await openTab('Projects');
   await open('Care cards for the houseplant');
-  await sleep(5400);
+  await sleep(4300);
 
   mark('end');
   await S('caption', null);

@@ -56,6 +56,7 @@ function ask(url, token) {
 export async function run(c) {
   const { app, S, sleep, tap, point, type, keyboardOff, scroll, scrollTo, nav, term, mark, server, PORTRAIT } = c;
 
+  await S('address', new URL(c.APP).host);            // the throwaway dashboard's own address, as its endpoints show it
   // 0. the home-wide switch
   mark('door');
   await S('appIn');
@@ -63,13 +64,13 @@ export async function run(c) {
   await S('caption', 0);
   const label = app.getByText('MCP endpoint', { exact: true }).first();
   await sleep(1200);
-  await scrollTo(app.getByText('External access', { exact: true }).last(), PORTRAIT ? 110 : 120, 1600);
-  await sleep(2400);
+  await scrollTo(app.getByText('External access', { exact: true }).last(), PORTRAIT ? 110 : 120, 1500);
+  await sleep(1500);
   await tap(label.locator('xpath=ancestor::*[.//button][1]').getByRole('switch'), { move: 800 });
   await sleep(900);
   await tap(app.getByRole('button', { name: 'Save changes' }), { move: 800 });
   await S('hide');
-  await sleep(2600);
+  await sleep(1900);
 
   // 1. publish one agent
   mark('publish');
@@ -77,14 +78,14 @@ export async function run(c) {
   await nav('/agents/juno/external', { click: false });
   const tab = app.getByTestId('external-access-tab');
   await tab.waitFor({ timeout: 30000 });
-  await sleep(1500);
+  await sleep(900);
   const reach = tab.getByLabel('Reachable over MCP');
   await scrollTo(reach, PORTRAIT ? 300 : 380, 900).catch(() => {});
   await tap(reach, { move: 700 });
   await sleep(600);
   const desc = tab.getByTestId('ext-description');
   await scrollTo(desc, PORTRAIT ? 120 : 300, 800).catch(() => {});
-  await type(desc, DESCRIPTION, { cps: 34 });
+  await type(desc, DESCRIPTION, { cps: 60 });
   await keyboardOff();
   await sleep(500);
   const save = tab.getByRole('button', { name: 'Save', exact: true });
@@ -96,7 +97,7 @@ export async function run(c) {
   await sleep(700);
   await scrollTo(endpoints, PORTRAIT ? 90 : 110, 1200);
   if (!PORTRAIT) await point(endpoints.getByText('ask_juno').first(), { move: 800, dx: -70 });
-  await sleep(3200);
+  await sleep(2500);
 
   // 2. a token for this caller
   mark('token');
@@ -108,15 +109,16 @@ export async function run(c) {
   await dlg.locator('input.input').first().waitFor({ timeout: 30000 });
   await sleep(500);
   await type(dlg.locator('input.input').first(), 'Booking site assistant', { cps: 22 });
-  await type(dlg.locator('textarea'), 'juno', { cps: 14 });
   await keyboardOff();
-  await sleep(500);
+  await sleep(400);
+  if (!PORTRAIT) await point(dlg.locator('textarea'), { move: 600 });   // opened from juno's tab: already filled in
+  await sleep(700);
   await tap(dlg.getByRole('button', { name: 'Create token' }), { move: 600 });
   const minted = app.getByTestId('ext-minted-token');
   await minted.waitFor({ timeout: 30000 });
   const token = (await minted.textContent()).trim();
   if (!PORTRAIT) await point(minted, { move: 700 });
-  await sleep(3800);
+  await sleep(2800);
   await tap(app.getByRole('button', { name: 'Done' }), { move: 600 });
   await S('hide');
   await sleep(700);
@@ -146,7 +148,7 @@ export async function run(c) {
     }
   }
   await term.prompt();
-  await sleep(4200);
+  await sleep(3000);
 
   // 4. the call, on record
   mark('record');
@@ -161,7 +163,7 @@ export async function run(c) {
   await tap(rail.getByText('Booking site assistant').first(), { move: 700 });
   await app.getByText('Friday has three free slots').last().waitFor({ timeout: 30000 });
   await S('hide');
-  await sleep(5200);
+  await sleep(4000);
 
   mark('end');
   await S('caption', null);

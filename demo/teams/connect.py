@@ -63,7 +63,7 @@ TEAM = {
                     {
                         "text": "Here is a secure link for Slack. Use the button below and enter the PIN. "
                         "You sign in with Slack itself, and nothing is pasted into this chat.",
-                        "wps": 14,
+                        "wps": 22,
                     },
                 ]
             },

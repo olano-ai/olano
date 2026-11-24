@@ -47,12 +47,12 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
     await tap(rail.locator('.simple-row', { hasText: 'poppy' }), { move: 700 });
     await sleep(1000);
   } else {
-    await point(rail.getByText('bram', { exact: true }), { move: 900 });
-    await sleep(1000);
-    await point(rail.getByText('poppy', { exact: true }), { move: 700 });
-    await sleep(1000);
+    await point(rail.getByText('bram', { exact: true }), { move: 800 });
+    await sleep(700);
+    await point(rail.getByText('poppy', { exact: true }), { move: 600 });
+    await sleep(700);
     await point(rail.getByText('tess', { exact: true }), { move: 700 });
-    await sleep(1700);
+    await sleep(1300);
   }
   await S('hide');
 
@@ -87,7 +87,7 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await sleep(1100);
   await send("Here is Biscuit's vaccination card.", { cps: 22 });
   await chat.getByText('due this week').first().waitFor({ timeout: 90000 });
-  await sleep(2000);
+  await sleep(1600);
 
   mark('new');
   await S('caption', 4);
@@ -96,15 +96,15 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   const d = app.locator('[role=dialog]').last();
   const name = d.locator('#simple-newbot-name');
   await name.waitFor({ timeout: 30000 });
-  await sleep(900);
-  await type(name, 'Milo', { cps: 7 });
+  await sleep(600);
+  await type(name, 'Milo', { cps: 10 });
   await keyboardOff();
-  await sleep(700);
+  await sleep(400);
   const about = d.locator('textarea').first();
   await scrollTo(about, PORTRAIT ? 220 : 300, 900);
   await type(about, 'Writes aftercare notes for pets going home.', { cps: 26 });
   await keyboardOff();
-  await sleep(900);
+  await sleep(600);
   await tap(d.getByRole('button', { name: 'Create agent' }), { move: 700, dispatch: true });
 
   await app.getByText('Say hello to milo').first().waitFor({ timeout: 90000 });
@@ -115,7 +115,7 @@ export async function run({ app, frame, S, sleep, tap, point, type, send, keyboa
   await sleep(700);
   await send('Hi Milo!');
   await chat.getByText('draft their aftercare notes').first().waitFor({ timeout: 90000 });
-  await sleep(2200);
+  await sleep(1800);
 
   mark('end');
   await S('caption', null);

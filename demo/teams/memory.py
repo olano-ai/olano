@@ -203,7 +203,7 @@ TEAM = {
                         "result": lambda ctx: _recall(ctx).split("\n\n")[1],
                         "took": 1.0,
                     },
-                    {"text": _recall, "wps": 13},
+                    {"text": _recall, "wps": 20},
                 ]
             },
         ],

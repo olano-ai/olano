@@ -75,6 +75,7 @@ export function ExternalAccessTab({
             {status && (
               <StatusBadge
                 serving={status.serving && mcp}
+                surfaceServing={status.serving}
                 enabled={status.enabled}
                 https={status.https}
                 requireHttps={status.require_https}
@@ -97,6 +98,7 @@ export function ExternalAccessTab({
             {status?.a2a && (
               <StatusBadge
                 serving={status.a2a.serving && a2a}
+                surfaceServing={status.a2a.serving}
                 enabled={status.a2a.enabled}
                 https={status.https}
                 requireHttps={status.require_https}

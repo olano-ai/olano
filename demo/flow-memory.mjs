@@ -29,17 +29,17 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await S('appIn');
   await sleep(300);
   await S('caption', 0);
-  await sleep(2600);
-  await scroll(PORTRAIT ? 330 : 150, 1800);
-  await sleep(3400);
+  await sleep(1900);
+  await scroll(PORTRAIT ? 330 : 150, 1700);
+  await sleep(2500);
 
   mark('teach');
   await S('caption', 1);
   const section = app.getByPlaceholder('e.g. Preferences');
   await scrollTo(section, PORTRAIT ? 200 : 300, 1000);
-  await type(section, 'Clients', { cps: 14 });
+  await type(section, 'Clients', { cps: 18 });
   await keyboardOff();
-  await type(app.locator('main textarea').last(), 'Biscuit is nervous in the waiting room. Book the first slot.', { cps: 24 });
+  await type(app.locator('main textarea').last(), 'Biscuit is nervous in the waiting room. Book the first slot.', { cps: 30 });
   await keyboardOff();
   await sleep(500);
   await tap(app.getByRole('button', { name: 'Save fact' }), { move: 600 });
@@ -47,14 +47,14 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await saved.waitFor({ timeout: 30000 });
   await S('hide');
   await scrollTo(saved, PORTRAIT ? 330 : 380, 1100).catch(() => {});
-  await sleep(2600);
+  await sleep(2000);
 
   mark('daily');
   await S('caption', 2);
   const today = new Date().toISOString().slice(0, 10);
   await nav(`/files?path=memories/${today}.md&agent=willa`);
   await app.getByText('Dr. Halvorsen is away next Monday').first().waitFor({ timeout: 30000 });
-  await sleep(5200);
+  await sleep(PORTRAIT ? 4400 : 5200);
 
   mark('notes');
   await S('caption', 3);
@@ -65,14 +65,14 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await tap(note, { move: 700 });
   await app.getByText('What Willa does every morning.').last().waitFor({ timeout: 30000 });
   await S('hide');
-  await sleep(4400);
+  await sleep(PORTRAIT ? 2800 : 3600);
 
   mark('knowledge');
   await S('caption', 4);
   await nav('/knowledge');
   const query = app.locator('input[placeholder^="Search across"]');
   await query.waitFor({ timeout: 30000 });
-  await sleep(900);
+  await sleep(600);
   await type(query, 'When can a puppy meet other dogs?', { cps: 22 });
   await keyboardOff();
   await tap(app.getByRole('button', { name: 'Search', exact: true }).last(), { move: 500 });
@@ -81,7 +81,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await S('hide');
   await sleep(500);
   await scrollTo(app.getByText('Results', { exact: true }).first(), PORTRAIT ? 80 : 110, 1200);
-  await sleep(3800);
+  await sleep(PORTRAIT ? 1900 : 2800);
 
   mark('recall');
   await S('caption', 5);
@@ -90,9 +90,9 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await sleep(700);
   await tap(app.locator('button[aria-label="New chat"]').first(), { move: 600 });
   await sleep(600);
-  await send('Biscuit is coming in tomorrow. Anything to know?');
+  await send('Biscuit is coming in tomorrow. Anything to know?', { cps: 26 });
   await app.getByText('off the counter').first().waitFor({ timeout: 90000 });
-  await sleep(3200);
+  await sleep(PORTRAIT ? 1600 : 2500);
 
   mark('end');
   await S('caption', null);
