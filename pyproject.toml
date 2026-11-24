@@ -65,11 +65,11 @@ dependencies = [
     # accepting that group alone silently downgrades the floor deepagents needs.
     # Raise these together with the deepagents pin, never separately.
     "deepagents==0.7.23",
-    "langchain>=1.4.3",
+    "langchain>=1.5.2",
     "langchain-core>=1.6.7",
     "langchain-community>=0.4.2",
-    "langgraph>=1.2.10",
-    "langgraph-checkpoint>=4.2.0",
+    "langgraph>=1.2.24",
+    "langgraph-checkpoint>=4.3.2",
     # LLM providers — all included by default.
     # Every provider in olano/models/PROVIDERS ships in the BASE install so the
     # two install surfaces stay in lockstep: install.sh runs `uv sync --all-extras`
@@ -78,25 +78,25 @@ dependencies = [
     # [project.optional-dependencies] would therefore be missing on every cloud
     # deployment — so it lives here, not there. The per-provider extras below are
     # kept only as back-compat aliases.
-    "langchain-openai>=1.7.0",
-    "langchain-anthropic>=1.7.5",
+    "langchain-openai>=1.8.5",
+    "langchain-anthropic>=1.7.12",
     "langchain-ollama>=1.1.0",
     "langchain-google-genai>=4.4.0",
-    "langchain-google-vertexai>=2.0.0",
-    "langchain-groq>=1.1.3",
-    "langchain-mistralai>=1.1.6",
-    "langchain-deepseek>=1.1.1",
-    "langchain-xai>=1.3.0",
+    "langchain-google-vertexai>=3.3.0",
+    "langchain-groq>=1.2.1",
+    "langchain-mistralai>=1.2.0",
+    "langchain-deepseek>=1.2.1",
+    "langchain-xai>=1.4.1",
     "langchain-cohere>=0.6.0",
-    "langchain-fireworks>=1.6.0",
+    "langchain-fireworks>=1.7.3",
     "langchain-together>=0.2.0",
-    "langchain-aws>=1.8.1",
-    "langchain-nvidia-ai-endpoints>=1.4.3",
-    "langchain-perplexity>=1.4.0",
+    "langchain-aws>=1.10.0",
+    "langchain-nvidia-ai-endpoints>=1.5.0",
+    "langchain-perplexity>=1.4.2",
     # Moved out of optional-dependencies so cloud (DO) deploys get them too —
     # openrouter + litellm are in the PROVIDERS catalog and were previously
     # unreachable on any base-deps install (ImportError at model build).
-    "langchain-openrouter>=0.2.8",
+    "langchain-openrouter>=0.3.0",
     "langchain-litellm>=0.11.0",
     # Hugging Face serverless / TGI endpoints (torch-free without the [full] extra;
     # only needs huggingface-hub + tokenizers). init_chat_model routes "huggingface:".
@@ -104,7 +104,7 @@ dependencies = [
     # Qwen (Alibaba DashScope) — ChatQwQ (reasoning) + ChatQwen (Qwen3 series);
     # Moonshot AI — ChatMoonshot (Kimi K2). Neither is in init_chat_model's provider
     # registry, so build_model() has explicit branches for them.
-    "langchain-qwq>=0.3.5",
+    "langchain-qwq>=0.4.0",
     "langchain-moonshot>=0.1.0",
     # MCP support
     # 0.3.1 is the floor that supports mcp 1.28's API (0.2.x imports symbols
@@ -178,11 +178,11 @@ dependencies = [
     # substring (CVE-2026-71433 / GHSA-47pj-3jcm-6whg, filed against the postgres
     # package; the sqlite package shipped the same bug and the same fix in 3.1.1).
     # Both stores are used — see core/stores.py.
-    "langgraph-checkpoint-sqlite>=3.1.1",
+    "langgraph-checkpoint-sqlite>=3.1.3",
     # Postgres is the default persistence backend (concurrent writes + pooling),
     # so its packages ship in the base install. SQLite stays bundled above as the
     # opt-out backend and for the threads.db → Postgres migration reader.
-    "langgraph-checkpoint-postgres>=3.1.3",
+    "langgraph-checkpoint-postgres>=3.2.1",
     "psycopg[binary,pool]>=3.3.9",
     "yfinance>=1.8.0",
     "stripe>=15.5.1",
@@ -211,21 +211,21 @@ dependencies = [
 # NOTE: every LLM provider now ships in the BASE install (see [project.dependencies]),
 # so these per-provider extras are redundant no-op aliases kept only so existing
 # `uv add "olano[groq]"` / `pip install .[xai]` commands keep resolving.
-google = ["langchain-google-genai>=4.4.0", "langchain-google-vertexai>=2.0.0"]
-groq = ["langchain-groq>=1.1.3"]
-mistral = ["langchain-mistralai>=1.1.6"]
-deepseek = ["langchain-deepseek>=1.1.1"]
-xai = ["langchain-xai>=1.3.0"]
-openrouter = ["langchain-openrouter>=0.2.8"]
+google = ["langchain-google-genai>=4.4.0", "langchain-google-vertexai>=3.3.0"]
+groq = ["langchain-groq>=1.2.1"]
+mistral = ["langchain-mistralai>=1.2.0"]
+deepseek = ["langchain-deepseek>=1.2.1"]
+xai = ["langchain-xai>=1.4.1"]
+openrouter = ["langchain-openrouter>=0.3.0"]
 cohere = ["langchain-cohere>=0.6.0"]
-fireworks = ["langchain-fireworks>=1.6.0"]
+fireworks = ["langchain-fireworks>=1.7.3"]
 together = ["langchain-together>=0.2.0"]
-aws = ["langchain-aws>=1.8.1"]
-nvidia = ["langchain-nvidia-ai-endpoints>=1.4.3"]
-perplexity = ["langchain-perplexity>=1.4.0"]
+aws = ["langchain-aws>=1.10.0"]
+nvidia = ["langchain-nvidia-ai-endpoints>=1.5.0"]
+perplexity = ["langchain-perplexity>=1.4.2"]
 litellm = ["langchain-litellm>=0.11.0"]
 huggingface = ["langchain-huggingface>=1.2.2"]
-qwq = ["langchain-qwq>=0.3.5"]
+qwq = ["langchain-qwq>=0.4.0"]
 moonshot = ["langchain-moonshot>=0.1.0"]
 # Postgres is now the DEFAULT persistence backend and its packages are bundled in
 # the base install (see [project.dependencies]). This extra is kept as a no-op
@@ -250,19 +250,19 @@ discord-voice = ["davey>=0.2.0"]
 # back-compat with `pip install "olano[all-providers]"`.
 all-providers = [
     "langchain-google-genai>=4.4.0",
-    "langchain-groq>=1.1.3",
-    "langchain-mistralai>=1.1.6",
-    "langchain-deepseek>=1.1.1",
-    "langchain-xai>=1.3.0",
+    "langchain-groq>=1.2.1",
+    "langchain-mistralai>=1.2.0",
+    "langchain-deepseek>=1.2.1",
+    "langchain-xai>=1.4.1",
     "langchain-cohere>=0.6.0",
-    "langchain-fireworks>=1.6.0",
+    "langchain-fireworks>=1.7.3",
     "langchain-together>=0.2.0",
-    "langchain-nvidia-ai-endpoints>=1.4.3",
-    "langchain-perplexity>=1.4.0",
-    "langchain-openrouter>=0.2.8",
+    "langchain-nvidia-ai-endpoints>=1.5.0",
+    "langchain-perplexity>=1.4.2",
+    "langchain-openrouter>=0.3.0",
     "langchain-litellm>=0.11.0",
     "langchain-huggingface>=1.2.2",
-    "langchain-qwq>=0.3.5",
+    "langchain-qwq>=0.4.0",
     "langchain-moonshot>=0.1.0",
 ]
 
