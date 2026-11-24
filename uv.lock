@@ -1916,7 +1916,7 @@ wheels = [
 
 [[package]]
 name = "facebook-business"
-version = "25.0.3"
+version = "27.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1926,9 +1926,9 @@ dependencies = [
     { name = "requests" },
     { name = "six" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/99/2b/02fe6d01e17832c8c94e5eaccac265bb47727cf2cd0b50cfb0f393052a58/facebook_business-25.0.3.tar.gz", hash = "sha256:cf498ee3638b0d55694affe2384218bc9698892eb5fb59fb8ce3febe74aafbe0", size = 697054, upload-time = "2026-07-17T17:34:52.063Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0b/1f/35a0471ab6425931f5e5596485cbf9165c081ca498ddd1db9bf68cba781d/facebook_business-27.0.1.tar.gz", hash = "sha256:e8110689205b41f001f87b72fa2e6552ff3f097e966c2846004568b2a72b2f1c", size = 788564, upload-time = "2026-11-21T05:00:45.725Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ad/3d/9b9c93d8084e74bf1384c8e75f1114acd0f6cb5d3c4f0fcec56d38a8047c/facebook_business-25.0.3-py3-none-any.whl", hash = "sha256:dbe12170b6b63bb554670b6e4f3c40e3ca9690fdd9dacddc483ee127f760b754", size = 1442992, upload-time = "2026-07-17T17:34:50.508Z" },
+    { url = "https://files.pythonhosted.org/packages/ed/09/b053cac4ab68e4d27c542d6aa6b00bf955fdafdb7f99f07363c3a4abf084/facebook_business-27.0.1-py3-none-any.whl", hash = "sha256:18a330d2e1cce2c724c776c78ab0488d697978d3bec314441075b5cd80aab9ec", size = 1695550, upload-time = "2026-11-21T05:00:44.035Z" },
 ]
 
 [[package]]
@@ -5156,7 +5156,7 @@ requires-dist = [
     { name = "deepagents", specifier = "==0.7.23" },
     { name = "deepagents-acp", specifier = ">=0.0.11" },
     { name = "discord-py", specifier = ">=2.3.0" },
-    { name = "facebook-business", specifier = ">=25.0.3" },
+    { name = "facebook-business", specifier = ">=27.0.1" },
     { name = "fastapi", specifier = ">=0.165.0" },
     { name = "fastembed", specifier = ">=0.9.1" },
     { name = "firecrawl-py", specifier = ">=4.57.0" },
