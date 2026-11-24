@@ -262,10 +262,19 @@ async def test_unreadable_prior_state_skips_recording_not_the_reply() -> None:
 
 
 def _tool_update(text: str, status: str = "completed"):
-    from acp import text_block, tool_content, update_tool_call
+    # Built from the schema, the way deepagents-acp builds it: the helper
+    # functions the SDK once exported at its top level are gone in 1.0.
+    from acp import schema
 
-    return update_tool_call(
-        tool_call_id="call_1", status=status, content=[tool_content(text_block(text))]
+    return schema.ToolCallProgress(
+        session_update="tool_call_update",
+        tool_call_id="call_1",
+        status=status,
+        content=[
+            schema.ContentToolCallContent(
+                type="content", content=schema.TextContentBlock(type="text", text=text)
+            )
+        ],
     )
 
 

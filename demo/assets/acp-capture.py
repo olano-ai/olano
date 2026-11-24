@@ -105,12 +105,20 @@ def main() -> None:
         out = subprocess.run(cmd, env=env, cwd=project, capture_output=True, text=True, check=True)
         return out.stdout.replace(str(root), "/home/you").rstrip("\n").split("\n")
 
-    session: dict[str, object] = {"help": run("olano", "acp", "--help"), "settings": run("cat", str(zed))}
+    session: dict[str, object] = {
+        "help": run("olano", "acp", "--help"),
+        "settings": run("cat", str(zed)),
+    }
 
     # The client, driven the way a person at the keyboard would: wait for its "> ", type a prompt.
     client = subprocess.Popen(
         [sys.executable, str(HERE / "acp-client.py"), "sage"],
-        env=env, cwd=project, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+        env=env,
+        cwd=project,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
     )
     assert client.stdin and client.stdout
 
@@ -119,7 +127,11 @@ def main() -> None:
         while not buf.endswith("\n> "):
             ch = client.stdout.read(1)
             if not ch:
-                raise RuntimeError("the client ended early:\n" + buf + (client.stderr.read() if client.stderr else ""))
+                raise RuntimeError(
+                    "the client ended early:\n"
+                    + buf
+                    + (client.stderr.read() if client.stderr else "")
+                )
             buf += ch
         return buf[: -len("\n> ")].replace(str(root), "/home/you").strip("\n").split("\n")
 
@@ -132,9 +144,13 @@ def main() -> None:
     client.stdin.flush()
     client.wait(timeout=30)
     session["client"] = turns
-    session["stderr"] = (client.stderr.read() if client.stderr else "").replace(str(root), "/home/you")
+    session["stderr"] = (client.stderr.read() if client.stderr else "").replace(
+        str(root), "/home/you"
+    )
     session["checklist"] = run("cat", str(notes / "checklist.md"))
-    (HERE / "acp-session.json").write_text(json.dumps(session, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    (HERE / "acp-session.json").write_text(
+        json.dumps(session, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
     shutil.rmtree(root, ignore_errors=True)
     print(json.dumps(session, indent=2, ensure_ascii=False))
 

@@ -1,7 +1,17 @@
 """A minimal ACP client: it starts an agent the way an editor does and sends it prompts."""
-import asyncio, os, sys
-from acp import PROTOCOL_VERSION, spawn_agent_process, text_block
-from acp.schema import AllowedOutcome, ClientCapabilities, Implementation, RequestPermissionResponse
+
+import asyncio
+import os
+import sys
+
+from acp import PROTOCOL_VERSION, spawn_agent_process
+from acp.schema import (
+    AllowedOutcome,
+    ClientCapabilities,
+    Implementation,
+    RequestPermissionResponse,
+    TextContentBlock,
+)
 
 
 class Editor:
@@ -22,7 +32,9 @@ class Editor:
             print(f"  {n}. {option.name}", flush=True)
         print("  choice: ", end="", flush=True)
         pick = options[int((await asyncio.to_thread(sys.stdin.readline)).strip()) - 1]
-        return RequestPermissionResponse(outcome=AllowedOutcome(option_id=pick.option_id, outcome="selected"))
+        return RequestPermissionResponse(
+            outcome=AllowedOutcome(option_id=pick.option_id, outcome="selected")
+        )
 
 
 async def main(agent):
@@ -42,7 +54,9 @@ async def main(agent):
             prompt = (await asyncio.to_thread(sys.stdin.readline)).strip()
             if not prompt:
                 break
-            done = await conn.prompt(session_id=session.session_id, prompt=[text_block(prompt)])
+            done = await conn.prompt(
+                session_id=session.session_id, prompt=[TextContentBlock(type="text", text=prompt)]
+            )
             print(f"\n[{done.stop_reason}]", flush=True)
 
 
