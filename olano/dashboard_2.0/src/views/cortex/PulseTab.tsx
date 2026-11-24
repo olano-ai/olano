@@ -12,6 +12,7 @@ import {
   hasMarkdown,
   isFileRef,
   priorityColor,
+  relFuture,
   statusColor,
   type Outcome,
 } from "./helpers";
@@ -480,7 +481,7 @@ function PulseCard({
         )}
         {item.expires_at ? (
           <span className="muted" style={{ fontSize: 11 }}>
-            {t("pulse.expires", { when: formatTs(item.expires_at) })}
+            {t("pulse.expires", { when: relFuture(item.expires_at) })}
           </span>
         ) : null}
       </div>

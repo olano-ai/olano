@@ -106,6 +106,27 @@ body:not(.portrait) .phone-wrap { display: none; }
 .portrait .steps { display: none; }
 .portrait.term-mode .captions { top: 225px; }
 
+/* the iPhone in landscape too (?device=phone, a flow's `device: 'phone'`): the phone beside the captions
+   instead of the browser window, with the fingertip and the iOS keyboard */
+body.dphone .win-wrap { display: none; }
+body.dphone:not(.portrait) .phone-wrap { display: block; --s: 1.06; left: 1090px; top: 67px; }
+body.dphone:not(.portrait) .captions { left: 250px; width: 620px; }
+body.dphone:not(.portrait) .steps { left: 250px; }
+body.dphone:not(.portrait) .cap h1 { font-size: 76px; }
+body.dphone:not(.portrait) .cap p { font-size: 30px; }
+body.dphone:not(.portrait) .eyebrow { font-size: 21px; }
+body.dphone:not(.portrait) .bg { background: radial-gradient(1000px 820px at 68% 50%, rgba(255,106,61,.14) 0%, rgba(255,106,61,0) 70%),
+              radial-gradient(900px 700px at 8% 96%, rgba(255,106,61,.10) 0%, rgba(255,106,61,0) 70%), linear-gradient(180deg, #111115, #0a0a0c); }
+.dphone .touch svg { display: none; }
+.dphone .touch .dot { display: block; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.55) 0%, rgba(255,255,255,.32) 60%, rgba(255,255,255,.22) 100%);
+  box-shadow: 0 0 0 1.5px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.6); transition: transform .25s var(--ease); }
+.dphone .touch.down .dot { transform: scale(.78); transition-duration: .09s; }
+.dphone .ripple { width: 70px; height: 70px; margin: -35px 0 0 -35px; border-color: rgba(255,255,255,.9); }
+/* an app that draws under the status bar and the home indicator itself (stage.fullScreen) */
+.screen.full iframe { top: 0; height: 852px; }
+.screen.full.kbd iframe { height: 552px; }
+
 /* iOS keyboard (dark) */
 .kb { position: absolute; left: 0; right: 0; bottom: 0; height: 300px; background: #2b2b2f; z-index: 8; transform: translateY(100%);
   transition: transform .42s var(--ease); padding: 8px 3px 0; }
@@ -205,15 +226,19 @@ body:not(.portrait) .phone-wrap { display: none; }
 <script>
 const PORTRAIT = new URLSearchParams(location.search).get('layout') === 'portrait';
 if (PORTRAIT) document.body.classList.add('portrait');
+// The app is in the iPhone: always in portrait, and in landscape for a flow with `device: 'phone'`
+const PHONE = PORTRAIT || new URLSearchParams(location.search).get('device') === 'phone';
+if (PHONE && !PORTRAIT) document.body.classList.add('dphone');
 for (const row of document.querySelectorAll('[data-r]'))
   for (const ch of row.dataset.r) { const k = document.createElement('div'); k.className = 'k'; k.dataset.k = ch; k.textContent = ch; row.appendChild(k); }
 const $ = (id) => document.getElementById(id);
 // The app's iframe is #app in either layout
-(PORTRAIT ? $('app-p') : $('app-d')).id = 'app';
+(PHONE ? $('app-p') : $('app-d')).id = 'app';
 const termEl = PORTRAIT ? $('term-p') : $('term-d');
 const termBody = termEl.querySelector('.scroll');
 const touch = $('touch');
 let pos = PORTRAIT ? { x: 800, y: 1500 } : { x: 1500, y: 900 };
+if (PHONE && !PORTRAIT) pos = { x: 1700, y: 900 };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 function place(x, y) { pos = { x, y }; touch.style.left = x + 'px'; touch.style.top = y + 'px'; }
@@ -238,7 +263,9 @@ window.stage = {
     [...$('steps').children].forEach((s, n) => s.classList.toggle('on', n === i));
     $('mark').classList.toggle('on', i != null);
   },
-  appIn() { $(PORTRAIT ? 'phone' : 'win').classList.remove('pre'); },
+  appIn() { $(PHONE ? 'phone' : 'win').classList.remove('pre'); },
+  /** The app fills the phone's whole screen (it leaves room for the status bar and the home indicator itself). */
+  fullScreen(on = true) { $('screen').classList.toggle('full', on); },
   // compatibility with the Birdhouse flows
   phoneIn() { this.appIn(); },
   address(t) { $('addr').textContent = t; },

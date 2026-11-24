@@ -160,6 +160,10 @@ class ScriptedRunner:
                         },
                     )
                 result = step.get("result", "ok")
+                if callable(result):  # the product's own tool, run for real (off the loop)
+                    result = await asyncio.to_thread(
+                        result, {"agent": self.config.name, "message": text, "thread_id": tid}
+                    )
                 yield ("tool_result", {"id": call_id, "name": step["tool"], "content": result})
                 self._persist(
                     tid,
@@ -178,7 +182,12 @@ class ScriptedRunner:
             elif "text" in step:
                 # Words per second, at the page's pace.
                 gap = SLOW / float(step.get("wps", 14))
-                words = step["text"].split(" ")
+                body = step["text"]
+                if callable(body):  # text the product computes (a real tool's output)
+                    body = await asyncio.to_thread(
+                        body, {"agent": self.config.name, "message": text, "thread_id": tid}
+                    )
+                words = body.split(" ")
                 for i, word in enumerate(words):
                     chunk = word + (" " if i < len(words) - 1 else "")
                     said.append(chunk)
@@ -412,6 +421,44 @@ def adopt_new_agents(team: dict[str, Any], gateway: Any, home: Path, stop: threa
             gateway._runners[name] = ScriptedRunner(cfg, team.get("turns", {}).get(name, []))
 
 
+def publish_external_agents(gateway: Any, home: Path, stop: threading.Event) -> None:
+    """Keep the inbound MCP endpoint's tools in step with each agent's saved External access.
+
+    The real runtime publishes an agent as ``ask_<agent>`` when it boots or restarts the agent
+    (``runtime/server.py``: ``mcp_server.register_agent``). The launcher's gateway has no boot, so an
+    agent switched on in the External access tab during a take would never be reachable. This reads
+    each ``agent.json5`` and makes the same two calls, on the runtime's own loop; the endpoint, its
+    token check and the tool call itself are the product's own code.
+    """
+    from olano.config.loader import load_agent_config
+
+    def sync(name: str, runner: Any, access: Any) -> None:
+        server = getattr(gateway, "mcp_server", None)
+        if server is None or not hasattr(server, "register_agent"):
+            return
+        runner.config.external_access = access
+        if access.mcp:
+            server.register_agent(name, runner)
+        else:
+            server.unregister_agent(name)
+
+    seen: dict[str, tuple[bool, str]] = {}
+    while not stop.wait(0.3):
+        for name, runner in list(gateway._runners.items()):
+            if not (home / "agents" / name / "agent.json5").is_file():
+                continue
+            try:
+                access = load_agent_config(name).external_access
+            except Exception:
+                continue
+            state = (bool(access.mcp), str(access.description or ""))
+            if seen.get(name, (False, "")) == state:
+                continue
+            seen[name] = state
+            if LOOP is not None:
+                LOOP.call_soon_threadsafe(sync, name, runner, access)
+
+
 def main(argv: list[str]) -> int:
     global PUSH_EVENT, RUNTIME_URL, LOOP, GATEWAY
     demo = argv[0] if argv else "tour"
@@ -438,6 +485,9 @@ def main(argv: list[str]) -> int:
         seed_home(team, gateway, home, dash.runtime_url)
         threading.Thread(
             target=adopt_new_agents, args=(team, gateway, home, stop), daemon=True
+        ).start()
+        threading.Thread(
+            target=publish_external_agents, args=(gateway, home, stop), daemon=True
         ).start()
         after = getattr(team_mod, "after_seed", None)
         if after is not None:

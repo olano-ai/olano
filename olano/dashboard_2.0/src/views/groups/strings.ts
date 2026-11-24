@@ -12,6 +12,14 @@ export const GROUPS_STR: LocalDict = {
   en: {
     // Borrowed from the simple shell when these files lived there; they
     // resolve here now that the files are shared.
+    // The transcript's time labels (simple/format.ts asks for these keys).
+    "msg.now": "just now",
+    "msg.minOne": "{n} min ago",
+    "msg.minMany": "{n} mins ago",
+    "msg.hourOne": "{n} hour ago",
+    "msg.hourMany": "{n} hours ago",
+    "time.today": "Today",
+    "time.yesterday": "Yesterday",
     "groups.cancel": "Cancel",
     "groups.deleteAction": "Delete",
     "groups.openBots": "Show my agents",
@@ -158,6 +166,14 @@ export const GROUPS_STR: LocalDict = {
   zh: {
     // Borrowed from the simple shell when these files lived there; they
     // resolve here now that the files are shared.
+    // The transcript's time labels (simple/format.ts asks for these keys).
+    "msg.now": "刚刚",
+    "msg.minOne": "{n} 分钟前",
+    "msg.minMany": "{n} 分钟前",
+    "msg.hourOne": "{n} 小时前",
+    "msg.hourMany": "{n} 小时前",
+    "time.today": "今天",
+    "time.yesterday": "昨天",
     "groups.cancel": "取消",
     "groups.deleteAction": "删除",
     "groups.openBots": "显示我的智能体",
@@ -302,6 +318,14 @@ export const GROUPS_STR: LocalDict = {
   es: {
     // Borrowed from the simple shell when these files lived there; they
     // resolve here now that the files are shared.
+    // The transcript's time labels (simple/format.ts asks for these keys).
+    "msg.now": "ahora mismo",
+    "msg.minOne": "hace {n} minuto",
+    "msg.minMany": "hace {n} minutos",
+    "msg.hourOne": "hace {n} hora",
+    "msg.hourMany": "hace {n} horas",
+    "time.today": "Hoy",
+    "time.yesterday": "Ayer",
     "groups.cancel": "Cancelar",
     "groups.deleteAction": "Eliminar",
     "groups.openBots": "Mostrar mis agentes",

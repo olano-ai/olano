@@ -5531,7 +5531,9 @@ def acp(agent: str, http: bool, port: int) -> None:
             console.print(f"[green]ACP HTTP server for '{agent}' on port {port}[/green]")
             await server.run_http(port=port)
         else:
-            console.print(f"[green]ACP stdio server for '{agent}'[/green]")
+            # stdout is the protocol channel in stdio mode: one non-JSON line on it and the
+            # client logs a parse error before the first message. The banner goes to stderr.
+            Console(stderr=True).print(f"[green]ACP stdio server for '{agent}'[/green]")
             await server.run_stdio()
 
     asyncio.run(_run_acp())
