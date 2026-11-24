@@ -30,6 +30,15 @@ records it frame by frame; the voice is generated from the written lines, and on
 | `control` | An approval before an email is sent, the Vault, Insights, Revisions | Marlow & Finch, an accounting firm |
 | `install` | The one-line Docker install, the setup code, the first-run wizard | none: a real, fresh install |
 | `source` | Clone, `./install.sh`, `olano setup`, `olano doctor`, `olano dashboard` | Harbor & Pine, for the final shot |
+| `connect` | The Connections tab, an MCP server from the directory, a magic link from the chat | Saltmarsh Cycles, a bike shop |
+| `memory` | MEMORY.md, the daily log, Notes, Knowledge, then a new chat that uses a saved fact | Juniper Lane Veterinary Clinic |
+| `cortex` | A Pulse card, brainstorms, rated ideas, approving a promotion, a prototype, a project | Fernway Garden Centre |
+| `simple` | The simple chat interface: replies only, detail levels, a photo, a new agent | Willow Lane Vets |
+| `groups` | A group chat: three agents answer in turn, then one by name | Saltmarsh Cycles, a bike shop |
+| `pages` | An agent publishes a web page; the Pages tab, its password, the page itself | Fernhill Yoga, a yoga studio |
+| `mobile` | The iPhone and Android app (`mobile/`): chats, Cortex, an approval in the Inbox, Settings | Tidewater Cycles, a bike shop |
+| `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic |
+| `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio |
 
 ## How the dashboard is real and the agents are not
 
@@ -86,6 +95,17 @@ DEMO=tour demo/clips.sh                             # one clip per chapter
 
 The finished MP4s (`videos/`) and the work folder are not committed; the scripts, the voice
 files and the chart are.
+
+### Videos that need more than the launcher
+
+- `mobile` builds the app in `mobile/` and serves it next to the launcher's runtime (its flow's `init`
+  does both; run `npm install` in `mobile/` first). It sets `device: 'phone'`, so the phone is on
+  stage in landscape too.
+- `connect` connects a real MCP server during the take, so it needs network access.
+- `external` runs a real MCP client (`assets/mcp-ask.py`) against the take's own runtime and prints
+  what it printed.
+- `acp` replays `assets/acp-session.json`, the true output of the four commands on screen;
+  `assets/acp-capture.py` records it again.
 
 ### The installation tutorials
 
