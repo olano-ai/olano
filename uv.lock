@@ -57,14 +57,15 @@ wheels = [
 
 [[package]]
 name = "agent-client-protocol"
-version = "0.11.0"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
+    { name = "pydantic-core" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6c/93/396d02c91b387b2678f23081869ca47bd495fc6c78789022c683180cf5f1/agent_client_protocol-0.11.0.tar.gz", hash = "sha256:8920a3b27bdcc852fd7c73066f47ab53257dbfbe57b505e20a40c69f80a5391c", size = 87402, upload-time = "2026-07-05T17:07:56.803Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/14/e2/085f4857cb864c3a423d76e205f75e1da1643862fd452e5cec47c3078d79/agent_client_protocol-1.0.0.tar.gz", hash = "sha256:24914d9996aaeeb08931191382d0ca1028b83743e2797cc05ded39b3bb754425", size = 187237, upload-time = "2026-11-09T00:34:01.706Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a0/48/a1367dded7765f5489f9840389949d5aeac53a73aeb1b4e6c0ab61e1617a/agent_client_protocol-0.11.0-py3-none-any.whl", hash = "sha256:2d8570cd4911f8af9fbab4808f7b05f09204a756f346c7409ecdcae3f37cdb2f", size = 68089, upload-time = "2026-07-05T17:07:55.518Z" },
+    { url = "https://files.pythonhosted.org/packages/30/a1/7e29d00f01fede44ffdc84099552720727f8bfda942fea79a4f7d5ef1294/agent_client_protocol-1.0.0-py3-none-any.whl", hash = "sha256:179c14266997841438ee15245a2668d31b2c695c13bff87d01c36e016185ddd0", size = 128090, upload-time = "2026-11-09T00:34:00.324Z" },
 ]
 
 [[package]]
@@ -1691,16 +1692,16 @@ wheels = [
 
 [[package]]
 name = "deepagents-acp"
-version = "0.0.12"
+version = "0.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "agent-client-protocol" },
     { name = "deepagents" },
     { name = "python-dotenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/75/7f/725a3a30790d09fada6262bd047eed17c4c51b71116209d694d72f246994/deepagents_acp-0.0.12.tar.gz", hash = "sha256:17581bfc97e170cfaf9cafba0dd584fb5f0a1a1bf7b891d7fa387e623217e74b", size = 13019477, upload-time = "2026-09-18T21:05:18.401Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/2e/e0ae87b1ccdacc6d75caea05ad92de0fa85aa713ab1512e93b27285a76c7/deepagents_acp-0.1.0.tar.gz", hash = "sha256:bb6cc32da2ae20e7e4bd9e9202e4b1164cd84fe43b2697baf57874873cc1c751", size = 13023885, upload-time = "2026-11-20T23:14:23.335Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/31/c4/ac09e768b2c0af47bbf3d215a129d6855abaa908bb4f2bf9466b0e6b239c/deepagents_acp-0.0.12-py3-none-any.whl", hash = "sha256:a8563caf18750ecd5ffdf94178b6c8025a71a1b2e44164516e61972817051bf2", size = 22555, upload-time = "2026-09-18T21:05:16.416Z" },
+    { url = "https://files.pythonhosted.org/packages/02/64/fec56989d3e6d87189c02182e276a2ec8c28581f576f946e642e2cc8bc7b/deepagents_acp-0.1.0-py3-none-any.whl", hash = "sha256:2b171125c3bece21d5456c6e5a045354f3927c646da0664a55a1f9bce9e365bb", size = 22631, upload-time = "2026-11-20T23:14:21.813Z" },
 ]
 
 [[package]]
@@ -5154,7 +5155,7 @@ requires-dist = [
     { name = "cryptography", specifier = ">=50.0.2" },
     { name = "davey", marker = "extra == 'discord-voice'", specifier = ">=0.2.0" },
     { name = "deepagents", specifier = "==0.7.23" },
-    { name = "deepagents-acp", specifier = ">=0.0.11" },
+    { name = "deepagents-acp", specifier = ">=0.1.0" },
     { name = "discord-py", specifier = ">=2.3.0" },
     { name = "facebook-business", specifier = ">=27.0.1" },
     { name = "fastapi", specifier = ">=0.165.0" },
