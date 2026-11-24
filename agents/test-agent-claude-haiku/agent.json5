@@ -1,0 +1,16 @@
+{
+  // Test agent — Anthropic Claude Haiku (fast + cheap).
+  // This is the default workhorse for GENERAL feature tests (toolkits,
+  // connectors, platforms, chat) where we just need *a* capable model, not a
+  // specific one. Enable the toolkit/connector subagents a given test needs via
+  // `builtin_subagents` (e.g. ["StripeAgent"]) or `tools`.
+  // Requires ANTHROPIC_API_KEY in the environment (.env or vault).
+  name: "test-agent-claude-haiku",
+  description: "Test agent on Claude Haiku — default for general feature tests.",
+  emoji: "🧪",
+  model: "anthropic:claude-haiku-4-5",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}

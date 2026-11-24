@@ -1,0 +1,12 @@
+{
+  // Test agent — Google Gemini. For TARGETED tests of Gemini model behaviour.
+  // Requires GOOGLE_API_KEY (and the `google` extra: `uv sync --extra google`).
+  name: "test-agent-gemini",
+  description: "Test agent on Gemini — for Gemini-specific (targeted) tests.",
+  emoji: "🧪",
+  model: "google_genai:gemini-2.5-flash",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}

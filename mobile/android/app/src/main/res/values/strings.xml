@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Olano</string>
+    <string name="title_activity_main">Olano</string>
+    <string name="package_name">ai.olano.app</string>
+    <string name="custom_url_scheme">ai.olano.app</string>
+
+    <!-- Notification channels (ids in NotificationChannels.java). Shown in the
+         system notification settings, one sentence each. -->
+    <string name="channel_replies_name">Replies</string>
+    <string name="channel_replies_description">An agent finished replying to a message you sent while the app was closed.</string>
+    <string name="channel_approvals_name">Approvals</string>
+    <string name="channel_approvals_description">An agent is waiting for you to approve or reject an action before it continues.</string>
+    <string name="channel_cortex_name">Cortex</string>
+    <string name="channel_cortex_description">Cortex has a new finding or a proposed change for you to review.</string>
+    <string name="channel_alerts_name">Deployment alerts</string>
+    <string name="channel_alerts_description">Something on your Olano deployment needs attention; test notifications arrive here too.</string>
+    <!-- Notification buttons, and what a notification says when answering one failed. -->
+    <string name="notification_approve">Approve</string>
+    <string name="notification_decline">Decline</string>
+    <string name="notification_reply">Reply</string>
+    <string name="notification_reply_hint">Message</string>
+    <string name="notification_reply_failed">Reply not sent</string>
+    <string name="notification_answer_failed">Not answered</string>
+    <string name="notification_failed_busy">The agent is still working on the last message. Open Olano to add yours.</string>
+    <string name="notification_failed_signin">Olano needs you to sign in again. Tap to open it.</string>
+    <string name="notification_failed_unreachable">The deployment could not be reached. Tap to open Olano and try again.</string>
+    <string name="notification_failed_other">Something went wrong. Tap to open Olano and try again.</string>
+</resources>

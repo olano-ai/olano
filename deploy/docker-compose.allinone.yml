@@ -1,0 +1,225 @@
+# All-in-one compose — Lionclaw backend + dashboard_2.0 on a SINGLE VM.
+#
+# Same backend as docker-compose.prod.yml, but instead of hosting the SPA on
+# a separate host this adds a `web` service (Caddy) that serves the dashboard on /
+# and reverse-proxies /api → olano:8765. Backend + frontend share one origin.
+#
+# Provider-agnostic: any VM Olano Cloud provisions, whatever the cloud. Run from
+# the repo root on the box:
+#   docker compose --env-file .env -f deploy/docker-compose.allinone.yml up -d --build
+# (--env-file .env is REQUIRED: LIONCLAW_HOST_HOME below is interpolated from
+# the project .env — see the volumes comment on the olano service.)
+# Bounded container logs on every service. Docker's default json-file driver
+# is UNBOUNDED — a chatty backend (PYTHONUNBUFFERED, every agent turn logged)
+# can fill a 25 GB Basic droplet with log files alone in days, and no cleanup
+# action covers them. 20m × 3 caps each container at 60 MB while keeping
+# enough tail to debug with. NOTE: managed boxes never git-pull this checkout,
+# so existing droplets get the same cap via the daemon.json default their
+# update agent installs (cloud repo: olano_cloud/update_agent.sh); bootstrap
+# writes that daemon default for new boxes too — this stanza is what covers
+# dev boxes and anyone running compose by hand.
+x-bounded-logs: &bounded-logs
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "3"
+
+services:
+  olano:
+    logging: *bounded-logs
+    # Pre-built image (GHCR). Managed-cloud deploys `docker compose pull` this
+    # instead of building on the box (building all provider SDKs + the Vite
+    # dashboard on a small droplet OOMs). `build:` stays for local dev — with
+    # both present, `pull` fetches the image and `up -d` (no --build) runs it,
+    # while `up -d --build` still builds from source. Override the tag with
+    # OLANO_BACKEND_IMAGE (e.g. pin a :sha instead of :latest).
+    image: ${OLANO_BACKEND_IMAGE:-ghcr.io/olano-ai/olano-backend:latest}
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: olano
+    restart: unless-stopped
+    # Memory guardrail: agents' shell commands run inside this container (or in
+    # sandbox siblings, which carry their own host-aware caps — by default 25%
+    # of host RAM and 50% of the cores per sandbox, floors 512m/0.5; see the
+    # `sandbox:` block in config.yaml), so an uncapped heavy command can
+    # swap-thrash the whole VM into a silent freeze. With the cap,
+    # Docker OOM-kills the container and `restart: unless-stopped` recovers it.
+    # Pinned to 75% of host RAM in .env by bootstrap (env-lib.sh
+    # ensure_mem_limit); 0 = uncapped (legacy .env that predates the pin).
+    mem_limit: ${LIONCLAW_MEM_LIMIT:-0}
+    command: ["serve"]
+    env_file:
+      - ../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Home + workspace follow the HOST-side data dir (see the volumes note):
+      # the runtime must be told its home explicitly because the container's
+      # own Path.home() is /root regardless of where the data is mounted.
+      - OLANO_HOME=${LIONCLAW_HOST_HOME:-${HOME:-/root}}/${OLANO_HOME_DIR:-.lionclaw}
+      - LIONCLAW_HOME=${LIONCLAW_HOST_HOME:-${HOME:-/root}}/${OLANO_HOME_DIR:-.lionclaw}
+      - LIONCLAW_WORKSPACE=${LIONCLAW_HOST_HOME:-${HOME:-/root}}/${OLANO_HOME_DIR:-.lionclaw}/workspace
+      - LIONCLAW_CONTAINERIZED=1
+      - LIONCLAW_RUNTIME_PORT=8765
+      # Vault unlock key, optional. Leave it empty and quick-setup generates a
+      # vault passphrase and stores it in the vault's boot-key file inside the
+      # (mounted) olano home, which is what the runtime unlocks from. Set it
+      # (here or in .env) only to choose the passphrase yourself; it must then
+      # match the passphrase the vault was created with. First-boot material
+      # only either way: when the owner later rekeys the vault from the
+      # dashboard, the runtime persists the new passphrase to that boot-key file
+      # and boot unlock falls back to it, so a stale env value is harmless.
+      # OLANO_VAULT_KEY is the name; LIONCLAW_VAULT_KEY is what older .env
+      # files carry, and the runtime reads either.
+      - OLANO_VAULT_KEY=${OLANO_VAULT_KEY:-}
+      - LIONCLAW_VAULT_KEY=${LIONCLAW_VAULT_KEY:-}
+      # NOTE: do NOT set LIONCLAW_DASHBOARD_TOKEN — the dashboard uses cookie/
+      # session auth (same-origin); a bearer token would 401 every request.
+      # Persistence backend: DEFAULTS to the bundled Postgres sidecar (true
+      # concurrent writes at scale). Override either var in .env — e.g. set
+      # LIONCLAW_CHECKPOINT_BACKEND=sqlite to use the embedded SQLite instead.
+      # The sidecar's role and database are OLANO_PG_NAME (pinned into .env by
+      # env-lib.sh ensure_pg_name: olano on a fresh box, lionclaw wherever a
+      # data dir was initialised under that name — see the postgres service).
+      - LIONCLAW_CHECKPOINT_BACKEND=${LIONCLAW_CHECKPOINT_BACKEND:-postgres}
+      - LIONCLAW_CHECKPOINT_DB_URL=${LIONCLAW_CHECKPOINT_DB_URL:-postgresql://${OLANO_PG_NAME:-lionclaw}:${LIONCLAW_PG_PASSWORD:-lionclaw}@postgres:5432/${OLANO_PG_NAME:-lionclaw}}
+      - LIONCLAW_STORE_BACKEND=${LIONCLAW_STORE_BACKEND:-postgres}
+      - LIONCLAW_STORE_DB_URL=${LIONCLAW_STORE_DB_URL:-postgresql://${OLANO_PG_NAME:-lionclaw}:${LIONCLAW_PG_PASSWORD:-lionclaw}@postgres:5432/${OLANO_PG_NAME:-lionclaw}}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ${LIONCLAW_HOST_HOME:-${HOME:-/root}}/${OLANO_HOME_DIR:-.lionclaw}:${LIONCLAW_HOST_HOME:-${HOME:-/root}}/${OLANO_HOME_DIR:-.lionclaw}
+      # Machine-level bootstrap env (MCP relay wiring etc.) written by the
+      # provisioner; olano reads /opt/olano/olano.env natively at startup.
+      # Docker creates an empty host dir when none exists - harmless.
+      - /opt/olano:/opt/olano:ro
+      # Managed-installation manifest (/etc/olano/installation.json), written by
+      # cloud-init on the HOST. REQUIRED: its presence is what puts the runtime
+      # in the managed posture, and the runtime reads it from ITS OWN
+      # filesystem — so without this mount every managed droplet resolved to
+      # posture=open and EVERY protection gate (sandboxed agent exec, the
+      # /api/shell/* denials, the sandbox-only terminal, stdio-MCP blocking,
+      # plan limits) silently went inert on a box holding /app + the vault.
+      # Read-only: the manifest is root-owned host state, never runtime-writable.
+      # Docker creates an empty host dir when none exists - harmless on
+      # open/unmanaged installs, which legitimately have no manifest.
+      - /etc/olano:/etc/olano:ro
+      # ── Sandboxed agent execution ───────────────────────────────────────────
+      # On a MANAGED deployment agents run their shell/pip/npm inside an isolated,
+      # source-/secret-free Docker sandbox (OlanoDockerBackend) — never this
+      # runtime container (which holds /app + secrets). For that, THIS runtime
+      # container needs the docker CLI (baked into the backend image) + the host
+      # docker socket so it can spawn sibling sandbox containers (the sandbox
+      # itself never gets the socket). The sandbox image
+      # (ghcr.io/olano-ai/olano-sandbox) is pulled by the provisioner, and the
+      # control plane sets features.sandbox_exec=true. On OPEN/unmanaged installs
+      # the sandbox is unused (agents get the ordinary host shell) and this mount
+      # is harmless.
+      - /var/run/docker.sock:/var/run/docker.sock
+      #
+      # Sandbox bind mounts (workspace, plus the shared tool layer at
+      # <home>/sandbox/tools → /opt/agent-tools and <home>/shared → /shared,
+      # both auto-created by the runtime) resolve on the HOST daemon, so the
+      # runtime must see the data dir at the SAME path the host does. The home
+      # mount above is therefore path-IDENTICAL on both sides, keyed on
+      # LIONCLAW_HOST_HOME + OLANO_HOME_DIR — both pinned into the project
+      # .env by env-lib.sh (ensure_host_home + ensure_home_dir_name, run by
+      # bootstrap: OLANO_HOME_DIR is .olano on fresh boxes, olano where a box
+      # was provisioned while the visible name was the default, .lionclaw
+      # where the original data exists) and
+      # delivered via `--env-file .env` on every compose call. The dir-name
+      # fallback stays the original .lionclaw so an unpinned legacy box
+      # hand-running compose never flips onto an empty new directory. The shell fallback chain
+      # (${HOME}, then /root) covers laptops and legacy boxes; NEVER rely on
+      # the shell alone on a box: `sudo docker compose` resets HOME=/root and
+      # systemd units without User= have no HOME at all (which used to render
+      # the mount as /.lionclaw — an empty bind — on console-driven updates).
+      # The image's `VOLUME /root/.lionclaw` still creates a small anonymous
+      # volume when the home isn't /root — unused and harmless.
+    expose:
+      - "8765"          # internal to the compose network only
+    networks:
+      - olano
+
+  web:
+    logging: *bounded-logs
+    # Pre-built dashboard SPA image (GHCR). Same pull-vs-build story as the
+    # backend above. The Caddyfile is still mounted from the host below, so the
+    # image only bakes the built SPA into /srv.
+    image: ${OLANO_DASHBOARD_IMAGE:-ghcr.io/olano-ai/olano-dashboard:latest}
+    build:
+      context: ..
+      dockerfile: docker/dashboard/Dockerfile
+    container_name: olano_web
+    restart: unless-stopped
+    depends_on:
+      - olano
+    env_file:
+      - ./caddy.env          # holds LIONCLAW_HTTPS_HOST=<host> — <name>.olano.run in prod, <ip>.sslip.io in dev (rsync-excluded)
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile.allinone:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      # The sealed volume's ceremony socket (olano-sealer serve, managed boxes
+      # with a sealed data volume): the Caddyfile's /api/seal/* block proxies
+      # to /run/olano-sealer/serve.sock after the runtime's forward_auth gate.
+      # The DIRECTORY is mounted, not the socket file, because the sealer
+      # unlinks and recreates the socket on every start and a file bind mount
+      # would keep pointing at the deleted inode. Read-only is enough:
+      # connect() on a unix socket is not a write. On a box without a sealed
+      # volume the directory is simply empty (Docker creates it), the gate
+      # answers 404 and nothing here is ever dialled.
+      - /run/olano-sealer:/run/olano-sealer:ro
+    networks:
+      - olano
+
+  # Postgres checkpoint/store backend (the default — see the olano service).
+  # Internal to the compose network only (not published); data persists in the
+  # named volume, or under LIONCLAW_PGDATA when that is a path (see volumes).
+  # To run SQLite-only, set LIONCLAW_CHECKPOINT_BACKEND=sqlite in .env (this
+  # container then idles unused).
+  #
+  # OLANO_PG_NAME is the role, the database AND the named volume's stem, all
+  # three at once because Postgres applies the names only when it initialises
+  # the data dir, so they must never drift from the data they were created
+  # with. bootstrap pins it into .env (env-lib.sh ensure_pg_name): olano on a
+  # fresh box, lionclaw wherever a data dir already exists. The fallback here
+  # stays lionclaw so an unpinned legacy box hand-running compose keeps using
+  # <project>_lionclaw_pgdata with the role it was initialised with. Both
+  # volume keys are declared because a key cannot be interpolated; compose
+  # creates only the volumes its services reference, so the other one never
+  # exists on disk (verified: an unpinned project gets exactly
+  # <project>_lionclaw_pgdata, a pinned one exactly <project>_olano_pgdata).
+  postgres:
+    logging: *bounded-logs
+    image: postgres:16
+    container_name: olano_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${OLANO_PG_NAME:-lionclaw}
+      POSTGRES_PASSWORD: ${LIONCLAW_PG_PASSWORD:-lionclaw}
+      POSTGRES_DB: ${OLANO_PG_NAME:-lionclaw}
+    volumes:
+      # A path (starts with /) is a bind mount — the sealed data volume on
+      # managed boxes; a bare name keeps the project-prefixed named volume.
+      - ${LIONCLAW_PGDATA:-${OLANO_PG_NAME:-lionclaw}_pgdata}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${OLANO_PG_NAME:-lionclaw} -d ${OLANO_PG_NAME:-lionclaw}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - olano
+
+networks:
+  olano:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  lionclaw_pgdata:
+  olano_pgdata:

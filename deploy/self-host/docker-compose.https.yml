@@ -1,0 +1,17 @@
+# Olano self-hosted: the public https site, layered over docker-compose.yml.
+#
+# Loaded when OLANO_SITE_ADDRESS names a hostname: setup.sh --host <name> (or
+# --host auto, which uses <your-ip-with-dashes>.sslip.io) adds this file to
+# COMPOSE_FILE in .env, so a plain `docker compose up -d` picks it up.
+#
+# Caddy obtains a Let's Encrypt certificate over the HTTP-01 challenge, which
+# needs port 80 reachable from the internet, then serves https on 443 and
+# redirects 80 to it. Open exactly these two (plus SSH) in your cloud
+# firewall. Nothing else of the stack is published: the runtime's own port
+# stays inside the compose network, and the plain-http port stays on the
+# host's loopback (docker-compose.yml).
+services:
+  web:
+    ports:
+      - "80:80"
+      - "443:443"

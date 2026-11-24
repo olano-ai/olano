@@ -1,0 +1,32 @@
+{
+  "name": "Olano Mission Control",
+  "short_name": "Olano",
+  "description": "Chat with your agents, watch what they run, and approve what they ask for.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1b1b1f",
+  "theme_color": "#1b1b1f",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Chat", "url": "/chat", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ],
+  "share_target": {
+    "action": "/chat",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": { "title": "share_title", "text": "share_text", "url": "share_url" }
+  }
+}

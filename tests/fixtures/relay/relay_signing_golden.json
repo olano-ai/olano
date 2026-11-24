@@ -1,0 +1,48 @@
+{
+  "_comment": "Cross-repo golden vector for the MCP relay request-signing contract. Committed identically in olano-ai/cloud (services/mcp_oauth_relay/tests/fixtures/) and olano-ai/olano (tests/fixtures/relay/). Regenerate with cloud scripts/gen-relay-golden-vector.py. TEST KEY — not production.",
+  "message_format": "'\\n'.join([action, instance_id, state, ts]), UTF-8 encoded",
+  "encodings": {
+    "ed25519_public_key": "base64, standard alphabet, padded (raw 32 bytes)",
+    "ed25519_private_key": "base64, standard alphabet, padded (PKCS8 DER)",
+    "ed25519_signature_wire": "base64url, unpadded (raw 64 bytes)",
+    "hmac_signature_wire": "lowercase hex (HMAC-SHA256)"
+  },
+  "ed25519": {
+    "seed_phrase_sha256": "seed = sha256(b'olano-mcp-relay-golden-vector-2026-07')",
+    "private_key_seed_b64": "NEaRT89SU/zFBTnkVY6Hu6fYE5sTQL+XwsZ8phD/USQ=",
+    "private_key_pkcs8_b64": "MC4CAQAwBQYDK2VwBCIEIDRGkU/PUlP8xQU55FWOh7un2BObE0C/l8LGfKYQ/1Ek",
+    "public_key_b64": "EcvDOpbU/0hL4U+LXxmS9tN6fkP2cxmCTD7mb0KeC/c="
+  },
+  "hmac": {
+    "secret": "golden-hmac-secret-do-not-use"
+  },
+  "cases": [
+    {
+      "action": "register",
+      "instance_id": "dep_golden",
+      "state": "golden-state-abc",
+      "ts": "1779000000",
+      "message_utf8_b64": "cmVnaXN0ZXIKZGVwX2dvbGRlbgpnb2xkZW4tc3RhdGUtYWJjCjE3NzkwMDAwMDA=",
+      "ed25519_signature_b64url": "7G7zM-6NxOnxdYmYFEFMj-IbSYeUvdCyCQD7u3wmRUdNr8dffVNET5tUhDtdzWfy6_KaSQ_VsqycfYy-O68wBA",
+      "hmac_signature_hex": "903b7db9361832f0d508b97fef6e6015e54762f98f650f1175fdfba4ddcec665"
+    },
+    {
+      "action": "pending",
+      "instance_id": "dep_golden",
+      "state": "golden-state-abc",
+      "ts": "1779000000",
+      "message_utf8_b64": "cGVuZGluZwpkZXBfZ29sZGVuCmdvbGRlbi1zdGF0ZS1hYmMKMTc3OTAwMDAwMA==",
+      "ed25519_signature_b64url": "HTgERUduVE2hd1DQ3N29V_8RTnbDcEvcq_8oLEvsV_7r2FS0MOnrZlhzmaHsY3r-VzglyMnWa489h1cfJWSuBA",
+      "hmac_signature_hex": "0c1cda059b02b02cf3d213f46de757452c1f6621693e5f8ec208b4bc42b5cbe9"
+    },
+    {
+      "action": "pending",
+      "instance_id": "dep_golden",
+      "state": "estado-cañón-✓",
+      "ts": "1779000042",
+      "message_utf8_b64": "cGVuZGluZwpkZXBfZ29sZGVuCmVzdGFkby1jYcOxw7NuLeKckwoxNzc5MDAwMDQy",
+      "ed25519_signature_b64url": "kYj4BPYrkR73ZfcmddYE9Ud8FhwWx6TN1exLVQdLBQAhG1hnre7lVzPP7VYR7XthfQtpb-unO-tUPioONsgfBg",
+      "hmac_signature_hex": "92c54e72c7c3cd4628481ddd5d1b49272fe43f1c245c20cc1c08b3668ea48fdb"
+    }
+  ]
+}

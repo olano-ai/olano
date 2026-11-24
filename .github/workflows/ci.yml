@@ -1,0 +1,337 @@
+name: CI
+
+# Cost note: GitHub-hosted minutes are metered per job and rounded UP to the
+# whole minute, so a fleet of tiny jobs is expensive relative to the work they
+# do. This workflow keeps the billed-minute count low by (1) skipping runs that
+# can't change the outcome (docs-only churn) and (2) folding the fast static
+# checks onto a single runner instead of paying a per-job minimum for each.
+#
+# ── Measured profile, so the next person does not re-derive it ───────────────
+# Run 1044 (push, with coverage) and 1043 (PR, without), both on main's tree:
+#
+#   job      push            PR              where the time goes
+#   checks   1m44s  ->  2m   1m54s  ->  2m   mypy 75s of it; everything else <10s
+#   test    14m59s  -> 15m   9m56s  -> 10m   the pytest step IS the job
+#   build      39s  ->  1m     42s  ->  1m   39s of work, and it used to WAIT
+#   total           18 min           13 min  billed, per run
+#
+# A merged PR pays both columns — ~31 billed minutes per feature — because the
+# PR run and the post-merge push run are separate runs of this file.
+#
+# The two facts that matter for anyone tuning this further. First, coverage was
+# 5m07s of that 14m59s (14m35s with, 9m28s without, same suite) and the
+# `COVERAGE_CORE` note on the test job is how that is now paid for. Second, the
+# test job is ~80% of the bill and it is ONE runner: `-n auto` gets the 4 cores
+# a standard runner has and no more. Sharding it across N runners would cut wall
+# clock roughly N-fold and RAISE the billed total (each shard re-pays checkout +
+# install + its rounded-up minute) — a deliberate money-for-latency trade, not
+# an optimization, which is why it is written down here rather than done.
+
+on:
+  # Run on direct pushes to the long-lived branches (post-merge validation +
+  # coverage/build artifacts). Feature branches are validated via their PR,
+  # so leaving them out here avoids a duplicate run per push.
+  push:
+    # release/** carries hotfix branches cut from a tag (docs/RELEASING.md); the
+    # release workflow's CI gate reads these runs, so they must exist.
+    branches: [master, main, "v2.0-migration", "release/**"]
+    # CI only lints / type-checks / tests olano/ + tests/. Root markdown,
+    # docs/ and assets can never affect those, so validating a
+    # docs-only push just burns ~8 runner-minutes for a guaranteed pass. Skip
+    # them. A commit that touches BOTH docs and code still runs (paths-ignore
+    # only suppresses the run when *every* changed path matches).
+    #
+    # The same argument covers `whatsapp-bridge/`, a Node package that no Python
+    # test reads (the three tests naming it build their own `index.js` under
+    # `tmp_path`). Dependabot opens up to two bridge npm PRs a week and each one
+    # ran the whole ~13-billed-minute pipeline to prove something about a tree
+    # it never touches. A pass that carries no information is not a cheap
+    # check, it is an expensive no-op.
+    #
+    # Worth stating plainly: this means a bridge dependency bump now runs NO
+    # check, because it never had one — the Python suite was not covering it, it
+    # was merely running next to it. Nothing can land unreviewed (there is no
+    # auto-merge here, so a human still approves every Dependabot PR), but if
+    # the bridge should be gated, that wants its own small Node job rather than
+    # this suite standing in for one.
+    paths-ignore:
+      - "*.md"
+      - "docs/**"
+      - "assets/**"
+      - "LICENSE"
+      - ".gitignore"
+      # Trees this workflow cannot say anything about — see the note above the
+      # push trigger. Keep the two lists identical; Actions has no YAML anchors.
+      - "whatsapp-bridge/**"
+  # Run on every pull request regardless of its base branch. No branch filter
+  # here: a PR's checks should fire whatever it targets, so feature-branch work
+  # is always tested before merge.
+  pull_request:
+    paths-ignore:
+      - "*.md"
+      - "docs/**"
+      - "assets/**"
+      - "LICENSE"
+      - ".gitignore"
+      # Trees this workflow cannot say anything about — see the note above the
+      # push trigger. Keep the two lists identical; Actions has no YAML anchors.
+      - "whatsapp-bridge/**"
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UV_SYSTEM_PYTHON: 1
+
+jobs:
+  # Lint, format, type-check and the security scan all finish in seconds but
+  # each used to be its own job — four rounded-up billed minutes for ~10s of
+  # real work plus four runner spin-ups + four dependency installs. Folding
+  # them onto one runner that installs deps once costs ~2 billed minutes total.
+  # Steps run sequentially and fail fast (a lint failure short-circuits the
+  # rest); that's the intended cost trade — cheaper than running every check to
+  # completion on every push. Pinned to Python 3.11 (the requires-python floor):
+  # ruff target-version=py311 + mypy validate the oldest supported interpreter.
+  checks:
+    name: Lint, Type & Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      # The runtime image installs its dependencies from uv.lock with
+      # `uv export --locked` (Dockerfile, "dependencies" section), so a
+      # pyproject edit that was not followed by `uv lock` would fail the
+      # 3-hourly image build instead of this PR. Catch it here, where the
+      # author is still looking. `uv sync` above does NOT do this: without
+      # --locked it silently re-resolves and rewrites the lock in place.
+      - name: Lockfile in sync with pyproject
+        run: uv lock --check
+
+      - name: Ruff lint
+        run: uv run ruff check olano/ tests/
+
+      - name: Ruff format check
+        run: uv run ruff format --check olano/ tests/
+
+      # Mypy is 75s of this job's 104s — everything else here finishes in
+      # seconds. It has an incremental cache and a cold runner never has one, so
+      # every run re-analyses the whole tree from scratch.
+      #
+      # Keyed on the lockfile alone, and deliberately NOT on the source tree or
+      # the run id. Both of those would mint a fresh multi-hundred-MB entry on
+      # every run, and the repo shares one 10 GB cache budget with the uv cache
+      # that `setup-uv` keeps — evicting that to speed up one 75s step would cost
+      # more, in the install step of every job, than it saved. This way the entry
+      # is written once per dependency bump and then read for weeks.
+      #
+      # A cache that predates the current source is the normal case, not a
+      # failure: mypy validates each entry against the file's hash and re-analyses
+      # what moved, so the tree's own churn is the only work left. The cache can
+      # make this step slow, never wrong.
+      - name: Cache mypy
+        uses: actions/cache@v6
+        with:
+          path: .mypy_cache
+          key: mypy-${{ runner.os }}-py311-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            mypy-${{ runner.os }}-py311-
+
+      - name: Mypy
+        run: uv run mypy olano/ --ignore-missing-imports
+
+      # Dependency-audit GATE (olano-ai/cloud#164 §1). The step this replaces
+      # was a silent no-op — `uv run pip audit` (pip has no such subcommand)
+      # with stderr discarded and an || fallback that always echoed "skipping".
+      # This one has teeth: --frozen exports the lock's default install (base
+      # deps + dev group — matching what CI installs and what ships; the
+      # opt-in hf-embeddings group is not covered), --no-deps/--disable-pip
+      # keep it pure-metadata, and uvx isolates pip-audit from the project env.
+      - name: Dependency audit (pip-audit against uv.lock)
+        run: |
+          uv export --frozen --no-emit-project --no-hashes -o requirements-audit.txt
+          # Every waiver below is an advisory with no installable fix AND no
+          # code path in Olano that reaches it. The reason for each, the release
+          # that would lift it and the last review date are in SECURITY.md
+          # ("Known advisories that do not affect Olano"), along with the steps
+          # for adding or removing one. tests/test_audit_waivers_in_sync.py keeps
+          # that list, these flags and `make audit` identical.
+          uvx pip-audit -r requirements-audit.txt --no-deps --disable-pip \
+            --ignore-vuln PYSEC-2026-311 --ignore-vuln GHSA-xf7x-x43h-rpqh \
+            --ignore-vuln CVE-2026-45830 --ignore-vuln CVE-2026-45831 \
+            --ignore-vuln CVE-2026-45833 --ignore-vuln CVE-2026-49265 \
+            --ignore-vuln CVE-2026-49264 --ignore-vuln CVE-2026-49272
+
+      # Advisory only (478 pre-existing findings; a gate would need a triaged
+      # baseline first). The previous name implied enforcement it never had.
+      - name: Ruff security rules (advisory, non-blocking)
+        run: uv run ruff check olano/ --select S --ignore S101 || true
+
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    # 25, not 15: the parallel suite is ~9 minutes on CI, and runner speed
+    # varies by ~50% here (see the measurements on the test step below), so a
+    # 15-minute limit still left a slow runner landing near the wall. This is
+    # meant to catch a genuine hang, not to referee runner luck.
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        # Test on the version we actually develop and run on. The 3.11 floor
+        # (requires-python >=3.11) is guarded statically by the checks job
+        # (ruff target-version=py311 + mypy), which stays pinned at 3.11.
+        python-version: ["3.13"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      # Coverage is only consumed from the post-merge report on the long-lived
+      # branches, so only pay for it there. Pull requests run plain pytest —
+      # same test suite, no coverage instrumentation overhead, faster + cheaper.
+      #
+      # `-n auto` plus the raised ceiling above, together, are what stop this
+      # job being a coin flip. Serially the suite ran ~15 minutes against a
+      # 15-minute limit and main was cancelled mid-suite about half the time
+      # with nothing failing — and a red check that means nothing is worse than
+      # no check, because the next real failure gets read as "the usual
+      # timeout".
+      #
+      # Measured, so nobody has to re-derive it. The "Run tests" step alone:
+      #
+      #   CI, serial      10m06s on a fast runner; >14m45s on a slow one,
+      #                   where it was killed at 99% with nothing failing
+      #   CI, parallel     9m07s
+      #   local, 4 cores  946s serial -> 266s parallel (3.6x)
+      #
+      # Note what that does and does not say. The 3.6x is a 4-core box; a
+      # GitHub runner has fewer cores, so against the FAST serial run
+      # parallelism bought about a minute (1.11x). The dominant term here is
+      # not the suite's length, it is that the SAME commit ran 10m06s and
+      # >14m45s — roughly 50% spread between runners. Parallelism cannot fix
+      # that spread; only headroom can, which is why the timeout moved too.
+      # Do not "tidy up" either half on the assumption the other covers it.
+      #
+      # `--dist loadfile` keeps a whole file on one worker: module-scoped
+      # fixtures and within-file ordering behave exactly as they do serially,
+      # and assignment is deterministic rather than a fresh shuffle per run —
+      # the point here is a gate that gives the same answer twice. With 325
+      # test files there is no shortage of parallelism to distribute.
+      #
+      # The suite is safe to parallelise because the autouse `lionclaw_home`
+      # fixture gives every test its own tmp home; workers share no state.
+      - name: Run tests
+        if: github.event_name == 'pull_request'
+        run: uv run pytest tests/ -q -n auto --dist loadfile
+
+      # `COVERAGE_CORE=sysmon` is the single cheapest win in this file.
+      #
+      # coverage.py's default core is a C tracer that fires a callback on every
+      # line. Since 3.12 CPython exposes `sys.monitoring`, which coverage can
+      # drive instead, and the interpreter disables the instrumentation it is not
+      # being asked about rather than calling back into Python. Measured on this
+      # suite at the exact shape CI runs it (`-n 4 --dist loadfile`, Python
+      # 3.13.7, 24-file subset):
+      #
+      #   no coverage        16.0s
+      #   default core       19.5s   (+21.9%)
+      #   COVERAGE_CORE      16.2s   (+1.3%)
+      #
+      # and byte-identical results — 110981 statements / 89221 missed / 20% on
+      # both cores, serial and under xdist. So it is not trading measurement for
+      # speed; it measures the same thing and stops paying for it. On CI, where
+      # coverage currently costs this step 5m07s (14m35s with, 9m28s without),
+      # that overhead should fall to well under a minute.
+      #
+      # Safe if the matrix ever moves: on an interpreter without
+      # `sys.monitoring` coverage emits a `no-sysmon` CoverageWarning, falls
+      # back to the default core and still passes (verified on 3.11.15). It
+      # degrades to slow, never to wrong or red.
+      - name: Run tests with coverage
+        if: github.event_name != 'pull_request'
+        env:
+          COVERAGE_CORE: sysmon
+        run: >-
+          uv run pytest tests/ -q -n auto --dist loadfile
+          --cov=olano --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage
+        if: github.event_name != 'pull_request' && matrix.python-version == '3.13'
+        # The coverage artifact is an auxiliary output, not a correctness gate.
+        # GitHub Actions artifact *storage quota* is an account-level infra/billing
+        # limit ("Artifact storage quota has been hit") that fails the upload — and
+        # therefore the whole test job — even when every test passed. Don't let a
+        # transient storage cap block merges; tolerate an upload failure.
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+  # Deliberately NOT `needs: [checks, test]`.
+  #
+  # `uv build` asks "does this tree package", which no test outcome changes.
+  # Gated, it sat idle for the ~15 minutes the test job takes and then did 39
+  # seconds of work — so it added a whole billed minute AND ~45s of wall clock to
+  # the end of the critical path on every run, and reported a packaging break
+  # only after everything else had already gone green.
+  #
+  # Ungated it runs beside the other two: the run now ends when the slowest job
+  # ends instead of 45s after it, and a broken pyproject/MANIFEST surfaces in the
+  # first minute. The trade is that a run whose tests fail also pays this job's
+  # billed minute, where before it was skipped — worth it while most runs pass,
+  # and it buys the packaging answer on exactly the runs where you are already
+  # editing something.
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Build sdist and wheel
+        run: uv build
+
+      - name: Verify package
+        run: |
+          ls -la dist/
+          uv run python -c "import zipfile; zipfile.ZipFile('dist/olano-*.whl').namelist()[:10]" 2>/dev/null || true
+
+      - name: Upload build artifacts
+        # Same rationale as the coverage upload: don't fail the build job when the
+        # account's artifact storage quota is exhausted — the package still built.
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/

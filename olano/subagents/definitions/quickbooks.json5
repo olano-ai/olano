@@ -1,0 +1,64 @@
+{
+  "name": "QuickBooksAgent",
+  "toolkit": "quickbooks",
+  "description": "Intuit QuickBooks accounting specialist for customers, invoices, estimates, payments, vendors, bills, expenses, and financial reports.",
+  "emoji": "📒",
+  "category": "Finance",
+  "system_prompt": "You are QuickBooksAgent, the built-in Lionclaw specialist for Intuit QuickBooks Online.\nUse the Intuit QuickBooks Online toolkit directly when the user asks for concrete work in this platform.\nPrefer reading/listing/searching before mutating records unless the user already provided exact IDs and requested the change.\nResolve references before writing: quickbooks_search_customers or quickbooks_list_vendors for the party, quickbooks_list_items for invoice/estimate lines, and quickbooks_list_accounts for the expense or funding account a bill or expense needs.\nSummarize every external API mutation with the object type, object ID, and next recommended verification step.\nNever fabricate IDs, links, balances, invoice totals, envelope status, or document contents; if credentials or permissions are missing, explain the required setup.\nTreat accounting writes as high-impact: confirm customer, line items, amounts, taxes, and due dates before creating financial records.\nVoid invoices with quickbooks_void_invoice rather than deleting them — voiding preserves the audit trail the company's books depend on.\n",
+  "default_tools": [
+    "quickbooks_company_info",
+    "quickbooks_query",
+    "quickbooks_list_accounts",
+    "quickbooks_list_items",
+    // Customer management
+    "quickbooks_list_customers",
+    "quickbooks_search_customers",
+    "quickbooks_get_customer",
+    "quickbooks_create_customer",
+    "quickbooks_update_customer",
+    // Invoicing & payments
+    "quickbooks_create_invoice",
+    "quickbooks_list_invoices",
+    "quickbooks_get_invoice",
+    "quickbooks_send_invoice",
+    "quickbooks_void_invoice",
+    "quickbooks_list_estimates",
+    "quickbooks_create_estimate",
+    "quickbooks_list_sales_receipts",
+    "quickbooks_create_sales_receipt",
+    "quickbooks_list_payments",
+    "quickbooks_record_payment",
+    // Expenses
+    "quickbooks_list_vendors",
+    "quickbooks_create_vendor",
+    "quickbooks_list_bills",
+    "quickbooks_create_bill",
+    "quickbooks_pay_bill",
+    "quickbooks_list_expenses",
+    "quickbooks_create_expense",
+    // Business insights
+    "quickbooks_profit_and_loss",
+    "quickbooks_balance_sheet",
+    "quickbooks_cash_flow",
+    "quickbooks_ar_aging",
+    "quickbooks_ap_aging",
+    "quickbooks_sales_by_customer",
+    "quickbooks_expenses_by_vendor",
+    "quickbooks_trial_balance"
+  ],
+  "security": {
+    "profile": "developer",
+    "hitl_enabled": true,
+    "hitl_write_tools": true,
+    "pii_scan_input": true,
+    "pii_scan_output": true,
+    "credential_scrub": true
+  },
+  "credential_env_vars": [
+    "QUICKBOOKS_CLIENT_ID",
+    "QUICKBOOKS_CLIENT_SECRET",
+    "QUICKBOOKS_REFRESH_TOKEN"
+  ],
+  "tags": ["quickbooks", "intuit", "accounting"],
+  "aliases": ["intuit", "intuitquickbooks"]
+}

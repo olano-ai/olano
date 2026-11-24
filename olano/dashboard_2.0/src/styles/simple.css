@@ -1,0 +1,1848 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * SIMPLE MODE — the consumer chat shell (src/views/simple/**).
+ *
+ * Loaded by SimpleApp.tsx, so it ships in the /simple chunk and never reaches
+ * a dashboard user. Everything here is built from the shared tokens in
+ * tokens.css: no literal colour appears below, which is what keeps the shell
+ * correct in all three themes (dark, light, noir) without a second palette.
+ *
+ * The message column reuses the dashboard's chat primitives — .msg / .bubble /
+ * .composer-box / .typing / .att-row / .todo-block / .approval-card — so a fix
+ * to a shared component lands in both shells. What this file does on top of
+ * them is re-dress them as a MESSENGER: the bot speaks in a soft grey bubble on
+ * the left, the human in a near-white one on the right, a centred stamp
+ * separates blocks of time, and the composer is a pill with a round "+" and a
+ * round mic. Every override is written as `.simple-shell .x` (two classes) so
+ * it outranks the dashboard's own `.x` regardless of which stylesheet the
+ * bundler happens to inject first.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.simple-shell {
+  --simple-rail-w: 300px;
+  /* The collapsed rail. Wide enough for a 38px face with room either side, and
+     for "GROUP CHATS" to wrap onto two short lines rather than clip — the
+     dividers are the whole reason the strip is still a list. */
+  --simple-rail-collapsed-w: 78px;
+  --simple-profile-w: 320px;
+
+  /* Three tones, taken from the theme rather than invented: the frame the
+     window sits in, the conversation ground, and the slightly different column
+     the rail lives in. Dark themes read as "near-black page, slightly lighter
+     rail"; light themes as "grey page, white conversation". The bare rule is
+     the dark one (matching tokens.css, where `:root` IS the dark theme). */
+  --simple-frame: var(--bg-elev);
+  --simple-canvas: var(--bg);
+  --simple-rail-bg: var(--surface);
+
+  /* The two bubble fills. "Mine" is the inverse of the page — a near-white
+     bubble with dark text on a dark theme, a dark bubble with light text on a
+     light one — which is one rule that lands correctly in all three themes
+     instead of a per-theme colour that has to be maintained three times. */
+  --simple-me-bg: var(--text);
+  --simple-me-fg: var(--bg);
+  --simple-bot-bg: var(--surface-2);
+
+  display: grid;
+  grid-template-columns: var(--simple-rail-w) minmax(0, 1fr);
+  /* --app-vh is "the height of the window" (tokens.css): dvh in a browser tab,
+     so mobile browser chrome can't push the composer under the address bar;
+     vh once installed to the home screen, where iOS's dvh under-reports by the
+     status-bar inset and left a dead strip along the bottom of the screen (see
+     the display-mode:standalone block in globals.css). The plain vh line is
+     the fallback for engines without custom properties. */
+  height: 100vh;
+  height: var(--app-vh);
+  overflow: hidden;
+  background: var(--simple-frame);
+  color: var(--text);
+}
+.simple-shell.with-profile {
+  grid-template-columns: var(--simple-rail-w) minmax(0, 1fr) var(--simple-profile-w);
+}
+/* Collapsed, the rail's track is the strip's fixed width — the dragged width
+   is remembered but not applied, so opening it again lands where it was. */
+.simple-shell.rail-collapsed {
+  grid-template-columns: var(--simple-rail-collapsed-w) minmax(0, 1fr);
+}
+.simple-shell.rail-collapsed.with-profile {
+  grid-template-columns:
+    var(--simple-rail-collapsed-w) minmax(0, 1fr)
+    var(--simple-profile-w);
+}
+
+/* Every pale theme (core/theme.ts LIGHT_THEMES) — a new one joins this list. */
+:root[data-theme="light"] .simple-shell,
+:root[data-theme="bw"] .simple-shell,
+:root[data-theme="harbor"] .simple-shell,
+:root[data-theme="sepia"] .simple-shell,
+:root[data-theme="sakura"] .simple-shell,
+:root[data-theme="pastel"] .simple-shell,
+:root[data-theme="singapore"] .simple-shell,
+:root[data-theme="contrast"] .simple-shell {
+  --simple-frame: var(--surface-3);
+  --simple-canvas: var(--bg-elev);
+  --simple-rail-bg: var(--bg);
+  --simple-bot-bg: var(--surface-2);
+}
+/* Noir and volt are deliberately lights-out: page and rail are both black and
+   the hairline does all the separating, so only the bubble fills are re-pointed. */
+:root[data-theme="noir"] .simple-shell,
+:root[data-theme="volt"] .simple-shell {
+  --simple-frame: var(--bg);
+  --simple-canvas: var(--bg);
+  --simple-rail-bg: var(--bg);
+  --simple-bot-bg: var(--surface);
+}
+
+/* The rounded window. Only on a viewport wide enough to give the frame away
+   for free — below this the conversation wants every pixel, and a phone has a
+   rounded window already. */
+@media (min-width: 1200px) {
+  .simple-shell {
+    padding: 12px;
+    gap: 0;
+  }
+  .simple-rail {
+    border-start-start-radius: var(--r-lg);
+    border-end-start-radius: var(--r-lg);
+  }
+  .simple-chat,
+  .simple-profile {
+    border-start-end-radius: var(--r-lg);
+    border-end-end-radius: var(--r-lg);
+  }
+  .simple-shell.with-profile .simple-chat {
+    border-radius: 0;
+  }
+  .simple-rail,
+  .simple-chat,
+  .simple-profile {
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* ── embedded: the group transcript inside the dashboard ────────────────
+   views/groups/GroupChatPage.tsx wraps GroupThreadView + GroupInfoPanel in a
+   `.simple-shell` so every `.simple-shell .simple-msg` rule below still
+   applies — but it is a page inside the dashboard's content area, not the
+   window: no full-height, no rail column, no frame, no rounded window. The
+   details column keeps its width; on a phone it is an overlay (`is-overlay`)
+   exactly as in the simple shell. */
+.simple-shell.is-embedded {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr);
+  background: transparent;
+}
+.simple-shell.is-embedded.with-profile {
+  grid-template-columns: minmax(0, 1fr) var(--simple-profile-w);
+}
+.simple-shell.is-embedded .simple-chat,
+.simple-shell.is-embedded .simple-profile {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Screen-reader-only text. The transcript names every speaker for assistive
+   tech while the visual design leans on side + face, the way a messenger does.
+   Not `display:none` — that would take it out of the accessibility tree too. */
+.simple-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── left rail: bots and groups ──────────────────────────────────────── */
+.simple-rail {
+  /* Anchors the drag-to-resize edge (.simple-rail-resize). */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 8px;
+  padding: 14px 10px 10px;
+  background: var(--simple-rail-bg);
+  border-inline-end: 1px solid var(--border);
+}
+.simple-rail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px;
+}
+.simple-rail-title {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+/* The head's icon buttons: the notification bell plus whichever of the collapse
+   toggle / drawer close belongs at this viewport. */
+.simple-rail-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+.simple-newbot {
+  justify-content: center;
+  border-radius: var(--r-pill);
+}
+
+/* ── foldable sections ────────────────────────────────────────────────────
+   The divider IS the control. Adding a separate chevron button beside a label
+   that is already a full-width row of dead space costs a hit target and buys
+   nothing, so the whole heading is the button — which also means the fold is
+   reachable by Tab, and announces its own state through aria-expanded. */
+.simple-section-btn {
+  width: 100%;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-4);
+  cursor: pointer;
+  border-radius: var(--r-sm);
+}
+.simple-section-btn:hover {
+  color: var(--text-2);
+}
+.simple-section-label {
+  flex: 1;
+  min-width: 0;
+  text-align: start;
+}
+/* How many rows are behind a folded heading — the one thing the label can't
+   say once the list under it is gone. */
+.simple-section-count {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--text-4);
+  opacity: 0.75;
+}
+.simple-section-caret {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform var(--t-fast);
+}
+.simple-section-btn.is-open .simple-section-caret {
+  transform: rotate(0deg);
+}
+.simple-section-icon {
+  flex-shrink: 0;
+}
+.simple-rail-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 2px -4px 0;
+  padding: 0 4px;
+}
+.simple-rail-empty {
+  margin: 10px 8px;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* A row: face · bold name · right-aligned stamp · one muted line. The selected
+   row is a raised surface rather than an accent bar — the reference's quiet
+   treatment, and the one that survives all three themes without shouting. */
+.simple-row-wrap {
+  position: relative;
+  border-radius: var(--r-md);
+}
+.simple-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 9px 10px;
+  border: none;
+  border-radius: var(--r-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.simple-row:hover {
+  background: var(--surface-2);
+}
+.simple-bot.is-active > .simple-row-wrap > .simple-row,
+.simple-bot.is-active > .simple-row-wrap:hover > .simple-row {
+  background: var(--surface-3);
+  box-shadow: var(--shadow-sm);
+}
+.simple-row-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.simple-row-top {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.simple-row-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simple-row-pinned {
+  flex-shrink: 0;
+  color: var(--text-4);
+  transform: translateY(1px);
+}
+.simple-row-time {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-4);
+}
+.simple-row-sub {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--text-3);
+}
+/* The truncation lives on the text element, not the flex row: `text-overflow`
+   never applies to a flex container's own anonymous text, which is how a
+   preview ends up chopped mid-word with no ellipsis. */
+.simple-row-subtext {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* "Shared with you" on a group chat somebody else let the reader into. */
+.simple-row-tag {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+/* The "working" pulse in front of a busy bot's line. */
+.simple-row-live {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: simple-pulse 1.4s infinite ease-in-out;
+}
+.simple-count {
+  flex-shrink: 0;
+  min-width: 19px;
+  padding: 1px 6px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+.simple-count.is-sm {
+  min-width: 16px;
+  font-size: 10px;
+}
+/* The pin sits over the timestamp and appears on hover: a row has one line of
+   width for a stamp OR a control, and the stamp is what a reader wants at rest.
+   A pinned row keeps a small static glyph beside the name, so the state is
+   still visible when the button is not. */
+.simple-pin {
+  position: absolute;
+  inset-block-start: 7px;
+  inset-inline-end: 8px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface-3);
+  color: var(--text-3);
+  cursor: pointer;
+  opacity: 0;
+  /* Invisible is not absent: an opacity-0 button still takes the click, and
+     at rest the pin's slot is where the selected row's chevron sits. */
+  pointer-events: none;
+  transition: opacity var(--t-fast);
+}
+.simple-row-wrap:hover .simple-pin,
+.simple-pin:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.simple-row-wrap:hover .simple-row-time {
+  opacity: 0;
+}
+.simple-pin:hover {
+  color: var(--text);
+}
+/* Touch devices can't hover, so the pin has to stay reachable. */
+@media (hover: none) {
+  .simple-pin {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .simple-row-wrap .simple-row-time {
+    /* …which means the stamp has to move out of its way. */
+    margin-inline-end: 26px;
+  }
+}
+
+/* Conversations live INSIDE their bot — indented under the selected one. */
+.simple-threads {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 10px;
+  padding-inline-start: 16px;
+  border-inline-start: 1px solid var(--border);
+  margin-inline-start: 26px;
+}
+.simple-newchat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: start;
+}
+.simple-newchat:hover {
+  background: var(--accent-muted);
+}
+.simple-newgroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 6px 0 4px;
+  padding: 8px 10px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-md);
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: start;
+}
+.simple-newgroup:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* ── More: the dashboard panels below the conversations ──────────────────
+   A rule rather than a third section heading, because it separates two KINDS
+   of thing (people you talk to, places you go) rather than two groups of the
+   same thing. Everything above it is a conversation; everything below is a
+   page. Extra top margin so the divider reads as a break and not as one more
+   row's border. */
+.simple-rail-divider {
+  height: 1px;
+  margin: 14px 4px 2px;
+  background: var(--border);
+}
+.simple-more-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+.simple-more-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 9px;
+  border-radius: var(--r-sm);
+  color: var(--text-3);
+  font-size: 13px;
+  text-decoration: none;
+}
+.simple-more-item:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.simple-more-item.is-active {
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 550;
+}
+/* The row under the pointer during a drag — dimmed, so the gap it will leave
+   and the place it is going are both readable at once. */
+.simple-more-item.is-dragging {
+  opacity: 0.4;
+}
+/* The group above More is empty until someone drags something into it, so it
+   takes no space at all until then. */
+.simple-more-primary:empty {
+  display: none;
+}
+/* Where a drop would land in an empty group. Only drawn mid-drag: a dashed
+   invitation on an idle rail promises a gesture nothing is offering. */
+.simple-more-dropzone {
+  height: 30px;
+  margin: 2px 0;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--r-sm);
+}
+.simple-more-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* In the strip the icon is the whole row — the label is on the tooltip. */
+.simple-rail.is-collapsed .simple-more-item {
+  justify-content: center;
+  padding: 8px 0;
+}
+
+/* ── a panel in the centre column ─────────────────────────────────────────
+   The dashboard view renders its own `.page` inside this, exactly as it does
+   under the console's own <main class="main">, so this adds only the ground it
+   sits on and the phone's way back to the rail. */
+.simple-panel {
+  min-width: 0;
+  background: var(--bg);
+}
+/* The panel keeps .main's own single scrollport rather than boxing the view
+   into a flex column: a view renders whatever siblings it likes under here —
+   Overview alone is a sticky `.topbar` PLUS a `.page` — and a column would
+   stretch the first of them to fill the height. So the bar is sticky instead,
+   over the view's own sticky topbar (z-index 5). */
+/* Safe areas (see tokens.css and the display-mode:standalone block in
+   globals.css). --safe-top / --safe-bottom are 0 in a browser tab and the real
+   OS insets when installed to the home screen, where `viewport-fit=cover` runs
+   the app edge to edge UNDER the status bar and home indicator.
+
+   This shell needs them applied by hand at every anchored edge: it is sized
+   `height: var(--app-vh)` from y=0 and never renders the advanced shell's
+   `.mobile-topbar`, which is the only thing --safe-top used to reach. Without
+   these the header sits under the clock and is not clickable.
+
+   Always `var(--safe-*)`, never a bare `env(safe-area-inset-*)`: one
+   definition site, and a test can override the variable to prove the wiring
+   (headless Chromium reports 0px for every env() inset, so a bare one is
+   untestable). */
+
+.simple-panel-bar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* The inset belongs IN the shorthand: a separate `padding-top` declared
+     above it would be overwritten by this line, silently. Sticky at the very
+     top of a full-bleed shell, so the strip behind it is the status bar. */
+  padding: calc(8px + var(--safe-top)) 10px 8px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.simple-panel-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+/* A view's topbar keeps its own controls (Issues' New issue, Files' search) but
+   drops the console wordmark: that is the dashboard identifying itself, and
+   this shell has already done that at the head of the rail. */
+.simple-panel .topbar .brand-wordmark {
+  display: none;
+}
+/* The wordmark was the left half of the bar's `space-between`, so hiding it
+   strands the right half at the left edge. Only the bars that HAD one need
+   re-aligning — Files and Cortex put their own content on the left. */
+.simple-panel .topbar:has(> .brand-wordmark) {
+  justify-content: flex-end;
+}
+
+.simple-threads-empty {
+  margin: 4px 8px;
+  font-size: 11.5px;
+}
+.simple-thread {
+  display: flex;
+  align-items: center;
+  border-radius: var(--r-sm);
+}
+.simple-thread:hover {
+  background: var(--surface-2);
+}
+.simple-thread.is-active {
+  background: var(--surface-3);
+}
+.simple-thread-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: none;
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: start;
+  cursor: pointer;
+}
+.simple-thread.is-active .simple-thread-btn {
+  color: var(--text);
+}
+.simple-thread-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Inline rename, in place of a rail row (a conversation or a group). Sized to
+   sit inside the row it replaces, so the list does not reflow while you type —
+   a name field that shoves everything below it down reads as a bug. */
+.simple-rename-input {
+  width: 100%;
+  min-width: 0;
+  margin: 1px 0;
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 12.5px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-focus);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+.simple-row-wrap.is-renaming .simple-rename-input {
+  font-size: 13.5px;
+  padding: 9px 10px;
+}
+.simple-thread-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: simple-pulse 1.4s infinite ease-in-out;
+}
+.simple-thread-del {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-inline-end: 2px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--text-4);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+.simple-thread:hover .simple-thread-del,
+.simple-thread-del:focus-visible {
+  opacity: 1;
+}
+.simple-thread-del:hover {
+  color: var(--danger);
+}
+@media (hover: none) {
+  .simple-thread-del {
+    opacity: 1;
+  }
+  /* No hover to reveal it, and no right-click menu either — on a touch
+     viewport this pencil is the ONLY way to rename a group, so it is always
+     visible rather than always absent. */
+  .simple-group-rename {
+    opacity: 1;
+  }
+}
+@keyframes simple-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* The fold on a bot's row (BotRail.tsx): a real button parked at the row's
+   trailing edge, vertically centred — points right while the chats are tucked
+   away, down while they are open, the disclosure grammar every file tree
+   already taught. Hidden at rest and revealed on hover like the pin, except on
+   the selected row, where it is the standing sign that the list below belongs
+   to this row and can be folded. The pin keeps its top-line slot and steps one
+   slot inward while both are showing, so neither ever sits on the other. */
+.simple-row-chev {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: 6px;
+  transform: translateY(-50%) rotate(-90deg);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-4);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none; /* same reason as the pin's */
+  transition:
+    opacity var(--t-fast),
+    transform var(--t-fast);
+}
+[dir="rtl"] .simple-row-chev {
+  transform: translateY(-50%) rotate(90deg);
+}
+.simple-row-chev.is-open,
+[dir="rtl"] .simple-row-chev.is-open {
+  transform: translateY(-50%) rotate(0deg);
+}
+.simple-bot.is-active > .simple-row-wrap > .simple-row-chev,
+.simple-row-wrap:hover .simple-row-chev,
+.simple-row-chev:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.simple-row-chev:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+/* While the chevron shows, the pin moves one slot inward … */
+.simple-row-wrap:hover .simple-pin,
+.simple-pin:focus-visible {
+  inset-inline-end: 38px;
+}
+/* … and the selected row keeps the chevron's slot clear at rest, so its stamp,
+   its unread badge and its preview line never run under it. */
+.simple-bot.is-active > .simple-row-wrap > .simple-row {
+  padding-inline-end: 36px;
+}
+/* No hover: the chevron is on every row, and every row keeps its slot. The pin
+   then sits inward of it, and the stamp clears them both. */
+@media (hover: none) {
+  .simple-row-chev {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .simple-row-wrap > .simple-row {
+    padding-inline-end: 36px;
+  }
+  .simple-pin {
+    inset-inline-end: 38px;
+  }
+  .simple-row-wrap .simple-row-time {
+    margin-inline-end: 34px;
+  }
+}
+
+/* The chat source filter chips (rail + all-chats panel) are the shared
+   .thread-filter-* rules in globals.css — the dashboard sidebar draws the same
+   row, and this sheet is loaded by the simple shell only. */
+
+/* "Show all N chats" under the rail's capped list. */
+.simple-showall {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: start;
+}
+.simple-showall:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* The right-click menu on a bot row: the shared .menu chrome, pinned to the
+   pointer. Fixed positioning escapes the rail's own overflow, and the z-index
+   clears the mobile drawer (z-modal + 1). */
+.simple-bot-menu {
+  position: fixed;
+  min-width: 200px;
+  z-index: calc(var(--z-modal) + 3);
+}
+
+/* ── drag to rearrange ───────────────────────────────────────────────────
+   The rail is arranged by hand, so every row is a drag handle and the whole
+   row shows it (`grab`). A separate grip column would spend 20px of a 300px
+   rail on an affordance the row itself can carry.
+
+   The insertion point is a line drawn on the row it would land ABOVE, plus one
+   `after` case for the very last slot — two pseudo-elements rather than a real
+   placeholder element, because inserting a node into the list mid-drag makes
+   the row under the pointer change identity and the drop target flicker. */
+.simple-rail:not(.is-drawer) .simple-bot[draggable="true"] > .simple-row-wrap {
+  cursor: grab;
+}
+.simple-bot.is-dragging {
+  opacity: 0.4;
+}
+.simple-bot.is-drop-before,
+.simple-bot.is-drop-after {
+  position: relative;
+}
+.simple-bot.is-drop-before::before,
+.simple-bot.is-drop-after::after {
+  content: "";
+  position: absolute;
+  inset-inline: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+.simple-bot.is-drop-before::before {
+  top: -2px;
+}
+.simple-bot.is-drop-after::after {
+  bottom: -2px;
+}
+/* An empty Pinned section still has to be a target, or "drag one up here to
+   pin it" is a promise the rail does not keep. */
+.simple-drop-empty {
+  margin: 2px 6px;
+  padding: 10px 8px;
+  border: 1px dashed var(--border);
+  border-radius: var(--r-md);
+  font-size: 11.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+.simple-rail.is-reordering .is-droppable {
+  min-height: 12px;
+}
+.simple-rail.is-reordering .simple-drop-empty {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* The rail's drag-to-resize edge (wide viewports only — BotRail doesn't
+   render it in drawer mode). The hit area is wider than the 2px line it
+   lights up, same as the dashboard's rails. */
+.simple-rail-resize {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 6px;
+  cursor: col-resize;
+  z-index: 6;
+}
+.simple-rail-resize::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 2px;
+  background: transparent;
+  transition: background var(--t-fast);
+}
+.simple-rail-resize:hover::after,
+.simple-rail-resize.is-active::after {
+  background: var(--accent);
+}
+
+/* ── the collapsed rail: faces and dividers, nothing else ────────────────
+   What survives is exactly what the reader needs to pick a bot out of a strip:
+   the mark (which already carries the online pip) and the section it belongs
+   to. Everything with words — the search box, the previews, the stamps, the
+   selected bot's chats — is UNRENDERED rather than hidden, so nothing the
+   reader cannot see can still be reached by Tab; only the rules that re-shape
+   what remains live here.
+
+   The collapse toggle stays in the head at both states, which is why it is the
+   one control that never centres away: a strip you cannot get out of is a trap,
+   and it is the only door. */
+.simple-rail.is-collapsed {
+  padding: 14px 6px 10px;
+  align-items: stretch;
+  overflow: hidden;
+}
+/* Two icon buttons will not sit side by side in a 78px strip once its padding
+   is taken out, so the strip stacks them instead of letting one spill. */
+.simple-rail.is-collapsed .simple-rail-head {
+  justify-content: center;
+  padding: 0;
+}
+.simple-rail.is-collapsed .simple-rail-head-actions {
+  flex-direction: column;
+  gap: 2px;
+  margin-inline-start: 0;
+}
+.simple-rail.is-collapsed .simple-rail-scroll {
+  margin-inline: -2px;
+  padding-inline: 2px;
+  /* No horizontal scrollbar in a 78px strip — the rows are already sized to
+     it, and a stray one would eat a third of the width. */
+  overflow-x: hidden;
+}
+.simple-rail.is-collapsed .simple-bot-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.simple-rail.is-collapsed .simple-row.is-mini {
+  position: relative;
+  justify-content: center;
+  gap: 0;
+  padding: 5px;
+  width: auto;
+}
+/* The unread count rides the mark's corner rather than taking a column of its
+   own — there is no column to take. */
+.simple-rail.is-collapsed .simple-count.is-corner {
+  position: absolute;
+  top: 1px;
+  inset-inline-end: 1px;
+  min-width: 17px;
+  padding: 0 5px;
+  font-size: 10px;
+  line-height: 17px;
+  box-shadow: 0 0 0 2px var(--simple-rail-bg);
+}
+/* Dividers stay, and stay readable: centred, a shade smaller, and allowed to
+   wrap onto a second line so a longer translation of "GROUP CHATS" is short
+   rather than clipped. */
+.simple-rail.is-collapsed .simple-section-btn {
+  gap: 2px;
+  margin: 12px 0 5px;
+  padding: 8px 0 0;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  border-top: 1px solid var(--border);
+}
+.simple-rail.is-collapsed .simple-section-btn:first-child {
+  border-top: none;
+  margin-top: 2px;
+  padding-top: 0;
+}
+/* The label wraps INSIDE its own box rather than the row wrapping around the
+   caret: a chevron marooned on its own line above "ALL BOTS" reads as a stray
+   glyph, and a two-line "GROUP CHATS" reads as a heading. */
+.simple-rail.is-collapsed .simple-section-label {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
+}
+.simple-rail.is-collapsed .simple-section-caret {
+  width: 9px;
+  height: 9px;
+}
+/* The count is the rows underneath it. Spending a whole line of a 78px strip
+   restating their number is the one thing this width cannot afford. */
+.simple-rail.is-collapsed .simple-section-count,
+.simple-rail.is-collapsed .simple-section-icon {
+  display: none;
+}
+/* Round icon-only buttons: the same language the composer's controls speak. */
+.simple-rail.is-collapsed .simple-newbot.is-mini,
+.simple-rail.is-collapsed .simple-newgroup.is-mini {
+  width: 38px;
+  height: 38px;
+  min-width: 0;
+  margin: 2px auto;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+.simple-rail.is-collapsed .simple-account {
+  display: flex;
+  justify-content: center;
+}
+.simple-rail.is-collapsed .simple-account-btn {
+  width: auto;
+  padding: 6px;
+}
+/* Nothing here anchors the account menu any more: the collapsed rail is
+   `overflow: hidden` on a 78px strip, so an in-flow menu was sliced off at the
+   strip's edge. It is portaled to <body> and positioned from the button's rect
+   instead (see AccountMenu), which no ancestor clip can reach. */
+/* The head's collapse toggle: a quiet disc, at both states. */
+.simple-rail-collapse {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+}
+.simple-rail-collapse:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* ── account menu (rail footer) ──────────────────────────────────────── */
+.simple-account {
+  position: relative;
+  flex-shrink: 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.simple-account-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 8px;
+  border: none;
+  border-radius: var(--r-md);
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: start;
+}
+.simple-account-btn:hover {
+  background: var(--surface-2);
+}
+.simple-account-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Positioned inline by AccountMenu (fixed, from the button's rect). Theme and
+   language are one <select> row each now, so the whole menu is short enough
+   that nothing inside it needs to scroll — which is what used to bury Sign out
+   under the language rows with no visible affordance. */
+.simple-account-menu {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  /* Portaled to <body>, so it no longer inherits the rail's stacking context:
+     on a phone the rail IS the drawer (z-modal + 1) and the bare .menu z-index
+     of 50 put the menu underneath it. Same clearance the row context menu
+     takes, for the same reason. */
+  z-index: calc(var(--z-modal) + 3);
+}
+.simple-account-menu > * {
+  flex-shrink: 0;
+}
+.simple-menu-sep {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--border);
+}
+
+/* ── centre: the conversation ────────────────────────────────────────── */
+.simple-chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--simple-canvas);
+
+  /* THE conversation column. One number, read by the transcript, the composer
+     and the system lines alike, so the three can never disagree about where
+     the centre is or how wide the reading area gets.
+
+     It is a `min()` against 100% rather than a bare px cap because the column
+     has to be the WHOLE chat pane on anything narrower than the cap — the pane
+     itself already shrinks when the rail is dragged wider or the profile panel
+     opens, and the column follows it down instead of leaving a moat.
+
+     Deliberately generous: the shell is a full-window messenger, not an
+     article, and a 560px bubble in a 1600px window spends two thirds of the
+     screen on nothing. Tune here and every surface moves together. */
+  --simple-col-max: min(100%, 1240px);
+  /* The composer stack (box, slash menu, chips) shares the column exactly, so
+     the pill's edges line up with the bubbles above it. */
+  --composer-max: var(--simple-col-max);
+}
+.simple-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  /* The top term carries the status-bar inset: this is the first row of a
+     full-window shell anchored at y=0, so without it the avatar and the
+     buttons render under the clock and taps there go to the OS. */
+  padding: calc(11px + var(--safe-top)) 16px 11px;
+  border-bottom: 1px solid var(--border);
+  background: var(--simple-canvas);
+}
+.simple-head-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.simple-head-name {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simple-head-sub {
+  font-size: 11.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Header actions are round, like the composer's — one button language. */
+.simple-head-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 11px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-3);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.simple-head-btn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.simple-log {
+  padding: 22px 0 10px;
+  gap: 4px;
+  background: var(--simple-canvas);
+  /* The transcript scrolls DOWN and never sideways.
+     `.chat-log` only sets `overflow-y`, and CSS turns the other axis of a
+     scroll container into `auto` on its own — so one over-wide row (a tool
+     line whose arguments are a 400-character JSON blob) handed the whole log a
+     horizontal scrollbar, and every bubble in the conversation slid left and
+     right under the reader's cursor. Content that cannot fit is the content's
+     problem to solve, inside its own box: the clamps below cap every row at
+     the column, wide markdown (tables, code) already carries its own
+     `overflow-x: auto`, and a long tool line truncates with its full text on
+     the tooltip.
+     `clip` rather than `hidden` because it never wants to become a scroll
+     container of its own; `hidden` is the fallback for engines without it. */
+  overflow-x: hidden;
+  overflow-x: clip;
+  /* Reserve the vertical scrollbar's gutter on BOTH sides, always. Without it
+     the centred column jumps sideways by half a scrollbar the moment a reply
+     makes the log overflow — the same "moving left and right" the rule above
+     fixes, arriving from the other direction. */
+  scrollbar-gutter: stable both-edges;
+}
+/* A short conversation rests on the composer rather than floating at the top of
+   an empty column. `margin-block-start: auto` on the first row and NOT
+   `justify-content: flex-end` on the scroller: the latter makes overflowing
+   content at the top unreachable in every engine, the former collapses to 0 the
+   moment the log is full. */
+.simple-log > *:first-child {
+  margin-block-start: auto;
+}
+
+/* A centred, muted stamp between two blocks of conversation. */
+.simple-daysep {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 12px;
+}
+.simple-daysep span {
+  padding: 3px 12px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Rows and bubbles. The face anchors the bot's column; the human's turns lean
+   on the right with no face at all — the side IS the attribution in a 1:1. */
+.simple-shell .simple-msg {
+  display: flex;
+  /* Top, not bottom. The body carries an actions row under the bubble (copy +
+     the time label, revealed on hover) that is IN layout even while invisible,
+     so aligning to the row's bottom parks the face below the bubble it belongs
+     to. Aligning to the top pins it to the first line of the message — and, in
+     a group, level with the speaker's name. */
+  align-items: flex-start;
+  gap: 9px;
+  width: 100%;
+  max-width: var(--simple-col-max);
+  margin: 0 auto;
+  padding: 6px 24px;
+}
+.simple-shell .simple-msg.is-grouped {
+  padding-top: 0;
+}
+.simple-shell .simple-msg.is-me {
+  justify-content: flex-end;
+}
+.simple-msg-face {
+  flex-shrink: 0;
+  width: 30px;
+  display: inline-flex;
+  align-items: flex-start;
+  padding-top: 1px;
+}
+/* In a group the face lines up with the author's name, which sits above the
+   bubble — so it drops by that row's height instead of the bubble's. */
+.simple-msg:has(.simple-msg-author) .simple-msg-face {
+  padding-top: 22px;
+}
+.simple-shell .simple-msg-body {
+  flex: 0 1 auto;
+  min-width: 0;
+  /* A share of the column, with no second px cap on top of it. The cap used to
+     be `min(74%, 560px)`, which pinned a reply to 560px no matter how much
+     window there was — the column below is the ONE place the reading width is
+     decided now, and this leaves the opposite margin a messenger wants so a
+     turn still reads as coming from one side. */
+  max-width: 88%;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+/* Every block inside a turn is capped at the body, and this rule is why the
+   log no longer scrolls sideways.
+   A column flex container with `align-items: flex-start` sizes its children to
+   FIT-CONTENT — and the fit-content of a `white-space: nowrap` row (a tool
+   line) or a `pre-wrap` card (a tool result) is the whole unbroken string. So
+   a 400-character JSON argument list made the row 3000px wide, the body's own
+   `max-width` never applied to it (it constrains the body, not its children),
+   and the log grew a horizontal scrollbar that slid the entire conversation.
+   Clamping each child to 100% puts the fit-content back inside the column, at
+   which point the ellipsis and wrapping rules that were always there start
+   working. `.bubble` already carries its own 100%; this covers the rest. */
+.simple-shell .simple-msg-body > * {
+  max-width: 100%;
+}
+.simple-shell .simple-msg.is-me .simple-msg-body {
+  align-items: flex-end;
+}
+/* A pending human turn is on screen before the server has confirmed it. */
+.simple-msg.is-pending .bubble.user {
+  opacity: 0.72;
+}
+.simple-shell .simple-msg .bubble {
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.55;
+  width: fit-content;
+  max-width: 100%;
+}
+.simple-shell .simple-msg .bubble.assistant {
+  background: var(--simple-bot-bg);
+  color: var(--text);
+  /* The corner nearest the speaker's face is clipped — the one detail that
+     turns two rounded rectangles into a conversation. */
+  border-end-start-radius: 7px;
+}
+.simple-shell .simple-msg .bubble.user {
+  background: var(--simple-me-bg);
+  color: var(--simple-me-fg);
+  border-end-end-radius: 7px;
+}
+/* Markdown inside a reply inherits the bubble's colour rather than the page's,
+   or a light-theme bubble prints grey-on-grey. */
+.simple-shell .simple-msg .bubble.assistant :where(p, li, td, th, h1, h2, h3, h4) {
+  color: inherit;
+}
+.simple-shell .simple-msg .bubble.assistant :where(p:first-child) {
+  margin-top: 0;
+}
+.simple-shell .simple-msg .bubble.assistant :where(p:last-child) {
+  margin-bottom: 0;
+}
+/* The speaker's name, shown only where it earns its line: a group. */
+.simple-shell .simple-msg-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+/* "→ Sales Outbound": who a message was aimed at. The whole point of a group
+   is being able to follow who said what to whom. */
+.simple-to-chip {
+  padding: 1px 8px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+/* "↩ maria": a bot-to-bot turn answering the member that called on it. Drawn
+   quieter than the hand-off chip so an answer never reads as another hand-off. */
+.simple-reply-chip {
+  background: color-mix(in srgb, var(--text-2) 12%, transparent);
+  color: var(--text-2);
+}
+.simple-shell .simple-msg .msg-actions {
+  margin-top: 4px;
+  padding: 0 4px;
+}
+.simple-shell .simple-msg .msg-time {
+  font-size: 11px;
+}
+
+/* A titled card with a status pill: how a tool/computer result reads in this
+   shell. The only one today is the agent's own checklist — never a tool name,
+   its arguments, or its output. */
+.simple-card {
+  width: 100%;
+  margin: 2px 0 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+.simple-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.simple-card-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.simple-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--text-3);
+  font-size: 11px;
+  font-weight: 600;
+}
+.simple-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.simple-status.is-done {
+  background: var(--success-soft);
+  color: var(--success);
+}
+.simple-card .todo-block {
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+.simple-card .todo-block-head {
+  display: none;
+}
+
+/* System lines are events, not turns: centred and muted, no icon, no card. */
+.simple-shell .simple-system {
+  display: block;
+  max-width: 560px;
+  margin: 10px auto;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-4);
+  background: none;
+  border: none;
+}
+.simple-shell .simple-system .md :where(p) {
+  margin: 0;
+  color: inherit;
+  font-size: 12px;
+}
+
+/* The one thing a reader sees instead of tool cards: the bot is busy, and
+   nothing about which tool, with what arguments, returning what. */
+.simple-working {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: var(--simple-bot-bg);
+  font-size: 13px;
+  color: var(--text-3);
+}
+/* Tool rows at the Normal/Verbose detail levels. The shapes themselves
+   (.tool-activity, .tool-card) are the dashboard's, from globals.css; these
+   two classes only add what ChatView sets inline, so the two surfaces render
+   the same activity the same way. */
+.simple-tool-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  word-break: break-word;
+}
+/* "Maria is thinking…" — a peer a member is blocked on. It wears the peer's own
+   face because in a group the reader's question is WHO, and a second unadorned
+   pill under the speaker's face answers that with nothing. Sized to the line
+   (18px) rather than to the speaker's mark: this is a mention inside somebody
+   else's turn, not a third voice in the column. */
+.simple-peer-thinking {
+  /* A peer call can land mid-reply, putting this pill under the bubble rather
+     than under the trail — and there the trail seam below does not fire. 8px
+     is the base; the seam rule outranks it (higher specificity) at the one
+     place 12px is wanted, so the two never add up. */
+  margin-top: 8px;
+  gap: 7px;
+  padding: 5px 12px 5px 6px;
+  color: var(--text-2);
+}
+.simple-sub-path {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 6px 0 2px;
+  font-size: 11px;
+}
+
+/* The trail is scaffolding; the reply is the point. Whatever follows the last
+   tool row — the answer bubble, the plan card, the "working on it" line — was
+   sitting 3-6px under a mono result card, reading as one more row of machine
+   output rather than as the turn's result. The selector fires on the FIRST
+   non-trail sibling only, so a run of tool rows keeps its own tight rhythm and
+   only the seam between the two opens up. (Compact rows carry 3px of their own
+   below, so the two detail levels land within a few px of each other.) */
+.simple-shell .simple-msg-body
+  > :where(.tool-activity, .simple-tool-group, .simple-peer-thinking)
+  + :not(.tool-activity, .simple-tool-group) {
+  margin-top: 12px;
+}
+.simple-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.simple-notice-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+.simple-notice-btn {
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 12px;
+}
+.simple-warn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 8px;
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+.simple-recovered {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--success);
+}
+.simple-blank {
+  margin: auto;
+  padding: 24px;
+  max-width: 440px;
+  text-align: center;
+}
+.simple-blank-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.simple-blank-sub {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+/* The zero-bots call to action ("Create your first bot"). */
+.simple-blank > .btn {
+  margin-top: 16px;
+}
+
+/* ── composer: a pill, a round "+", a round mic ──────────────────────── */
+.simple-composer {
+  /* max(), not 16px + inset: the home indicator needs the composer lifted
+     clear of it, not lifted clear of it AND given a second gap. */
+  padding: 10px 20px max(16px, var(--safe-bottom));
+  background: var(--simple-canvas);
+}
+.simple-shell .composer-box.simple-pill {
+  align-items: center;
+  gap: 4px;
+  padding: 5px 6px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.simple-shell .composer-box.simple-pill:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
+}
+.simple-shell .composer-box.simple-pill textarea {
+  padding: 9px 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+/* Round controls: 36px discs at both ends of the pill. */
+.simple-shell .simple-round {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  align-self: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+.simple-shell .simple-round:hover:not(:disabled) {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.simple-shell button.icon-btn.simple-round:not(:disabled) {
+  background: var(--accent);
+  color: var(--bg);
+}
+.simple-shell button.icon-btn.simple-round.danger:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.simple-shell .simple-round:disabled {
+  background: var(--surface-2);
+  color: var(--text-4);
+}
+.simple-shell .composer-mic.simple-round.rec {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.simple-composer-hint {
+  max-width: var(--composer-max);
+  margin: 8px auto 0;
+  font-size: 11px;
+  text-align: center;
+  color: var(--text-4);
+}
+.simple-mention-menu {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+/* ── right: the bot's profile / the group's details ──────────────────── */
+.simple-profile {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--simple-rail-bg);
+  border-inline-start: 1px solid var(--border);
+}
+
+/* ── the all-chats panel (same column/overlay as the profile) ─────────── */
+/* Tools stay fixed above their own scroll area — a 500-chat list must never
+   scroll the search box it is filtered by off screen. */
+.simple-chats-tools {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.simple-chats-count {
+  padding: 0;
+}
+.simple-chats-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 8px 16px;
+}
+.simple-chats-row .simple-thread-btn {
+  padding: 8px;
+}
+.simple-chats-row-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.simple-chats-row-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.simple-chats-row-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  font-size: 11px;
+  color: var(--text-4);
+}
+.simple-chats-row-sender {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simple-chats-more {
+  width: calc(100% - 8px);
+  margin: 8px 4px 0;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* ── phones: rail becomes a drawer, panel a full-screen overlay ───────── */
+.simple-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 4, 12, 0.5);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: var(--z-modal);
+}
+
+@media (max-width: 768px) {
+  .simple-shell,
+  .simple-shell.with-profile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Out of the grid entirely: a stacked rail would spend most of a phone's
+     viewport on a list the reader is already done with. */
+  .simple-rail.is-drawer {
+    position: fixed;
+    /* Full-height overlay in a full-bleed shell: its own head (bell, close)
+       would sit under the clock and its account footer under the home
+       indicator. The base rule's padding is 14px 10px 10px. */
+    padding-top: calc(14px + var(--safe-top));
+    padding-bottom: calc(10px + var(--safe-bottom));
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    width: min(310px, 86vw);
+    z-index: calc(var(--z-modal) + 1);
+    background: var(--simple-rail-bg);
+    box-shadow: var(--shadow-lg);
+    /* Parked off-canvas rather than `visibility: hidden`, so it can slide;
+       the closed drawer carries `inert` (see BotRail) to stay out of the tab
+       order and the accessibility tree while it is off screen. */
+    transform: translateX(-100%);
+    transition: transform var(--t) var(--ease);
+  }
+  [dir="rtl"] .simple-rail.is-drawer {
+    transform: translateX(100%);
+  }
+  .simple-shell.rail-open .simple-rail.is-drawer,
+  [dir="rtl"] .simple-shell.rail-open .simple-rail.is-drawer {
+    transform: none;
+  }
+  .simple-profile.is-overlay {
+    position: fixed;
+    inset: 0;
+    /* --modal-vtop/--modal-vh track the *keyboard* (ui/viewportInset.ts); they
+       know nothing about safe areas, so the status-bar inset is added here or
+       the overlay's close button lands under the clock. */
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+    top: var(--modal-vtop, 0px);
+    height: var(--modal-vh, var(--app-vh));
+    z-index: calc(var(--z-modal) + 2);
+    background: var(--simple-canvas);
+    border: none;
+  }
+  .simple-shell .simple-msg {
+    padding: 5px 12px;
+  }
+  .simple-shell .simple-msg-body {
+    max-width: 82%;
+  }
+  .simple-shell .simple-system {
+    padding: 0 14px;
+  }
+  .simple-composer {
+    padding: 8px 12px max(12px, var(--safe-bottom));
+  }
+  .simple-head {
+    padding: calc(8px + var(--safe-top)) 10px 8px;
+    gap: 9px;
+  }
+  .simple-head-btn {
+    padding: 0 9px;
+  }
+  /* "New chat" goes icon-only: on a phone the bot's name has first claim on
+     the header, and the button keeps its aria-label and tooltip. */
+  .simple-head-new-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simple-rail.is-drawer {
+    transition: none;
+  }
+  .simple-thread-dot,
+  .simple-row-live {
+    animation: none;
+  }
+  .simple-row-chev {
+    transition: none;
+  }
+}
+
+/* The profile card's own rules (.simple-profile-head/-body/-face/-setup …)
+   are in bots.css: the dashboard's chat opens the same card as a drawer, and
+   this sheet is loaded by the simple shell only. */
+
+/* ── Bot marks: simple-shell-scoped refinements ──────────────────────────
+   The mark system itself lives in globals.css now — BotMark renders on the
+   sign-in screen too, which never loads this file. Only rules that reach
+   into .simple-* structure belong here. */
+/* The conversation header and the transcript sit on the canvas, not the rail. */
+.simple-head .botmark,
+.simple-msg .botmark {
+  --simple-pip-ring: var(--simple-canvas);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .botmark {
+    transition: transform 120ms ease;
+  }
+  .simple-row:hover .botmark,
+  .simple-row:focus-visible .botmark {
+    transform: scale(1.06);
+  }
+}
+
+
+/* ── offline tail (views/agents/presence.ts) ─────────────────────────────
+   Paused and stopped bots sit behind one "N offline" row at the foot of All
+   agents, closed by default. Their face and name step back so an opened tail
+   still reads as "these are asleep"; the unread count and the row controls
+   keep full strength, because those are things to act on. */
+.simple-bot.is-asleep > .simple-row-wrap > .simple-row .botmark,
+.simple-bot.is-asleep > .simple-row-wrap > .simple-row .simple-row-text {
+  opacity: 0.55;
+}
+.simple-bot.is-asleep.is-active > .simple-row-wrap > .simple-row .botmark,
+.simple-bot.is-asleep.is-active > .simple-row-wrap > .simple-row .simple-row-text {
+  opacity: 0.85;
+}
+.simple-asleep-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 2px 0;
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--text-4);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: start;
+}
+.simple-asleep-toggle:hover {
+  color: var(--text-2);
+  background: var(--surface-2);
+}
+.simple-asleep-caret {
+  flex-shrink: 0;
+  transform: rotate(-90deg);
+  transition: transform var(--t-fast);
+}
+.simple-asleep-toggle.is-open .simple-asleep-caret {
+  transform: rotate(0deg);
+}
+:dir(rtl) .simple-asleep-toggle:not(.is-open) .simple-asleep-caret {
+  transform: rotate(90deg);
+}
+.simple-asleep-toggle.is-mini {
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 0;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}

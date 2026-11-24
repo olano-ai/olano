@@ -1,0 +1,12 @@
+{
+  // Test agent — OpenAI. For TARGETED tests of OpenAI model behaviour
+  // (streaming, tool-calling, provider quirks). Requires OPENAI_API_KEY.
+  name: "test-agent-openai",
+  description: "Test agent on OpenAI — for OpenAI-specific (targeted) tests.",
+  emoji: "🧪",
+  model: "openai:gpt-5.4-mini",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}

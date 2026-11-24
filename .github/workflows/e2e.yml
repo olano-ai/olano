@@ -1,0 +1,216 @@
+name: E2E
+
+# Browser-driven dashboard tests (tests/e2e). Kept OUT of ci.yml on purpose:
+# this job is genuinely expensive next to the static checks — it installs the
+# dashboard's npm tree, downloads Chromium, and boots a real runtime + Vite dev
+# server — so it must not run on every push that touches only Python.
+#
+# A separate workflow is how you path-filter a job without a third-party action:
+# `on.<event>.paths` is workflow-scoped, so this file simply doesn't start
+# unless something that can move the UI changed. That keeps the billed-minute
+# story in ci.yml intact while closing the gap this suite exists for — a UI
+# change that strands a route selector (see tests/e2e/route_checks.py) now
+# fails a check on the PR that causes it, instead of waiting for someone to run
+# the olano-tester skill by hand.
+#
+# The two `paths:` lists below are duplicated verbatim, not shared via a YAML
+# anchor: the Actions workflow parser does not support anchors/aliases. Keep
+# them in sync by hand.
+
+on:
+  push:
+    branches: [master, main, "v2.0-migration", "release/**"]
+    paths:
+      # The UI itself — a moved, renamed or deleted section is exactly what
+      # strands a route check.
+      - "olano/dashboard_2.0/**"
+      # The suite, its harness, and the shared checklist.
+      - "tests/e2e/**"
+      # The hand-run skill reads the same checklist; verify them together.
+      - ".claude/skills/olano-tester/**"
+      # The dashboard is served by the runtime, so its API/auth surface can
+      # break every route at once.
+      - "olano/runtime/**"
+      # The mobile app's screens run against the same runtime
+      # (tests/e2e/test_mobile_app.py).
+      - "mobile/**"
+      - ".github/workflows/e2e.yml"
+  pull_request:
+    paths:
+      - "olano/dashboard_2.0/**"
+      - "tests/e2e/**"
+      - ".claude/skills/olano-tester/**"
+      - "olano/runtime/**"
+      - "mobile/**"
+      - ".github/workflows/e2e.yml"
+  # Manual re-runs after an infra failure: `rerun_workflow_run` replays the
+  # workflow definition AS OF the original commit, so a fix to this file can
+  # only be exercised by a new event — this gives it one that needs no push.
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UV_SYSTEM_PYTHON: 1
+  # Prerequisites are installed explicitly below, so the suite's "tooling is
+  # missing" skips would be a broken runner reporting green. Make them fail.
+  LIONCLAW_E2E_STRICT: "1"
+
+jobs:
+  # A push to main re-ran the whole suite on a tree its PR had usually already
+  # passed (76 of 107 merges in October 2026, about 2,700 billed minutes). This
+  # job answers, in seconds, whether this exact git tree already passed on the
+  # PR; .github/scripts/tree-already-tested.sh explains the proof. Only push
+  # events ask: a PR always runs, and a manual dispatch always runs.
+  already-tested:
+    name: Tree already tested on its PR?
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/tree-already-tested.sh e2e.yml e2e-tested-tree
+
+  e2e:
+    name: Dashboard E2E (both viewports)
+    needs: already-tested
+    # `!cancelled()` because `already-tested` is skipped on every event but a
+    # push, and a skipped need would otherwise skip this job too. The script
+    # never fails (every error is "run the suite"), so this runs unless the
+    # tree is proven tested. A skipped job leaves the run green, which is what
+    # the image and release gates (checks-green.sh) read.
+    if: ${{ !cancelled() && needs.already-tested.outputs.skip != 'true' }}
+    # Pinned, not ubuntu-latest: the lockfile's Playwright (1.56, held there
+    # with the runtime's bundled Chromium) has no browser build for Ubuntu
+    # 26.04, and the day ubuntu-latest moved to it every run failed at
+    # `playwright install` before a single test. Move this label together
+    # with the Playwright pin.
+    runs-on: ubuntu-24.04
+    # Generous next to ci.yml's limits: npm install + a Chromium download +
+    # booting a runtime dominate, and every check runs twice (desktop, mobile).
+    # The suite itself is the long pole now — #439 and #444 each added dozens
+    # of browser cases, and a run that took 24.5 minutes at 25 was cancelled
+    # at 87% with nothing failing. Same lesson as ci.yml's test job: the
+    # timeout carries the runner variance, so it has to clear the suite with
+    # room to spare, not sit on it.
+    #
+    # It had stopped doing that at 45: the last ten green runs took 32 to 44
+    # minutes end to end (#555 to #565), and #566 was cancelled at the wall
+    # with 95% of the suite passed and nothing failing. Raising this moves
+    # CHECKS_WAIT_SECONDS in build-images.yml and release.yml with it (the
+    # gates wait for this job), their jobs' timeouts, and the constant in
+    # tests/test_release_pipeline.py that pins the chain.
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dependencies
+        run: uv sync --group dev
+
+      # Uses the runner's preinstalled Node rather than pinning actions/setup-node,
+      # which would also buy npm caching — worth adding if this job's minutes
+      # start to matter, pinned to whatever major the repo standardises on.
+      - name: Install dashboard dependencies
+        run: npm ci
+        working-directory: olano/dashboard_2.0
+
+      # The mobile app's screens are served by their own Vite dev server in
+      # tests/e2e/test_mobile_app.py.
+      - name: Install mobile app dependencies
+        run: npm ci
+        working-directory: mobile
+
+      # The dashboard's own checks, before a browser is even downloaded: the
+      # type check (a broken import white-screens a route long before Playwright
+      # times out on it) and the React-free unit tests of the Files tree model.
+      - name: Dashboard typecheck + unit tests
+        run: npm run typecheck && npm run test:unit
+        working-directory: olano/dashboard_2.0
+
+      # The Chromium download comes from Playwright's CDN, which can stall
+      # mid-transfer; a single unbounded attempt then hangs until the JOB
+      # timeout kills the run before any test body has executed — read as an
+      # E2E failure when nothing was ever tested (main, 2026-08-19: two
+      # consecutive runs died exactly this way at this step). Two defenses:
+      # cache the browser per Playwright version so most runs skip the
+      # download entirely, and bound each attempt so a stall costs 4 minutes,
+      # not the whole job.
+      - name: Resolve Playwright version (browser cache key)
+        id: playwright-version
+        run: |
+          echo "version=$(uv run python -c "from importlib.metadata import version; print(version('playwright'))")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Chromium
+        # `install --with-deps` is still run on a cache hit: the browser comes
+        # from the cache, but the apt system deps live outside it (fast, and a
+        # no-op when already present).
+        run: |
+          for attempt in 1 2 3; do
+            timeout 240 uv run playwright install --with-deps chromium && exit 0
+            echo "playwright install attempt ${attempt}/3 timed out or failed; retrying"
+            sleep 10
+          done
+          echo "playwright install failed after 3 bounded attempts"
+          exit 1
+
+      # Two xdist workers, each with its own dashboard (the `dashboard` fixture
+      # is session-scoped, so a worker is a session; ports are picked free).
+      # A browser suite mostly waits on pages, so two workers on the runner's
+      # two vCPUs shorten the job, and a billed minute is a job minute:
+      # unlike sharding across runners, this lowers the bill. Measured
+      # 2026-11-02: 35 and 38 minutes end to end against a ~53-minute median
+      # for the ten green serial runs before (40 to 55). The contention also
+      # made a real app bug fire on 3 runs in 4 (the keyboard leaving the
+      # newest reply behind the composer); it is fixed in mobile/src/chat/
+      # anchor.ts (`scrollIsSettled`), and this is what proved the fix.
+      # `--dist loadfile` keeps each file on one worker, as ci.yml does.
+      - name: Run E2E tests
+        run: uv run pytest tests/e2e -q -m e2e -n 2 --dist loadfile
+
+      # The evidence `already-tested` reads on the push to main: the tree this
+      # PR run tested (HEAD is refs/pull/N/merge here), recorded only on success.
+      - name: Record the tested tree
+        if: success() && github.event_name == 'pull_request'
+        run: git rev-parse 'HEAD^{tree}' > tested-tree.txt
+
+      - name: Upload the tested tree
+        if: success() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-tested-tree
+          path: tested-tree.txt
+          retention-days: 14
+
+      - name: Upload failure artifacts
+        if: failure()
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-artifacts
+          path: .olano-tester/**
+          if-no-files-found: ignore

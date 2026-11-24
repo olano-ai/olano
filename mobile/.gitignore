@@ -1,0 +1,18 @@
+# Dependencies and build output. `npm run build` writes www/, `npx cap sync`
+# copies it into the native projects (whose own .gitignore files cover the copies
+# and the other generated config).
+node_modules/
+www/
+
+# Push credentials. They identify the store app, not a deployment, and are
+# provided at build time (README.md, "Push notifications"). Never committed.
+google-services.json
+GoogleService-Info.plist
+*.p8
+
+# Signing material and the files that point at it.
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+android/keystore.properties

@@ -1,0 +1,122 @@
+{
+  "name": "default",
+  "description": "Fresh Olano starter agent that learns who to become with the user",
+  "emoji": "🤖",
+  "model": "anthropic:claude-sonnet-4-6",
+
+  "system_prompt": "",
+
+  "tools": ["safe_shell"],
+
+  "top_level_memory_tools": [
+    "user_profile_save",
+    "identity_preference_save",
+    "soul_preference_save"
+  ],
+  "top_level_rag_tools": [],
+  "top_level_graph_tools": [],
+  "top_level_workspace_context": true,
+
+  "subagents": [
+    {
+      "name": "WebAgent",
+      "description": "Web research, HTTP, download, and screenshot specialist.",
+      "system_prompt": "Handle live web research, compare sources, download files, make HTTP requests,\ncapture page screenshots, and describe screenshots.\nChoose tools in this order when possible:\n1. page_read for the fastest clean read of a known page\n2. page_extract when page_read is incomplete or poorly structured\n3. http_request for APIs, custom headers, JSON, or non-GET requests\n4. url_download for files the user wants saved locally\n5. page_screenshot followed by image_describe when the user needs visual output\nUse web_search first when the task is discovery or source comparison rather\nthan retrieval from one known URL.\nDo not use BrowserAgent unless the task requires actual interaction with the page.\n",
+      "tools": [
+        "page_read",
+        "page_extract",
+        "http_request",
+        "url_download",
+        "page_screenshot",
+        "image_describe",
+        "web_search"
+      ]
+    },
+    {
+      "name": "BrowserAgent",
+      "description": "Interactive browser specialist.",
+      "system_prompt": "Handle only interactive browser tasks: navigate, click, type, inspect state,\nand extract content after interaction.\nDo not use this agent for ordinary webpage summaries, simple HTTP retrieval,\nnon-interactive screenshots, downloads, or screenshot description when WebAgent\ncan handle them faster.\nUse this agent when the user explicitly needs interaction with the page, or\nwhen a login/session/click workflow is required.\n\nOperating rules:\n- Always start with browser_navigate; the other tools act on the current page\nand return 'no active browser page' until you do. You have your own browser\nsession (no other agent sees it), so the page, form values, and login state\npersist from one call to the next, and sign-ins are kept even after\nbrowser_close.\n- Before clicking or typing, call browser_snapshot: it lists the page's\nelements with refs like [ref=e12]. Pass ref='e12' to browser_click or\nbrowser_type instead of guessing a selector, and take a fresh snapshot after\nthe page changes (refs expire).\n- Without a ref, selectors are CSS ('button.submit', '#login') or text match\n('text=Log in'). Clicks wait up to 10s; a timeout usually means a wrong\nselector or an unrendered element: snapshot again or re-navigate with\nwait_for='networkidle' before retrying.\n- browser_type replaces the field content by default; pass clear_first=false\nto append instead, and press_enter=true to submit.\n- browser_extract returns the first 10 matching elements ('body' for the whole\npage). browser_navigate output truncates at 40k characters — extract with a\ntighter selector instead of re-navigating.\n- browser_screenshot saves a PNG under the workspace screenshots/ folder;\nfull_page=true captures the whole scrollable page.\n- Finish the workflow with browser_close to release the browser\n(browser_close with forget_profile=true also signs you out everywhere).\n\nIf a site blocks automation ('Automation blocked by site security'), say that\nexplicitly instead of pretending the blocked page is the intended content.\n",
+      "tools": [
+        "browser_navigate",
+        "browser_snapshot",
+        "browser_screenshot",
+        "browser_click",
+        "browser_type",
+        "browser_extract",
+        "browser_close"
+      ]
+    },
+    {
+      "name": "KnowledgeBaseAgent",
+      "description": "Document and URL knowledge-base specialist.",
+      "system_prompt": "Manage RAG-backed knowledge-base stores for files, URLs, workspace docs,\nand reference corpora. Add, sync, list, delete, and search indexed sources.\nUse NotesAgent for curated markdown notes and backlinks.\n",
+      "tools": [
+        "kb_add_file",
+        "kb_add_url",
+        "kb_create_store",
+        "kb_search",
+        "kb_list",
+        "kb_sync",
+        "kb_delete",
+        "kb_remove_file",
+        "rag_search"
+      ]
+    },
+    {
+      "name": "NotesAgent",
+      "description": "Markdown notes and backlinks specialist.",
+      "system_prompt": "Manage curated workspace notes in the markdown notes store. Create concise\nnotes, retrieve notes by title or alias, search notes, list the notes index,\nand inspect backlinks created by [[wikilinks]]. Do not store secrets here;\nuse secret_* tools for credentials.\n",
+      "tools": [
+        "notes_add",
+        "notes_get",
+        "notes_search",
+        "notes_list",
+        "notes_backlinks"
+      ]
+    },
+    {
+      "name": "GoogleAgent",
+      "description": "Gmail, Calendar, and Drive specialist.",
+      "system_prompt": "Handle Google Workspace actions carefully. Confirm before sending or deleting.\n",
+      "tools": [
+        "gmail_read",
+        "gmail_send",
+        "gmail_search",
+        "calendar_list_events",
+        "calendar_create_event",
+        "calendar_delete_event",
+        "drive_list",
+        "drive_download",
+        "drive_upload"
+      ]
+    }
+  ],
+
+  "memory": {
+    "markdown": true,
+    "rag": true,
+    "self_learning": true,
+    "self_learning_interval": 3600
+  },
+
+  "backend": {
+    "type": "local_shell",
+    "root_dir": "workspace",
+    "virtual_mode": false
+  },
+
+  "security": {
+    "profile": "developer",
+    "trust_level": 3,
+    "pii_scan_input": true,
+    "pii_scan_output": true,
+    "hitl_enabled": true,
+    "hitl_shell": true,
+    "hitl_write_tools": true
+  },
+
+  "pulse": {
+    "enabled": true,
+    "max_items_per_session": 5
+  }
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small notification icon: white on transparent, as Android requires (it is
+     tinted with @color/olano_accent). An octagon of eight nodes: the full mesh
+     of the app icon (scripts/make_icons.py) blurs at 24 dp. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="840"
+    android:viewportHeight="840">
+    <group
+        android:translateX="-92"
+        android:translateY="-92">
+        <path
+            android:pathData="M809.5,388.8 L635.2,214.5 L388.8,214.5 L214.5,388.8 L214.5,635.2 L388.8,809.5 L635.2,809.5 L809.5,635.2 Z"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="56"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M715.5,388.8 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M541.2,214.5 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M294.8,214.5 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M120.5,388.8 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M120.5,635.2 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M294.8,809.5 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M541.2,809.5 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z M715.5,635.2 a94,94 0 1,0 188,0 a94,94 0 1,0 -188,0 Z" />
+    </group>
+</vector>

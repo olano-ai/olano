@@ -1,0 +1,156 @@
+name: Mobile TestFlight
+
+# Builds the iOS app in mobile/, signs it for distribution and uploads it to
+# App Store Connect, where it appears in TestFlight for testers once Apple has
+# processed it (usually 10 to 30 minutes). Run by hand from the Actions tab.
+#
+# Signing is fully automatic from an App Store Connect API key: xcodebuild
+# registers the App ID, creates or reuses the distribution certificate and
+# profile in the team's account, and uploads. No certificate or profile files
+# are stored anywhere. Four repository secrets:
+#
+#   APPLE_TEAM_ID              the 10-character team ID (Membership details in
+#                              the Apple Developer account)
+#   ASC_KEY_ID                 the API key's Key ID
+#   ASC_ISSUER_ID              the Issuer ID shown above the keys list
+#   ASC_KEY_P8_BASE64          the downloaded AuthKey_<id>.p8, base64 on one
+#                              line (`base64 -i AuthKey_X.p8 | tr -d '\n'`)
+#
+# The key needs the Admin role: creating a distribution certificate (which
+# automatic signing does the first time) is an Admin permission. Create it in
+# App Store Connect under Users and Access, Integrations, App Store Connect API.
+#
+# One manual step comes first, once: the app record. In App Store Connect,
+# Apps, "+", New App: platform iOS, name Olano, bundle ID ai.olano.app (it
+# appears in the list after the first run of this workflow registers it, or
+# register it yourself under Certificates, Identifiers & Profiles, with the
+# Push Notifications and App Groups capabilities), any SKU. Uploads to a bundle
+# ID without an app record are rejected. The share extension,
+# ai.olano.app.share, and the App Group both share, group.ai.olano.app, are
+# registered by automatic signing; if an archive fails on the group, create it
+# under Identifiers, App Groups, and run again.
+#
+# The build number is this workflow's run number plus an offset, so every run
+# uploads a build App Store Connect has not seen; the version is
+# mobile/package.json's.
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: mobile-testflight
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  testflight:
+    name: Build, sign and upload to TestFlight
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - name: Check the signing secrets
+        working-directory: .
+        run: |
+          missing=""
+          for name in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8_BASE64; do
+            [ -n "${!name}" ] || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repository secrets:$missing. See the header of .github/workflows/mobile-testflight.yml."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      - run: npm run sync:ios
+
+      - name: Install the API key
+        run: |
+          key="$RUNNER_TEMP/AuthKey_${ASC_KEY_ID}.p8"
+          printf '%s' "$ASC_KEY_P8_BASE64" | base64 --decode > "$key"
+          chmod 600 "$key"
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+
+      - name: Version and build number
+        run: |
+          echo "MARKETING_VERSION=$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
+          echo "BUILD_NUMBER=$(( 100 + ${{ github.run_number }} ))" >> "$GITHUB_ENV"
+
+      - name: Archive
+        working-directory: mobile/ios/App
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/Olano.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic \
+            MARKETING_VERSION="$MARKETING_VERSION" \
+            CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
+            archive 2>&1 | tee "$RUNNER_TEMP/archive.log" | grep -E "^(\*\*|error:|.*: error:)" || true
+          grep -q "ARCHIVE SUCCEEDED" "$RUNNER_TEMP/archive.log"
+
+      - name: Export and upload to App Store Connect
+        working-directory: mobile/ios/App
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>${APPLE_TEAM_ID}</string>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          EOF
+          set -o pipefail
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Olano.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            2>&1 | tee "$RUNNER_TEMP/export.log"
+          grep -q "EXPORT SUCCEEDED\|Upload succeeded" "$RUNNER_TEMP/export.log"
+          echo "Uploaded version $MARKETING_VERSION ($BUILD_NUMBER). It appears in TestFlight once Apple finishes processing it." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: testflight-logs
+          path: |
+            ${{ runner.temp }}/archive.log
+            ${{ runner.temp }}/export.log
+          retention-days: 7
+
+      - name: Remove the API key
+        if: always()
+        run: rm -f "$RUNNER_TEMP"/AuthKey_*.p8

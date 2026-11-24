@@ -1,0 +1,1184 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * THEME TOKENS — matched to lucide.dev (VitePress). Borderless: separation
+ * comes from background tone, not outlines. One accent (Olano orange).
+ *
+ * Add a theme: copy a :root[data-theme="…"] block and change the values, add
+ * its id to THEMES in core/theme.ts and a `theme.<id>` label to every i18n
+ * dictionary. A pale theme also joins LIGHT_THEMES there and the `light`
+ * selector lists in globals.css (Cortex glow) and simple.css (the frame).
+ * A theme whose accent is light (volt's chartreuse) sets --accent-fg to a
+ * dark ink: everything drawn ON the accent (primary buttons, the send button,
+ * badges, active segments) reads its type colour from that token.
+ * ─────────────────────────────────────────────────────────────────────────── */
+:root,
+:root[data-theme="dark"] {
+  /* Render native controls (date/time pickers, scrollbars) in dark chrome. */
+  color-scheme: dark;
+  /* Type painted on the accent. White for every accent dark enough to carry
+     it; the bare :root here hands it to every theme, and only a theme with a
+     pale accent overrides it. */
+  --accent-fg: #fff;
+  --bg: #1b1b1f; /* page */
+  --bg-elev: #161618; /* sidebar / alt (darker than page) */
+  --surface: #202127; /* cards, menus, popovers (elevated) */
+  --surface-2: #26262c; /* buttons, soft hovers */
+  --surface-3: #2e2e34; /* badges, stronger hover */
+  --surface-4: #3a3a42; /* scrollbar */
+  --border: #2e2e32; /* dividers / table rows where a hairline is needed */
+  --border-strong: #3a3a42;
+  --border-focus: #ff6a3d;
+  /* Form controls are the one place the borderless language is dropped: a
+     field whose fill matches its container reads as static text, not as
+     something you can type in. --input-border clears WCAG 1.4.11 (3:1) against
+     every surface an input sits on (page, card, fieldset). */
+  --input-bg: #17171a;
+  --input-border: #6e6e7d;
+  --text: #dfdfd6; /* warm off-white */
+  /* Text ramp is contrast-graded, not just "progressively fainter": --text-3
+     carries body/hint copy (.muted, field labels) and clears AA 4.5 on page,
+     card AND input fills; --text-4 stays a step down but still clears 3:1. */
+  --text-2: #a3a3aa;
+  --text-3: #8c8c93;
+  --text-4: #6f6f76;
+  --text-5: #3a3a40;
+  /* Olano orange */
+  --accent: #ff6a3d;
+  --accent-2: #ff6a3d;
+  --accent-hover: #ff8159;
+  --accent-soft: rgba(255, 106, 61, 0.14);
+  --accent-muted: rgba(255, 106, 61, 0.08);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — the marquee "thinking" feature. A neural violet that is
+     deliberately the only thing in the UI not using the coral accent.
+     The Cortex view re-themes its whole accent palette onto these. */
+  --cortex: #a78bfa;
+  --cortex-strong: #c4b5fd;
+  --cortex-glow: rgba(167, 139, 250, 0.7);
+  --cortex-soft: rgba(167, 139, 250, 0.16);
+  --cortex-muted: rgba(167, 139, 250, 0.08);
+  --cortex-ring: rgba(167, 139, 250, 0.3);
+  --success: #3ddc97;
+  --success-soft: rgba(61, 220, 151, 0.13);
+  --warn: #e2b341;
+  --warn-soft: rgba(226, 179, 65, 0.13);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.13);
+  --info: #60a5fa;
+  --info-soft: rgba(96, 165, 250, 0.13);
+  /* Shell "!" mode accents (dark) — bright cyan, readable on dark surfaces. */
+  --shell-accent: #22d3ee;
+  --shell-fg: #a5f3fc;
+  --shell-bg: rgba(34, 211, 238, 0.1);
+  --code-bg: #161618;
+  --code-border: #2e2e32;
+  /* highlight.js token palette (GitHub-dark-ish, tuned for --code-bg) */
+  --hl-comment: #8b949e;
+  --hl-keyword: #ff7b72;
+  --hl-string: #a5d6ff;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+  --hl-builtin: #ffa657;
+  --hl-attr: #79c0ff;
+  --hl-meta: #8b949e;
+  --hl-addition: #7ee787;
+  --hl-deletion: #ffa198;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.55);
+  --shadow-focus: 0 0 0 3px rgba(255, 106, 61, 0.25);
+  /* ── Channel hues ────────────────────────────────────────────────────────
+     Source badges in the Chat rail / header / message rows. A shared ramp, not
+     one variable per platform: platforms are assigned a SLOT below (see
+     globals.css .thread-channel-*), so re-pointing one costs a line and a new
+     platform costs none. `noir` inherits this ramp — the bare `:root` in this
+     group's selector reaches it, and noir's surfaces sit within a few points
+     of dark's. A fourth theme should copy the light block, not this one. */
+  --hue-azure: #4fb0e8;
+  --hue-sky: #7fc9f0;
+  --hue-indigo: #8891f7;
+  --hue-violet: #c08be8;
+  --hue-magenta: #f075a8;
+  --hue-red: #f08a7a;
+  --hue-amber: #e0a44a;
+  --hue-lime: #a9cf56;
+  --hue-grass: #35c46b;
+  --hue-jade: #12bfa4;
+  --hue-teal: #45c8d4;
+  --hue-slate: #a7b3c4;
+  --hue-sand: #cbb79a;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f3f4; /* soft off-white page (easier on the eyes than pure white) */
+  --bg-elev: #ffffff;
+  --surface: #ffffff; /* white cards pop on the off-white page */
+  --surface-2: #e9e9ea; /* buttons / inputs */
+  --surface-3: #e1e1e3; /* badges */
+  --surface-4: #d4d4d6;
+  --border: #e4e4e6;
+  --border-strong: #d4d4d6;
+  --border-focus: #e85d2a;
+  /* See the dark block: input fills stay white and the border does the work
+     of marking the control (3:1 against page, card and fieldset). */
+  --input-bg: #ffffff;
+  --input-border: #85858b;
+  --text: #3c3c43;
+  --text-2: #56565b;
+  --text-3: #69696d;
+  --text-4: #85858c;
+  --text-5: #c8c8cc;
+  --accent: #e85d2a;
+  --accent-2: #e85d2a;
+  --accent-hover: #d44e1e;
+  --accent-soft: rgba(232, 93, 42, 0.1);
+  --accent-muted: rgba(232, 93, 42, 0.06);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — neural violet, deepened for contrast on the light page. */
+  --cortex: #7c3aed;
+  --cortex-strong: #6d28d9;
+  --cortex-glow: rgba(124, 58, 237, 0.55);
+  --cortex-soft: rgba(124, 58, 237, 0.12);
+  --cortex-muted: rgba(124, 58, 237, 0.06);
+  --cortex-ring: rgba(124, 58, 237, 0.22);
+  --success: #18794e;
+  --success-soft: rgba(24, 121, 78, 0.1);
+  --warn: #b45309;
+  --warn-soft: rgba(180, 83, 9, 0.1);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.1);
+  --info: #2563eb;
+  --info-soft: rgba(37, 99, 235, 0.1);
+  /* Shell "!" mode accents (light) — deep teal, readable on light surfaces. */
+  --shell-accent: #0891b2;
+  --shell-fg: #0e5b6e;
+  --shell-bg: rgba(8, 145, 178, 0.08);
+  --code-bg: #eeeef0;
+  --code-border: #e4e4e6;
+  /* highlight.js token palette (GitHub-light-ish, tuned for --code-bg) */
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #6e7781;
+  --hl-addition: #116329;
+  --hl-deletion: #82071e;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(24, 24, 27, 0.05);
+  --shadow: 0 8px 28px rgba(24, 24, 27, 0.08);
+  --shadow-lg: 0 18px 50px rgba(24, 24, 27, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(232, 93, 42, 0.18);
+  /* Channel hues, light. Same slots, darkened for contrast on a light ground. */
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Cool Black — pure-black "lights out" canvas with a green accent. */
+:root[data-theme="noir"] {
+  color-scheme: dark;
+  --bg: #000000; /* pure black page */
+  --bg-elev: #000000; /* sidebar also black */
+  --surface: #16181c; /* cards, menus, popovers */
+  --surface-2: #202327; /* buttons, soft hovers */
+  --surface-3: #2a2e33; /* badges, stronger hover */
+  --surface-4: #3a3f44; /* scrollbar */
+  --border: #2f3336; /* hairline divider */
+  --border-strong: #3e4347;
+  --border-focus: #00ba7c;
+  /* See the dark block. */
+  --input-bg: #0b0d0f;
+  --input-border: #656e74;
+  --text: #e7e9ea; /* primary text */
+  --text-2: #9da1a5; /* secondary gray */
+  --text-3: #848a90;
+  --text-4: #676d73;
+  --text-5: #2f3336;
+  /* green accent */
+  --accent: #00ba7c;
+  --accent-2: #00ba7c;
+  --accent-hover: #00d68f;
+  --accent-soft: rgba(0, 186, 124, 0.14);
+  --accent-muted: rgba(0, 186, 124, 0.08);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — keep the neural violet; it reads well on pure black. */
+  --cortex: #a78bfa;
+  --cortex-strong: #c4b5fd;
+  --cortex-glow: rgba(167, 139, 250, 0.7);
+  --cortex-soft: rgba(167, 139, 250, 0.16);
+  --cortex-muted: rgba(167, 139, 250, 0.08);
+  --cortex-ring: rgba(167, 139, 250, 0.3);
+  --success: #00ba7c;
+  --success-soft: rgba(0, 186, 124, 0.13);
+  --warn: #e8b923; /* gold / verified */
+  --warn-soft: rgba(232, 185, 35, 0.13);
+  --danger: #f4212e; /* red */
+  --danger-soft: rgba(244, 33, 46, 0.13);
+  --info: #1d9bf0; /* classic blue */
+  --info-soft: rgba(29, 155, 240, 0.13);
+  /* Shell "!" mode accents — blue, readable on black. */
+  --shell-accent: #1d9bf0;
+  --shell-fg: #6fc4fb;
+  --shell-bg: rgba(29, 155, 240, 0.1);
+  --code-bg: #16181c;
+  --code-border: #2f3336;
+  /* highlight.js token palette (GitHub-dark — works on black). */
+  --hl-comment: #8b949e;
+  --hl-keyword: #ff7b72;
+  --hl-string: #a5d6ff;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+  --hl-builtin: #ffa657;
+  --hl-attr: #79c0ff;
+  --hl-meta: #8b949e;
+  --hl-addition: #7ee787;
+  --hl-deletion: #ffa198;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.8);
+  --shadow-focus: 0 0 0 3px rgba(0, 186, 124, 0.3);
+}
+
+/* Volt — a near-black page with an electric chartreuse accent, the studio /
+   campaign-tool look: black everywhere, dark-grey cards a hairline apart, and
+   one colour that is the brightest thing on the screen. Dark-based: inherits
+   the dark channel-hue ramp from the bare `:root` block above, and joins
+   noir's lights-out selector in simple.css.
+
+   The accent is the one thing that makes this theme different in KIND, not
+   just in hue. Every other accent is dark enough to carry white type (the
+   orange at 2.9:1, the azure at 3.3:1); chartreuse #d4f24a is a near-white
+   luminance (15.6:1 against the page) and white on it is 1.2:1, unreadable.
+   So --accent-fg is the page's own black here, and the sites that used to
+   hardcode `color: #fff` on an accent fill read the token instead; a theme
+   added later gets white back for free.
+
+   Three adjacencies, all held by hue and all measured:
+   • warn is pushed from the usual amber toward ORANGE (#f5a524): an amber
+     caution beside a yellow-green accent is the one pairing where the colour
+     that means "look at this" and the colour that means "click this" merge.
+   • success is a cool mint (#34d399), bluer than dark's, so a "6 of 8 posts
+     made" dot is never mistaken for the accent at a smaller size.
+   • Cortex keeps the stock violet: against chartreuse it is close to the
+     complement, the widest separation the token set has anywhere. */
+:root[data-theme="volt"] {
+  color-scheme: dark;
+  --bg: #0a0a0a; /* near-black page */
+  --bg-elev: #060606; /* sidebar, a touch deeper */
+  --surface: #151515; /* cards, menus, popovers */
+  --surface-2: #1d1d1d; /* buttons, soft hovers */
+  --surface-3: #262626; /* badges, stronger hover */
+  --surface-4: #343434; /* scrollbar */
+  --border: #232323; /* the hairline the cards sit inside */
+  --border-strong: #353535;
+  --border-focus: #d4f24a;
+  /* See the dark block: the input border clears 3:1 on page, card and
+     fieldset (3.7 / 3.5 / 3.1). */
+  --input-bg: #0f0f0f;
+  --input-border: #6a6a6a;
+  --text: #ececec;
+  --text-2: #a8a8a8;
+  --text-3: #8e8e8e;
+  --text-4: #6f6f6f;
+  --text-5: #2c2c2c;
+  /* Electric chartreuse — 15.6:1 on the page, 14.4:1 on a card. */
+  --accent: #d4f24a;
+  --accent-2: #d4f24a;
+  --accent-hover: #e2fb6a;
+  --accent-soft: rgba(212, 242, 74, 0.14);
+  --accent-muted: rgba(212, 242, 74, 0.08);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Black type on the chartreuse: 15.6:1. */
+  --accent-fg: #0a0a0a;
+  /* Cortex — the stock neural violet, near-complementary to the accent. */
+  --cortex: #a78bfa;
+  --cortex-strong: #c4b5fd;
+  --cortex-glow: rgba(167, 139, 250, 0.7);
+  --cortex-soft: rgba(167, 139, 250, 0.16);
+  --cortex-muted: rgba(167, 139, 250, 0.08);
+  --cortex-ring: rgba(167, 139, 250, 0.3);
+  --success: #34d399; /* cool mint, held clear of the accent */
+  --success-soft: rgba(52, 211, 153, 0.14);
+  --warn: #f5a524; /* orange, not amber: amber reads as the accent here */
+  --warn-soft: rgba(245, 165, 36, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.14);
+  --info: #60a5fa;
+  --info-soft: rgba(96, 165, 250, 0.14);
+  /* Shell "!" mode — cyan, a hue nothing else in this theme claims. */
+  --shell-accent: #22d3ee;
+  --shell-fg: #a5f3fc;
+  --shell-bg: rgba(34, 211, 238, 0.1);
+  --code-bg: #101010;
+  --code-border: #232323;
+  /* highlight.js token palette (GitHub-dark — works on black). */
+  --hl-comment: #8b949e;
+  --hl-keyword: #ff7b72;
+  --hl-string: #a5d6ff;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+  --hl-builtin: #ffa657;
+  --hl-attr: #79c0ff;
+  --hl-meta: #8b949e;
+  --hl-addition: #7ee787;
+  --hl-deletion: #ffa198;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.6);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.8);
+  --shadow-focus: 0 0 0 3px rgba(212, 242, 74, 0.28);
+}
+
+/* Black & White — ink on paper. A white page, near-black text and a BLACK
+   accent: the one theme with no hue of its own, so every state colour below is
+   as neutral as it can be while still reading (success/warn/danger/info stay
+   coloured — a red error in grey is not an error). Cortex keeps its violet, as
+   it does in every theme. Light-based: joins the `light` selectors in
+   globals.css / simple.css. */
+:root[data-theme="bw"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-elev: #f7f7f7; /* sidebar: a step off the page so the panel reads */
+  --surface: #ffffff;
+  --surface-2: #ededed; /* buttons / inputs */
+  --surface-3: #e2e2e2; /* badges */
+  --surface-4: #cfcfcf;
+  --border: #e3e3e3;
+  --border-strong: #c9c9c9;
+  --border-focus: #111111;
+  --input-bg: #ffffff;
+  --input-border: #767676;
+  --text: #111111;
+  --text-2: #3d3d3d;
+  --text-3: #5f5f5f;
+  --text-4: #7a7a7a;
+  --text-5: #c4c4c4;
+  /* the accent is black: primary buttons are black with white type */
+  --accent: #111111;
+  --accent-2: #111111;
+  --accent-hover: #333333;
+  --accent-soft: rgba(17, 17, 17, 0.08);
+  --accent-muted: rgba(17, 17, 17, 0.05);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — the light block's deepened violet, the one colour on the page. */
+  --cortex: #7c3aed;
+  --cortex-strong: #6d28d9;
+  --cortex-glow: rgba(124, 58, 237, 0.55);
+  --cortex-soft: rgba(124, 58, 237, 0.12);
+  --cortex-muted: rgba(124, 58, 237, 0.06);
+  --cortex-ring: rgba(124, 58, 237, 0.22);
+  --success: #18794e;
+  --success-soft: rgba(24, 121, 78, 0.1);
+  --warn: #b45309;
+  --warn-soft: rgba(180, 83, 9, 0.1);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.1);
+  --info: #2563eb;
+  --info-soft: rgba(37, 99, 235, 0.1);
+  --shell-accent: #0891b2;
+  --shell-fg: #0e5b6e;
+  --shell-bg: rgba(8, 145, 178, 0.08);
+  --code-bg: #f2f2f2;
+  --code-border: #e3e3e3;
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #6e7781;
+  --hl-addition: #116329;
+  --hl-deletion: #82071e;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(17, 17, 17, 0.18);
+  /* Channel hues: the light ramp — a platform badge still needs its colour. */
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Pastel Green — a light sage page. The surfaces carry the pastel (mint page,
+   white cards, sage buttons); the accent is a deep emerald so white type on a
+   primary button clears AA. Light-based.
+
+   Three things this palette does deliberately, all of which the first cut of it
+   got wrong:
+   • The page is the DEEPEST layer, not the middle one. Page #e7f1e9 → sidebar
+     #f7fbf8 → white cards is a real three-step ramp; the old #edf5ee page sat
+     ~2% off its own sidebar, so the panel read as a smudge rather than a panel
+     and cards had nothing to pop off.
+   • The accent moved from a greyed sage (#2f7d4f, 4.36 on the page — under AA
+     for a link) to an emerald (#177552, 4.90 on the page / 5.67 on a card).
+     Saturation is what a "green theme" is for; the old one spent it on grey.
+   • --success IS the accent, on purpose. A green accent beside a near-identical
+     green success (#2f7d4f vs #18794e, 1.09 apart) reads as one colour used
+     twice with no rule — the same trap noir resolves the same way. One green
+     means the page has one primary hue and the states that must NOT be missed
+     (warn / danger / info) are the only other colours in it. */
+:root[data-theme="pastel"] {
+  color-scheme: light;
+  --bg: #e7f1e9; /* mint page — the deepest of the three layers */
+  --bg-elev: #f7fbf8; /* sidebar */
+  --surface: #ffffff; /* cards pop on the mint page */
+  --surface-2: #dbeade; /* buttons / inputs */
+  --surface-3: #cbe1d1; /* badges */
+  --surface-4: #b3d2bc;
+  --border: #cfe2d4;
+  --border-strong: #aecbb6;
+  --border-focus: #177552;
+  --input-bg: #ffffff;
+  --input-border: #5f7d68; /* 4:1 on both the mint page and a white card */
+  --text: #17301f;
+  --text-2: #365040;
+  --text-3: #4e6558;
+  --text-4: #6a7f73;
+  --text-5: #bdd1c4;
+  --accent: #177552; /* emerald — 4.9:1 on the page, 5.7:1 on a card */
+  --accent-2: #177552;
+  --accent-hover: #115e43;
+  --accent-soft: rgba(23, 117, 82, 0.13);
+  --accent-muted: rgba(23, 117, 82, 0.07);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — violet, deepened for a pale page (the light block's values). */
+  --cortex: #7c3aed;
+  --cortex-strong: #6d28d9;
+  --cortex-glow: rgba(124, 58, 237, 0.55);
+  --cortex-soft: rgba(124, 58, 237, 0.12);
+  --cortex-muted: rgba(124, 58, 237, 0.06);
+  --cortex-ring: rgba(124, 58, 237, 0.22);
+  /* Success is the accent — see the block comment. */
+  --success: #177552;
+  --success-soft: rgba(23, 117, 82, 0.13);
+  --warn: #8f5606; /* was #a16207: 4.26 on the new page, i.e. under AA */
+  --warn-soft: rgba(143, 86, 6, 0.12);
+  --danger: #b52626;
+  --danger-soft: rgba(181, 38, 38, 0.11);
+  --info: #1f61a8;
+  --info-soft: rgba(31, 97, 168, 0.1);
+  --shell-accent: #0891b2;
+  --shell-fg: #0e5b6e;
+  --shell-bg: rgba(8, 145, 178, 0.08);
+  --code-bg: #e0ece3;
+  --code-border: #cfe2d4;
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #6e7781;
+  --hl-addition: #116329;
+  --hl-deletion: #82071e;
+  --glow: none;
+  /* Green-tinted and a step stronger than light's neutral shadows: on a
+     saturated pale page a grey shadow reads as dirt, and cards need the lift. */
+  --shadow-sm: 0 1px 2px rgba(20, 48, 32, 0.08);
+  --shadow: 0 8px 28px rgba(20, 48, 32, 0.13);
+  --shadow-lg: 0 18px 50px rgba(20, 48, 32, 0.17);
+  --shadow-focus: 0 0 0 3px rgba(23, 117, 82, 0.22);
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Singapore — the flag, drawn the way the flag is: a RED FIELD with white on
+   it. The page is a red blush (#fdecec), the cards are white, and the accent is
+   the flag's own red. Sakura's construction with red in place of rose.
+   Light-based.
+
+   Two earlier cuts are worth knowing about, because both were worse:
+   • v1 was the light theme with a red swapped in — a cold neutral-grey page
+     under a red accent, the one pairing that makes a red look cheap.
+   • v2 warmed the greys, which fixed the clash but left a theme that only
+     announced itself on the buttons. On a tinted page the red is the ground,
+     which is what a flag theme should feel like.
+   Three things this palette has to hold, all of them measured:
+   • The accent must still read as an ACTION on a red page. #c8102e (Pantone
+     032-ish, the flag's red) sits 5.15:1 on the blush and 5.88:1 on a card, so
+     a primary button is a deeper, more saturated red than everything under it,
+     not the same red at a different size.
+   • --danger is an oxblood #7f1d1d: 8.77:1 on the page and 1.70 from the accent
+     (it was #991b1b, 1.41 away — an error and a primary button one shade
+     apart). "Red because it's the brand" and "red because something broke"
+     can never be the same red, and on a red ground that matters more, not less.
+   • Every neutral is red-tinted from the same hue as the page, so nothing on it
+     reads as a grey borrowed from another theme.
+   The accent gradient is a real two-stop (the flag red lifting to the deepened
+   one) — it lands on the ~40px chips and tiles that read as the theme's
+   signature, and nowhere large enough to band. */
+:root[data-theme="singapore"] {
+  color-scheme: light;
+  --bg: #fdecec; /* the red field */
+  --bg-elev: #fff6f6; /* sidebar */
+  --surface: #ffffff; /* the white the flag puts on the red */
+  --surface-2: #f9dede;
+  --surface-3: #f3cfcf;
+  --surface-4: #e3b0b0;
+  --border: #f4dada;
+  --border-strong: #dfbcbc;
+  --border-focus: #c8102e;
+  --input-bg: #ffffff;
+  --input-border: #8f7576;
+  --text: #2e2020;
+  --text-2: #4f3a3a;
+  --text-3: #665050;
+  --text-4: #8a6f6f;
+  --text-5: #ddc4c4;
+  --accent: #c8102e; /* the flag's red — 5.2:1 on the page, 5.9:1 on a card */
+  --accent-2: #ef3340; /* the flag red at full brightness, for the gradient */
+  --accent-hover: #a80d26;
+  --accent-soft: rgba(200, 16, 46, 0.11);
+  --accent-muted: rgba(200, 16, 46, 0.07);
+  --accent-gradient: linear-gradient(135deg, #ef3340 0%, #c8102e 100%);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — violet, deepened for a pale page (the light block's values). */
+  --cortex: #7c3aed;
+  --cortex-strong: #6d28d9;
+  --cortex-glow: rgba(124, 58, 237, 0.55);
+  --cortex-soft: rgba(124, 58, 237, 0.12);
+  --cortex-muted: rgba(124, 58, 237, 0.06);
+  --cortex-ring: rgba(124, 58, 237, 0.22);
+  --success: #15703f;
+  --success-soft: rgba(21, 112, 63, 0.11);
+  --warn: #8a5006;
+  --warn-soft: rgba(138, 80, 6, 0.12);
+  --danger: #7f1d1d; /* oxblood — far darker than anything clickable */
+  --danger-soft: rgba(127, 29, 29, 0.11);
+  --info: #1f5c9e;
+  --info-soft: rgba(31, 92, 158, 0.1);
+  --shell-accent: #0891b2;
+  --shell-fg: #0e5b6e;
+  --shell-bg: rgba(8, 145, 178, 0.08);
+  --code-bg: #f8e4e4;
+  --code-border: #f4dada;
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #6e7781;
+  --hl-addition: #116329;
+  --hl-deletion: #82071e;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(70, 25, 25, 0.07);
+  --shadow: 0 8px 28px rgba(70, 25, 25, 0.12);
+  --shadow-lg: 0 18px 50px rgba(70, 25, 25, 0.16);
+  --shadow-focus: 0 0 0 3px rgba(200, 16, 46, 0.2);
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Midnight — a deep navy page with an azure accent. The dark theme for people
+   who find a neutral charcoal flat: every surface is blue-shifted, so the blue
+   accent belongs to the page instead of sitting on top of it. Cortex moves a
+   step toward magenta (#b18bfa) because the stock violet against an azure
+   accent is the one pairing where "the only thing not using the accent" stops
+   reading as a different colour. Dark-based: inherits the dark channel-hue
+   ramp from the bare `:root` block above. */
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --bg: #101827; /* navy page */
+  --bg-elev: #0b1220; /* sidebar, deeper than the page */
+  --surface: #172234; /* cards, menus, popovers */
+  --surface-2: #1e2b41; /* buttons, soft hovers */
+  --surface-3: #26364f; /* badges, stronger hover */
+  --surface-4: #34486a; /* scrollbar */
+  --border: #24324a;
+  --border-strong: #33445f;
+  --border-focus: #3b8ef5;
+  /* See the dark block: the input border is the one place a hairline is
+     mandatory, and it clears 3:1 on page, card and fieldset. */
+  --input-bg: #0d1524;
+  --input-border: #7386a8;
+  --text: #e2e9f6;
+  --text-2: #a8b7d1;
+  --text-3: #92a3c0;
+  --text-4: #7688a6;
+  --text-5: #2b3a52;
+  /* Azure. Deep enough that white type on a primary button reads (3.3:1 —
+     better than the dark theme's own 2.9), bright enough that the same colour
+     as link text clears AA on the navy page (5.4:1). */
+  --accent: #3b8ef5;
+  --accent-2: #3b8ef5;
+  --accent-hover: #5aa3f8;
+  --accent-soft: rgba(59, 142, 245, 0.16);
+  --accent-muted: rgba(59, 142, 245, 0.09);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — pushed toward magenta so it separates from the azure accent. */
+  --cortex: #b18bfa;
+  --cortex-strong: #cdb4fd;
+  --cortex-glow: rgba(177, 139, 250, 0.7);
+  --cortex-soft: rgba(177, 139, 250, 0.16);
+  --cortex-muted: rgba(177, 139, 250, 0.08);
+  --cortex-ring: rgba(177, 139, 250, 0.3);
+  --success: #35d0a0;
+  --success-soft: rgba(53, 208, 160, 0.14);
+  --warn: #f0b429;
+  --warn-soft: rgba(240, 180, 41, 0.14);
+  --danger: #ff7a85;
+  --danger-soft: rgba(255, 122, 133, 0.14);
+  /* Info is the one state that has to live beside a blue accent: it is a
+     lighter sky than the accent, never the same blue at a different alpha. */
+  --info: #8fd3ff;
+  --info-soft: rgba(143, 211, 255, 0.14);
+  /* Shell "!" mode — cyan, a hue nothing else in this theme claims. */
+  --shell-accent: #22d3ee;
+  --shell-fg: #a5f3fc;
+  --shell-bg: rgba(34, 211, 238, 0.1);
+  --code-bg: #0b1220;
+  --code-border: #24324a;
+  --hl-comment: #8b9ab5;
+  --hl-keyword: #ff7b8a;
+  --hl-string: #a5d6ff;
+  --hl-number: #79c0ff;
+  --hl-title: #d2a8ff;
+  --hl-builtin: #ffbd7a;
+  --hl-attr: #79c0ff;
+  --hl-meta: #8b9ab5;
+  --hl-addition: #7ee787;
+  --hl-deletion: #ffa198;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(3, 8, 20, 0.5);
+  --shadow: 0 8px 28px rgba(3, 8, 20, 0.55);
+  --shadow-lg: 0 18px 50px rgba(3, 8, 20, 0.65);
+  --shadow-focus: 0 0 0 3px rgba(59, 142, 245, 0.3);
+}
+
+/* Mocha — a warm espresso page with a copper accent. The counterweight to
+   Midnight: same "tint every surface" idea, opposite temperature, for long
+   sessions where a blue-white screen is the thing you want least. Copper, not
+   gold, is the accent on purpose — warn is amber in every theme, and an amber
+   accent on a brown page would make the one colour that means "look at this"
+   indistinguishable from the furniture. Dark-based: inherits the dark
+   channel-hue ramp. */
+:root[data-theme="mocha"] {
+  color-scheme: dark;
+  --bg: #1e1815; /* espresso page */
+  --bg-elev: #181310; /* sidebar */
+  --surface: #26201c;
+  --surface-2: #2f2822;
+  --surface-3: #3a312a;
+  --surface-4: #4a3f35;
+  --border: #362d26;
+  --border-strong: #453a31;
+  --border-focus: #cf7a44;
+  --input-bg: #191411;
+  --input-border: #877565;
+  --text: #f0e6dc;
+  --text-2: #bcab9a;
+  --text-3: #a4937f;
+  --text-4: #8a7a68;
+  --text-5: #3d332b;
+  /* Copper — same balance as Midnight's azure: 3.2:1 under white button type,
+     5.5:1 as link text on the espresso page. */
+  --accent: #cf7a44;
+  --accent-2: #cf7a44;
+  --accent-hover: #e08a52;
+  --accent-soft: rgba(207, 122, 68, 0.17);
+  --accent-muted: rgba(207, 122, 68, 0.09);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — the stock neural violet; it is the coolest thing on the page,
+     which is exactly the separation this theme needs. */
+  --cortex: #a78bfa;
+  --cortex-strong: #c4b5fd;
+  --cortex-glow: rgba(167, 139, 250, 0.7);
+  --cortex-soft: rgba(167, 139, 250, 0.16);
+  --cortex-muted: rgba(167, 139, 250, 0.08);
+  --cortex-ring: rgba(167, 139, 250, 0.3);
+  --success: #63c98d;
+  --success-soft: rgba(99, 201, 141, 0.14);
+  --warn: #e8c14a; /* gold, held clear of the copper accent */
+  --warn-soft: rgba(232, 193, 74, 0.14);
+  --danger: #f2726f;
+  --danger-soft: rgba(242, 114, 111, 0.14);
+  --info: #86b6f0;
+  --info-soft: rgba(134, 182, 240, 0.14);
+  --shell-accent: #4fd6c4;
+  --shell-fg: #a7ede3;
+  --shell-bg: rgba(79, 214, 196, 0.1);
+  --code-bg: #181310;
+  --code-border: #362d26;
+  --hl-comment: #9a8a79;
+  --hl-keyword: #ff8f7a;
+  --hl-string: #b8d9a8;
+  --hl-number: #f0c674;
+  --hl-title: #d2a8ff;
+  --hl-builtin: #ffbd7a;
+  --hl-attr: #f0c674;
+  --hl-meta: #9a8a79;
+  --hl-addition: #8fd88f;
+  --hl-deletion: #ffa198;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(10, 6, 3, 0.5);
+  --shadow: 0 8px 28px rgba(10, 6, 3, 0.55);
+  --shadow-lg: 0 18px 50px rgba(10, 6, 3, 0.65);
+  --shadow-focus: 0 0 0 3px rgba(207, 122, 68, 0.3);
+}
+
+/* Harbor — a cool slate page with a deep teal accent. The "office" light
+   theme: nothing about it is playful, which is the point — it is the one to
+   pick for a shared screen or a demo, where the orange reads as branding and
+   the mint reads as a choice. Light-based, so it joins LIGHT_THEMES in
+   core/theme.ts and the `light` selector lists in globals.css / simple.css.
+   Shell mode moves to indigo here because its usual deep teal IS this theme's
+   accent. Pale themes must restate the light channel-hue ramp: the bare
+   `:root` block hands out the DARK one, which is unreadable on a white card. */
+:root[data-theme="harbor"] {
+  color-scheme: light;
+  --bg: #eef1f5; /* cool slate page */
+  --bg-elev: #f8fafc; /* sidebar */
+  --surface: #ffffff;
+  --surface-2: #e3e8ef;
+  --surface-3: #d8dfe8;
+  --surface-4: #c3ccd8;
+  --border: #e0e5ec;
+  --border-strong: #c7cfda;
+  --input-bg: #ffffff;
+  --input-border: #7c8797;
+  --border-focus: #0d7a72;
+  --text: #1b2531;
+  --text-2: #3a4757;
+  --text-3: #52606f;
+  --text-4: #74808f;
+  --text-5: #c4ccd6;
+  --accent: #0d7a72; /* deep teal — 4.9:1 on the page, 5.4:1 on a card */
+  --accent-2: #0d7a72;
+  --accent-hover: #0a5f59;
+  --accent-soft: rgba(13, 122, 114, 0.12);
+  --accent-muted: rgba(13, 122, 114, 0.07);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  --cortex: #7c3aed;
+  --cortex-strong: #6d28d9;
+  --cortex-glow: rgba(124, 58, 237, 0.55);
+  --cortex-soft: rgba(124, 58, 237, 0.12);
+  --cortex-muted: rgba(124, 58, 237, 0.06);
+  --cortex-ring: rgba(124, 58, 237, 0.22);
+  --success: #116b33;
+  --success-soft: rgba(17, 107, 51, 0.11);
+  --warn: #a45309;
+  --warn-soft: rgba(164, 83, 9, 0.11);
+  --danger: #c81e1e;
+  --danger-soft: rgba(200, 30, 30, 0.1);
+  --info: #1d4ed8;
+  --info-soft: rgba(29, 78, 216, 0.1);
+  /* Shell "!" mode — indigo: the light default (deep teal) is the accent here. */
+  --shell-accent: #4338ca;
+  --shell-fg: #372fa8;
+  --shell-bg: rgba(67, 56, 202, 0.08);
+  --code-bg: #e9edf3;
+  --code-border: #e0e5ec;
+  --hl-comment: #6e7781;
+  --hl-keyword: #cf222e;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #8250df;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #6e7781;
+  --hl-addition: #116329;
+  --hl-deletion: #82071e;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(20, 30, 45, 0.06);
+  --shadow: 0 8px 28px rgba(20, 30, 45, 0.1);
+  --shadow-lg: 0 18px 50px rgba(20, 30, 45, 0.14);
+  --shadow-focus: 0 0 0 3px rgba(13, 122, 114, 0.2);
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Sepia — warm parchment with an umber accent. Reading mode: the whole point is
+   that no surface is white, so there is no pure-white rectangle anywhere to
+   glare from at 1am. That costs a little card/page separation, which the
+   stronger warm shadows buy back. Light-based. */
+:root[data-theme="sepia"] {
+  color-scheme: light;
+  --bg: #f2e9db; /* parchment page */
+  --bg-elev: #fbf6ec; /* sidebar */
+  --surface: #fffaf1; /* cards — cream, never white */
+  --surface-2: #eadfcd;
+  --surface-3: #e0d2bb;
+  --surface-4: #cdbb9e;
+  --border: #e4d7c3;
+  --border-strong: #c9b89c;
+  --input-bg: #fffaf1;
+  --input-border: #8a7a63;
+  --border-focus: #8a5a24;
+  --text: #33291d;
+  --text-2: #524534;
+  --text-3: #665844;
+  --text-4: #857357;
+  --text-5: #cbbda6;
+  --accent: #8a5a24; /* umber — 5.4:1 on the page, 5.9:1 on a card */
+  --accent-2: #8a5a24;
+  --accent-hover: #6f4718;
+  --accent-soft: rgba(138, 90, 36, 0.13);
+  --accent-muted: rgba(138, 90, 36, 0.07);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  --cortex: #6d28d9;
+  --cortex-strong: #5b21b6;
+  --cortex-glow: rgba(109, 40, 217, 0.55);
+  --cortex-soft: rgba(109, 40, 217, 0.12);
+  --cortex-muted: rgba(109, 40, 217, 0.06);
+  --cortex-ring: rgba(109, 40, 217, 0.22);
+  --success: #15693f;
+  --success-soft: rgba(21, 105, 63, 0.12);
+  /* Warn is the state most at risk on a warm page — an amber caution on
+     parchment is nearly invisible — so it goes deep enough to read as its own
+     colour rather than as the paper. */
+  --warn: #8a4a06;
+  --warn-soft: rgba(138, 74, 6, 0.13);
+  --danger: #a32116;
+  --danger-soft: rgba(163, 33, 22, 0.11);
+  --info: #1f5c94;
+  --info-soft: rgba(31, 92, 148, 0.1);
+  --shell-accent: #0e6d80;
+  --shell-fg: #0a4f5e;
+  --shell-bg: rgba(14, 109, 128, 0.09);
+  --code-bg: #ece0cd;
+  --code-border: #e4d7c3;
+  --hl-comment: #7a6a55;
+  --hl-keyword: #a8331f;
+  --hl-string: #1f5c3a;
+  --hl-number: #14538d;
+  --hl-title: #6d28d9;
+  --hl-builtin: #8a4a06;
+  --hl-attr: #14538d;
+  --hl-meta: #7a6a55;
+  --hl-addition: #15693f;
+  --hl-deletion: #96201a;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(70, 50, 25, 0.08);
+  --shadow: 0 8px 28px rgba(70, 50, 25, 0.13);
+  --shadow-lg: 0 18px 50px rgba(70, 50, 25, 0.17);
+  --shadow-focus: 0 0 0 3px rgba(138, 90, 36, 0.22);
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* Sakura — a blush page with a deep rose accent. The one theme that is allowed
+   to be pretty. Two adjacencies it has to hold apart, both handled by hue and
+   not by luck: Cortex goes to the bluest violet in the token set (#6d28d9) so
+   it never blends into the rose, and --danger is a scarlet (#c02718) rather
+   than the usual crimson, which would sit a few degrees from the accent.
+   Light-based. */
+:root[data-theme="sakura"] {
+  color-scheme: light;
+  --bg: #fbeef1; /* blush page */
+  --bg-elev: #fff7f9; /* sidebar */
+  --surface: #ffffff;
+  --surface-2: #f7e0e6;
+  --surface-3: #f0d2da;
+  --surface-4: #e2b6c2;
+  --border: #f2dae0;
+  --border-strong: #dfbfc8;
+  --input-bg: #ffffff;
+  --input-border: #937480;
+  --border-focus: #b3235c;
+  --text: #33202a;
+  --text-2: #513440;
+  --text-3: #684653;
+  --text-4: #8a6472;
+  --text-5: #dcbfc8;
+  --accent: #b3235c; /* deep rose — 5.4:1 on the page, 5.9:1 on a card */
+  --accent-2: #b3235c;
+  --accent-hover: #97104a;
+  --accent-soft: rgba(179, 35, 92, 0.12);
+  --accent-muted: rgba(179, 35, 92, 0.07);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  /* Cortex — the bluest violet in the set, to clear the rose accent. */
+  --cortex: #6d28d9;
+  --cortex-strong: #5b21b6;
+  --cortex-glow: rgba(109, 40, 217, 0.55);
+  --cortex-soft: rgba(109, 40, 217, 0.12);
+  --cortex-muted: rgba(109, 40, 217, 0.06);
+  --cortex-ring: rgba(109, 40, 217, 0.22);
+  --success: #147a52;
+  --success-soft: rgba(20, 122, 82, 0.11);
+  --warn: #8f5606;
+  --warn-soft: rgba(143, 86, 6, 0.12);
+  --danger: #c02718; /* scarlet, held clear of the rose accent */
+  --danger-soft: rgba(192, 39, 24, 0.1);
+  --info: #2159c4;
+  --info-soft: rgba(33, 89, 196, 0.1);
+  --shell-accent: #0e7490;
+  --shell-fg: #0a5468;
+  --shell-bg: rgba(14, 116, 144, 0.09);
+  --code-bg: #f6e6eb;
+  --code-border: #f2dae0;
+  --hl-comment: #7a6670;
+  --hl-keyword: #b3235c;
+  --hl-string: #0a3069;
+  --hl-number: #0550ae;
+  --hl-title: #6d28d9;
+  --hl-builtin: #953800;
+  --hl-attr: #0550ae;
+  --hl-meta: #7a6670;
+  --hl-addition: #116329;
+  --hl-deletion: #a3141a;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(70, 25, 40, 0.07);
+  --shadow: 0 8px 28px rgba(70, 25, 40, 0.12);
+  --shadow-lg: 0 18px 50px rgba(70, 25, 40, 0.16);
+  --shadow-focus: 0 0 0 3px rgba(179, 35, 92, 0.2);
+  --hue-azure: #0b6e9e;
+  --hue-sky: #0369a1;
+  --hue-indigo: #4348c8;
+  --hue-violet: #7e22ce;
+  --hue-magenta: #be185d;
+  --hue-red: #b91c1c;
+  --hue-amber: #92400e;
+  --hue-lime: #4d7c0f;
+  --hue-grass: #15803d;
+  --hue-jade: #0e7490;
+  --hue-teal: #0f766e;
+  --hue-slate: #475569;
+  --hue-sand: #78716c;
+}
+
+/* High Contrast — the accessibility theme, not a taste one. Body copy is pure
+   black (21:1 on a card, 17.4:1 on the page), every hairline is a real line
+   rather than a tone step, and every state colour is pushed past 7:1 (AAA for
+   body text) instead of the 4.5 the others target. The accent is a deep blue:
+   the Olano orange cannot reach 7:1 against white at any saturation worth
+   having, and the point of this theme is that NOTHING in it is a compromise for
+   brand. Cortex is the one carry-over, deepened to match. Light-based.
+
+   The page is grey and the cards are white, which looks like a step DOWN in
+   contrast and is the opposite: `.card` is drawn with a background and no
+   border, so a white card on a white page has no edge at all — the first cut of
+   this theme dissolved every card and panel on the Overview into the page. The
+   tone step is what makes the layout legible; the ink on top of it is what
+   makes the text legible, and those are different jobs. */
+:root[data-theme="contrast"] {
+  color-scheme: light;
+  --bg: #e9e9e9; /* page — the tone step that gives cards an edge */
+  --bg-elev: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #d6d6d6;
+  --surface-3: #c8c8c8;
+  --surface-4: #ababab;
+  /* Borders are visible by design — the borderless language elsewhere relies on
+     tone steps that low-vision users cannot resolve. */
+  --border: #6b6b6b;
+  --border-strong: #333333;
+  --input-bg: #ffffff;
+  --input-border: #333333;
+  --border-focus: #0b3d91;
+  --text: #000000;
+  --text-2: #1a1a1a;
+  --text-3: #333333;
+  --text-4: #4a4a4a; /* still 8.9:1 — this theme has no faint tier */
+  --text-5: #767676;
+  --accent: #0b3d91; /* deep blue — 10.4:1 on white */
+  --accent-2: #0b3d91;
+  --accent-hover: #082c6b;
+  --accent-soft: rgba(11, 61, 145, 0.12);
+  --accent-muted: rgba(11, 61, 145, 0.07);
+  --accent-gradient: var(--accent);
+  --accent-gradient-soft: var(--accent-soft);
+  --cortex: #59119e;
+  --cortex-strong: #440d7a;
+  --cortex-glow: rgba(89, 17, 158, 0.5);
+  --cortex-soft: rgba(89, 17, 158, 0.12);
+  --cortex-muted: rgba(89, 17, 158, 0.07);
+  --cortex-ring: rgba(89, 17, 158, 0.25);
+  --success: #005c33;
+  --success-soft: rgba(0, 92, 51, 0.12);
+  --warn: #7a4300;
+  --warn-soft: rgba(122, 67, 0, 0.12);
+  --danger: #a80000;
+  --danger-soft: rgba(168, 0, 0, 0.1);
+  --info: #0b3d91;
+  --info-soft: rgba(11, 61, 145, 0.1);
+  --shell-accent: #005c6b;
+  --shell-fg: #003d47;
+  --shell-bg: rgba(0, 92, 107, 0.1);
+  --code-bg: #dedede;
+  --code-border: #6b6b6b;
+  --hl-comment: #4a4a4a;
+  --hl-keyword: #a80000;
+  --hl-string: #00404a;
+  --hl-number: #0b3d91;
+  --hl-title: #59119e;
+  --hl-builtin: #7a4300;
+  --hl-attr: #0b3d91;
+  --hl-meta: #4a4a4a;
+  --hl-addition: #005c33;
+  --hl-deletion: #a80000;
+  --glow: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.26);
+  --shadow-focus: 0 0 0 3px rgba(11, 61, 145, 0.45);
+  /* Channel hues: the light ramp, darkened again — a platform badge is small
+     text on a soft fill, which is where a mid-tone hue fails first. */
+  --hue-azure: #05537a;
+  --hue-sky: #01507c;
+  --hue-indigo: #2f34a8;
+  --hue-violet: #6b12b0;
+  --hue-magenta: #a3134d;
+  --hue-red: #a10f0f;
+  --hue-amber: #7a3606;
+  --hue-lime: #3d6408;
+  --hue-grass: #0f6631;
+  --hue-jade: #0a5c73;
+  --hue-teal: #0b5f58;
+  --hue-slate: #3a4658;
+  --hue-sand: #5f5a55;
+}
+
+:root {
+  --r-xs: 5px;
+  --r-sm: 7px;
+  --r: 10px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+  --sb-w: 244px;
+  /* The collapsed strip. 68px left a 32px content box once the panel's 8px
+     margins and 10px padding came off — narrower than the word PINNED and
+     narrower than an agent's face, so both were clipped the moment the
+     headings got their labels back. 78px is the width the simple shell's
+     collapsed rail uses, and with the tighter collapsed padding it leaves 46px
+     of content: room for a 34px mark and a two-line heading. */
+  --sb-w-collapsed: 78px;
+  --topbar-h: 56px;
+  /* The bar's own height, and the height the layout reserves for it. They are
+     the same in a browser tab and differ when installed to the home screen,
+     where the OS status bar overlaps the viewport and the reserved row has to
+     grow by that inset — see the display-mode:standalone block in globals.css.
+     Everything that positions against the topbar reads --mobile-topbar-h, so
+     redefining that one value insets the whole shell. */
+  --mobile-topbar-base: 48px;
+  --mobile-topbar-h: var(--mobile-topbar-base);
+  /* Zero in a browser tab (the chrome already keeps content clear of the
+     status bar and home indicator); the real insets only when installed. */
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+  /* The height a full-window shell fills — read by .app-shell, .simple-shell
+     and every fixed overlay, so "how tall is the window" is answered in one
+     place instead of in a dozen `100dvh` literals.
+
+     `vh` here is the fallback for engines without `dvh`; the @supports block
+     at the foot of this file upgrades it. Installed to the home screen the
+     value goes BACK to `vh` (see the display-mode:standalone block in
+     globals.css) — that is deliberate, and the reason this token exists. */
+  --app-vh: 100vh;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --t-fast: 0.12s;
+  --t: 0.18s;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Stacking scale — the one place that defines who sits on top of whom.
+     Use these instead of ad-hoc z-index numbers:
+       menus/popovers < drawers/modals < command palette < confirm < toasts
+       < system overlays (connectivity, vault unlock). */
+  --z-menu: 50;
+  --z-modal: 60;
+  --z-cmdk: 70;
+  --z-confirm: 80;
+  --z-toast: 85;
+  --z-system: 100;
+}
+
+/* `dvh` tracks the VISIBLE viewport: in a browser tab it shrinks by whatever
+   the retractable chrome (Safari's bottom bar, Chrome's address bar) is
+   covering, which is exactly what a full-window shell must not lay its
+   composer under. A separate rule rather than a second declaration inside
+   :root, so an engine that does not know the unit keeps the `vh` value above
+   instead of dropping the whole custom property to its guaranteed-invalid
+   value (a var() fallback cannot rescue that — the fallback only applies when
+   the property is not set at all). */
+@supports (height: 100dvh) {
+  :root {
+    --app-vh: 100dvh;
+  }
+}

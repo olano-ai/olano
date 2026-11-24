@@ -1,0 +1,115 @@
+/*
+ * Olano's accent on Ionic's theme variables. Ionic draws every component in
+ * the platform's own style (iOS on an iPhone, Material on Android) and its
+ * dark palette is switched by the ion-palette-dark class on <html>
+ * (palettes/dark.class.css, native/theme.ts), so it follows the phone or the
+ * choice in Settings; only the brand colour and the chat bubbles are ours.
+ *
+ * Volt (the dashboard's black-and-chartreuse theme) is the dark palette plus
+ * the olano-theme-volt class, under which the block at the foot of this file
+ * repaints the brand colour, the bubbles and the surfaces.
+ */
+
+:root {
+  --ion-color-primary: #ff6a3d;
+  --ion-color-primary-rgb: 255, 106, 61;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e05d36;
+  --ion-color-primary-tint: #ff7950;
+
+  --olano-bubble-user: #ff6a3d;
+  --olano-bubble-user-text: #ffffff;
+  --olano-bubble-agent: #e9e9eb;
+  --olano-bubble-agent-text: #15151a;
+  --olano-muted: #6e6e73;
+  --olano-code-bg: #f2f2f7;
+  --olano-online: #34c759;
+  --olano-card: #ffffff;
+
+  /* The dashboard's hues (its tokens.css), for the source badges. */
+  --olano-hue-azure: #0b6e9e;
+  --olano-hue-sky: #0369a1;
+  --olano-hue-indigo: #4348c8;
+  --olano-hue-violet: #7e22ce;
+  /* Cortex keeps the dashboard's violet everywhere it appears. */
+  --olano-cortex: #7c3aed;
+  --olano-cortex-soft: rgba(124, 58, 237, 0.12);
+  --olano-hue-magenta: #be185d;
+  --olano-hue-red: #b91c1c;
+  --olano-hue-amber: #92400e;
+  --olano-hue-lime: #4d7c0f;
+  --olano-hue-grass: #15803d;
+  --olano-hue-jade: #0e7490;
+  --olano-hue-teal: #0f766e;
+  --olano-hue-slate: #475569;
+  --olano-hue-sand: #78716c;
+}
+
+/* Specificity above Ionic's own .ion-palette-dark, so the brand colour
+   stays orange in the dark theme too (Ionic's dark palette is blue). */
+:root.ion-palette-dark {
+  --ion-color-primary: #ff7a50;
+  --ion-color-primary-rgb: 255, 122, 80;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e06b46;
+  --ion-color-primary-tint: #ff8762;
+
+  --olano-bubble-user: #ff6a3d;
+  --olano-bubble-agent: #26262a;
+  --olano-bubble-agent-text: #ececf0;
+  --olano-muted: #8e8e93;
+  --olano-code-bg: #121214;
+  --olano-card: #1c1c1e;
+
+  --olano-hue-azure: #4fb0e8;
+  --olano-hue-sky: #7fc9f0;
+  --olano-hue-indigo: #8891f7;
+  --olano-hue-violet: #c08be8;
+  --olano-cortex: #a78bfa;
+  --olano-cortex-soft: rgba(167, 139, 250, 0.16);
+  --olano-hue-magenta: #f075a8;
+  --olano-hue-red: #f08a7a;
+  --olano-hue-amber: #e0a44a;
+  --olano-hue-lime: #a9cf56;
+  --olano-hue-grass: #35c46b;
+  --olano-hue-jade: #12bfa4;
+  --olano-hue-teal: #45c8d4;
+  --olano-hue-slate: #a7b3c4;
+  --olano-hue-sand: #cbb79a;
+}
+
+/* Volt: a black page, dark-grey cards a hairline apart, and an electric
+   chartreuse where the orange was (the dashboard's `volt` tokens). Three
+   classes deep so it outranks both our dark block and Ionic's own
+   `.ion-palette-dark.ios` / `.md` platform blocks. The brand colour is pale
+   enough that its contrast colour is black, not white: every Ionic primary
+   button, the user's bubbles and the selected segment carry dark type. */
+:root.ion-palette-dark.olano-theme-volt {
+  --ion-color-primary: #d4f24a;
+  --ion-color-primary-rgb: 212, 242, 74;
+  --ion-color-primary-contrast: #0a0a0a;
+  --ion-color-primary-contrast-rgb: 10, 10, 10;
+  --ion-color-primary-shade: #bbd541;
+  --ion-color-primary-tint: #d8f35c;
+
+  /* The page is black on both platforms (Ionic's Material dark is #121212)
+     and the cards one step up, as the dashboard draws them. */
+  --ion-background-color: #000000;
+  --ion-background-color-rgb: 0, 0, 0;
+  --ion-card-background: #151515;
+  --ion-item-background: #151515;
+  --ion-toolbar-background: #0a0a0a;
+  --ion-tab-bar-background: #0a0a0a;
+
+  --olano-bubble-user: #d4f24a;
+  --olano-bubble-user-text: #0a0a0a;
+  --olano-bubble-agent: #1d1d1d;
+  --olano-bubble-agent-text: #ececec;
+  --olano-muted: #8e8e93;
+  --olano-code-bg: #0e0e0e;
+  --olano-card: #151515;
+  /* A cool mint, held clear of the chartreuse (the dashboard's volt success). */
+  --olano-online: #34d399;
+}

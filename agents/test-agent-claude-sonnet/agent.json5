@@ -1,0 +1,13 @@
+{
+  // Test agent — Anthropic Claude Sonnet (more capable than Haiku).
+  // Use when a feature test needs stronger reasoning/tool-use than Haiku.
+  // Requires ANTHROPIC_API_KEY in the environment (.env or vault).
+  name: "test-agent-claude-sonnet",
+  description: "Test agent on Claude Sonnet — for feature tests needing more capability.",
+  emoji: "🧪",
+  model: "anthropic:claude-sonnet-4-6",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}

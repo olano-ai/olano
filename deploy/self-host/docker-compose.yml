@@ -1,0 +1,150 @@
+# Olano, self-hosted: the runtime, the dashboard and Postgres on one machine,
+# from the public images. This is the install path for a box Olano does NOT
+# host: your laptop, a NAS, a VPS. Models are paid for with your own provider
+# keys, or with an Olano API key from cloud.olano.ai (Providers → Olano in the
+# dashboard, or OLANO_CREDITS_KEY in .env) that spends your account's credits.
+#
+#   bash setup.sh                 # writes .env (random Postgres password, a one-time
+#                                 # setup code, the address), pulls, starts
+#   open http://localhost:3200    # or the https address setup.sh printed
+#
+# setup.sh also chooses which override files compose loads, through
+# COMPOSE_FILE in .env: docker-compose.https.yml publishes ports 80 and 443 for
+# a public hostname (setup.sh --host), docker-compose.sandbox.yml gives every
+# agent its own sandbox container (setup.sh --sandbox).
+#
+# What this file is NOT: the managed-cloud stack (deploy/docker-compose.allinone.yml).
+# A managed deployment is provisioned by cloud.olano.ai with an installation
+# manifest in /etc/olano, a deployment token and a control-plane channel; none
+# of that exists here and none of it may be added by hand. A deployment token
+# without its manifest puts the runtime in quarantine (every execution gate
+# closes), which is the opposite of what a self-hosted box wants. This stack
+# runs in the open posture: agents' shell commands run inside the runtime
+# container, there is no exec sandbox and no plan gating, and everything in
+# the dashboard is yours. (setup.sh --sandbox moves agents' shell commands
+# into per-agent sandbox containers instead; see docker-compose.sandbox.yml.)
+#
+# Bounded logs on every service: Docker's default json-file driver is
+# unbounded, and a chatty runtime can fill a small disk with logs in days.
+x-bounded-logs: &bounded-logs
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "3"
+
+services:
+  olano:
+    logging: *bounded-logs
+    # The runtime. :latest is the current release; pin a version with
+    # OLANO_BACKEND_IMAGE (ghcr.io/olano-ai/olano-backend:0.3.2) to update on
+    # your own schedule. Public image, no registry login needed.
+    image: ${OLANO_BACKEND_IMAGE:-ghcr.io/olano-ai/olano-backend:latest}
+    container_name: olano
+    restart: unless-stopped
+    command: ["serve"]
+    # Cap the container's memory so a runaway agent command is OOM-killed and
+    # restarted instead of freezing the host. 0 = uncapped. setup.sh pins 75%
+    # of the host's RAM here.
+    mem_limit: ${OLANO_MEM_LIMIT:-0}
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      # The home lives on the mounted data directory (see volumes) at a fixed
+      # in-container path, so nothing here depends on where you keep it.
+      - OLANO_HOME=/root/.olano
+      - LIONCLAW_HOME=/root/.olano
+      - LIONCLAW_WORKSPACE=/root/.olano/workspace
+      - LIONCLAW_CONTAINERIZED=1
+      - LIONCLAW_RUNTIME_PORT=8765
+      # The dashboard is served from the same origin by the web service, so
+      # the API uses cookie sessions: never set LIONCLAW_DASHBOARD_TOKEN.
+      #
+      # Persistence: the bundled Postgres sidecar (true concurrent writes).
+      # LIONCLAW_PG_PASSWORD has no default on purpose: setup.sh generates it,
+      # and a stack must never boot behind a password printed in a repository.
+      - LIONCLAW_CHECKPOINT_BACKEND=${LIONCLAW_CHECKPOINT_BACKEND:-postgres}
+      - LIONCLAW_CHECKPOINT_DB_URL=${LIONCLAW_CHECKPOINT_DB_URL:-postgresql://${OLANO_PG_NAME:-olano}:${LIONCLAW_PG_PASSWORD:?run setup.sh first (it writes a random Postgres password into .env)}@postgres:5432/${OLANO_PG_NAME:-olano}}
+      - LIONCLAW_STORE_BACKEND=${LIONCLAW_STORE_BACKEND:-postgres}
+      - LIONCLAW_STORE_DB_URL=${LIONCLAW_STORE_DB_URL:-postgresql://${OLANO_PG_NAME:-olano}:${LIONCLAW_PG_PASSWORD:?run setup.sh first (it writes a random Postgres password into .env)}@postgres:5432/${OLANO_PG_NAME:-olano}}
+      # Where the dashboard is reached from a browser. Needed for the links
+      # agents send (magic links, QR codes) and, on https, for secure cookies.
+      - LIONCLAW_PUBLIC_URL=${LIONCLAW_PUBLIC_URL:-http://localhost:${OLANO_HTTP_PORT:-3200}}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      # Everything Olano keeps: agents, the vault, conversations, files, logs.
+      # A directory next to this file by default; point OLANO_DATA_DIR at any
+      # absolute path (a bigger disk, a backed-up share) to move it. Back this
+      # directory up and you have backed up the install.
+      - ${OLANO_DATA_DIR:-./data}:/root/.olano
+      # The host's Docker socket is NOT mounted here. setup.sh --sandbox adds
+      # it (docker-compose.sandbox.yml) so the runtime can start a sandbox
+      # container per agent, and the live-browser container (Config ->
+      # Browser) with it. Giving a container the socket is root on the host;
+      # enable it only on a machine you alone control.
+    expose:
+      - "8765"
+    networks:
+      - olano
+
+  web:
+    logging: *bounded-logs
+    # The dashboard: a static build served by Caddy, which also proxies /api
+    # to the runtime so both share one origin (the session cookie, the
+    # terminal WebSocket and chat streams all depend on that).
+    image: ${OLANO_DASHBOARD_IMAGE:-ghcr.io/olano-ai/olano-dashboard:latest}
+    container_name: olano_web
+    restart: unless-stopped
+    depends_on:
+      - olano
+    environment:
+      # The public site (see the Caddyfile). ":80" (the default) leaves it
+      # inert: the dashboard is reached on the loopback port below. A hostname
+      # (olano.example.com, or <ip-with-dashes>.sslip.io) makes Caddy obtain a
+      # Let's Encrypt certificate and serve https on ports 80 and 443, which
+      # docker-compose.https.yml publishes. setup.sh --host sets both.
+      - OLANO_SITE_ADDRESS=${OLANO_SITE_ADDRESS:-:80}
+    ports:
+      # Plain http, published on the host's loopback ONLY, in every mode:
+      # http://localhost:3200 on the machine itself (or through an SSH tunnel,
+      # `ssh -L 3200:localhost:3200 you@server`), never from the network.
+      # OLANO_HTTP_BIND=0.0.0.0 opens it to your LAN; that is unencrypted
+      # http, so do it only on a network you trust, never on a public server.
+      - "${OLANO_HTTP_BIND:-127.0.0.1}:${OLANO_HTTP_PORT:-3200}:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - olano
+
+  postgres:
+    logging: *bounded-logs
+    image: postgres:16
+    container_name: olano_postgres
+    restart: unless-stopped
+    environment:
+      # Postgres applies these only when it initialises the data volume, so
+      # the pins in .env must never change once the stack has started.
+      POSTGRES_USER: ${OLANO_PG_NAME:-olano}
+      POSTGRES_PASSWORD: ${LIONCLAW_PG_PASSWORD:?run setup.sh first (it writes a random Postgres password into .env)}
+      POSTGRES_DB: ${OLANO_PG_NAME:-olano}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${OLANO_PG_NAME:-olano} -d ${OLANO_PG_NAME:-olano}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - olano
+
+networks:
+  olano:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pgdata:

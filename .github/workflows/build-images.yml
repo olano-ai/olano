@@ -1,0 +1,356 @@
+name: Build runtime images (GHCR)
+
+# Builds the three images a box runs (the backend runtime, the dashboard SPA
+# behind Caddy, and the exec sandbox) and pushes them to GHCR, so an instance
+# `docker compose pull`s them instead of building on the box: the full backend
+# plus the Vite dashboard OOMs a small droplet.
+#
+# ── Two tags, two audiences ──────────────────────────────────────────────────
+#
+#   :edge      main, rebuilt here every 3 hours, only from a commit whose CI
+#              runs are all green. For our own canary boxes and anyone who
+#              wants to track main.
+#   :latest    the newest official release. It moves ONLY when release.yml
+#              promotes a version tag (vX.Y.Z), never from this workflow.
+#
+# Managed boxes, fresh provisioning (deploy/docker-compose.allinone.yml,
+# deploy/bootstrap-allinone.sh) and the cloud's golden disk images all pull
+# `:latest`, so the fleet receives only tested, versioned images and a merge
+# to main cannot reach a customer by itself. Every build also pushes
+# `:<full sha>`, which is what release.yml promotes and what an operator pins
+# to roll a box back. docs/RELEASING.md has the whole procedure.
+#
+# ── The CI gate ──────────────────────────────────────────────────────────────
+# Before building, .github/scripts/checks-green.sh lists every workflow run for
+# HEAD. green builds; pending (CI still running) skips this window and the
+# next one picks the commit up; red fails this run loudly and nothing is
+# published. The manual dispatch honours the same gate unless `force` is set,
+# with one difference: on pending it WAITS for the checks (up to 45 minutes,
+# what E2E and the test job can take together from a push) instead of failing
+# at once. A person pressing the button right after a merge means "build this
+# once it is green", and the alternative the failure offered, dispatching
+# again with force=true, publishes an image whose checks nobody has seen.
+# The scheduled run never waits: a sleeping runner is billed like a working
+# one, and the next window is three hours away at most.
+#
+# ── Cadence and cost ─────────────────────────────────────────────────────────
+# Every 3 hours, not on every merge: three full builds per push was the biggest
+# Actions cost, and hourly skip-checks alone cost ~720 minutes a month. On
+# 2026-08-16 the account's Actions budget ran out entirely and every workflow
+# in both repos stopped, deploys included. workflow_dispatch is the "I need
+# this image now" button.
+#
+# ── Why the skip-check is "is HEAD published", not a time window ────────────
+# It was a window ("did a commit land in the last 90 minutes"), written for an
+# hourly cron and left in place when the cron moved to 3 hours. That turned it
+# into a ~50% blind spot: runs 392-406 (2026-08-20 to 08-22) all skipped, the
+# published image stayed pinned for two days, six merged PRs were never built,
+# and every run reported success because a skipped job is not a failure. The
+# question that cannot miss a commit is "does the registry already hold HEAD":
+# for every image, `:edge` and `:<sha>` resolve to the same digest. That also
+# catches a partial publish (backend pushed, dashboard failed).
+
+on:
+  schedule:
+    - cron: "0 */3 * * *" # every three hours (UTC)
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Build even when this commit's checks are red or still running. Off, a dispatch waits for running checks (up to 45 min) and refuses a red commit."
+        type: boolean
+        default: false
+
+# Serialize so two runs do not race on the `edge` tag; let an in-flight build
+# finish (images are a release artifact, not worth cancelling).
+concurrency:
+  group: build-images
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+  # The CI gate lists this commit's workflow runs.
+  actions: read
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ghcr.io/olano-ai/olano-backend
+  DASHBOARD_IMAGE: ghcr.io/olano-ai/olano-dashboard
+  # Source-/secret-free exec sandbox the runtime spawns for managed agents.
+  SANDBOX_IMAGE: ghcr.io/olano-ai/olano-sandbox
+  # The live agent browser (config.yaml → browser.mode: live), pulled by a box
+  # only when an operator turns live on. Holds Chromium and docker/olano-browser
+  # only: no product source, no secrets.
+  BROWSER_IMAGE: ghcr.io/olano-ai/olano-browser
+
+jobs:
+  check:
+    name: Decide whether to build
+    runs-on: ubuntu-latest
+    # Room for the dispatch wait below plus the gate's own work; a scheduled
+    # run is done in under a minute either way.
+    timeout-minutes: 80
+    env:
+      # How long the gate keeps asking while this commit's checks are still
+      # running: 75 minutes on a dispatch that does not force (e2e.yml's job
+      # timeout, the longest check; ci.yml's test job is 25), never on the
+      # schedule. The gate reads it; the Decide step names it in its message.
+      CHECKS_WAIT_SECONDS: ${{ github.event_name == 'workflow_dispatch' && inputs.force != true && '4500' || '0' }}
+    outputs:
+      should_build: ${{ steps.decide.outputs.should_build }}
+      push_edge: ${{ steps.decide.outputs.push_edge }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # Dispatch never asks the registry, so log in only when we must.
+      - name: Log in to GHCR
+        if: github.event_name != 'workflow_dispatch'
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Is HEAD already published as :edge?
+        id: published
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          # No `-e`: a missing tag is an ANSWER ("not published"), not a failure.
+          # GitHub invokes this step as `bash -e {0}`, and `set -…` only adds
+          # flags, so errexit has to be cleared explicitly or the first lookup
+          # of an unpublished tag exits the job before the loop can read the
+          # empty string as its answer.
+          set +e
+          set -uo pipefail
+
+          # Plain output, NOT --format. Any --format makes buildx resolve the
+          # whole image tree, including config blobs, so a lookup that only
+          # needs the top-level digest starts failing on unrelated blob fetches,
+          # and a failed lookup here reads as "not published" and triggers
+          # three full rebuilds. The unformatted header carries the digest and
+          # costs one manifest request.
+          digest() {
+            docker buildx imagetools inspect "$1" 2>/dev/null \
+              | awk '/^Digest:/ { print $2; exit }'
+          }
+
+          published=true
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            head_digest=$(digest "${image}:${GITHUB_SHA}")
+            edge_digest=$(digest "${image}:edge")
+            name=${image##*/}
+            if [ -z "$head_digest" ]; then
+              echo "${name}: :${GITHUB_SHA:0:12} is not published."
+              published=false
+            elif [ "$head_digest" != "$edge_digest" ]; then
+              echo "${name}: :${GITHUB_SHA:0:12} is published but is not :edge."
+              published=false
+            else
+              echo "${name}: already published as :edge (${head_digest:0:19})."
+            fi
+          done
+          echo "published=${published}" >> "$GITHUB_OUTPUT"
+
+      - name: Are HEAD's checks green?
+        id: checks
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: .github/scripts/checks-green.sh "$GITHUB_SHA"
+
+      - name: Decide
+        id: decide
+        env:
+          EVENT: ${{ github.event_name }}
+          PUBLISHED: ${{ steps.published.outputs.published }}
+          VERDICT: ${{ steps.checks.outputs.verdict }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          # :edge tracks main and nothing else. A dispatch on another ref still
+          # publishes :<sha> (useful for trying a branch image on a box) but
+          # must not move the tag the canaries follow.
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "push_edge=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "push_edge=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::${GITHUB_REF} is not main: publishing :<sha> only, :edge stays where it is."
+          fi
+
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            if [ "$VERDICT" = "green" ] || [ "$FORCE" = "true" ]; then
+              [ "$VERDICT" != "green" ] && echo "::warning::checks are ${VERDICT} for ${GITHUB_SHA:0:12}; building anyway because force=true."
+              echo "should_build=true" >> "$GITHUB_OUTPUT"
+            elif [ "$VERDICT" = "pending" ]; then
+              # The gate already waited CHECKS_WAIT_SECONDS for them.
+              echo "::error::checks for ${GITHUB_SHA:0:12} are still running after $((CHECKS_WAIT_SECONDS / 60)) minutes. Dispatch again once they finish, or with force=true to build without them."
+              exit 1
+            else
+              echo "::error::checks are ${VERDICT} for ${GITHUB_SHA:0:12}. Fix or re-run them, or dispatch again with force=true."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          if [ "$PUBLISHED" = "true" ]; then
+            echo "Every image already published for ${GITHUB_SHA:0:12}; nothing to do."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+          elif [ "$VERDICT" = "green" ]; then
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+          elif [ "$VERDICT" = "pending" ]; then
+            echo "::notice::checks for ${GITHUB_SHA:0:12} are still running; the next scheduled window will pick it up."
+            echo "should_build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::main's checks are red at ${GITHUB_SHA:0:12}; :edge stays on the previous commit until main is green again."
+            exit 1
+          fi
+
+  build:
+    needs: check
+    if: needs.check.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      PUSH_EDGE: ${{ needs.check.outputs.push_edge }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tags for this build
+        id: tags
+        run: |
+          suffixes=("$GITHUB_SHA")
+          if [ "$PUSH_EDGE" = "true" ]; then
+            suffixes+=("edge")
+          fi
+          emit() {
+            local key=$1 image=$2
+            {
+              echo "${key}<<EOF"
+              for s in "${suffixes[@]}"; do echo "${image}:${s}"; done
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          }
+          emit backend "$BACKEND_IMAGE"
+          emit dashboard "$DASHBOARD_IMAGE"
+          emit sandbox "$SANDBOX_IMAGE"
+          emit browser "$BROWSER_IMAGE"
+
+      - uses: ./.github/actions/build-images
+        with:
+          sha: ${{ github.sha }}
+          build_time: ${{ github.event.repository.updated_at }}
+          backend_tags: ${{ steps.tags.outputs.backend }}
+          dashboard_tags: ${{ steps.tags.outputs.dashboard }}
+          sandbox_tags: ${{ steps.tags.outputs.sandbox }}
+          browser_tags: ${{ steps.tags.outputs.browser }}
+
+      # ── image size report ──────────────────────────────────────────────────
+      # What these images cost on a customer's disk, printed on every build.
+      # A Basic droplet has 25 GB and holds the backend + sandbox + dashboard +
+      # postgres at once; before this step nobody could answer "how big is the
+      # release" without pulling it by hand, and a dependency that quietly adds
+      # a gigabyte looked exactly like one that adds a megabyte. Sizes are the
+      # UNCOMPRESSED on-disk figures (what `df` sees), not the compressed
+      # transfer size. The per-layer breakdown names the Dockerfile line
+      # responsible, so a regression is attributable in the run that caused it.
+      # Fail-soft: a reporting problem must never fail a build.
+      - name: Image size report
+        continue-on-error: true
+        run: |
+          set -uo pipefail
+          {
+            echo "### Image sizes (uncompressed, on disk)"
+            echo ""
+            echo "| image | size | layers |"
+            echo "|---|---:|---:|"
+          } >> "$GITHUB_STEP_SUMMARY"
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            if ! docker pull -q "${image}:${GITHUB_SHA}" >/dev/null 2>&1; then
+              echo "::warning::could not pull ${image##*/}; size not reported"
+              continue
+            fi
+            bytes=$(docker image inspect "${image}:${GITHUB_SHA}" --format '{{.Size}}' 2>/dev/null || echo 0)
+            layers=$(docker image inspect "${image}:${GITHUB_SHA}" --format '{{len .RootFS.Layers}}' 2>/dev/null || echo 0)
+            human=$(awk -v b="$bytes" 'BEGIN{printf "%.2f GB", b/1073741824}')
+            printf '| `%s` | %s | %s |\n' "${image##*/}" "$human" "$layers" >> "$GITHUB_STEP_SUMMARY"
+            echo "::group::${image##*/} layer breakdown"
+            echo "TOTAL ${image##*/}: ${human} (${bytes} bytes, ${layers} layers)"
+            docker history "${image}:${GITHUB_SHA}" --no-trunc --format '{{.Size}}\t{{.CreatedBy}}' 2>/dev/null \
+              | grep -v '^0B' | head -40
+            echo "::endgroup::"
+            # Free it before pulling the next one. The three images together do
+            # not fit on a hosted runner: the first version of this step ran
+            # the runner to 0 MB and never measured the sandbox. (That the set
+            # overflows a 14 GB runner is itself the point of this report.)
+            docker rmi "${image}:${GITHUB_SHA}" >/dev/null 2>&1 || true
+            docker image prune -f >/dev/null 2>&1 || true
+          done
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "_A Basic droplet ships 25 GB total and holds one full set plus postgres._" >> "$GITHUB_STEP_SUMMARY"
+
+      # ── did the publish actually take? ─────────────────────────────────────
+      # The `check` job decides whether to build by asking the registry whether
+      # HEAD is published. This step asks the same question AFTER building, and
+      # FAILS the run when the answer is still no: a skipped job and a
+      # successful job look identical from outside, which is how a stale tag
+      # once sat two days with nothing red anywhere. What this cannot catch is a
+      # workflow that never runs at all (an Actions budget exhaustion, a
+      # disabled schedule); the durable staleness alarm for that lives in the
+      # cloud repo's always-on provisioning worker, watching :edge.
+      - name: Verify the publish
+        run: |
+          set +e
+          set -uo pipefail
+          digest() {
+            docker buildx imagetools inspect "$1" 2>/dev/null \
+              | awk '/^Digest:/ { print $2; exit }'
+          }
+          stale=""
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            name=${image##*/}
+            head_digest=$(digest "${image}:${GITHUB_SHA}")
+            if [ -z "$head_digest" ]; then
+              echo "::error::${name}: :${GITHUB_SHA:0:12} is NOT published after a successful build"
+              stale=1
+              continue
+            fi
+            if [ "$PUSH_EDGE" = "true" ]; then
+              edge_digest=$(digest "${image}:edge")
+              if [ "$head_digest" = "$edge_digest" ]; then
+                echo "${name}: :edge is ${GITHUB_SHA:0:12}"
+              else
+                echo "::error::${name}: :edge is NOT ${GITHUB_SHA:0:12} after a successful build"
+                stale=1
+              fi
+            else
+              echo "${name}: :${GITHUB_SHA:0:12} published (${head_digest:0:19})"
+            fi
+          done
+          if [ -n "$stale" ]; then
+            echo "Canary boxes will keep pulling the previous image. Re-run this workflow."
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### Runtime images pushed"
+            if [ "$PUSH_EDGE" = "true" ]; then
+              echo "- \`${BACKEND_IMAGE}:edge\` (+ \`:${GITHUB_SHA}\`)"
+              echo "- \`${DASHBOARD_IMAGE}:edge\` (+ \`:${GITHUB_SHA}\`)"
+              echo "- \`${SANDBOX_IMAGE}:edge\` (+ \`:${GITHUB_SHA}\`)"
+              echo "- \`${BROWSER_IMAGE}:edge\` (+ \`:${GITHUB_SHA}\`)"
+            else
+              echo "- \`${BACKEND_IMAGE}:${GITHUB_SHA}\`"
+              echo "- \`${DASHBOARD_IMAGE}:${GITHUB_SHA}\`"
+              echo "- \`${SANDBOX_IMAGE}:${GITHUB_SHA}\`"
+              echo "- \`${BROWSER_IMAGE}:${GITHUB_SHA}\`"
+            fi
+            echo ""
+            echo "\`:latest\` moves only on a release (docs/RELEASING.md)."
+          } >> "$GITHUB_STEP_SUMMARY"

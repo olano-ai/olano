@@ -1,0 +1,448 @@
+import type { LocalDict } from "../../core/i18n";
+
+// Group-chat strings — the group transcript, its info panel, the New group
+// and Add-an-agent dialogs. They lived in the simple shell's dictionary until
+// the dashboard grew the same surfaces; one copy here, spread back into the
+// simple dictionary so the two shells can never word a group differently.
+//
+// Every control carries its own explanation (the `*Help` keys): what it
+// changes, the format it accepts, what happens when it is left empty, and
+// what each choice means. A field without one is a defect.
+export const GROUPS_STR: LocalDict = {
+  en: {
+    // Borrowed from the simple shell when these files lived there; they
+    // resolve here now that the files are shared.
+    "groups.cancel": "Cancel",
+    "groups.deleteAction": "Delete",
+    "groups.openBots": "Show my agents",
+    "groups.section": "Group chats",
+    "groups.new": "New group",
+    "groups.newHelp":
+      "Starts a chat that holds 2–6 of your agents at once. Every agent reads every message.",
+    "groups.empty": "No group chats yet.",
+    "groups.members": "{n} agents",
+    "groups.membersOne": "1 agent",
+    "groups.previewLine": "{who}: {text}",
+    "groups.you": "You",
+    "groups.region": "Group chat: {name}",
+    "groups.open": "Open the group {name}",
+    "groups.loading": "Loading your group chats…",
+    "groups.loadFailed": "Couldn't load your group chats.",
+    "groups.openFailed": "Couldn't open that group.",
+    "groups.emptyThread": "Nobody has spoken in {name} yet",
+    "groups.emptyThreadHint":
+      "Say something to start it off. Type @ and an agent's name to ask that one directly, or name several to put the same question to each of them — otherwise {first} answers.",
+    "groups.placeholder": "Message {name}…",
+    "groups.replying": "{name} is replying…",
+    "groups.toChip": "→ {name}",
+    "groups.toChipHelp": "This message was addressed to {name} — so that is who answered it. A message can name several agents, and then each of them takes a turn, in the order you named them.",
+    "groups.replyChip": "↩ {name}",
+    "groups.replyChipHelp": "An agent-to-agent turn: this is an answer to {name}, who called on this agent in the turn before. Answering is not handing over — the thread only moves on when a message names somebody else.",
+    "groups.mention": "Mention an agent",
+    "groups.answersFallback": "{name} answers — type @ to pick someone else",
+    "groups.answersNamed": "{name} answers",
+    "groups.answersEach": "{names} answer, each in turn",
+    "groups.rename": "Rename this group",
+    "groups.renamePlaceholder": "Name this group…",
+    "groups.renameHelp":
+      "Give the group a new name. It is only a label: the agents in it, everything already said, and what each agent remembers of the conversation all stay exactly as they are. You can also right-click the group in the sidebar.",
+    "groups.renamed": "Renamed to “{name}”.",
+    "groups.renameFailed": "Couldn't rename this group.",
+    "groups.info": "About this group",
+    "groups.infoRegion": "About the group {name}",
+    "groups.infoClose": "Hide the group's details",
+    "groups.roster": "Members",
+    "groups.rosterHelp":
+      "Every agent in this group, in speaking order. The first one answers any message that names nobody; @mention one or more to send it to them instead, in the order you name them. All of them read the whole conversation, and each is told what the others do so it knows who to bring in.",
+    "groups.answersFirst": "Answers by default",
+    "groups.remove": "Remove {name}",
+    "groups.removeConfirm":
+      "Remove {name} from “{group}”? What it already said stays in the conversation, and you can add it back later.",
+    "groups.removeMin":
+      "A group needs at least {min} agents, so this one can't be removed. Add another agent first, or delete the whole group.",
+    "groups.removed": "{name} left the group.",
+    "groups.add": "Add an agent",
+    "groups.addHelp":
+      "Adds one more of your agents to this group, up to {max} in total. It joins at the end of the speaking order, reads the conversation from that point on, and answers when you — or another agent in the group — @mention it. Only agents you can already chat with are listed.",
+    "groups.addAction": "Add",
+    "groups.addPlaceholder": "Pick an agent…",
+    "groups.addNone": "Every agent you can use is already in this group.",
+    "groups.addFull": "This group already holds the maximum of {max} agents. Remove one before adding another.",
+    "groups.added": "{name} joined the group.",
+    "groups.memberFailed": "Couldn't change who is in this group.",
+    "groups.delete": "Delete this group",
+    "groups.deleteHelp":
+      "Deletes this group chat and its whole conversation, for good. The agents themselves are not deleted — only this conversation between them, and only for people who can see this group.",
+    "groups.deleteConfirm":
+      "Delete “{name}”? The conversation goes with it and can't be recovered. The agents themselves are not deleted.",
+    "groups.deleted": "Group deleted.",
+    "groups.deleteFailed": "Couldn't delete this group.",
+    "groups.sendFailed": "Couldn't send that message.",
+    "groups.peopleCount": "{n} people",
+    "groups.people": "People",
+    "groups.peopleHelp":
+      "Everyone who can read this group and post in it, besides the agents: the person who created it, anyone they shared it with, and any admin who has posted here. Admins can open every group whether or not they are listed. Each person's messages are labelled with their handle, and the agents are told who is in the room, so they know who is asking.",
+    "groups.personCreator": "Created it",
+    "groups.personShared": "Shared in",
+    "groups.personAdmin": "Admin",
+    "groups.personYou": "you",
+    "groups.personGone": "(account removed)",
+    "groups.guestHint":
+      "This group was shared with you. You can read it and post in it; only its creator and admins can rename it, change its agents, share it with more people or delete it.",
+    "groups.share": "Share with a teammate",
+    "groups.shareHelp":
+      "Lets another team account read this group and post in it. Pick a person from the list: it offers only people who already have access to every agent in this group, because sharing never grants access to an agent. A shared person can leave on their own, but cannot rename the group, add or remove agents, share it further, or delete it. Once more than one person is in the group, a message that names no agent is for the other people and no agent answers it; type @ and an agent's name to ask one. Leave the list empty and nothing changes.",
+    "groups.shareAction": "Share",
+    "groups.sharePlaceholder": "Pick a person…",
+    "groups.shareNone":
+      "Nobody else can be added right now: every team member who can use all of this group's agents is already in it, or there are none. Grant access to the agents on the Admin page first.",
+    "groups.sharedWith": "{name} can now read and post here.",
+    "groups.shareFailed": "Couldn't change who this group is shared with.",
+    "groups.unshare": "Remove {name}",
+    "groups.unshareConfirm":
+      "Remove {name} from “{group}”? They will no longer see this group. What they posted stays in the conversation under their name.",
+    "groups.unshared": "{name} no longer has access to this group.",
+    "groups.leave": "Leave this group",
+    "groups.leaveHelp":
+      "Takes you out of this group. It disappears from your list, and what you posted stays in the conversation under your name. The person who created it can share it with you again later.",
+    "groups.leaveConfirm": "Leave “{name}”? It disappears from your list. Anything you posted stays.",
+    "groups.left": "You left the group.",
+    "groups.leaveFailed": "Couldn't leave this group.",
+    "groups.sharedTag": "Shared",
+    "groups.sharedTagHelp":
+      "Somebody else made this group and shared it with you. You can read it and post in it; only its creator and admins can rename it, change its agents, share it further or delete it. Open its details to leave it.",
+    "groups.answersNobody": "For the people here. Type @ and an agent's name to ask one",
+    "groups.emptyThreadHintShared":
+      "Say something to start it off. Type @ and an agent's name to ask that one, or name several to put the same question to each of them. A message that names no agent is for the other people in this group, and no agent answers it.",
+    "addbot.title": "Add an agent to your chat with {name}",
+    "addbot.subtitle": "This becomes a group chat. {name} still answers by default.",
+    "addbot.who": "Agents to bring in",
+    "addbot.whoHelp":
+      "Pick one or more agents to join this conversation. {name} is already in it and stays first in line, so it keeps answering anything that doesn't name an agent — the others reply when you @mention them. You can add up to {max} more here, and add or remove agents later from the group's details. Your one-to-one chat with {name} is left exactly as it is; this creates a separate group conversation.",
+    "addbot.tooMany":
+      "Pick at most {room} — a group holds {max} agents including the one you're already talking to. Unpick one to continue.",
+    "addbot.noOthers":
+      "There are no other agents to add yet. Create a second agent first, then you can start a group with it.",
+    "addbot.carry": "Bring the conversation along",
+    "addbot.carryHelp":
+      "On (the default): the most recent messages from this chat are copied into the new group, labelled with who said what, so the agents you add can read what has been discussed instead of starting blind. Long conversations are trimmed to the most recent messages and the group says so. Off: the group starts empty and you explain it yourself. Either way nothing is removed from this chat, and what the agents remember of it privately does not transfer — the group is a fresh conversation for all of them.",
+    "addbot.create": "Start group chat",
+    "addbot.creating": "Starting…",
+    "addbot.cancel": "Cancel",
+    "addbot.created": "Started “{name}”.",
+    "addbot.failed": "Couldn't start that group chat.",
+    "newgroup.title": "New group chat",
+    "newgroup.subtitle": "Pick the agents that should talk to each other.",
+    "newgroup.name": "Group name",
+    "newgroup.namePlaceholder": "Sales outbound",
+    "newgroup.nameHelp":
+      "What this conversation is called. Any text up to 60 characters — spaces and emoji are fine, e.g. “Sales outbound”. It shows in your chat list and is given to every agent in the group, so a name that says what the group is for helps them answer in context.",
+    "newgroup.nameError": "Give the group a name.",
+    "newgroup.members": "Agents in this group",
+    "newgroup.membersHelp":
+      "Choose {min} to {max} agents. The first one you pick answers every message that doesn't name an agent, so pick the lead first; the others join in when you @mention them. You can add or remove agents later from the group's details.",
+    "newgroup.count": "{n} of {max} chosen",
+    "newgroup.tooFew": "Pick at least {min} agents — a group needs more than one voice.",
+    "newgroup.tooMany": "Pick at most {max} agents. Unpick one to continue.",
+    "newgroup.noBots": "You need at least {min} agents before you can start a group chat.",
+    "newgroup.searchPlaceholder": "Search agents…",
+    "newgroup.searchLabel": "Search agents to add",
+    "newgroup.noMatches": "No agents match your search.",
+    "newgroup.first": "Answers by default",
+    "newgroup.create": "Create group",
+    "newgroup.creating": "Creating…",
+    "newgroup.created": "“{name}” is ready.",
+    "newgroup.failed": "Couldn't create the group.",
+    "newgroup.cancel": "Cancel",
+  },
+  zh: {
+    // Borrowed from the simple shell when these files lived there; they
+    // resolve here now that the files are shared.
+    "groups.cancel": "取消",
+    "groups.deleteAction": "删除",
+    "groups.openBots": "显示我的智能体",
+    "groups.section": "群聊",
+    "groups.new": "新建群聊",
+    "groups.newHelp":
+      "创建一个同时容纳 2–6 个智能体的对话。每条消息所有成员都会看到。",
+    "groups.empty": "还没有群聊。",
+    "groups.members": "{n} 个智能体",
+    "groups.membersOne": "1 个智能体",
+    "groups.previewLine": "{who}：{text}",
+    "groups.you": "你",
+    "groups.region": "群聊：{name}",
+    "groups.open": "打开群聊 {name}",
+    "groups.loading": "正在加载群聊…",
+    "groups.loadFailed": "无法加载你的群聊。",
+    "groups.openFailed": "无法打开该群聊。",
+    "groups.emptyThread": "{name} 里还没有人发言",
+    "groups.emptyThreadHint":
+      "先说点什么吧。输入 @ 加智能体名可以直接问它，也可以一次点名多个把同一个问题交给它们各自回答，否则由 {first} 回复。",
+    "groups.placeholder": "发消息给 {name}…",
+    "groups.replying": "{name} 正在回复…",
+    "groups.toChip": "→ {name}",
+    "groups.toChipHelp": "这条消息发给了 {name}，所以由它回复。一条消息可以点名多个智能体，它们会按被点名的顺序依次发言。",
+    "groups.replyChip": "↩ {name}",
+    "groups.replyChipHelp": "智能体之间的一轮：这是对 {name} 的回复，它在上一轮点名了这个智能体。回复不等于交接——只有当消息点名了其他成员时，对话才会继续传递。",
+    "groups.mention": "@ 某个智能体",
+    "groups.answersFallback": "由 {name} 回复——输入 @ 可换人",
+    "groups.answersNamed": "由 {name} 回复",
+    "groups.answersEach": "由 {names} 依次回复",
+    "groups.rename": "重命名此群聊",
+    "groups.renamePlaceholder": "为此群聊命名…",
+    "groups.renameHelp":
+      "给群聊换一个名称。它只是一个标签：群里的智能体、已经说过的内容，以及每个智能体对这段对话的记忆都不会改变。也可以在侧边栏右键点击该群聊。",
+    "groups.renamed": "已重命名为“{name}”。",
+    "groups.renameFailed": "无法重命名此群聊。",
+    "groups.info": "群聊信息",
+    "groups.infoRegion": "群聊 {name} 的信息",
+    "groups.infoClose": "隐藏群聊信息",
+    "groups.roster": "成员",
+    "groups.rosterHelp":
+      "群里的全部智能体，按发言顺序排列。没有点名时由第一个回复；用 @ 点名一个或多个则改由它们按点名顺序依次回复。所有成员都能读到整个对话，并且每个成员都被告知其他成员各自负责什么，以便知道该找谁。",
+    "groups.answersFirst": "默认由它回复",
+    "groups.remove": "移出 {name}",
+    "groups.removeConfirm":
+      "将 {name} 移出“{group}”？它已经说过的话会保留在对话里，之后也可以再加回来。",
+    "groups.removeMin":
+      "群聊至少需要 {min} 个智能体，因此无法移出这一个。请先添加另一个智能体，或删除整个群聊。",
+    "groups.removed": "{name} 已离开群聊。",
+    "groups.add": "添加智能体",
+    "groups.addHelp":
+      "再向该群聊添加一个你的智能体，总数最多 {max} 个。它会排在发言顺序末尾，从加入时起可读取对话，并在被你或群里其他智能体 @ 时回复。列表只包含你已能对话的智能体。",
+    "groups.addAction": "添加",
+    "groups.addPlaceholder": "选择智能体…",
+    "groups.addNone": "你可使用的智能体都已在该群聊中。",
+    "groups.addFull": "该群聊已达上限 {max} 个智能体。请先移出一个再添加。",
+    "groups.added": "{name} 已加入群聊。",
+    "groups.memberFailed": "无法更改群聊成员。",
+    "groups.delete": "删除该群聊",
+    "groups.deleteHelp":
+      "永久删除该群聊及其全部对话内容。智能体本身不会被删除——删除的只是它们之间的这段对话，对所有能看到该群聊的人生效。",
+    "groups.deleteConfirm":
+      "删除“{name}”？整段对话会一并删除且无法恢复。智能体本身不会被删除。",
+    "groups.deleted": "群聊已删除。",
+    "groups.deleteFailed": "无法删除该群聊。",
+    "groups.sendFailed": "无法发送该消息。",
+    "groups.peopleCount": "{n} 人",
+    "groups.people": "成员（人）",
+    "groups.peopleHelp":
+      "除智能体之外，能阅读并在此群聊发言的所有人：创建者、创建者共享给的人，以及在这里发过言的管理员。管理员无论是否列在此处都能打开任何群聊。每个人的消息都会标注其用户名，智能体也会被告知群里有哪些人，因此它们知道是谁在提问。",
+    "groups.personCreator": "创建者",
+    "groups.personShared": "被共享",
+    "groups.personAdmin": "管理员",
+    "groups.personYou": "你",
+    "groups.personGone": "（账户已删除）",
+    "groups.guestHint":
+      "这个群聊是共享给你的。你可以阅读和发言；只有创建者和管理员才能重命名、更改智能体、共享给更多人或删除它。",
+    "groups.share": "共享给同事",
+    "groups.shareHelp":
+      "让另一个团队账户能阅读此群聊并发言。从列表中选一个人：列表只包含已经拥有此群聊所有智能体访问权限的人，因为共享从不授予智能体的访问权限。被共享的人可以自行退出，但不能重命名群聊、添加或移除智能体、继续共享或删除它。一旦群里有不止一个人，没有点名智能体的消息就是说给其他人听的，智能体不会回复；输入 @ 加智能体名可以向它提问。不选择任何人则不会有任何更改。",
+    "groups.shareAction": "共享",
+    "groups.sharePlaceholder": "选择一个人…",
+    "groups.shareNone":
+      "目前没有可添加的人：能使用此群聊全部智能体的团队成员都已在群里，或者还没有这样的成员。请先在管理页面授予智能体访问权限。",
+    "groups.sharedWith": "{name} 现在可以在这里阅读和发言了。",
+    "groups.shareFailed": "无法更改此群聊的共享对象。",
+    "groups.unshare": "移除 {name}",
+    "groups.unshareConfirm":
+      "将 {name} 从“{group}”移除？对方将不再看到此群聊。其发过的消息会以其名义保留在对话中。",
+    "groups.unshared": "{name} 不再拥有此群聊的访问权限。",
+    "groups.leave": "退出此群聊",
+    "groups.leaveHelp":
+      "将你从此群聊中移出。它会从你的列表中消失，你发过的消息会以你的名义保留在对话中。创建者之后可以再次共享给你。",
+    "groups.leaveConfirm": "退出“{name}”？它会从你的列表中消失。你发过的内容会保留。",
+    "groups.left": "你已退出该群聊。",
+    "groups.leaveFailed": "无法退出此群聊。",
+    "groups.sharedTag": "已共享",
+    "groups.sharedTagHelp":
+      "这个群聊由其他人创建并共享给了你。你可以阅读和发言；只有创建者和管理员才能重命名、更改智能体、继续共享或删除它。打开群聊信息可以退出。",
+    "groups.answersNobody": "说给群里的人听。输入 @ 加智能体名可向它提问",
+    "groups.emptyThreadHintShared":
+      "先说点什么吧。输入 @ 加智能体名可以直接问它，也可以一次点名多个把同一个问题交给它们各自回答。没有点名智能体的消息是说给群里其他人听的，智能体不会回复。",
+    "addbot.title": "把智能体加入你与 {name} 的对话",
+    "addbot.subtitle": "这会变成群聊。{name} 仍是默认回复者。",
+    "addbot.who": "要加入的智能体",
+    "addbot.whoHelp":
+      "选择一个或多个智能体加入这段对话。{name} 已在其中并排在首位，因此凡是没有指名智能体的消息仍由它回复——其他智能体在你 @提及 时才回复。这里最多可再添加 {max} 个，之后也可以在群聊详情中添加或移除。你与 {name} 的一对一聊天将原样保留；此操作会另外创建一个群聊。",
+    "addbot.tooMany": "最多选择 {room} 个——群聊连同你正在对话的智能体共可容纳 {max} 个。请取消选择一个后继续。",
+    "addbot.noOthers": "目前没有其他智能体可添加。请先创建第二个智能体，然后才能与它开始群聊。",
+    "addbot.carry": "一并带上聊天记录",
+    "addbot.carryHelp":
+      "开启（默认）：本次聊天中最近的消息会复制到新群聊中，并标注发言者，这样新加入的智能体可以读到此前讨论的内容，而不必从零开始。较长的对话会截取最近的若干条消息，群聊中会有相应说明。关闭：群聊从空白开始，由你自行说明。无论哪种方式，本次聊天中的内容都不会被删除；智能体各自私下记住的内容也不会转移——对所有成员来说，群聊都是一段全新的对话。",
+    "addbot.create": "开始群聊",
+    "addbot.creating": "正在创建…",
+    "addbot.cancel": "取消",
+    "addbot.created": "已创建“{name}”。",
+    "addbot.failed": "无法创建该群聊。",
+    "newgroup.title": "新建群聊",
+    "newgroup.subtitle": "选择要一起对话的智能体。",
+    "newgroup.name": "群聊名称",
+    "newgroup.namePlaceholder": "销售外呼",
+    "newgroup.nameHelp":
+      "该对话的名称。最多 60 个字符，可以使用空格和表情，例如“销售外呼”。它会显示在你的聊天列表中，并会告知群内每个智能体，因此一个能说明用途的名称有助于它们理解上下文。",
+    "newgroup.nameError": "请为群聊取个名称。",
+    "newgroup.members": "群聊成员",
+    "newgroup.membersHelp":
+      "选择 {min} 至 {max} 个智能体。你选的第一个会回复所有没有点名的消息，所以请先选主导的那个；其他成员可通过 @ 点名参与。之后也可在群聊信息中添加或移除成员。",
+    "newgroup.count": "已选 {n}/{max}",
+    "newgroup.tooFew": "至少选择 {min} 个智能体——群聊需要不止一个声音。",
+    "newgroup.tooMany": "最多选择 {max} 个智能体。请取消一个再继续。",
+    "newgroup.noBots": "至少需要 {min} 个智能体才能创建群聊。",
+    "newgroup.searchPlaceholder": "搜索智能体…",
+    "newgroup.searchLabel": "搜索要添加的智能体",
+    "newgroup.noMatches": "没有匹配的智能体。",
+    "newgroup.first": "默认由它回复",
+    "newgroup.create": "创建群聊",
+    "newgroup.creating": "创建中…",
+    "newgroup.created": "“{name}”已就绪。",
+    "newgroup.failed": "无法创建群聊。",
+    "newgroup.cancel": "取消",
+  },
+  es: {
+    // Borrowed from the simple shell when these files lived there; they
+    // resolve here now that the files are shared.
+    "groups.cancel": "Cancelar",
+    "groups.deleteAction": "Eliminar",
+    "groups.openBots": "Mostrar mis agentes",
+    "groups.section": "Chats de grupo",
+    "groups.new": "Nuevo grupo",
+    "groups.newHelp":
+      "Crea un chat con 2–6 de tus agentes a la vez. Todos leen todos los mensajes.",
+    "groups.empty": "Todavía no tienes chats de grupo.",
+    "groups.members": "{n} agentes",
+    "groups.membersOne": "1 agente",
+    "groups.previewLine": "{who}: {text}",
+    "groups.you": "Tú",
+    "groups.region": "Chat de grupo: {name}",
+    "groups.open": "Abrir el grupo {name}",
+    "groups.loading": "Cargando tus chats de grupo…",
+    "groups.loadFailed": "No se pudieron cargar tus chats de grupo.",
+    "groups.openFailed": "No se pudo abrir ese grupo.",
+    "groups.emptyThread": "Nadie ha hablado todavía en {name}",
+    "groups.emptyThreadHint":
+      "Escribe algo para empezar. Pon @ y el nombre de un agente para preguntarle a ese en concreto, o nombra a varios para plantearles la misma pregunta a cada uno; si no, responde {first}.",
+    "groups.placeholder": "Mensaje para {name}…",
+    "groups.replying": "{name} está respondiendo…",
+    "groups.toChip": "→ {name}",
+    "groups.toChipHelp": "Este mensaje iba dirigido a {name}, así que es quien respondió. Un mensaje puede nombrar a varios agentes, y entonces cada uno habla por turno, en el orden en que los nombraste.",
+    "groups.replyChip": "↩ {name}",
+    "groups.replyChipHelp": "Un turno entre agentes: es una respuesta a {name}, que llamó a este agente en el turno anterior. Responder no es pasar el turno — el hilo solo avanza cuando un mensaje nombra a otro miembro.",
+    "groups.mention": "Mencionar a un agente",
+    "groups.answersFallback": "Responde {name} — escribe @ para elegir a otro",
+    "groups.answersNamed": "Responde {name}",
+    "groups.answersEach": "Responden {names}, por turnos",
+    "groups.rename": "Renombrar este grupo",
+    "groups.renamePlaceholder": "Ponle nombre a este grupo…",
+    "groups.renameHelp":
+      "Dale otro nombre al grupo. Es solo una etiqueta: los agentes que lo forman, todo lo que ya se ha dicho y lo que cada agente recuerda de la conversación se quedan igual. También puedes hacer clic derecho sobre el grupo en la barra lateral.",
+    "groups.renamed": "Renombrado a «{name}».",
+    "groups.renameFailed": "No se pudo renombrar este grupo.",
+    "groups.info": "Sobre este grupo",
+    "groups.infoRegion": "Sobre el grupo {name}",
+    "groups.infoClose": "Ocultar los detalles del grupo",
+    "groups.roster": "Miembros",
+    "groups.rosterHelp":
+      "Todos los agentes del grupo, en orden de intervención. El primero responde a cualquier mensaje que no nombre a nadie; menciona a uno o varios con @ para enviárselo a ellos, en el orden en que los nombres. Todos leen la conversación entera, y a cada uno se le dice qué hacen los demás para que sepa a quién traer.",
+    "groups.answersFirst": "Responde por defecto",
+    "groups.remove": "Quitar a {name}",
+    "groups.removeConfirm":
+      "¿Quitar a {name} de «{group}»? Lo que ya dijo se queda en la conversación y podrás volver a añadirlo más adelante.",
+    "groups.removeMin":
+      "Un grupo necesita al menos {min} agentes, así que este no se puede quitar. Añade otro agente antes, o elimina el grupo entero.",
+    "groups.removed": "{name} salió del grupo.",
+    "groups.add": "Añadir un agente",
+    "groups.addHelp":
+      "Añade otro de tus agentes a este grupo, hasta {max} en total. Entra al final del orden de intervención, lee la conversación a partir de ese momento y responde cuando lo mencionéis con @ tú u otro agente del grupo. Solo se listan los agentes con los que ya puedes chatear.",
+    "groups.addAction": "Añadir",
+    "groups.addPlaceholder": "Elige un agente…",
+    "groups.addNone": "Todos los agentes que puedes usar ya están en este grupo.",
+    "groups.addFull": "Este grupo ya tiene el máximo de {max} agentes. Quita uno antes de añadir otro.",
+    "groups.added": "{name} se unió al grupo.",
+    "groups.memberFailed": "No se pudo cambiar quién está en este grupo.",
+    "groups.delete": "Eliminar este grupo",
+    "groups.deleteHelp":
+      "Elimina este chat de grupo y toda su conversación, para siempre. Los agentes no se eliminan: solo desaparece esta conversación entre ellos, para todas las personas que ven el grupo.",
+    "groups.deleteConfirm":
+      "¿Eliminar «{name}»? La conversación se va con él y no se puede recuperar. Los agentes no se eliminan.",
+    "groups.deleted": "Grupo eliminado.",
+    "groups.deleteFailed": "No se pudo eliminar este grupo.",
+    "groups.sendFailed": "No se pudo enviar ese mensaje.",
+    "groups.peopleCount": "{n} personas",
+    "groups.people": "Personas",
+    "groups.peopleHelp":
+      "Todas las personas que pueden leer este grupo y escribir en él, además de los agentes: quien lo creó, las personas con las que lo compartió y cualquier administrador que haya escrito aquí. Los administradores pueden abrir cualquier grupo, estén o no en la lista. Los mensajes de cada persona llevan su identificador, y a los agentes se les dice quién está en la sala, así saben quién pregunta.",
+    "groups.personCreator": "Lo creó",
+    "groups.personShared": "Invitado",
+    "groups.personAdmin": "Administrador",
+    "groups.personYou": "tú",
+    "groups.personGone": "(cuenta eliminada)",
+    "groups.guestHint":
+      "Este grupo se compartió contigo. Puedes leerlo y escribir en él; solo quien lo creó y los administradores pueden renombrarlo, cambiar sus agentes, compartirlo con más gente o eliminarlo.",
+    "groups.share": "Compartir con alguien del equipo",
+    "groups.shareHelp":
+      "Permite que otra cuenta del equipo lea este grupo y escriba en él. Elige a una persona de la lista: solo aparecen quienes ya tienen acceso a todos los agentes de este grupo, porque compartir nunca concede acceso a un agente. Una persona invitada puede salir por su cuenta, pero no puede renombrar el grupo, añadir o quitar agentes, compartirlo con más gente ni eliminarlo. En cuanto hay más de una persona en el grupo, un mensaje que no nombra a ningún agente va dirigido a las demás personas y ningún agente lo responde; escribe @ y el nombre de un agente para preguntarle. Si no eliges a nadie, nada cambia.",
+    "groups.shareAction": "Compartir",
+    "groups.sharePlaceholder": "Elige a una persona…",
+    "groups.shareNone":
+      "Ahora mismo no se puede añadir a nadie más: todas las personas del equipo que pueden usar todos los agentes de este grupo ya están en él, o no hay ninguna. Concede antes acceso a los agentes desde la página de administración.",
+    "groups.sharedWith": "{name} ya puede leer y escribir aquí.",
+    "groups.shareFailed": "No se pudo cambiar con quién está compartido este grupo.",
+    "groups.unshare": "Quitar a {name}",
+    "groups.unshareConfirm":
+      "¿Quitar a {name} de «{group}»? Dejará de ver este grupo. Lo que escribió se queda en la conversación con su nombre.",
+    "groups.unshared": "{name} ya no tiene acceso a este grupo.",
+    "groups.leave": "Salir de este grupo",
+    "groups.leaveHelp":
+      "Te saca de este grupo. Desaparece de tu lista, y lo que escribiste se queda en la conversación con tu nombre. Quien lo creó puede volver a compartirlo contigo más adelante.",
+    "groups.leaveConfirm": "¿Salir de «{name}»? Desaparece de tu lista. Lo que escribiste se queda.",
+    "groups.left": "Saliste del grupo.",
+    "groups.leaveFailed": "No se pudo salir de este grupo.",
+    "groups.sharedTag": "Compartido",
+    "groups.sharedTagHelp":
+      "Otra persona creó este grupo y lo compartió contigo. Puedes leerlo y escribir en él; solo quien lo creó y los administradores pueden renombrarlo, cambiar sus agentes, compartirlo con más gente o eliminarlo. Abre sus detalles para salir de él.",
+    "groups.answersNobody": "Para las personas del grupo. Escribe @ y el nombre de un agente para preguntarle",
+    "groups.emptyThreadHintShared":
+      "Escribe algo para empezar. Pon @ y el nombre de un agente para preguntarle a ese en concreto, o nombra a varios para plantearles la misma pregunta a cada uno. Un mensaje que no nombra a ningún agente va dirigido a las demás personas del grupo, y ningún agente lo responde.",
+    "addbot.title": "Añadir un agente a tu chat con {name}",
+    "addbot.subtitle": "Esto se convierte en un chat de grupo. {name} sigue respondiendo por defecto.",
+    "addbot.who": "Agentes que quieres traer",
+    "addbot.whoHelp":
+      "Elige uno o más agentes para que se unan a esta conversación. {name} ya está en ella y sigue siendo el primero, así que continúa respondiendo a todo lo que no nombre a un agente; los demás responden cuando los mencionas con @. Aquí puedes añadir hasta {max} más, y después añadir o quitar agentes desde los detalles del grupo. Tu chat uno a uno con {name} queda exactamente como está; esto crea una conversación de grupo aparte.",
+    "addbot.tooMany":
+      "Elige como máximo {room} — un grupo admite {max} agentes contando el que ya te acompaña. Quita uno para continuar.",
+    "addbot.noOthers":
+      "Todavía no hay otros agentes que añadir. Crea un segundo agente y entonces podrás empezar un grupo con él.",
+    "addbot.carry": "Llevar la conversación",
+    "addbot.carryHelp":
+      "Activado (predeterminado): los mensajes más recientes de este chat se copian al nuevo grupo, con la indicación de quién dijo qué, para que los agentes que añadas puedan leer lo que se ha hablado en lugar de empezar a ciegas. Las conversaciones largas se recortan a los mensajes más recientes y el grupo lo indica. Desactivado: el grupo empieza vacío y lo explicas tú. En ambos casos no se quita nada de este chat, y lo que los agentes recuerden de él en privado no se transfiere — para todos ellos el grupo es una conversación nueva.",
+    "addbot.create": "Crear chat de grupo",
+    "addbot.creating": "Creando…",
+    "addbot.cancel": "Cancelar",
+    "addbot.created": "Se creó «{name}».",
+    "addbot.failed": "No se pudo crear ese chat de grupo.",
+    "newgroup.title": "Nuevo chat de grupo",
+    "newgroup.subtitle": "Elige los agentes que deben hablar entre ellos.",
+    "newgroup.name": "Nombre del grupo",
+    "newgroup.namePlaceholder": "Ventas salientes",
+    "newgroup.nameHelp":
+      "Cómo se llama esta conversación. Cualquier texto de hasta 60 caracteres — se admiten espacios y emoji, p. ej. «Ventas salientes». Aparece en tu lista de chats y se le da a cada agente del grupo, así que un nombre que explique para qué es el grupo les ayuda a responder en contexto.",
+    "newgroup.nameError": "Ponle un nombre al grupo.",
+    "newgroup.members": "Agentes de este grupo",
+    "newgroup.membersHelp":
+      "Elige entre {min} y {max} agentes. El primero que elijas responde a todos los mensajes que no nombren a nadie, así que elige primero al que lleve la voz cantante; a los demás los traes con una mención @. Podrás añadir o quitar agentes más adelante desde los detalles del grupo.",
+    "newgroup.count": "{n} de {max} elegidos",
+    "newgroup.tooFew": "Elige al menos {min} agentes — un grupo necesita más de una voz.",
+    "newgroup.tooMany": "Elige como máximo {max} agentes. Quita uno para continuar.",
+    "newgroup.noBots": "Necesitas al menos {min} agentes para empezar un chat de grupo.",
+    "newgroup.searchPlaceholder": "Buscar agentes…",
+    "newgroup.searchLabel": "Buscar agentes para añadir",
+    "newgroup.noMatches": "Ningún agente coincide con tu búsqueda.",
+    "newgroup.first": "Responde por defecto",
+    "newgroup.create": "Crear grupo",
+    "newgroup.creating": "Creando…",
+    "newgroup.created": "«{name}» está listo.",
+    "newgroup.failed": "No se pudo crear el grupo.",
+    "newgroup.cancel": "Cancelar",
+  },
+};

@@ -1,0 +1,386 @@
+name: Release
+
+# A release is a git tag `vX.Y.Z` on a commit whose checks are green. Two ways
+# in: push such a tag, or dispatch this workflow on main (or a release/*
+# branch) with the version as its input, and the run creates the tag itself
+# once the checks below pass. Either way, this workflow turns the tagged commit
+# into the artifacts the fleet and users consume:
+#
+#   images     ghcr.io/olano-ai/olano-{backend,dashboard,sandbox,browser}
+#              :X.Y.Z, :X.Y and :latest, all pointing at the SAME image the
+#              edge pipeline already built and tested for that commit
+#              (`:<sha>`, promoted by re-tagging, never rebuilt). Managed boxes
+#              pull :latest, so this is the moment a release reaches the fleet.
+#   GitHub     a Release with generated notes and the built wheel/sdist.
+#   PyPI       opt-in: only when the repository variable PUBLISH_TO_PYPI is
+#              "true" (the package still carries the Private classifier).
+#
+# A pre-release tag (anything with a hyphen: v1.2.0-rc.1) gets its own image
+# tag and a GitHub pre-release, and moves neither :X.Y nor :latest.
+#
+# docs/RELEASING.md: how to cut one, what the fleet sees, how to roll back.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release: 1.2.0, or 1.2.0-rc.1 for a pre-release. Must equal pyproject.toml. The run creates tag v<version> on the commit it runs from, so dispatch it on main or a release/* branch."
+        required: true
+        type: string
+
+run-name: Release ${{ inputs.version || github.ref_name }}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  packages: write
+  # The gate lists the tagged commit's workflow runs.
+  actions: read
+  id-token: write
+
+env:
+  UV_SYSTEM_PYTHON: 1
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ghcr.io/olano-ai/olano-backend
+  DASHBOARD_IMAGE: ghcr.io/olano-ai/olano-dashboard
+  SANDBOX_IMAGE: ghcr.io/olano-ai/olano-sandbox
+  BROWSER_IMAGE: ghcr.io/olano-ai/olano-browser
+
+jobs:
+  verify:
+    name: Verify the tag
+    runs-on: ubuntu-latest
+    # Room for the gate to wait on checks that are still running (below).
+    timeout-minutes: 80
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      minor: ${{ steps.version.outputs.minor }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      sha: ${{ steps.version.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+
+      # A pushed tag names the version; a dispatch names it in its input and
+      # the tag is created further down, only once the gate has passed.
+      - name: Resolve the version and the commit
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$GITHUB_REF" in
+              refs/heads/main|refs/heads/release/*) ;;
+              *)
+                echo "::error::a release is dispatched from main or a release/* branch, not from ${GITHUB_REF#refs/heads/}."
+                exit 1 ;;
+            esac
+            version=$(printf '%s' "$INPUT_VERSION" | tr -d '[:space:]')
+            version="${version#v}"
+            tag="v${version}"
+          else
+            tag="${GITHUB_REF_NAME}"
+            version="${tag#v}"
+          fi
+          if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::${tag} is not vMAJOR.MINOR.PATCH[-prerelease]"
+            exit 1
+          fi
+          numeric="${version%%-*}"
+          minor="${numeric%.*}"
+          if [[ "$version" == *-* ]]; then prerelease=true; else prerelease=false; fi
+          # The commit being released. For an annotated tag GITHUB_SHA can be
+          # the tag object rather than its commit; on a dispatch it is the
+          # branch tip at this moment, and every later job checks out this
+          # exact commit rather than the branch, which may move meanwhile.
+          sha=$(git rev-parse HEAD)
+          {
+            echo "version=${version}"
+            echo "tag=${tag}"
+            echo "minor=${minor}"
+            echo "prerelease=${prerelease}"
+            echo "sha=${sha}"
+          } >> "$GITHUB_OUTPUT"
+          echo "${tag}: version ${version} (minor ${minor}, prerelease ${prerelease}) at ${sha}"
+
+      # The wheel attached to the GitHub Release is built from pyproject's
+      # version, so a tag that does not match it would publish a v1.2.0 release
+      # carrying an olano-0.1.0 wheel. Bump pyproject in a PR first.
+      - name: pyproject version matches the tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python3 - <<'EOF'
+          import os, sys, tomllib
+          with open("pyproject.toml", "rb") as f:
+              declared = tomllib.load(f)["project"]["version"]
+          tagged = os.environ["VERSION"]
+          if declared != tagged:
+              print(f"::error::pyproject.toml says version = \"{declared}\" but the tag says {tagged}. "
+                    "Bump pyproject.toml (and uv.lock) in a PR, then tag that commit.")
+              sys.exit(1)
+          print(f"pyproject.toml version {declared} matches the tag")
+          EOF
+
+      # A release is always a person's deliberate act, usually right after the
+      # version-bump PR merged, so the commit's own checks are often still
+      # running: the gate waits for them (up to 45 minutes, e2e.yml's job
+      # timeout) rather than failing a release someone would only dispatch
+      # again. Red still refuses; there is no force here.
+      - name: Checks are green for the tagged commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ steps.version.outputs.sha }}
+          CHECKS_WAIT_SECONDS: "4500"
+        run: |
+          verdict=$(.github/scripts/checks-green.sh "$SHA" | tee /dev/stderr | tail -n1 | cut -d= -f2)
+          if [ "$verdict" = "pending" ]; then
+            echo "::error::checks for ${SHA:0:12} are still running after $((CHECKS_WAIT_SECONDS / 60)) minutes. A release is cut only from a green commit: release again once they finish."
+            exit 1
+          elif [ "$verdict" != "green" ]; then
+            echo "::error::checks for ${SHA:0:12} are ${verdict}. A release is cut only from a green commit: fix them, or re-run a run that a later push cancelled; then release again."
+            exit 1
+          fi
+
+      # The dispatch path mints the tag here, after the gate, with the run's
+      # own token. A tag pushed by that token starts no second run of this
+      # workflow, so a dispatched release runs exactly once. A re-run of a
+      # dispatch whose later job failed finds its own tag and carries on.
+      - name: Create the release tag (dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+          SHA: ${{ steps.version.outputs.sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "$(git ls-remote --tags origin "refs/tags/${TAG}")" ]; then
+            git fetch --quiet origin "refs/tags/${TAG}:refs/tags/${TAG}"
+            at=$(git rev-parse "${TAG}^{commit}")
+            if [ "$at" = "$SHA" ]; then
+              echo "${TAG} already exists at ${SHA:0:12}; reusing it."
+              exit 0
+            fi
+            echo "::error::${TAG} already exists at ${at:0:12}, not at ${SHA:0:12}. A version is released once; bump pyproject.toml and release the next one."
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Olano ${VERSION}" "$SHA"
+          if ! git push origin "refs/tags/${TAG}"; then
+            echo "::error::could not push ${TAG}. If a ruleset protects v* tags, let GitHub Actions bypass it (Settings, Rules), or create the tag by hand: git tag -a ${TAG} -m 'Olano ${VERSION}' ${SHA} && git push origin ${TAG}"
+            exit 1
+          fi
+          echo "created ${TAG} at ${SHA:0:12}"
+
+  package:
+    name: Build the package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: verify
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify.outputs.sha }}
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Build package
+        run: uv build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  images:
+    name: Promote the images
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    needs: verify
+    env:
+      VERSION: ${{ needs.verify.outputs.version }}
+      MINOR: ${{ needs.verify.outputs.minor }}
+      PRERELEASE: ${{ needs.verify.outputs.prerelease }}
+      SHA: ${{ needs.verify.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify.outputs.sha }}
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # The normal case: the edge pipeline already built and published this
+      # commit as :<sha>, and that exact image is what gets promoted. The
+      # fallback builds it here, for a tag on a commit the 3-hourly schedule
+      # has not reached yet.
+      - name: Is :<sha> published for every image?
+        id: have
+        run: |
+          set +e
+          set -uo pipefail
+          digest() {
+            docker buildx imagetools inspect "$1" 2>/dev/null \
+              | awk '/^Digest:/ { print $2; exit }'
+          }
+          need_build=false
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            if [ -z "$(digest "${image}:${SHA}")" ]; then
+              echo "${image##*/}: :${SHA:0:12} is not published; will build it."
+              need_build=true
+            else
+              echo "${image##*/}: :${SHA:0:12} is published."
+            fi
+          done
+          echo "need_build=${need_build}" >> "$GITHUB_OUTPUT"
+
+      - name: Build :<sha> (tagged commit never built by the edge pipeline)
+        if: steps.have.outputs.need_build == 'true'
+        uses: ./.github/actions/build-images
+        with:
+          sha: ${{ env.SHA }}
+          build_time: ${{ github.event.repository.updated_at }}
+          backend_tags: ${{ env.BACKEND_IMAGE }}:${{ env.SHA }}
+          dashboard_tags: ${{ env.DASHBOARD_IMAGE }}:${{ env.SHA }}
+          sandbox_tags: ${{ env.SANDBOX_IMAGE }}:${{ env.SHA }}
+          browser_tags: ${{ env.BROWSER_IMAGE }}:${{ env.SHA }}
+
+      - name: Promote :<sha> to the release tags
+        run: |
+          set -euo pipefail
+          tags=("$VERSION")
+          if [ "$PRERELEASE" != "true" ]; then
+            tags+=("$MINOR" "latest")
+          fi
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            args=()
+            for t in "${tags[@]}"; do args+=(--tag "${image}:${t}"); done
+            echo "${image##*/}: :${SHA:0:12} -> ${tags[*]}"
+            docker buildx imagetools create "${args[@]}" "${image}:${SHA}"
+          done
+
+      - name: Verify the promotion
+        run: |
+          set +e
+          set -uo pipefail
+          digest() {
+            docker buildx imagetools inspect "$1" 2>/dev/null \
+              | awk '/^Digest:/ { print $2; exit }'
+          }
+          tags=("$VERSION")
+          if [ "$PRERELEASE" != "true" ]; then
+            tags+=("$MINOR" "latest")
+          fi
+          bad=""
+          for image in "$BACKEND_IMAGE" "$DASHBOARD_IMAGE" "$SANDBOX_IMAGE" "$BROWSER_IMAGE"; do
+            want=$(digest "${image}:${SHA}")
+            for t in "${tags[@]}"; do
+              got=$(digest "${image}:${t}")
+              if [ -n "$want" ] && [ "$got" = "$want" ]; then
+                echo "${image##*/}: :${t} is ${SHA:0:12} (${want:0:19})"
+              else
+                echo "::error::${image##*/}: :${t} is NOT ${SHA:0:12} after promotion"
+                bad=1
+              fi
+            done
+          done
+          [ -z "$bad" ] || exit 1
+
+      - name: Summary
+        run: |
+          {
+            echo "### Release images"
+            echo ""
+            echo "Promoted \`:${SHA}\` of each image to:"
+            echo ""
+            if [ "$PRERELEASE" = "true" ]; then
+              echo "- \`:${VERSION}\` (pre-release: \`:latest\` and \`:${MINOR}\` untouched)"
+            else
+              echo "- \`:${VERSION}\`, \`:${MINOR}\`, \`:latest\`"
+              echo ""
+              echo "Managed boxes receive this image on their next Update."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # The user guide for this release: docs.olano.ai/X.Y, with `latest` moved to
+  # it. After the images, so the docs never describe a release that has no
+  # image; from the verified commit, so they describe the one that does.
+  docs:
+    name: Publish the docs
+    needs: [verify, images]
+    if: needs.verify.outputs.prerelease != 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/docs.yml
+    with:
+      version: ${{ needs.verify.outputs.minor }}
+      ref: ${{ needs.verify.outputs.sha }}
+
+  github-release:
+    name: GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [verify, package, images]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.verify.outputs.sha }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+
+      # tag_name is explicit: on a dispatch github.ref is the branch.
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.verify.outputs.tag }}
+          generate_release_notes: true
+          prerelease: ${{ needs.verify.outputs.prerelease == 'true' }}
+          files: dist/*
+          body: |
+            Images (same digest as `:${{ needs.verify.outputs.sha }}`):
+
+            - `${{ env.BACKEND_IMAGE }}:${{ needs.verify.outputs.version }}`
+            - `${{ env.DASHBOARD_IMAGE }}:${{ needs.verify.outputs.version }}`
+            - `${{ env.SANDBOX_IMAGE }}:${{ needs.verify.outputs.version }}`
+            - `${{ env.BROWSER_IMAGE }}:${{ needs.verify.outputs.version }}`
+
+  publish-pypi:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [verify, package]
+    # Opt-in by repository variable; a pre-release is never published there.
+    if: vars.PUBLISH_TO_PYPI == 'true' && needs.verify.outputs.prerelease != 'true'
+    environment: pypi
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true

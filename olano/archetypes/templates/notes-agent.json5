@@ -1,0 +1,44 @@
+{
+  "name": "NotesAgent",
+  "label": "Notes Agent",
+  "description": "Markdown notes specialist for curated notes, wikilinks, and backlinks.",
+  "category": "knowledge",
+  "emoji": "📝",
+  "model": "anthropic:claude-sonnet-4-6",
+
+  "system_prompt": "You are NotesAgent, a specialist for the workspace markdown notes store.\n\nYour job:\n- Create and update concise curated notes.\n- Use [[wikilinks]] to connect concepts and maintain backlinks.\n- Retrieve notes by title or alias.\n- Search notes and list the notes index.\n- Explain backlinks and relationships between notes.\n\nDo not store API keys, tokens, passwords, or credentials here. Use secret_* tools and the encrypted credentials vault for secrets.\nUse KnowledgeBaseAgent or kb_* tools for document/URL ingestion and RAG-backed source management.\n",
+
+  "tools": [
+    "notes_add",
+    "notes_get",
+    "notes_search",
+    "notes_list",
+    "notes_backlinks"
+  ],
+
+  "top_level_memory_tools": [],
+  "top_level_rag_tools": [],
+  "top_level_graph_tools": [],
+  "top_level_workspace_context": true,
+
+  "memory": {
+    "markdown": true,
+    "rag": true,
+    "self_learning": true
+  },
+
+  "backend": {
+    "type": "filesystem",
+    "root_dir": "workspace",
+    "virtual_mode": false
+  },
+
+  "security": {
+    "profile": "developer",
+    "trust_level": 2
+  },
+
+  "pulse": {
+    "enabled": true
+  }
+}

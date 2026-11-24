@@ -1,0 +1,178 @@
+name: Mobile app
+
+# Builds the Olano app in mobile/ (Capacitor) whenever it changes:
+#
+# - iOS is compiled for the simulator, unsigned, on a macOS runner. Short of a
+#   developer's Mac this is the only place the Swift (the bridge view
+#   controller, OlanoShell and OlanoHttp) is compiled at all, so a typo, or a
+#   Capacitor upgrade that moves an API, fails here instead of in Xcode on the
+#   day of a release.
+# - Android builds a debug APK and uploads it as an artifact: anyone can
+#   install it on an Android phone to try the app (Settings may ask to allow
+#   installs from the browser or file manager). Debug builds also reach
+#   `http://` deployments on a local network; release builds never do.
+#
+# Signing and store uploads live in mobile-testflight.yml, run by hand.
+#
+# Unlike ci.yml and e2e.yml this runs on pushes to ANY branch that touch the
+# app: a macOS runner is the only compiler the Swift has, and finding out after
+# a merge is too late. The path filter keeps every other push from paying.
+#
+# That is also why there is no `pull_request` trigger. Every PR branch here is
+# pushed to this repository, so the push run already checks the PR's head
+# commit and its result shows on the PR; a `pull_request` trigger built the
+# same commit a second time (October 2026: 67 duplicate runs, about 370 billed
+# minutes, a third of them at the macOS rate). A PR from a fork would get no
+# run; the repository is private and takes none.
+
+on:
+  push:
+    paths:
+      - "mobile/**"
+      # The dashboard modules the app imports (mobile/src/shared/dashboard.ts).
+      - "olano/dashboard_2.0/src/core/types.ts"
+      - "olano/dashboard_2.0/src/ui/markdownProse.ts"
+      - "olano/dashboard_2.0/src/ui/highlight.ts"
+      - "olano/dashboard_2.0/src/ui/highlightImpl.ts"
+      - "olano/dashboard_2.0/src/views/chat/turnText.ts"
+      - "olano/dashboard_2.0/src/views/chat/fileLinks.ts"
+      - "olano/dashboard_2.0/src/views/chat/attachments.ts"
+      - "olano/dashboard_2.0/src/views/scheduler/recurrence.ts"
+      - "olano/dashboard_2.0/src/views/scheduler/types.ts"
+      - "olano/dashboard_2.0/src/views/chat/channelMeta.ts"
+      - "olano/dashboard_2.0/src/views/chat/threadPick.ts"
+      - "olano/dashboard_2.0/src/views/chat/threadFilters.ts"
+      - "olano/dashboard_2.0/src/views/cortex/handoffDraft.ts"
+      - "olano/dashboard_2.0/src/views/cortex/strings.ts"
+      - ".github/workflows/mobile.yml"
+  workflow_dispatch:
+    inputs:
+      xcode:
+        description: >-
+          Xcode to build iOS with, by version prefix (27, 26.6). Matched against
+          the runner's /Applications/Xcode_<version>*.app, newest match wins.
+          Empty: the runner's default Xcode.
+        required: false
+        default: ""
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: App screens (typecheck, tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  ios:
+    name: iOS (simulator build, unsigned)
+    runs-on: macos-26
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci
+      # Builds www/ and copies it, the config and the plugin list into the
+      # Xcode project; the Swift packages resolve from node_modules.
+      - run: npm run sync:ios
+      # A developer's Mac is often on a newer Xcode than the runner's default,
+      # so a dispatch can name one; every run lists what the runner has.
+      - name: Pick Xcode
+        env:
+          WANT: ${{ inputs.xcode }}
+        run: |
+          ls -d /Applications/Xcode*.app
+          if [ -n "$WANT" ]; then
+            app=$(ls -d /Applications/Xcode_"$WANT"*.app 2>/dev/null | sort -V | tail -1)
+            if [ -z "$app" ]; then
+              echo "::error::No Xcode matching '$WANT' on this runner"
+              exit 1
+            fi
+            sudo xcode-select -s "$app/Contents/Developer"
+          fi
+      - name: Xcode in use
+        run: xcodebuild -version
+      - name: Build for the simulator
+        working-directory: mobile/ios/App
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/dd" \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee "$RUNNER_TEMP/xcodebuild.log" | grep -E "^(\*\*|error:|.*: error:|.*: warning: .*(OlanoShell|OlanoHttp|OlanoBridge|AppDelegate|SceneDelegate))" || true
+          grep -q "BUILD SUCCEEDED" "$RUNNER_TEMP/xcodebuild.log"
+          # A Swift file missing from the target's Sources phase still builds,
+          # and the plugin in it is then silently absent at run time.
+          # Xcode logs one SwiftCompile line per file or per batch of files.
+          grep -E "^SwiftCompile .*in target 'App' from project 'App'" "$RUNNER_TEMP/xcodebuild.log" > "$RUNNER_TEMP/app-swift.log" || true
+          for f in App/*.swift; do
+            if ! grep -qF "$(basename "$f")" "$RUNNER_TEMP/app-swift.log"; then
+              echo "::error::$f is not compiled into the app target (add it to the Sources phase)"
+              exit 1
+            fi
+          done
+      - name: Keep the build log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-xcodebuild-log
+          path: ${{ runner.temp }}/xcodebuild.log
+          retention-days: 7
+
+  android:
+    name: Android (debug APK)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+      - run: npm ci
+      - run: npm run sync:android
+      - name: Build the debug APK
+        working-directory: mobile/android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v7
+        with:
+          name: olano-android-debug-apk
+          path: mobile/android/app/build/outputs/apk/debug/*.apk
+          retention-days: 14

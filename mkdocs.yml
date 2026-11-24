@@ -1,0 +1,175 @@
+# The Olano user guide as a website: docs.olano.ai.
+#
+# The pages live in docs/user-guide/ and are the ONE source of the guide. The
+# same pages are concatenated by scripts/gen_user_guide.py into
+# olano/archetypes/knowledge_user_guide.md, the single file the runtime seeds
+# into every agent workspace (system/knowledge/USER_GUIDE.md, RAG-indexed), so
+# the agent and the website can never disagree. Edit a page, then run
+#     uv run python scripts/gen_user_guide.py
+# tests/test_user_guide_generated.py fails when the generated copy is stale.
+#
+# Preview locally:   uv sync --group docs && uv run mkdocs serve
+# Published by .github/workflows/docs.yml: `edge` from main, X.Y + `latest`
+# from each release (mike keeps one directory per version on gh-pages).
+#
+# Keep this file loadable with yaml.safe_load (no !!python tags): the generator
+# and the tests read the nav from it. Anything that needs a Python object (the
+# Mermaid fence) is wired in docs/mkdocs_hooks.py instead.
+#
+# Screenshots live in docs/user-guide/assets/screenshots/ and are taken by
+#     uv run python scripts/capture_docs_screenshots.py
+# against a throwaway demo deployment; diagrams are ```mermaid fences.
+
+site_name: Olano Docs
+site_url: https://docs.olano.ai/
+site_description: >-
+  The Olano user guide: the dashboard, the agent.json5 and config.yaml
+  references, feature guides, models and credits, and Olano Cloud.
+repo_url: https://github.com/olano-ai/olano
+repo_name: olano-ai/olano
+edit_uri: edit/main/docs/user-guide/
+copyright: Copyright &copy; Olano AI
+
+docs_dir: docs/user-guide
+site_dir: site
+
+# Warnings fail the build: a broken page link or anchor is a defect, not a note.
+strict: true
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+theme:
+  name: material
+  language: en
+  logo: assets/mark.svg
+  favicon: assets/favicon.svg
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - content.tooltips
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: false
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+
+plugins:
+  - search
+  # Click a screenshot to see it full size.
+  - glightbox:
+      touchNavigation: true
+      loop: false
+      effect: zoom
+      width: 100%
+      height: auto
+      zoomable: true
+      draggable: false
+
+hooks:
+  - docs/mkdocs_hooks.py
+
+extra:
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/olano-ai/olano
+    - icon: fontawesome/solid/cloud
+      link: https://cloud.olano.ai
+
+nav:
+  - Home: index.md
+  - What Olano is: what-olano-is.md
+  - Getting started: getting-started.md
+  - The dashboard:
+      - dashboard/index.md
+      - Overview: dashboard/overview.md
+      - Insights: dashboard/insights.md
+      - Chat: dashboard/chat.md
+      - Agents: dashboard/agents.md
+      - Cortex: dashboard/cortex.md
+      - Scheduler: dashboard/scheduler.md
+      - Issues: dashboard/issues.md
+      - Revisions: dashboard/revisions.md
+      - Calendar: dashboard/calendar.md
+      - Files: dashboard/files.md
+      - Memory: dashboard/memory.md
+      - Notes: dashboard/notes.md
+      - Knowledge: dashboard/knowledge.md
+      - Tools: dashboard/tools.md
+      - Providers: dashboard/providers.md
+      - Connections: dashboard/connections.md
+      - Vault (admin only): dashboard/vault.md
+      - Agent to Agent: dashboard/agent-to-agent.md
+      - Org Chart: dashboard/org-chart.md
+      - Logs (admin only): dashboard/logs.md
+      - Terminal: dashboard/terminal.md
+      - Playground: dashboard/playground.md
+      - Config (admin only): dashboard/config.md
+      - Admin (admin only): dashboard/admin.md
+  - agent.json5 reference: agent-json5.md
+  - config.yaml reference: config-yaml.md
+  - organization.yaml, the org chart: organization-yaml.md
+  - Feature guides:
+      - feature-guides/index.md
+      - Agent-to-agent and the org chart: feature-guides/agent-to-agent.md
+      - Human in the loop and approvals: feature-guides/human-in-the-loop.md
+      - Privacy and security: feature-guides/privacy-and-security.md
+      - Multi-user: feature-guides/multi-user.md
+      - Subscriptions and monetization: feature-guides/subscriptions-and-monetization.md
+      - MCP servers: feature-guides/mcp-servers.md
+      - Browser control: feature-guides/browser.md
+      - Webhooks: feature-guides/webhooks.md
+      - Pages, sites and web apps: feature-guides/pages.md
+      - Scheduler and heartbeat: feature-guides/scheduler-and-heartbeat.md
+      - Memory and self-learning: feature-guides/memory-and-self-learning.md
+      - Notes: feature-guides/notes.md
+      - Issues: feature-guides/issues.md
+      - Revisions: feature-guides/revisions.md
+      - Channels and connectors: feature-guides/channels-and-connectors.md
+      - Cortex and Pulse: feature-guides/cortex-and-pulse.md
+      - The mobile app: feature-guides/mobile-app.md
+      - Budgets: feature-guides/budgets.md
+      - Ask the agent: feature-guides/ask-the-agent.md
+      - Beyond the deployment, A2A and MCP: feature-guides/a2a-and-mcp.md
+  - Models and credits: models-and-credits.md
+  - Olano Cloud: olano-cloud.md
+  - Building agents from a conversation: building-agents.md
+  - Common problems: common-problems.md

@@ -1,0 +1,85 @@
+name: Build and push the runtime images
+description: >
+  Builds the backend, dashboard, sandbox and live browser images from the checked-out tree
+  and pushes each under the tags it is given. One definition of "how an image
+  is built", shared by the edge pipeline (build-images.yml) and the release
+  fallback (release.yml, for a tag whose commit no edge build has published).
+  The caller logs in to the registry first.
+
+inputs:
+  sha:
+    description: The git commit baked into the backend image as OLANO_BUILD_SHA.
+    required: true
+  build_time:
+    description: Baked into the backend image as OLANO_BUILD_TIME.
+    required: true
+  backend_tags:
+    description: Newline-separated full image references for the backend image.
+    required: true
+  dashboard_tags:
+    description: Newline-separated full image references for the dashboard image.
+    required: true
+  sandbox_tags:
+    description: Newline-separated full image references for the sandbox image.
+    required: true
+  browser_tags:
+    description: Newline-separated full image references for the live browser image.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: docker/setup-buildx-action@v4
+
+    # Backend runtime image (context = repo root, matches the compose build).
+    # The commit is baked in so the running box can report what it is
+    # (olano/deployment/version.py): "did my merge reach the instance" is then
+    # answerable from the console instead of by cross-referencing Actions runs.
+    - name: Build + push backend
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        build-args: |
+          OLANO_BUILD_SHA=${{ inputs.sha }}
+          OLANO_BUILD_TIME=${{ inputs.build_time }}
+        tags: ${{ inputs.backend_tags }}
+        cache-from: type=gha,scope=backend
+        cache-to: type=gha,mode=max,scope=backend
+
+    # Dashboard SPA served by Caddy (context = repo root per its Dockerfile).
+    - name: Build + push dashboard
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: docker/dashboard/Dockerfile
+        push: true
+        tags: ${{ inputs.dashboard_tags }}
+        cache-from: type=gha,scope=dashboard
+        cache-to: type=gha,mode=max,scope=dashboard
+
+    # Exec sandbox image (context = docker/olano-sandbox). The document and OCR
+    # toolchain is in by default (SANDBOX_EXTRAS=1 in its Dockerfile).
+    - name: Build + push sandbox
+      uses: docker/build-push-action@v7
+      with:
+        context: docker/olano-sandbox
+        file: docker/olano-sandbox/Dockerfile
+        push: true
+        tags: ${{ inputs.sandbox_tags }}
+        cache-from: type=gha,scope=sandbox
+        cache-to: type=gha,mode=max,scope=sandbox
+
+    # Live agent browser (context = docker/olano-browser): Debian's Chromium on a
+    # virtual display plus browserd.py. Pulled by a box only when an operator
+    # turns the live browser on (olano/browser/sidecar.py).
+    - name: Build + push browser
+      uses: docker/build-push-action@v7
+      with:
+        context: docker/olano-browser
+        file: docker/olano-browser/Dockerfile
+        push: true
+        tags: ${{ inputs.browser_tags }}
+        cache-from: type=gha,scope=browser
+        cache-to: type=gha,mode=max,scope=browser

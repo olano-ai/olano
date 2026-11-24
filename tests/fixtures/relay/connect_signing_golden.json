@@ -1,0 +1,59 @@
+{
+  "_comment": "Cross-repo golden vector for the /connect (official connector) signing contract. Same key + message scheme as relay_signing_golden.json, under the connect_* action names. Committed identically in olano-ai/cloud (services/mcp_oauth_relay/tests/fixtures/) and olano-ai/olano (tests/fixtures/relay/). Regenerate with cloud scripts/gen-relay-golden-vector.py. TEST KEY — not production.",
+  "message_format": "'\\n'.join([action, instance_id, state, ts]), UTF-8 encoded",
+  "refresh_binding": "connect_refresh has no OAuth state; its state slot is sha256(refresh_token UTF-8).hexdigest(), recomputed by the relay from the request body",
+  "encodings": {
+    "ed25519_public_key": "base64, standard alphabet, padded (raw 32 bytes)",
+    "ed25519_private_key": "base64, standard alphabet, padded (PKCS8 DER)",
+    "ed25519_signature_wire": "base64url, unpadded (raw 64 bytes)",
+    "hmac_signature_wire": "lowercase hex (HMAC-SHA256)"
+  },
+  "ed25519": {
+    "seed_phrase_sha256": "seed = sha256(b'olano-mcp-relay-golden-vector-2026-07')",
+    "private_key_seed_b64": "NEaRT89SU/zFBTnkVY6Hu6fYE5sTQL+XwsZ8phD/USQ=",
+    "private_key_pkcs8_b64": "MC4CAQAwBQYDK2VwBCIEIDRGkU/PUlP8xQU55FWOh7un2BObE0C/l8LGfKYQ/1Ek",
+    "public_key_b64": "EcvDOpbU/0hL4U+LXxmS9tN6fkP2cxmCTD7mb0KeC/c="
+  },
+  "hmac": {
+    "secret": "golden-hmac-secret-do-not-use"
+  },
+  "cases": [
+    {
+      "action": "connect_register",
+      "instance_id": "dep_golden",
+      "state": "golden-connect-state",
+      "ts": "1779000000",
+      "message_utf8_b64": "Y29ubmVjdF9yZWdpc3RlcgpkZXBfZ29sZGVuCmdvbGRlbi1jb25uZWN0LXN0YXRlCjE3NzkwMDAwMDA=",
+      "ed25519_signature_b64url": "RNcjGFg6OZQfWxidrRBw6ONrDouM-gK6C9vn_ASHv84krXdkQgYqK1nyUqkwyoLMPlZrIykFMO43q0wko2cjBQ",
+      "hmac_signature_hex": "41eecfefcc20e56fd0264f034946ac0a6bfdc11692fabda58a6d5893b020b740"
+    },
+    {
+      "action": "connect_pending",
+      "instance_id": "dep_golden",
+      "state": "golden-connect-state",
+      "ts": "1779000000",
+      "message_utf8_b64": "Y29ubmVjdF9wZW5kaW5nCmRlcF9nb2xkZW4KZ29sZGVuLWNvbm5lY3Qtc3RhdGUKMTc3OTAwMDAwMA==",
+      "ed25519_signature_b64url": "WskgGmjkzT-R3g7Ri_aRX1SInJG0D58OM_R118jyjev1A2R4Ojf1vQjm8657NxBfjBjWSeVU49lJEC5o2mgMBA",
+      "hmac_signature_hex": "06918b74643a2034c843d2166371304f590306a970d5b8c22e7b3c0aaea44b53"
+    },
+    {
+      "action": "connect_pending",
+      "instance_id": "dep_golden",
+      "state": "estado-conexión-✓",
+      "ts": "1779000042",
+      "message_utf8_b64": "Y29ubmVjdF9wZW5kaW5nCmRlcF9nb2xkZW4KZXN0YWRvLWNvbmV4acOzbi3inJMKMTc3OTAwMDA0Mg==",
+      "ed25519_signature_b64url": "9e6gSqH-VImc340SHI1GQcS0EiIajy5nGjKrxtW4QGa5ZaulLM_uSBdxca0TkO0j0qUll9kshl4z960h3CFkDw",
+      "hmac_signature_hex": "abeba2d1731d906a95804b85f6ac209687b867826ca2fe5d0cd970b23527343b"
+    },
+    {
+      "action": "connect_refresh",
+      "instance_id": "dep_golden",
+      "state": "1015bf3baec6183fff95bdff2f56ceff1967694734b6860d5bcff2695cbb9547",
+      "ts": "1779000084",
+      "message_utf8_b64": "Y29ubmVjdF9yZWZyZXNoCmRlcF9nb2xkZW4KMTAxNWJmM2JhZWM2MTgzZmZmOTViZGZmMmY1NmNlZmYxOTY3Njk0NzM0YjY4NjBkNWJjZmYyNjk1Y2JiOTU0NwoxNzc5MDAwMDg0",
+      "ed25519_signature_b64url": "9CHX_UXo_HQDtw4O6AwKQvQ8QU5yTbVScLN7NKJI2fHNQLEl26QvYH5oEtGvIUgRne1Y727PGZZyqlcVdlgUAQ",
+      "hmac_signature_hex": "16b39e21d56ccd40158dd43b4e1b02d8d758f30fea7adf996b10f25cc71e414f",
+      "refresh_token": "golden-refresh-token-cañón-✓"
+    }
+  ]
+}

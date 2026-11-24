@@ -1,0 +1,21 @@
+# Lionclaw reverse proxy — auto HTTPS via Let's Encrypt.
+# The site address comes from the LIONCLAW_HTTPS_HOST env var (Caddy's {$VAR}
+# substitution), which the caddy container loads from deploy/caddy.env. That file
+# is rsync-excluded + gitignored so re-shipping the repo never clobbers the host.
+# deploy/bootstrap-remote.sh writes it from $SSLIP_HOST.
+#
+# Caddy obtains the cert over the HTTP-01 challenge (needs port 80 reachable),
+# then serves HTTPS on 443 and reverse-proxies to the olano container.
+
+# ACME contact email — also enables Caddy's ZeroSSL fallback issuer (needs an
+# email) so TLS still issues when Let's Encrypt is down or rate-limited.
+{
+	email {$LIONCLAW_ACME_EMAIL:support@olano.ai}
+}
+
+{$LIONCLAW_HTTPS_HOST} {
+	encode zstd gzip
+	# reverse_proxy streams SSE (/api/stream) and POST streaming (/api/chat/stream)
+	# without buffering by default — no extra config needed.
+	reverse_proxy olano:8765
+}

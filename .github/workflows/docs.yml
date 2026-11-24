@@ -1,0 +1,110 @@
+name: Docs
+
+# Publishes the user guide (docs/user-guide/, mkdocs.yml) to the gh-pages
+# branch. docs.olano.ai is a DigitalOcean App Platform static site (the
+# `olano-docs` app, plain HTML, free tier) that redeploys that branch on every
+# push; GitHub Pages could serve the same branch instead. mike keeps one
+# directory per version there and a versions.json the version switcher reads:
+#
+#   edge      main's current pages; rebuilt on every push to main that touches
+#             the docs, and on a dispatch with no version.
+#   X.Y       a release's pages; written by release.yml (through workflow_call)
+#             from the tagged commit, and `latest` is re-pointed at it. A
+#             dispatch with a version does the same by hand, which is how the
+#             first release's docs were backfilled.
+#
+# The pages are also the source of the single-file guide every agent carries
+# (scripts/gen_user_guide.py), so what this publishes is what the agents know.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/user-guide/**"
+      - "docs/mkdocs_hooks.py"
+      - "mkdocs.yml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Publish this ref as docs version X.Y and point `latest` at it. Leave empty to publish it as `edge`."
+        required: false
+        type: string
+        default: ""
+  workflow_call:
+    inputs:
+      version:
+        description: "The release's version (X.Y or X.Y.Z); published as X.Y and aliased `latest`"
+        required: true
+        type: string
+      ref:
+        description: "The commit to build the pages from"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+# One writer to gh-pages at a time: mike commits to it.
+concurrency:
+  group: docs-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to gh-pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          # mike commits on gh-pages and needs that branch fetched; a full
+          # clone is the simplest way to have it (and the first run creates it).
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install MkDocs Material and mike
+        run: uv sync --only-group docs
+
+      - name: Build once, strictly
+        # mike builds again when it deploys; this run is the one whose warnings
+        # (a broken link, an unlisted page, a bad anchor) fail the job readably.
+        run: uv run --only-group docs mkdocs build --strict
+
+      - name: Publish
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages --depth=1 2>/dev/null || echo "no gh-pages branch yet; mike creates it"
+          if [ -n "$VERSION" ]; then
+            if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+              echo "::error::version must be X.Y or X.Y.Z, got '${VERSION}'"
+              exit 1
+            fi
+            minor="${VERSION%.*}"
+            [[ "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]] && minor="$VERSION"
+            echo "publishing ${minor} and pointing latest at it"
+            # `latest` is a copy of the version directory, not mike's default
+            # symlink: a static host serves a checked-out symlink as a file
+            # holding the text "0.2" (or not at all), never as the directory.
+            uv run --only-group docs mike deploy --push --update-aliases --alias-type copy "$minor" latest
+            uv run --only-group docs mike set-default --push latest
+            echo "published=${minor} (latest)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "publishing edge"
+            uv run --only-group docs mike deploy --push edge
+            echo "published=edge" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "versions on gh-pages:"
+          uv run --only-group docs mike list

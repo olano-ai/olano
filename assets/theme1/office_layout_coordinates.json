@@ -1,0 +1,196 @@
+{
+  "image_file": "/mnt/data/a_wide_clean_cozy_modern_office_lounge_interio.png",
+  "image_size": {
+    "width": 1575,
+    "height": 999
+  },
+  "coordinate_system": {
+    "origin": "top-left",
+    "x_axis": "left-to-right",
+    "y_axis": "top-to-bottom",
+    "units": "pixels"
+  },
+  "notes": [
+    "Coordinates are approximate visual regions for the generated office image, not mathematically detected geometry.",
+    "All listed carpets and empty-space regions are aligned horizontally at 0 degrees. No rotation is needed for axis-aligned placements.",
+    "For oval carpets, bbox is the visible oval bounding box; center and radius_x/radius_y are derived from that bbox."
+  ],
+  "carpets": [
+    {
+      "id": "top_window_green_rect_carpet",
+      "shape": "rectangle",
+      "rotation_degrees": 0,
+      "bbox": {
+        "x": 299,
+        "y": 286,
+        "width": 497,
+        "height": 111
+      },
+      "center": {
+        "x": 548,
+        "y": 342
+      },
+      "corners": [
+        {
+          "x": 299,
+          "y": 286
+        },
+        {
+          "x": 796,
+          "y": 286
+        },
+        {
+          "x": 796,
+          "y": 397
+        },
+        {
+          "x": 299,
+          "y": 397
+        }
+      ]
+    },
+    {
+      "id": "left_middle_beige_rect_carpet",
+      "shape": "rectangle",
+      "rotation_degrees": 0,
+      "bbox": {
+        "x": 101,
+        "y": 461,
+        "width": 365,
+        "height": 154
+      },
+      "center": {
+        "x": 284,
+        "y": 538
+      },
+      "corners": [
+        {
+          "x": 101,
+          "y": 461
+        },
+        {
+          "x": 466,
+          "y": 461
+        },
+        {
+          "x": 466,
+          "y": 615
+        },
+        {
+          "x": 101,
+          "y": 615
+        }
+      ]
+    },
+    {
+      "id": "right_green_oval_carpet",
+      "shape": "ellipse",
+      "rotation_degrees": 0,
+      "bbox": {
+        "x": 959,
+        "y": 350,
+        "width": 439,
+        "height": 254
+      },
+      "center": {
+        "x": 1179,
+        "y": 477
+      },
+      "radius_x": 220,
+      "radius_y": 127
+    },
+    {
+      "id": "bottom_center_beige_rect_carpet",
+      "shape": "rectangle",
+      "rotation_degrees": 0,
+      "bbox": {
+        "x": 548,
+        "y": 657,
+        "width": 466,
+        "height": 295
+      },
+      "center": {
+        "x": 781,
+        "y": 805
+      },
+      "corners": [
+        {
+          "x": 548,
+          "y": 657
+        },
+        {
+          "x": 1014,
+          "y": 657
+        },
+        {
+          "x": 1014,
+          "y": 952
+        },
+        {
+          "x": 548,
+          "y": 952
+        }
+      ]
+    },
+    {
+      "id": "bottom_right_blue_oval_carpet",
+      "shape": "ellipse",
+      "rotation_degrees": 0,
+      "bbox": {
+        "x": 1060,
+        "y": 731,
+        "width": 262,
+        "height": 202
+      },
+      "center": {
+        "x": 1191,
+        "y": 832
+      },
+      "radius_x": 131,
+      "radius_y": 101,
+      "note": "Partially occluded by the right greenery wall."
+    }
+  ],
+  "empty_spaces": [
+    {
+      "id": "center_open_floor_space",
+      "shape": "rectangle",
+      "bbox": {
+        "x": 493,
+        "y": 404,
+        "width": 455,
+        "height": 246
+      },
+      "center": {
+        "x": 721,
+        "y": 527
+      },
+      "recommended_for": [
+        "characters",
+        "portable chairs",
+        "temporary laptop seating"
+      ],
+      "note": "Avoids the top window carpet, right green oval carpet, and bottom center beige carpet."
+    },
+    {
+      "id": "bottom_left_open_floor_space",
+      "shape": "rectangle",
+      "bbox": {
+        "x": 85,
+        "y": 620,
+        "width": 445,
+        "height": 120
+      },
+      "center": {
+        "x": 308,
+        "y": 680
+      },
+      "recommended_for": [
+        "characters",
+        "portable chairs",
+        "laptop seating"
+      ],
+      "note": "Above the bottom-left planter row and left of the bottom center carpet."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: debug-statements
+      - id: detect-private-key
+
+  # Ruff and mypy run through the project's own venv (`uv run`) rather than
+  # pre-commit's isolated, separately-pinned environments. A pinned
+  # ruff-pre-commit / mirrors-mypy rev drifts from the versions the CI jobs use
+  # (`uv run ruff` / `uv run mypy`), so a commit could pass the hook yet fail CI
+  # (or vice-versa) purely on a formatter/linter version mismatch. mirrors-mypy
+  # additionally installs mypy alone and cannot see langchain/pydantic/etc.,
+  # producing dozens of spurious "Returning Any" / redefinition errors CI never
+  # reports. Local hooks keep the commit checks byte-identical to CI.
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff
+        entry: uv run ruff check --fix --exit-non-zero-on-fix
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format
+        entry: uv run ruff format
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: mypy
+        name: mypy
+        entry: uv run mypy olano/ --ignore-missing-imports
+        language: system
+        types: [python]
+        pass_filenames: false

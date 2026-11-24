@@ -1,0 +1,135 @@
+# Lionclaw all-in-one reverse proxy — dashboard_2.0 SPA + backend on ONE origin.
+#
+# Used by deploy/docker-compose.allinone.yml to serve both the frontend and the
+# API from a single host (DigitalOcean droplet or AWS EC2). Same-origin is a
+# requirement, not a preference — serving the SPA from a separate host in front
+# of this backend is unsupported, because:
+#   • the session cookie (__Host-lc_session — HttpOnly; Secure; SameSite=Lax)
+#     stays first-party only here — no cross-site rewrite, and no
+#     LIONCLAW_DASHBOARD_TOKEN,
+#   • the terminal WebSocket (/api/terminal/ws) works (a CDN rewrite generally
+#     cannot proxy it), SSE/chat streams aren't capped by a proxy timeout, and
+#     the dashboard's service worker sits on the origin that serves /api.
+#
+# The site address comes from LIONCLAW_HTTPS_HOST (Caddy's {$VAR} substitution),
+# loaded from deploy/caddy.env (rsync-excluded + gitignored so re-ships never
+# clobber the host). Caddy obtains the TLS cert over the HTTP-01 challenge
+# (needs port 80 reachable), then serves HTTPS on 443.
+
+# ACME contact email. Having one lets Caddy fall back to its secondary free CA
+# (ZeroSSL — which requires an email to create the account) when Let's Encrypt
+# is down or rate-limited, so first-boot TLS still issues. Override per box via
+# LIONCLAW_ACME_EMAIL in deploy/caddy.env.
+{
+	email {$LIONCLAW_ACME_EMAIL:support@olano.ai}
+}
+
+{$LIONCLAW_HTTPS_HOST} {
+	encode zstd gzip
+
+	# API + OpenAPI schema → backend. reverse_proxy streams SSE (/api/stream,
+	# /api/chat/stream) and upgrades WebSockets (/api/terminal/ws) with no extra
+	# config. The dashboard fetches relative /api/* paths, so this is all it needs.
+	# /.well-known/* too: the external-access surfaces (olano/mcp_server,
+	# olano/a2a/server) publish RFC 8414 / RFC 9728 discovery documents at the
+	# spec-mandated root locations, which MCP and A2A clients fetch before they
+	# ever hit /api/*.
+	# The sealed volume's ceremony API (recovery key, seal state) -> the
+	# sealer's unix socket, NEVER the runtime. On a managed box provisioned
+	# with a sealed data volume, `olano-sealer serve` answers on
+	# /run/olano-sealer/serve.sock (the compose file mounts the directory
+	# read-only into this container), and the only thing standing between a
+	# browser and that socket is this block, so it is written as a `route`:
+	# Caddy's own directive order runs forward_auth BEFORE request_header,
+	# which inside a plain `handle` would strip the gate header AFTER the
+	# auth step had just copied it in. `route` keeps the written order.
+	#
+	#   1. drop any X-Olano-Seal-* header the client sent (the sealer trusts
+	#      them, so only Caddy may set them);
+	#   2. forward_auth asks the runtime's GET /api/system/seal-gate with the
+	#      original request headers (the session cookie included): 204 means
+	#      the caller is a signed-in admin on a box that has a sealed volume,
+	#      and its X-Olano-Seal-Gate / X-Olano-Seal-User response headers are
+	#      copied onto the proxied request; a 401/403/404 from the gate is
+	#      returned to the client as-is and the socket is never reached;
+	#   3. reverse_proxy to the socket.
+	#
+	# A box without a sealed volume gets a 404 from the gate (the runtime has
+	# no seal state) and never touches the socket, and a sealed box whose
+	# serve unit is down gets Caddy's 502, which the dashboard renders as
+	# "encryption service unavailable". Ordering: this handle precedes @api
+	# below, and @api also excludes the prefix, so the split does not depend
+	# on how Caddy sorts handle blocks.
+	@seal path /api/seal/*
+	handle @seal {
+		route {
+			request_header -X-Olano-Seal-Gate
+			request_header -X-Olano-Seal-User
+			forward_auth olano:8765 {
+				uri /api/system/seal-gate
+				copy_headers X-Olano-Seal-Gate X-Olano-Seal-User
+			}
+			reverse_proxy unix//run/olano-sealer/serve.sock
+		}
+	}
+
+	@api {
+		path /api/* /openapi.json /.well-known/*
+		not path /api/seal/*
+	}
+	handle @api {
+		reverse_proxy olano:8765
+	}
+
+	# Agent-published pages → backend. The runtime enforces HTTP Basic Auth per
+	# request against the owner-set credential (olano pages set-password);
+	# nothing under /pages/ is ever served unauthenticated.
+	@pages path /pages /pages/*
+	handle @pages {
+		reverse_proxy olano:8765
+	}
+
+	# Build output → served as-is, and a MISS is a 404, never index.html.
+	#
+	# /assets/* holds Vite's content-hashed chunks. A deploy swaps /srv for a
+	# build with new hashes, so a browser tab opened before the deploy asks for
+	# chunk names that are gone. Under the SPA fallback below those requests
+	# answer 200 with the HTML shell — the browser then refuses to run HTML as
+	# a module ("Failed to fetch dynamically imported module"), and because
+	# /assets/* is cached immutable, an intermediary can keep serving that HTML
+	# under a .js URL. A plain 404 keeps the failure honest and cacheable;
+	# recovery is the dashboard's job (src/core/chunkRecovery.ts reloads once,
+	# which fetches the current index.html and its current hashes).
+	@assets path /assets/*
+	handle @assets {
+		root * /srv
+		file_server
+	}
+
+	# Everything else → the static SPA. try_files checks the filesystem first,
+	# so real files (/sw.js, /manifest.json, the icons) are served as themselves
+	# and only unmatched paths fall back to index.html — that is what makes
+	# client-side routes (e.g. /agents, /chat) deep-link correctly.
+	handle {
+		root * /srv
+		# `no-cache` on EVERYTHING this block serves — index.html above all.
+		#
+		# It used to cover only /sw.js and /manifest.json, which left the HTML
+		# shell with nothing but ETag/Last-Modified. Browsers then apply
+		# *heuristic freshness* (~10% of the document's age), so a phone whose
+		# last successful load was three weeks old would keep serving that
+		# index.html from its own HTTP cache for days after a deploy — naming
+		# chunk hashes that /srv no longer has. Every route then fails with
+		# "Importing a module script failed", and because the reload the app
+		# offers is itself answered from that same cache, it never recovers.
+		#
+		# `no-cache` is revalidate-before-use, NOT don't-store: the 304 path
+		# still works, so this costs one conditional request per load, not the
+		# bundle. /assets/* is content-hashed and handled above, where caching
+		# permanently is safe. deploy/tc-manual-host.sh has always done it this
+		# way; this vhost had drifted, and it is the one customers run.
+		header Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}

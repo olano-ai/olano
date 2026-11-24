@@ -1,0 +1,435 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+# Legacy embedding backend (sentence-transformers + torch), opt-in via
+# LIONCLAW_EMBEDDING_MODEL=hf. Kept as a NON-default dependency-group — NOT a
+# [project.optional-dependencies] extra — precisely so `uv sync --all-extras`
+# (what install.sh runs) does NOT pull torch: groups are only installed with
+# `--group hf-embeddings` / `--all-groups`. The default install uses fastembed
+# (ONNX, torch-free). Install with:  uv sync --group hf-embeddings
+hf-embeddings = [
+    "sentence-transformers>=6.0.0",
+    "torch>=2.13.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=5.0.0",
+    "pytest-xdist>=3.5.0",
+    "ruff>=0.4.0",
+    "mypy>=2.3.1",
+    "pre-commit>=4.6.2",
+    "types-pyyaml>=6.0.12.20260815",
+    "types-requests>=2.33.0.20260712",
+    # Spins up an ephemeral Postgres for the opt-in postgres-backend tests
+    # (skipped when Docker / LIONCLAW_TEST_POSTGRES_URL is unavailable).
+    "testcontainers[postgres]>=4.15.0",
+]
+# The user guide website (docs.olano.ai): docs/user-guide/ rendered by MkDocs
+# Material, versioned per release by mike. A group, not an extra, for the same
+# reason as hf-embeddings: nothing here belongs in an install. Install with:
+#   uv sync --group docs      then      uv run mkdocs serve
+docs = [
+    "mkdocs-material>=9.6.0",
+    "mike>=2.1.0",
+    "mkdocs-glightbox>=0.4.0",
+]
+
+[project]
+name = "olano"
+version = "0.11.0"
+description = "Multi-agent AI runtime powered by deepagents — skills, channels, scheduling, self-learning"
+readme = "README.md"
+requires-python = ">=3.11"
+# MIT, see LICENSE. `Private :: Do Not Upload` is an intentionally unrecognized
+# classifier: PyPI rejects any distribution carrying it, so an accidental
+# `twine upload` / `uv publish` fails instead of publishing an unreviewed
+# release. Remove it deliberately when the package is ready for PyPI.
+license = { text = "MIT" }
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+authors = [{ name = "Olano AI", email = "support@olano.ai" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Private :: Do Not Upload",
+]
+
+dependencies = [
+    # Core agent harness
+    # The langchain floors below are NOT independent choices: deepagents 0.7.23
+    # requires langchain>=1.4.3, langchain-core>=1.6.7, langchain-anthropic>=1.7.5,
+    # langchain-google-genai>=4.4.0, langsmith>=0.14.4 and (aws extra)
+    # langchain-aws>=1.8.1. Dependabot's langchain group proposes the versions that
+    # were current when it opened the PR, which have repeatedly been BELOW these —
+    # accepting that group alone silently downgrades the floor deepagents needs.
+    # Raise these together with the deepagents pin, never separately.
+    "deepagents==0.7.23",
+    "langchain>=1.4.3",
+    "langchain-core>=1.6.7",
+    "langchain-community>=0.4.2",
+    "langgraph>=1.2.10",
+    "langgraph-checkpoint>=4.2.0",
+    # LLM providers — all included by default.
+    # Every provider in olano/models/PROVIDERS ships in the BASE install so the
+    # two install surfaces stay in lockstep: install.sh runs `uv sync --all-extras`
+    # while the Docker/DO image (Dockerfile) runs `uv pip install -e ".[postgres]"`
+    # (base deps only, no extras). Anything provider-related left in
+    # [project.optional-dependencies] would therefore be missing on every cloud
+    # deployment — so it lives here, not there. The per-provider extras below are
+    # kept only as back-compat aliases.
+    "langchain-openai>=1.7.0",
+    "langchain-anthropic>=1.7.5",
+    "langchain-ollama>=1.1.0",
+    "langchain-google-genai>=4.4.0",
+    "langchain-google-vertexai>=2.0.0",
+    "langchain-groq>=1.1.3",
+    "langchain-mistralai>=1.1.6",
+    "langchain-deepseek>=1.1.1",
+    "langchain-xai>=1.3.0",
+    "langchain-cohere>=0.6.0",
+    "langchain-fireworks>=1.6.0",
+    "langchain-together>=0.2.0",
+    "langchain-aws>=1.8.1",
+    "langchain-nvidia-ai-endpoints>=1.4.3",
+    "langchain-perplexity>=1.4.0",
+    # Moved out of optional-dependencies so cloud (DO) deploys get them too —
+    # openrouter + litellm are in the PROVIDERS catalog and were previously
+    # unreachable on any base-deps install (ImportError at model build).
+    "langchain-openrouter>=0.2.8",
+    "langchain-litellm>=0.11.0",
+    # Hugging Face serverless / TGI endpoints (torch-free without the [full] extra;
+    # only needs huggingface-hub + tokenizers). init_chat_model routes "huggingface:".
+    "langchain-huggingface>=1.2.2",
+    # Qwen (Alibaba DashScope) — ChatQwQ (reasoning) + ChatQwen (Qwen3 series);
+    # Moonshot AI — ChatMoonshot (Kimi K2). Neither is in init_chat_model's provider
+    # registry, so build_model() has explicit branches for them.
+    "langchain-qwq>=0.3.5",
+    "langchain-moonshot>=0.1.0",
+    # MCP support
+    # 0.3.1 is the floor that supports mcp 1.28's API (0.2.x imports symbols
+    # mcp removed); mcp itself is capped <2 in [tool.uv] constraint-dependencies.
+    "langchain-mcp-adapters>=0.3.2",
+    # ACP support
+    "deepagents-acp>=0.0.11",
+    # CLI (click + rich) and the Textual setup wizard
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "textual>=8.2.8",
+    # Configuration
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.15.0",
+    "python-dotenv>=1.2.3",
+    "pyyaml>=6.0.0",
+    "json5>=0.15.0",  # agent.json5 parsing (handles // inside string values like URLs)
+    # Scheduler
+    "apscheduler>=3.11.3",
+    # Memory / RAG
+    "chromadb>=1.5.9",
+    "langchain-chroma>=0.1.0",
+    # Security floor: 6.15.0 is the fixed release for CVE-2026-71852 and
+    # CVE-2026-71870, which the CI dependency-audit gate flags on 6.14.2.
+    "pypdf>=6.16.1",
+    "python-docx>=1.1.0",
+    "python-pptx>=1.0.0",
+    "openpyxl>=3.1.0",
+    # Channels
+    "python-telegram-bot>=22.8",
+    "discord.py>=2.3.0",
+    "slack-sdk>=3.43.0",
+    "aiohttp>=3.9.0",
+    # QR rendering for the channel-connect handshake page (pure-python, no deps)
+    "segno>=1.6.0",
+    # Session / storage
+    "aiosqlite>=0.20.0",
+    # Web tools (Phase 1)
+    "tavily-python>=0.7.27",
+    "firecrawl-py>=4.37.1",
+    # Pinned to the 1.56.x line: its bundled Chromium build (1194) matches the
+    # browsers pre-baked into the managed/CI image, so the dashboard E2E suite
+    # (tests/e2e, `make test-e2e`) runs without a network browser download.
+    "playwright>=1.56.0,<1.57.0",
+    # Embeddings / semantic search (Phase 2)
+    # Default embedding backend: fastembed (ONNX runtime — NO torch, no HF token),
+    # fast to load and query. See olano/memory/embeddings.py. The legacy
+    # sentence-transformers backend (LIONCLAW_EMBEDDING_MODEL=hf) and its heavy
+    # torch dependency live in the optional `hf-embeddings` dependency-group
+    # below, so the default install stays torch-free.
+    "fastembed>=0.4.0",
+    "numpy>=2.4.6",
+    # Google services (Phase 5)
+    "google-api-python-client>=2.198.0",
+    "google-auth-oauthlib>=1.4.0",
+    "google-auth-httplib2>=0.4.1",
+    # Dashboard REST API (Phase 6)
+    "fastapi>=0.115.0",
+    "uvicorn>=0.52.4",
+    "sse-starlette>=3.4.8",
+    # Utilities
+    # Explicit (not just transitive): vault AES-GCM, WeCom/WeChat crypto, and
+    # deployment-settings Ed25519 verification all import it directly.
+    "cryptography>=49.0.0",
+    "httpx>=0.27.0",
+    "tenacity>=8.3.0",
+    "watchdog>=4.0.0",
+    # 3.1.1 floor on both checkpoint packages: 3.1.0 flattens store namespaces to
+    # a dot-joined string and scopes reads with `LIKE '<path>%'`, so a scoped
+    # search/list_namespaces also matched sibling namespaces sharing a leading
+    # substring (CVE-2026-71433 / GHSA-47pj-3jcm-6whg, filed against the postgres
+    # package; the sqlite package shipped the same bug and the same fix in 3.1.1).
+    # Both stores are used — see core/stores.py.
+    "langgraph-checkpoint-sqlite>=3.1.1",
+    # Postgres is the default persistence backend (concurrent writes + pooling),
+    # so its packages ship in the base install. SQLite stays bundled above as the
+    # opt-out backend and for the threads.db → Postgres migration reader.
+    "langgraph-checkpoint-postgres>=3.1.3",
+    "psycopg[binary,pool]>=3.3.4",
+    "yfinance>=1.6.0",
+    "stripe>=15.5.1",
+    "tiktoken>=0.14.0",
+    "pygithub>=2.10.0",
+    "notion-client>=3.1.0",
+    "simple-salesforce>=1.12.10",
+    "hubspot-api-client>=11.0.0",  # HubSpot CRM toolkit (HubSpotAgent)
+    "web3>=7.16.0",
+    "tweepy>=4.17.0",      # Twitter (X) toolkits
+    "facebook-business>=25.0.3",  # Meta Business SDK — Facebook + Instagram toolkits
+    "alpaca-trade-api>=0.26",
+    # Trading / brokerage clients (Phase 6)
+    "ib-insync>=0.9.86",   # Interactive Brokers (TWS/Gateway client)
+    "requests>=2.34.2",    # used by some optional bundles (CoinGecko, FRED, etc.)
+    # Agent interoperability: outbound Agent2Agent client (olano/a2a). Base install only
+    # (no grpc extra); the inbound MCP server rides the `mcp` SDK already pulled in above.
+    "a2a-sdk>=1.1.2",
+    # Opt-in turn tracing to an operator's Langfuse project (olano/observability).
+    # Base install because a managed box has no shell to add an extra; imported
+    # only when a tracing policy is active (tests/test_observability_import_deferral.py).
+    "langfuse>=5.0.2,<6",
+]
+
+[project.optional-dependencies]
+# NOTE: every LLM provider now ships in the BASE install (see [project.dependencies]),
+# so these per-provider extras are redundant no-op aliases kept only so existing
+# `uv add "olano[groq]"` / `pip install .[xai]` commands keep resolving.
+google = ["langchain-google-genai>=4.4.0", "langchain-google-vertexai>=2.0.0"]
+groq = ["langchain-groq>=1.1.3"]
+mistral = ["langchain-mistralai>=1.1.6"]
+deepseek = ["langchain-deepseek>=1.1.1"]
+xai = ["langchain-xai>=1.3.0"]
+openrouter = ["langchain-openrouter>=0.2.8"]
+cohere = ["langchain-cohere>=0.6.0"]
+fireworks = ["langchain-fireworks>=1.6.0"]
+together = ["langchain-together>=0.2.0"]
+aws = ["langchain-aws>=1.8.1"]
+nvidia = ["langchain-nvidia-ai-endpoints>=1.4.3"]
+perplexity = ["langchain-perplexity>=1.4.0"]
+litellm = ["langchain-litellm>=0.11.0"]
+huggingface = ["langchain-huggingface>=1.2.2"]
+qwq = ["langchain-qwq>=0.3.5"]
+moonshot = ["langchain-moonshot>=0.1.0"]
+# Postgres is now the DEFAULT persistence backend and its packages are bundled in
+# the base install (see [project.dependencies]). This extra is kept as a no-op
+# alias so existing `uv add "olano[postgres]"` / `pip install .[postgres]`
+# commands keep resolving. To opt back into SQLite, set
+# LIONCLAW_CHECKPOINT_BACKEND=sqlite (no extra needed — SQLite is also bundled).
+postgres = []
+# Zero-config vault auto-unlock via the OS keychain (macOS Keychain, Linux
+# SecretService/KWallet, Windows Credential Locker) — a DESKTOP convenience so you
+# don't have to set OLANO_VAULT_KEY. Olano only uses it when a *secure* OS
+# backend is active; headless servers/cloud fall back to OLANO_VAULT_KEY.
+# Install with:  uv add "olano[keyring]"
+keyring = ["keyring>=24.0"]
+whatsapp = []  # WhatsApp uses Node.js bridge, no Python deps needed
+# Discord voice channels (DAVE end-to-end encryption).  Text-only Discord bots
+# do NOT need this — the warning "davey is not installed" is harmless unless
+# you actually join voice channels.  Install with:  uv sync --extra discord-voice
+discord-voice = ["davey>=0.1.6"]
+
+# All cloud providers at once (excludes AWS/Vertex which need extra auth setup).
+# Redundant now that every provider is in the base install, but kept complete for
+# back-compat with `pip install "olano[all-providers]"`.
+all-providers = [
+    "langchain-google-genai>=4.4.0",
+    "langchain-groq>=1.1.3",
+    "langchain-mistralai>=1.1.6",
+    "langchain-deepseek>=1.1.1",
+    "langchain-xai>=1.3.0",
+    "langchain-cohere>=0.6.0",
+    "langchain-fireworks>=1.6.0",
+    "langchain-together>=0.2.0",
+    "langchain-nvidia-ai-endpoints>=1.4.3",
+    "langchain-perplexity>=1.4.0",
+    "langchain-openrouter>=0.2.8",
+    "langchain-litellm>=0.11.0",
+    "langchain-huggingface>=1.2.2",
+    "langchain-qwq>=0.3.5",
+    "langchain-moonshot>=0.1.0",
+]
+
+# ── Torch: CPU-only wheels ────────────────────────────────────────────────────
+# torch is ONLY pulled in by the optional `hf-embeddings` dependency-group
+# (sentence-transformers → the legacy all-MiniLM-L6-v2 backend); the default
+# install uses fastembed and never touches torch. When the group IS installed,
+# this pin still applies (uv honours [tool.uv.sources] for a package declared as
+# a direct dependency in any group). On Linux the DEFAULT PyPI torch wheel is the
+# CUDA build, dragging in ~2 GB of nvidia-* runtime wheels + triton; our deploy
+# targets (Tencent CVM, containers) have no GPU and the embedding model runs on
+# CPU (see olano/memory/embeddings.py:_detect_device), so pin torch to
+# PyTorch's CPU index on Linux/Windows. macOS torch on PyPI is already CPU-only.
+[tool.uv]
+# mcp 2.0 is a breaking major (drops mcp.shared.context.RequestContext and the
+# streamablehttp_client signature), and olano/core/mcp_setup.py breaks on it at
+# import. langchain-mcp-adapters 0.3.2 (latest as of 2026-10) now declares
+# mcp<2 itself; earlier 0.3.x had no upper bound, which is why this pin exists.
+# 1.28.1 carries every advisory fix (PYSEC-2026-3481/3482/3483). Lift the cap
+# only after the adapter supports mcp 2 and mcp_setup is ported.
+constraint-dependencies = ["mcp>=1.28.1,<2"]
+# openai 3.x, forced past litellm's declared `openai<3` (every litellm release,
+# pre-releases included, as of 2026-10). Nothing else here caps it:
+# langchain-openai and langchain-fireworks allow <4. Verified on 3.28 with the
+# full unit suite, live OpenAI (the patched Responses path, tool calls) and
+# DeepSeek, and the litellm OpenAI-compatible path against a stub. Delete this
+# override the day litellm declares openai 3 support; if a litellm route
+# misbehaves before then, dropping it restores openai 2.x on the next lock.
+#
+# pillow 13, forced past fastembed 0.8.0's declared `pillow<13` (python <3.14;
+# the latest fastembed as of 2026-10). Pillow 12.x carries eight advisories
+# fixed only in 13.0.0 (CVE-2026-112395/-112397/-112400/-112404/-112895/
+# -112896/-112897/-112899: crafted TIFF, GIF, PPM, EPS and PDF files), and they
+# are reachable here: an uploaded avatar goes through Image.open, which picks
+# the decoder from the bytes, not the file name. fastembed imports pillow only
+# for its image models; Olano embeds text. Delete this override the day
+# fastembed declares pillow 13 support.
+#
+# filelock 4.2.1+, forced past litellm 1.104.2's declared `filelock<4` (its
+# latest release as of 2026-10; 1.103.x declared no filelock at all). 3.x
+# carries three advisories fixed only in 4.2.1 (CVE-2026-112907/-112913/
+# -112940), and the dependency audit gates on them. The lock otherwise
+# resolved them by downgrading litellm instead. litellm, huggingface-hub and
+# virtualenv use only FileLock/SoftFileLock, which 4.x keeps. Delete this
+# override the day litellm declares filelock 4 support.
+override-dependencies = ["openai>=3,<4", "pillow>=13", "filelock>=4.2.1"]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cpu", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[project.scripts]
+olano = "olano.cli.main:cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["olano"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+# Vendored third-party skill helper scripts (xlsx/pptx/docx recalc, etc.) ship
+# as-is from upstream Anthropic skills — don't lint or format them as first-party
+# code. force-exclude also skips them when ruff is handed explicit paths (pre-commit).
+extend-exclude = ["olano/skills/built_in"]
+force-exclude = true
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "PIE",    # flake8-pie
+    "RET",    # flake8-return
+    "TCH",    # flake8-type-checking
+    "PTH",    # flake8-use-pathlib
+    "PGH",    # pygrep-hooks
+    "RUF",    # ruff-specific rules
+    "T20",    # flake8-print (catch stray prints)
+]
+ignore = [
+    "E501",   # line length handled by formatter
+    "T201",   # print() is used intentionally for CLI output
+    "RET504", # unnecessary assignment before return
+    "RET505", # superfluous else after return
+    "B008",   # function call in default argument (Pydantic Field)
+    "UP007",  # use X | Y for union types (keep Optional for readability)
+    "UP017",  # datetime.timezone.utc → datetime.UTC (keep compat with 3.10)
+    "RUF001", # ambiguous unicode character in string (intentional emojis)
+    "RUF002", # ambiguous unicode character in docstring
+    "RUF003", # ambiguous unicode character in comment
+    "RUF012", # mutable class default (Pydantic models use this pattern)
+    "PTH123", # builtin open() — migrate to pathlib gradually
+    "PTH111", # os.path.expanduser — migrate to pathlib gradually
+    "SIM117", # multiple with statements — readability preference
+    "SIM105", # suppressible-exception — try/except/pass is clearer in many cases
+    "E402",   # module-import-not-at-top — intentional lazy imports in registry
+    "E741",   # ambiguous-variable-name — short vars acceptable in small scopes
+    "B904",   # raise-without-from — gradually fix (existing pattern)
+    "TCH",    # typing-only imports — gradually adopt TYPE_CHECKING blocks
+    "PIE810", # multiple-starts-ends-with — readability preference
+    "RUF005", # collection-literal-concatenation — readability preference
+    "RUF006", # asyncio-dangling-task — existing async patterns
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["olano"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B", "SIM", "RET", "T20", "F841"]
+# olano/platforms/ is a large, recently-imported set of chat-platform adapters.
+# These files trip the same style rules the project already defers globally
+# (pathlib migration, etc.); clean them up gradually rather than rewrite untested
+# adapter code wholesale. Correctness rules (F, E, real bugs) stay enabled.
+"olano/platforms/**" = [
+    "PTH",     # os.path → pathlib migration (deferred like PTH111/PTH123 globally)
+    "SIM102",  # nested-if collapse — readability preference in adapter code
+    "SIM115",  # context-manager for open — handles often outlive scope here
+    "B007",    # unused loop control variable
+    "B027",    # empty method in ABC without @abstractmethod (optional hooks)
+    "UP031",   # percent-format → format spec
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = ["tests/", "whatsapp-bridge/", "olano/skills/built_in/"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+# Browser E2E tests (tests/e2e) need Node + a Chromium download, so they are
+# opt-in: the default run excludes them. Run them with `make test-e2e`.
+addopts = "-q --tb=short -m 'not e2e'"
+markers = [
+    "e2e: browser-driven dashboard tests (require Node + Playwright Chromium)",
+]
+
+[tool.coverage.run]
+source = ["olano"]
+omit = ["olano/__main__.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+fail_under = 0
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.",
+]

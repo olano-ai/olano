@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/olano-ai/olano/blob/main/SECURITY.md
+    about: Please do not file security problems as public issues. SECURITY.md says how to report one privately.
+  - name: User guide
+    url: https://docs.olano.ai
+    about: Setup, the dashboard tab by tab, the agent.json5 and config.yaml references, and common problems.
+  - name: Olano Cloud account or billing
+    url: https://cloud.olano.ai
+    about: Questions about a managed deployment, credits or your account.

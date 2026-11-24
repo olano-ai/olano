@@ -1,0 +1,61 @@
+name: Bug report
+description: Something in Olano does not work the way it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please remove API keys, tokens, phone numbers and other personal data from anything you paste below.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: The smallest sequence that shows the problem. Include the relevant part of `agent.json5` or `config.yaml` if it matters.
+      placeholder: |
+        1. Create an agent with ...
+        2. Send ...
+        3. See ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Olano version
+      description: The version on the dashboard's Overview page, `olano --version`, or the image tag you run.
+      placeholder: "0.6.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How Olano is installed
+      options:
+        - Self-hosted with Docker Compose (deploy/self-host)
+        - From source (install.sh or uv sync)
+        - Olano Cloud (managed deployment)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model and provider
+      description: For example `anthropic:claude-sonnet-4-6` or `olano:pro`, if the problem involves an agent's replies.
+  - type: input
+    id: surface
+    attributes:
+      label: Where it happens
+      description: Dashboard (which page), a channel (Telegram, WhatsApp, ...), the scheduler, the API, the CLI.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: The relevant lines from the dashboard's Logs page or `olano.log`. Remove secrets first.
+      render: text

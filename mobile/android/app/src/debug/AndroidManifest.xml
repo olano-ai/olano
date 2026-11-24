@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug builds only: allow plain http so a developer can point the app at a
+     box on the local network (http://192.168.1.20:8765). Release builds keep
+     the main manifest's usesCleartextTraffic="false", and OlanoShellPlugin
+     refuses http:// addresses there as well. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:usesCleartextTraffic="true"
+        tools:replace="android:usesCleartextTraffic" />
+</manifest>

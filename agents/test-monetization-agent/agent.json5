@@ -1,0 +1,42 @@
+{
+  // Test agent — MONETIZATION example. A hidden, non-customer-facing fixture that
+  // demonstrates the reusable creator-monetization layer (olano/monetization/):
+  // an OPEN bot (no `allowed_users`) whose access is gated by subscription instead
+  // of an allowlist — a first-seen user gets a free trial, then must subscribe via
+  // Stripe (card, invoice/VAT) or Telegram Stars (one-tap in-chat).
+  //
+  // Kept in the repo purely as a reference config + test fixture, NOT a live
+  // deployment — hence `hidden: true` and no `channels` / `schedule`, so it never
+  // boots a real bot or fires crons. (Formerly the "sicop" example tenant; the SICOP
+  // Telegram bot + twice-daily tender sweeps were the deployment-specific bits and
+  // were removed.) To wire this up for real, add a `channels` block plus vault keys:
+  //   olano vault set STRIPE_API_KEY --agent test-monetization-agent
+  //   olano vault set STRIPE_WEBHOOK_SECRET --agent test-monetization-agent
+  //   olano vault set TELEGRAM_BOT_TOKEN --agent test-monetization-agent
+  name: "test-monetization-agent",
+  description: "Test agent — creator-monetization example (subscription gating, free trial, Stripe/Stars).",
+  emoji: "🧪",
+  model: "anthropic:claude-sonnet-4-6",
+  backend: { type: "filesystem", root_dir: "workspace" },
+
+  // Internal-only: hidden from the dashboard and customers, still loadable for tests.
+  hidden: true,
+
+  // The demonstrative payload: charge end-users for access, with a 3-day trial.
+  monetization: {
+    enabled: true,
+    providers: ["stripe", "telegram_stars"],
+    trial_days: 3,
+    plan: {
+      price_cents: 1500,           // $15/mo (display only)
+      currency: "usd",
+      interval: "month",
+      stripe_price_id: "price_REPLACE_ME",  // owner's own recurring Stripe Price
+      stars_amount: 750,           // Telegram Stars (XTR) per month
+      product_name: "Monetization Demo",
+      offer_copy: "Your free trial has ended. Subscribe to keep receiving alerts.",
+      // success_url / cancel_url default to a Telegram deep link; set them to your
+      // bot (e.g. "https://t.me/your_bot") for a nicer post-checkout return.
+    },
+  },
+}

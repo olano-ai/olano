@@ -1,0 +1,356 @@
+/* Terminal view — tab strip + a single mount that holds the active xterm host.
+   The terminal area stays a fixed dark regardless of the app's light/dark theme
+   (see terminalStore.xtermOptions) so ANSI colours always read well. */
+
+.term-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ── header: the workspace agent ──────────────────────────────────────────
+   Which agent's shells the strip below holds. The picker is the app-wide one
+   (views/nav/AgentPicker, inline form); the hint names where the shell runs. */
+.term-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  padding: 8px 10px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+}
+.term-header-label {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.term-header-hint {
+  margin-left: auto;
+  font-size: 12px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Per-agent open-tab count on the picker's rows. */
+.term-agent-count {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 11px;
+  color: var(--text-4);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.agent-item .term-agent-count + .agent-item-check {
+  margin-left: 6px;
+}
+@media (max-width: 900px) {
+  .term-header-hint {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+}
+
+/* ── tab strip ─────────────────────────────────────────────────────────── */
+.term-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.term-tabs::-webkit-scrollbar {
+  display: none;
+}
+.term-tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 6px 0 10px;
+  border-radius: var(--r-sm);
+  color: var(--text-3);
+  font-size: 12.5px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  border: 1px solid transparent;
+  transition:
+    background var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+.term-tab:hover {
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+.term-tab.active {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+/* status dot: connecting/reconnecting pulse amber, open green, closed grey */
+.term-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--text-4);
+}
+.term-dot.open {
+  background: var(--success);
+}
+.term-dot.connecting,
+.term-dot.reconnecting {
+  background: var(--warn);
+  animation: term-pulse 1.1s ease-in-out infinite;
+}
+.term-dot.closed,
+.term-dot.disabled,
+.term-dot.unavailable {
+  background: var(--danger);
+}
+@keyframes term-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+.term-tab-label {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-tab-edit {
+  width: 110px;
+  border: none;
+  outline: none;
+  background: var(--surface-2);
+  color: var(--text);
+  border-radius: var(--r-xs);
+  padding: 2px 6px;
+  font: inherit;
+}
+.term-tab-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  border-radius: var(--r-xs);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--t-fast),
+    background var(--t-fast),
+    color var(--t-fast);
+}
+.term-tab:hover .term-tab-x,
+.term-tab.active .term-tab-x {
+  opacity: 1;
+}
+.term-tab-x:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.term-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.term-add:hover {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+/* drag-to-reorder feedback */
+.term-tab.dragging {
+  opacity: 0.5;
+}
+.term-tab.drop-target {
+  box-shadow: -2px 0 0 0 var(--accent) inset;
+}
+
+/* ── terminal body ─────────────────────────────────────────────────────── */
+.term-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #161618;
+}
+.term-mount,
+.term-host {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+.term-host {
+  padding: 8px 6px 8px 10px;
+  box-sizing: border-box;
+}
+.term-host:focus {
+  outline: none;
+}
+.term-host .xterm {
+  height: 100%;
+}
+
+.term-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(22, 22, 24, 0.72);
+}
+/* The runtime's own reason under the 4503 line (a failed container start
+   reads differently from "never booted"); smaller so the action stays first. */
+.term-overlay-reason {
+  font-size: 12px;
+  max-width: 48rem;
+  overflow-wrap: anywhere;
+}
+/* No tab for the agent on screen: nothing to dim, so paint the pane itself. */
+.term-empty {
+  background: #161618;
+}
+
+/* ── command suggestions ───────────────────────────────────────────────────
+   An overlay pinned to the bottom of the terminal body, NOT a row in the
+   column: the terminal is sized by a ResizeObserver → fit() → PTY resize, so a
+   strip that appeared and disappeared in flow would reflow the shell's output
+   on every other keystroke. Overlaying costs a couple of covered rows near the
+   prompt instead, which is where the caret already is. The strip stays dark
+   with the terminal (see the file header) rather than following the app theme. */
+.term-suggest {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Never eat a tap meant for the terminal beyond the chips themselves. */
+  pointer-events: none;
+}
+.term-suggest::-webkit-scrollbar {
+  display: none;
+}
+.term-suggest-item {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 70%;
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border: 1px solid rgba(223, 223, 214, 0.16);
+  border-radius: var(--r-sm);
+  background: rgba(32, 33, 39, 0.94);
+  color: #b8b8b0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.term-suggest-item.is-first {
+  border-color: rgba(255, 106, 61, 0.55);
+  color: #dfdfd6;
+}
+.term-suggest-item:hover {
+  border-color: rgba(255, 106, 61, 0.75);
+  color: #fff;
+}
+.term-suggest-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.term-suggest-key {
+  flex-shrink: 0;
+  color: #ff6a3d;
+  font-size: 11px;
+}
+
+/* ── touch key bar ─────────────────────────────────────────────────────────
+   In flow (unlike the suggestion strip): it is always present at these
+   viewports, so the terminal is simply sized to the space above it once, not
+   resized as the user types. Scrolls horizontally on a narrow phone rather
+   than shrinking keys below a thumb-sized target. */
+.term-keys {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  /* Sized so the whole row fits a 390px phone without scrolling: 5×38 + 3×46
+     + 7×5 + 20 = 383. It still scrolls if a narrower device or a bigger font
+     needs it to. */
+  gap: 5px;
+  /* The last row of a full-window shell, so its bottom term clears the home
+     indicator when installed. max(), not `8px + inset`: the floor lifts the
+     keys exactly clear of it, where adding would lift them clear AND leave a
+     second gap below — the wasted strip. --safe-bottom, not a bare env(), so
+     one definition site drives every anchored edge and a test can override it
+     (headless Chromium reports 0px for every inset). */
+  padding: 8px 10px max(8px, var(--safe-bottom));
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.term-keys::-webkit-scrollbar {
+  display: none;
+}
+.term-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 38px;
+  height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.term-key.is-wide {
+  min-width: 46px;
+}
+.term-key:active {
+  background: var(--surface-3);
+  color: var(--text);
+  border-color: var(--accent);
+}

@@ -1,0 +1,431 @@
+/* ───────────────────────────────────────────────────────────────────────────
+ * BOT DIALOGS + ROSTER PANELS — shared by both shells.
+ *
+ * These rules began in simple.css, which only the simple chunk loads. The day
+ * the dashboard's sidebar grew the same "New bot" dialog they had to load with
+ * the app, so they moved here (imported from globals.css) — class names
+ * unchanged, because renaming them would have churned every component and
+ * every end-to-end selector for no visible difference. The `.simple-` prefix
+ * is therefore history, not scope: anything in this file is fair game for any
+ * shell. Only rules that reach into the simple shell's own structure (the
+ * rail, the drawer, the messenger bubbles) stay in simple.css.
+ *
+ * Built from the shared tokens in tokens.css — no literal colour below.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.simple-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: var(--r-pill);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-3);
+}
+.simple-search:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
+}
+.simple-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  padding: 8px 0;
+}
+.simple-search-input::placeholder {
+  color: var(--text-4);
+}
+/* Every control in this shell carries its explanation right under it. */
+.simple-hint {
+  margin: 0;
+  padding: 0 6px;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-3);
+}
+.simple-error {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  color: var(--danger);
+}
+
+/* Section heading in the rail and in the dialogs. */
+.simple-section {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 16px 0 6px;
+  padding: 0 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+
+.simple-rail-spinner {
+  margin: 16px auto;
+}
+
+.simple-bot-list,
+.simple-thread-list,
+.simple-member-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The bot's profile card (BotProfilePanel). Docked beside the simple shell's
+   conversation, a full-screen overlay on its phones, and a drawer off the
+   dashboard chat's right edge (.chat-profile-drawer, globals.css) — the same
+   card in all three, which is why its rules live in the shared sheet. */
+.simple-profile-head {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 12px 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.simple-profile-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 16px 24px;
+}
+.simple-profile-face {
+  text-align: center;
+}
+.simple-profile-mark {
+  display: inline-flex;
+  margin-bottom: 10px;
+  --simple-pip-ring: var(--simple-rail-bg);
+}
+.simple-profile-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  overflow-wrap: anywhere;
+}
+
+/* The group panel's title doubles as its rename control: the pencil appears on
+   hover (and always on a touch viewport, where there is no hover to reveal it —
+   see the media query at the end of this file). */
+.simple-group-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.simple-group-rename {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: var(--r-xs);
+  background: none;
+  color: var(--text-3);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.simple-group-title:hover .simple-group-rename,
+.simple-group-rename:focus-visible {
+  opacity: 1;
+}
+.simple-group-rename:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.simple-group-rename-input {
+  /* Block, not the input default: `.simple-profile-face` centres with
+     `text-align`, and an inline-block field flows onto the same line as the
+     inline-flex group mark above it — which put the field beside the avatar
+     instead of under the name it replaces. */
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  margin-inline: auto;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 650;
+  text-align: center;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border-focus);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.simple-profile-role {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.simple-profile-status {
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  color: var(--text-4);
+}
+.simple-profile-status.is-online {
+  color: var(--success);
+}
+.simple-profile-label {
+  margin: 22px 0 6px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-4);
+}
+.simple-profile-about {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+.simple-profile-edit {
+  margin-top: 16px;
+  width: 100%;
+  justify-content: center;
+}
+.simple-profile-form {
+  margin-top: 20px;
+}
+.simple-profile-textarea {
+  min-height: 78px;
+  resize: vertical;
+  line-height: 1.5;
+  font: inherit;
+  font-size: 13px;
+}
+/* Set up & connect: the card's one door into configuration. Buttons, not a
+   form — the forms live in the dashboard, and these land on the right page. */
+.simple-profile-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: stretch;
+}
+.simple-profile-setup .btn {
+  justify-content: flex-start;
+  gap: 9px;
+  font-size: 13px;
+}
+.simple-profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Group roster rows in the details panel. */
+.simple-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 4px;
+}
+.simple-member + .simple-member {
+  border-top: 1px solid var(--border);
+}
+.simple-member-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.simple-member-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simple-member-tag {
+  flex-shrink: 0;
+  padding: 1px 7px;
+  border-radius: var(--r-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.simple-member-del {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-4);
+  cursor: pointer;
+}
+.simple-member-del:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+.simple-member-del:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.simple-group-field {
+  margin-top: 22px;
+}
+/* The People heading sits under the roster's add-field, which already carries
+   its own bottom spacing; the guest notice sits above everything else. */
+.simple-group-people-label {
+  margin-top: 26px;
+}
+.simple-group-guest {
+  margin-bottom: 14px;
+}
+.simple-member .avatar-sm {
+  width: 30px;
+  height: 30px;
+}
+.simple-group-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.simple-group-add .input {
+  flex: 1;
+  min-width: 0;
+}
+.simple-group-delete {
+  width: 100%;
+  justify-content: center;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* ── dialogs: new bot, new group ─────────────────────────────────────── */
+.simple-dialog {
+  width: 560px;
+  max-width: calc(100vw - 40px);
+  display: flex;
+  flex-direction: column;
+}
+/* The shared .field has no vertical rhythm of its own (the dashboard's modals
+   add it inline), so the dialog sets its own: a control, its explanation, and
+   then clear air before the next question. */
+.simple-dialog .field {
+  margin-bottom: 20px;
+}
+.simple-dialog .field:last-child {
+  margin-bottom: 4px;
+}
+.simple-field-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.simple-dialog .simple-hint {
+  padding: 0;
+  margin-top: 4px;
+}
+.simple-pick-search {
+  margin: 10px 0 4px;
+}
+.simple-pick-list {
+  max-height: 260px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.simple-pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 6px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.simple-pick:hover {
+  border-color: var(--border-strong);
+}
+.simple-pick.is-active {
+  border-color: var(--accent);
+  background: var(--accent-muted);
+}
+.simple-pick-face {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 15px;
+}
+.simple-pick-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.simple-pick-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.simple-pick-desc {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--text-3);
+  /* Wraps rather than truncates: in the new-bot dialog this line is the whole
+     description of an archetype, and one clipped sentence is not a choice a
+     person can make. */
+  overflow-wrap: anywhere;
+}
+.simple-pick-check {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+}
+.simple-count-line {
+  margin: 10px 0 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.simple-dialog .groupmark-bead,
+.simple-profile .groupmark-bead {
+  --simple-pip-ring: var(--surface);
+}

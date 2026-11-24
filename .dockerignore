@@ -1,0 +1,64 @@
+# Build-context exclusions for BOTH images built from this repo root:
+# Dockerfile (backend, whose final `COPY . .` takes everything not listed here)
+# and docker/dashboard/Dockerfile. Measured in CI: that COPY layer was 233 MB
+# and is now 14.6 MB — almost none of it was needed at runtime, and because the
+# context changes on every commit, it also invalidated the layer cache
+# constantly.
+#
+# This is a DENYLIST on purpose. An allowlist would silently drop a new
+# directory the runtime needs; here the failure mode of forgetting an entry is
+# a slightly larger image, not a broken one. Before adding a line, check it is
+# not needed by either Dockerfile — the dashboard build copies
+# `olano/dashboard_2.0/` and `assets/`, and the backend serves the WhatsApp
+# bridge from `whatsapp-bridge/` (runtime/api.py runs `npm install` in it).
+
+# ── version control ──────────────────────────────────────────────────────────
+# ~80 MB in CI, and every commit changes it, so it busts the cache too.
+.git
+.gitignore
+.github
+
+# ── tests + dev tooling ──────────────────────────────────────────────────────
+# The image runs the product, not the suite (19 MB).
+tests/
+.claude/
+.pre-commit-config.yaml
+
+# ── the native mobile app ───────────────────────────────────────────────────
+# mobile/ is the Capacitor shell built for the App Store and Google Play; it
+# loads a deployment's dashboard over the network and nothing in either image
+# reads it. Its native projects (Gradle, Xcode) are large and change often.
+mobile/
+
+# ── dev/test agent fixtures ──────────────────────────────────────────────────
+# The repo-local agents/ dir holds only internal per-provider test agents
+# (test-agent-*, test-monetization-agent). Customer images must not contain
+# them at all — the loader additionally refuses the project-local dir on
+# managed deployments (olano/config/loader.py). Dev containers keep them via
+# the docker-compose.yml bind mount (./agents:/app/agents:ro).
+agents/
+
+# ── caches and build outputs ─────────────────────────────────────────────────
+# node_modules is rebuilt by `npm ci` inside the dashboard build; shipping the
+# host's copy would both bloat the context and risk platform-specific binaries.
+**/node_modules
+**/__pycache__
+**/*.py[cod]
+.venv
+venv/
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info
+
+# ── local state that must never enter an image ───────────────────────────────
+.env
+.env.*
+!.env.example
+*.log
+.olano-tester/
+.DS_Store

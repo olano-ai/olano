@@ -1,0 +1,127 @@
+name: Sandbox (live)
+
+# tests/integration drives real containers: the `docker exec` hop deepagents
+# parses JSON through, bind-mount ownership between the root runtime and the
+# uid-1000 agent, the egress firewall's DOCKER-USER rules, stdio MCP servers and
+# connected-job containers. The unit suite fakes every one of those, and CI
+# never ran this suite: CLAUDE.md asks for `make test-sandbox` on anything that
+# touches the container boundary, and until now that rested on someone having a
+# Docker host and the private sandbox image to hand.
+#
+# Runs on pull requests that touch that boundary, and on demand (Actions tab ->
+# Sandbox (live) -> Run workflow, with any branch) for everything else, e.g. a
+# dependency or builder change worth checking against a real container.
+
+on:
+  pull_request:
+    paths:
+      - "olano/backends/**"
+      - "olano/security/egress_firewall.py"
+      - "docker/olano-sandbox/**"
+      - "docker/olano-browser/**"
+      - "olano/browser/**"
+      - "tests/integration/**"
+      - ".github/workflows/sandbox-live.yml"
+  workflow_dispatch:
+    inputs:
+      image:
+        description: "Sandbox image to test against"
+        default: "ghcr.io/olano-ai/olano-sandbox:latest"
+      build_image:
+        description: "Build docker/olano-sandbox from this ref instead of pulling"
+        type: boolean
+        default: false
+
+concurrency:
+  group: sandbox-live-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  # Pull the private sandbox image with this run's own token.
+  packages: read
+
+jobs:
+  sandbox-live:
+    name: Live sandbox suite
+    runs-on: ubuntu-latest
+    # A pull is ~1 min; the build fallback is the long pole (LibreOffice,
+    # tesseract, the gog Go build) at roughly 15.
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      # The published image is what every box runs, so it is the default. A
+      # pull that fails (no package access, e.g. a fork's PR) falls back to
+      # building from this ref rather than skipping, and `build_image` forces
+      # the build. A PR that changes docker/olano-sandbox builds too: pulled,
+      # it would be tested against the image it is about to replace, and a
+      # test for a tool the PR bakes in fails against the old one. The diff is
+      # tree-to-tree, so the shallow checkout is enough.
+      - name: Get the sandbox image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE: ${{ inputs.image || 'ghcr.io/olano-ai/olano-sandbox:latest' }}
+          FORCE_BUILD: ${{ inputs.build_image && '1' || '' }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -z "$FORCE_BUILD" ] && [ -n "$BASE_REF" ] \
+             && git fetch --quiet --depth=1 origin "$BASE_REF" \
+             && ! git diff --quiet FETCH_HEAD HEAD -- docker/olano-sandbox/; then
+            echo "docker/olano-sandbox changed against $BASE_REF: building it"
+            FORCE_BUILD=1
+          fi
+          if [ -z "$FORCE_BUILD" ] \
+             && echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin \
+             && docker pull "$IMAGE"; then
+            docker tag "$IMAGE" olano-sandbox:latest
+            echo "Testing against $IMAGE" >> "$GITHUB_STEP_SUMMARY"
+          else
+            docker build -t olano-sandbox:latest docker/olano-sandbox/
+            echo "Testing against olano-sandbox built from ${GITHUB_SHA}" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          docker logout ghcr.io || true
+          docker image inspect olano-sandbox:latest --format '{{.Id}} created {{.Created}}'
+
+      # The live browser suite (tests/integration/test_browser_sidecar_live.py)
+      # runs against the image this ref builds: it is small, and a PR that
+      # changes docker/olano-browser must be tested against itself.
+      - name: Build the live browser image
+        run: docker build -t olano-browser:latest docker/olano-browser/
+
+      # The egress tests only need *a* container; they read this tag.
+      - name: Pull the egress test image
+        run: docker pull alpine:3.20
+
+      # As root, like the runtime in its container: the suite checks the
+      # root-seeded workspace hand-off to uid 1000, and the egress firewall
+      # writes DOCKER-USER rules, which needs root. The venv interpreter is
+      # called directly so nothing root-owned lands in uv's cache.
+      - name: Run tests/integration
+        run: |
+          set -o pipefail
+          sudo --preserve-env .venv/bin/python -m pytest tests/integration \
+            -p no:cacheprovider -o addopts="" -q -rs --tb=short 2>&1 | tee pytest.log
+
+      # Every module skips itself when Docker, the image or iptables is
+      # missing, which on a broken runner would read as a green run that tested
+      # nothing. Those skips fail the job; any other skip is reported as is.
+      - name: Fail on prerequisite skips
+        run: |
+          if grep -E "live sandbox( egress)? unavailable|iptables/DOCKER-USER not usable|live browser unavailable" pytest.log; then
+            echo "::error::the live suite skipped for a missing prerequisite (see above)"
+            exit 1
+          fi
+
+      - name: Containers left behind
+        if: always()
+        run: docker ps -a --format '{{.Names}}\t{{.Image}}\t{{.Status}}' || true

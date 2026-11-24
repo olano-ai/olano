@@ -1,0 +1,34 @@
+# Olano self-hosted: a sandbox container per agent, layered over
+# docker-compose.yml. setup.sh --sandbox adds this file to COMPOSE_FILE in
+# .env, pins OLANO_SANDBOX_EXEC=1 and an absolute OLANO_DATA_DIR, and pulls the
+# sandbox image (tagged olano-sandbox:latest, the name the runtime starts).
+#
+# Without it, agents' shell commands run inside the runtime container, which
+# also holds the vault's key, every agent's files and the runtime itself. With
+# it, each agent's commands run in its own container (non-root, resource
+# capped, only that agent's workspace mounted), and an agent whose sandbox
+# cannot start gets no shell rather than falling back to the runtime container.
+#
+# THE TRADE-OFF: the runtime starts those containers through the host's Docker
+# socket, and a container holding the Docker socket can do anything root can
+# do on the host. Agents never get the socket, but the runtime does, so a flaw
+# in the runtime becomes a flaw in the host. Use this on a machine you alone
+# control.
+#
+# Why the data directory is mounted a second time: the sandboxes are started by
+# the HOST's Docker daemon, and the runtime mounts an agent's workspace into
+# its sandbox at the path the runtime itself sees. Mounting the data directory
+# at the same absolute path inside the runtime container as on the host (and
+# pointing the home there) makes that path valid on the host too. The original
+# /root/.olano mount stays, so paths recorded before the switch still resolve
+# inside the runtime.
+services:
+  olano:
+    environment:
+      - OLANO_SANDBOX_EXEC=1
+      - OLANO_HOME=${OLANO_DATA_DIR:?setup.sh --sandbox sets an absolute OLANO_DATA_DIR}
+      - LIONCLAW_HOME=${OLANO_DATA_DIR}
+      - LIONCLAW_WORKSPACE=${OLANO_DATA_DIR}/workspace
+    volumes:
+      - ${OLANO_DATA_DIR}:${OLANO_DATA_DIR}
+      - /var/run/docker.sock:/var/run/docker.sock

@@ -1,0 +1,78 @@
+# Dependabot version updates. Also enable "Dependabot security updates" and
+# "secret scanning & push protection" under Settings, Code security: this
+# file alone does not turn those on.
+#
+# Weekly + grouped + low PR limits on purpose: ci.yml is explicitly written to
+# minimize billed Actions minutes, and every PR runs the full pipeline.
+version: 2
+updates:
+  # Python — uv.lock at the repo root (Dependabot's native uv support).
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      langchain:
+        patterns: ["langchain*", "langgraph*"]
+      security-patches:
+        applies-to: security-updates
+        patterns: ["*"]
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+        exclude-patterns: ["langchain*", "langgraph*", "deepagents*", "playwright"]
+    ignore:
+      # Exact-pinned beta with documented builder workarounds (CLAUDE.md:
+      # fireworks proto neutralization, middleware patches). Bump manually.
+      - dependency-name: "deepagents"
+      # Pinned <1.57 to match the Chromium build baked into the managed/CI
+      # image; only patch bumps are safe automatically.
+      - dependency-name: "playwright"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+      # ruff 0.10+ enables new default rules (RUF059 etc.) that flag ~740
+      # pre-existing violations, so a grouped bump turns the Lint job red
+      # (see #199/#210). Bump it in a dedicated lint-sweep PR (make fix +
+      # manual remainder), then drop this ignore.
+      - dependency-name: "ruff"
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
+
+  # GitHub Actions.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Docker base images — backend (root), sandbox, dashboard.
+  - package-ecosystem: "docker"
+    directories:
+      - "/"
+      - "/docker/olano-sandbox"
+      - "/docker/dashboard"
+    schedule:
+      interval: "weekly"
+    groups:
+      base-images:
+        patterns: ["*"]
+
+  # npm — dashboard SPA + WhatsApp bridge.
+  - package-ecosystem: "npm"
+    directory: "/olano/dashboard_2.0"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      dashboard-deps:
+        update-types: ["minor", "patch"]
+        patterns: ["*"]
+  - package-ecosystem: "npm"
+    directory: "/whatsapp-bridge"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 2
+    groups:
+      bridge-deps:
+        patterns: ["*"]

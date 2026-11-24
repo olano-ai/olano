@@ -1,0 +1,16 @@
+{
+  // Test agent — fake offline model. For profiling the agent loop itself
+  // (scripts/bench_agent_turn.py) and offline end-to-end tests: the `fake:`
+  // provider streams deterministic responses with configurable latency and
+  // needs no API key. See olano/models/fake.py for the knobs
+  // (LIONCLAW_FAKE_TTFT_MS, LIONCLAW_FAKE_TOKEN_DELAY_MS,
+  //  LIONCLAW_FAKE_MODEL_SCRIPT, and fake:instant|fast|realistic profiles).
+  name: "test-agent-fake",
+  description: "Offline fake-model agent — for agent-loop profiling and keyless tests.",
+  emoji: "🧪",
+  model: "fake:instant",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}

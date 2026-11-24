@@ -1,0 +1,68 @@
+# Local Claude Code settings stay untracked, but shared skills, the session
+# bootstrap hook and the settings that wire it are committed — a hook that only
+# exists inside one container dies with it, which is the same as not having one.
+.claude/*
+!.claude/skills/
+!.claude/session-start.sh
+!.claude/settings.json
+.claude/settings.local.json
+
+# Cursor/Codex project-local skills. Shared copies live in .claude/skills/.
+.agents/
+
+# olano-tester screenshots (dashboard GUI verification output)
+.olano-tester/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.env
+dist/
+build/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# Coverage
+htmlcov/
+coverage.xml
+.coverage
+.coverage.*
+
+# Node
+node_modules/
+whatsapp-bridge/node_modules/
+*.log
+
+# Lionclaw deploy (host-specific, not committed)
+deploy/caddy.env
+deploy/.github_token
+
+# Lionclaw runtime
+~/.lionclaw/
+.lionclaw/
+.olano/
+*.jsonl
+
+# Chroma
+chroma/
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+scratch
+
+# curl cookie jars from manual API testing (hold live session tokens)
+lc.cookies
+*.cookies
+
+# MkDocs output (docs.olano.ai is built in CI)
+site/

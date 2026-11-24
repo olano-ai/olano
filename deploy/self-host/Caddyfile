@@ -1,0 +1,69 @@
+# Olano self-hosted: the dashboard and the API on ONE origin.
+#
+# Two listeners inside the container, both serving the same routes:
+#
+#   :8080  plain http, ALWAYS. docker-compose.yml publishes it on the host's
+#          loopback only (127.0.0.1:3200 by default), so http://localhost:3200
+#          works on the machine itself (or through an SSH tunnel) and is never
+#          reachable from the network.
+#   OLANO_SITE_ADDRESS
+#          the public site. Unset or ":80" (localhost mode) it is a plain-http
+#          listener on a port compose does not publish, so it is inert. A
+#          hostname (olano.example.com, or <ip-with-dashes>.sslip.io from
+#          `setup.sh --host auto`) makes Caddy obtain a Let's Encrypt
+#          certificate over the HTTP-01 challenge and serve https on 443,
+#          redirecting 80 to it; docker-compose.https.yml publishes 80 and 443.
+#
+# Same origin is a requirement, not a preference: the session cookie, the
+# terminal WebSocket (/api/terminal/ws), the unbounded chat streams and the
+# installable dashboard's service worker all depend on it. Put your own
+# reverse proxy in FRONT of this one if you want, but keep / and /api together.
+
+(olano_routes) {
+	encode zstd gzip
+
+	# API, OpenAPI schema and the RFC 8414 / RFC 9728 discovery documents the
+	# external-access surfaces (MCP, A2A) publish at the root. reverse_proxy
+	# streams SSE and upgrades WebSockets with no extra configuration.
+	@api path /api/* /openapi.json /.well-known/*
+	handle @api {
+		reverse_proxy olano:8765
+	}
+
+	# Agent-published pages: the runtime enforces the owner-set password on
+	# every request; nothing under /pages/ is served unauthenticated.
+	@pages path /pages /pages/*
+	handle @pages {
+		reverse_proxy olano:8765
+	}
+
+	# Vite's content-hashed chunks: served as-is, and a miss is a 404, never
+	# index.html, so a tab opened before an update fails honestly and the
+	# dashboard's chunk recovery reloads it.
+	@assets path /assets/*
+	handle @assets {
+		root * /srv
+		file_server
+	}
+
+	# Everything else is the dashboard. Real files (/sw.js, /manifest.json,
+	# the icons) are served as themselves; unmatched paths fall back to
+	# index.html so client-side routes deep-link. no-cache = revalidate before
+	# use, so an update is picked up on the next load instead of days later.
+	handle {
+		root * /srv
+		header Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+# The loopback listener (see the header).
+http://:8080 {
+	import olano_routes
+}
+
+# The public site (see the header).
+{$OLANO_SITE_ADDRESS::80} {
+	import olano_routes
+}

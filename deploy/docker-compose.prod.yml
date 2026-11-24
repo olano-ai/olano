@@ -1,0 +1,111 @@
+# Production compose for the headless Lionclaw backend on EC2.
+# Differs from the dev ../docker-compose.yml by:
+#   • NOT publishing 8765 to the host (Caddy reaches it on the internal network)
+#   • adding a Caddy reverse proxy that terminates TLS (auto Let's Encrypt)
+#
+# Run from the repo root on the box:
+#   docker compose -f deploy/docker-compose.prod.yml up -d --build
+services:
+  olano:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: olano
+    restart: unless-stopped
+    # Memory guardrail (parity with docker-compose.allinone.yml): cap so a heavy
+    # agent shell command OOMs the container instead of freezing the VM. Pin
+    # LIONCLAW_MEM_LIMIT in .env (env-lib.sh ensure_mem_limit); 0 = uncapped.
+    mem_limit: ${LIONCLAW_MEM_LIMIT:-0}
+    command: ["serve"]
+    env_file:
+      - ../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LIONCLAW_WORKSPACE=/root/.lionclaw/workspace
+      - LIONCLAW_CONTAINERIZED=1
+      - LIONCLAW_RUNTIME_PORT=8765
+      # Vault unlock key, optional. Leave it empty and quick-setup generates a
+      # vault passphrase and stores it in the vault's boot-key file inside the
+      # olano home, which is what the runtime unlocks from. Set it (here or in
+      # .env) only to choose the passphrase yourself; it must then match the
+      # passphrase the vault was created with. OLANO_VAULT_KEY is the name;
+      # LIONCLAW_VAULT_KEY is what older .env files carry, and the runtime
+      # reads either.
+      - OLANO_VAULT_KEY=${OLANO_VAULT_KEY:-}
+      - LIONCLAW_VAULT_KEY=${LIONCLAW_VAULT_KEY:-}
+      # NOTE: do NOT set LIONCLAW_DASHBOARD_TOKEN — the dashboard uses
+      # cookie/session auth; a bearer token would 401 every request.
+      # Persistence backend: DEFAULTS to the bundled Postgres sidecar. Override
+      # in .env — e.g. LIONCLAW_CHECKPOINT_BACKEND=sqlite for embedded SQLite.
+      # OLANO_PG_NAME is the sidecar's role and database (see the postgres
+      # service; docker-compose.allinone.yml explains the pin).
+      - LIONCLAW_CHECKPOINT_BACKEND=${LIONCLAW_CHECKPOINT_BACKEND:-postgres}
+      - LIONCLAW_CHECKPOINT_DB_URL=${LIONCLAW_CHECKPOINT_DB_URL:-postgresql://${OLANO_PG_NAME:-lionclaw}:${LIONCLAW_PG_PASSWORD:-lionclaw}@postgres:5432/${OLANO_PG_NAME:-lionclaw}}
+      - LIONCLAW_STORE_BACKEND=${LIONCLAW_STORE_BACKEND:-postgres}
+      - LIONCLAW_STORE_DB_URL=${LIONCLAW_STORE_DB_URL:-postgresql://${OLANO_PG_NAME:-lionclaw}:${LIONCLAW_PG_PASSWORD:-lionclaw}@postgres:5432/${OLANO_PG_NAME:-lionclaw}}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ${HOME}/.lionclaw:/root/.lionclaw
+      # Machine-level bootstrap env (MCP relay wiring etc.) written by the
+      # provisioner; olano reads /opt/olano/olano.env natively at startup.
+      # Docker creates an empty host dir when none exists - harmless.
+      - /opt/olano:/opt/olano:ro
+    expose:
+      - "8765"          # internal to the compose network only
+    networks:
+      - olano
+
+  caddy:
+    image: caddy:2
+    container_name: olano_caddy
+    restart: unless-stopped
+    depends_on:
+      - olano
+    env_file:
+      - ./caddy.env          # holds LIONCLAW_HTTPS_HOST=<host> — api-acme.olano.run in prod, <eip>.sslip.io in dev (rsync-excluded)
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - olano
+
+  # Postgres checkpoint/store backend (the default — see the olano service).
+  # Internal to the compose network only; data persists in the named volume.
+  # Set LIONCLAW_CHECKPOINT_BACKEND=sqlite in .env to run SQLite-only.
+  # OLANO_PG_NAME is the role, the database and the volume's stem (fresh box:
+  # olano; a box whose data was initialised as lionclaw keeps that, which is
+  # also the fallback for an unpinned legacy box). Both volume keys exist
+  # because a key cannot be interpolated; compose creates only the one the
+  # service references.
+  postgres:
+    image: postgres:16
+    container_name: olano_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${OLANO_PG_NAME:-lionclaw}
+      POSTGRES_PASSWORD: ${LIONCLAW_PG_PASSWORD:-lionclaw}
+      POSTGRES_DB: ${OLANO_PG_NAME:-lionclaw}
+    volumes:
+      - ${OLANO_PG_NAME:-lionclaw}_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${OLANO_PG_NAME:-lionclaw} -d ${OLANO_PG_NAME:-lionclaw}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - olano
+
+networks:
+  olano:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  lionclaw_pgdata:
+  olano_pgdata:

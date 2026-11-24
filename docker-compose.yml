@@ -1,0 +1,87 @@
+services:
+  olano:
+    build: .
+    container_name: olano
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Persist Lionclaw home directly on the host
+      - ${HOME}/.lionclaw:/root/.lionclaw
+      # Mount local agents/ and workspace/ for development
+      - ./agents:/app/agents:ro
+      - ./workspace:/app/workspace:ro
+      # Optional: add extra host bind roots here for dynamic /share grants
+      # - ${HOME}/Documents:/host/Documents:rw
+    ports:
+      # ACP HTTP port (for editor integrations)
+      - "8765:8765"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LIONCLAW_WORKSPACE=/root/.lionclaw/workspace
+      - LIONCLAW_CONTAINERIZED=1
+      # NOTE: LIONCLAW_INSTALL_MODE is deliberately NOT pinned here. Self-update
+      # detection already reports docker for a baked image, but auto-detects
+      # "source" once the fleet tooling's update-code.sh git-inits /app for editable in-place
+      # updates — pinning "docker" would disable that git-pull-in-container path.
+      # Optional: advertise additional bind roots to Lionclaw's share validator
+      # - LIONCLAW_EXTRA_BIND_ROOTS=/root/.lionclaw:/host/Documents
+
+  # Optional: Postgres for the production checkpoint/store backend.
+  # Start it on its own with:  make postgres-up   (docker compose --profile postgres up -d)
+  # Then point olano at it:
+  #   export LIONCLAW_CHECKPOINT_BACKEND=postgres
+  #   export LIONCLAW_CHECKPOINT_DB_URL=postgresql://<OLANO_PG_NAME>:<LIONCLAW_PG_PASSWORD>@localhost:5432/<OLANO_PG_NAME>
+  # (install.sh does all of it for you: it pins OLANO_PG_NAME and a random
+  # LIONCLAW_PG_PASSWORD in <home>/.env, exports both for its compose call and
+  # writes the URL, password URL-encoded, into config.yaml.)
+  # SQLite stays the zero-config default; this is only needed at scale. CI uses
+  # testcontainers instead of this service.
+  postgres:
+    image: postgres:16
+    container_name: olano_postgres
+    restart: unless-stopped
+    environment:
+      # OLANO_PG_NAME is the role, the database and the volume's stem at once:
+      # Postgres applies the names only when it initialises the data dir, so
+      # they must never drift from the data. install.sh pins olano on a fresh
+      # machine and lionclaw wherever a <project>_lionclaw_pgdata volume
+      # already exists; the literal here is the fallback for a dev running
+      # `make postgres-up` by hand, and stays lionclaw so an existing volume
+      # keeps being found.
+      POSTGRES_USER: ${OLANO_PG_NAME:-lionclaw}
+      # install.sh generates a random value, keeps it in <home>/.env and exports
+      # it for its compose call; the literal is only the fallback when nothing
+      # sets it (a dev running `make postgres-up` by hand).
+      POSTGRES_PASSWORD: ${LIONCLAW_PG_PASSWORD:-lionclaw}
+      POSTGRES_DB: ${OLANO_PG_NAME:-lionclaw}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ${OLANO_PG_NAME:-lionclaw}_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${OLANO_PG_NAME:-lionclaw} -d ${OLANO_PG_NAME:-lionclaw}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    profiles:
+      - postgres  # only starts with: docker compose --profile postgres up
+
+  # Optional: ChromaDB as a standalone service for RAG memory
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: olano_chroma
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/chroma/chroma
+    ports:
+      - "8000:8000"
+    profiles:
+      - rag  # only starts with: docker compose --profile rag up
+
+volumes:
+  chroma_data:
+  # Both keys are declared because a key cannot be interpolated; compose
+  # creates only the one the service references.
+  lionclaw_pgdata:
+  olano_pgdata:

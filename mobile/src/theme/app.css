@@ -1,0 +1,4582 @@
+/*
+ * The few things Ionic has no component for: chat bubbles, agent steps,
+ * cards in the Inbox, and the start screens. Everything else is Ionic's own
+ * platform styling.
+ */
+
+.olano-splash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.olano-center {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.olano-muted {
+  color: var(--olano-muted);
+}
+
+/* ── start screens ─────────────────────────────────────────────────────── */
+
+.olano-start {
+  --background: #f2f2f7;
+}
+
+.ion-palette-dark .olano-start {
+  --background: var(--ion-background-color, #000);
+}
+
+.md .olano-start {
+  --background: var(--ion-background-color);
+}
+
+.olano-start-inner {
+  max-width: 440px;
+  margin: 0 auto;
+  padding-top: max(48px, calc(var(--ion-safe-area-top, 0px) + 32px));
+}
+
+.olano-start-inner.olano-centered {
+  text-align: center;
+  padding-top: max(96px, calc(var(--ion-safe-area-top, 0px) + 72px));
+}
+
+.olano-start-logo {
+  width: 168px;
+  height: auto;
+  display: block;
+  margin: 0 0 28px 4px;
+}
+
+.olano-logo-word {
+  fill: #15151a;
+}
+.olano-logo-dot {
+  fill: #ff6a3d;
+}
+.ion-palette-dark .olano-logo-word {
+  fill: #ffffff;
+}
+
+.olano-start h1 {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 4px 8px;
+}
+
+.olano-start-lead {
+  color: var(--olano-muted);
+  font-size: 16px;
+  line-height: 1.45;
+  margin: 0 4px 20px;
+}
+
+.olano-start-form {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.olano-start-form ion-item {
+  --background: var(--olano-card);
+}
+
+.olano-start-error {
+  margin: 0 4px 12px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.olano-start-button {
+  margin: 8px 0 4px;
+  --border-radius: 12px;
+  min-height: 50px;
+  font-weight: 600;
+}
+
+/* "Try the demo" (src/appConfig.ts) and the update notice under it. */
+.olano-start-demo {
+  margin-top: 20px;
+}
+
+.olano-start-note {
+  color: var(--olano-muted);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 6px 4px 12px;
+}
+
+.olano-start-or {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.olano-start-icon {
+  font-size: 64px;
+  margin-bottom: 12px;
+}
+
+/* ── lists ─────────────────────────────────────────────────────────────── */
+
+/* Pages built from inset lists sit on the platform's grouped background
+   (iOS Settings: light grey behind white cards; black behind dark cards). */
+ion-content.olano-grouped {
+  --background: #f2f2f7;
+}
+
+.ion-palette-dark ion-content.olano-grouped {
+  --background: var(--ion-background-color, #000);
+}
+
+.md ion-content.olano-grouped {
+  --background: var(--ion-background-color);
+}
+
+/* In the dark theme the cards sit a step lighter than the page, as in iOS
+   Settings; Ionic's dark palette would paint them the page's own black. */
+.ion-palette-dark ion-content.olano-grouped ion-list.list-inset,
+.ion-palette-dark ion-content.olano-grouped ion-list.list-inset ion-item,
+.ion-palette-dark ion-content.olano-grouped ion-list.list-inset ion-item-sliding {
+  --background: var(--olano-card);
+  --ion-item-background: var(--olano-card);
+  background: var(--olano-card);
+}
+
+/* The large title sits on the same grey as the cards below it, as in iOS
+   Settings, instead of on a white strip. */
+ion-content.olano-grouped .header-collapse-condense ion-toolbar {
+  --background: transparent;
+}
+
+.olano-row {
+  --padding-start: 16px;
+  --inner-padding-end: 12px;
+}
+
+.olano-row-avatar {
+  margin: 10px 12px 10px 0;
+  display: flex;
+}
+
+.olano-row-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.olano-row-top h2,
+.olano-row-top h3 {
+  font-weight: 600;
+  /* ion-label's own rules inherit these from the label, which clips a long
+     title without the ellipsis. */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.olano-row-time {
+  font-size: 13px;
+  flex: none;
+  margin-left: 8px;
+  align-self: flex-start;
+  margin-top: 12px;
+}
+
+.olano-row-top .olano-row-time {
+  margin-top: 0;
+}
+
+.olano-row-sub {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal !important;
+  /* ion-label sets overflow: inherit on its paragraphs, which would let a
+     third line show below the clamp. */
+  overflow: hidden !important;
+  line-height: 1.35 !important;
+  max-height: 2.7em;
+}
+
+/* The theme choice: a segmented control filling its row. */
+.olano-appearance {
+  --padding-start: 10px;
+  --inner-padding-end: 10px;
+  --min-height: 52px;
+}
+
+.olano-appearance ion-segment {
+  width: 100%;
+}
+
+/* A footnote under a grouped list, as iOS Settings explains a choice. */
+.olano-section-note {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+  margin: -8px 0 0;
+  padding: 0 32px;
+}
+
+.md .olano-section-note {
+  padding: 0 20px;
+  margin-top: 0;
+}
+
+/* iOS section header: small grey capitals above a grouped list. */
+.olano-section {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--olano-muted);
+  margin: 24px 0 -10px;
+  padding: 0 32px;
+}
+
+.md .olano-section {
+  text-transform: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ion-color-primary);
+  padding: 0 16px;
+  margin: 20px 0 0;
+}
+
+.olano-thread-title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/*
+ * Source badges on conversation rows (chat/sources.ts), in the dashboard's
+ * words and colours: one hue drives the text, a tint behind it and a hairline
+ * ring. The rgba background is for web views older than color-mix (iOS 15).
+ */
+.olano-thread-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.olano-source {
+  --c: var(--olano-muted);
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  max-width: 14ch;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--c);
+  background: rgba(127, 127, 127, 0.14);
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent);
+}
+
+.olano-source-scheduled { --c: var(--olano-hue-amber); }
+.olano-source-peer { --c: var(--olano-hue-grass); }
+.olano-source-autonomous { --c: var(--ion-color-primary); }
+.olano-source-cortex { --c: var(--olano-cortex); }
+.olano-source-external { --c: var(--olano-hue-sky); }
+.olano-source-telegram { --c: var(--olano-hue-azure); }
+.olano-source-whatsapp { --c: var(--olano-hue-grass); }
+.olano-source-slack { --c: var(--olano-hue-magenta); }
+.olano-source-discord { --c: var(--olano-hue-indigo); }
+.olano-source-weixin { --c: var(--olano-hue-jade); }
+.olano-source-wecom { --c: var(--olano-hue-sky); }
+.olano-source-feishu { --c: var(--olano-hue-teal); }
+.olano-source-dingtalk { --c: var(--olano-hue-sand); }
+.olano-source-signal { --c: var(--olano-hue-violet); }
+.olano-source-matrix { --c: var(--olano-hue-teal); }
+.olano-source-mattermost { --c: var(--olano-hue-indigo); }
+.olano-source-email { --c: var(--olano-hue-amber); }
+.olano-source-sms { --c: var(--olano-hue-lime); }
+.olano-source-bluebubbles { --c: var(--olano-hue-sky); }
+.olano-source-qqbot { --c: var(--olano-hue-red); }
+.olano-source-debox { --c: var(--olano-hue-violet); }
+.olano-source-homeassistant { --c: var(--olano-hue-teal); }
+.olano-source-webhook { --c: var(--olano-hue-slate); }
+.olano-source-mcp { --c: var(--olano-hue-indigo); }
+.olano-source-a2a { --c: var(--olano-hue-teal); }
+/* This app: the brand's own coral. */
+.olano-source-mobile { --c: var(--ion-color-primary); }
+
+.olano-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  margin-right: 0;
+  vertical-align: middle;
+  animation: olano-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes olano-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.olano-avatar {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  border-radius: 50%;
+}
+
+.olano-avatar img,
+.olano-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.olano-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.olano-presence {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 26%;
+  height: 26%;
+  min-width: 10px;
+  min-height: 10px;
+  border-radius: 50%;
+  background: #8e8e93;
+  border: 2px solid var(--ion-item-background, var(--ion-background-color));
+}
+
+.olano-presence.on {
+  background: var(--olano-online);
+}
+
+.olano-agent-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 24px 4px;
+}
+
+.olano-agent-hero h2 {
+  margin: 10px 0 2px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.olano-agent-hero p {
+  margin: 0;
+  color: var(--olano-muted);
+  font-size: 15px;
+}
+
+.olano-empty {
+  text-align: center;
+  padding: 56px 32px;
+  color: var(--olano-muted);
+}
+
+.olano-empty h3 {
+  color: var(--ion-text-color);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 8px 0 6px;
+}
+
+.olano-empty p {
+  margin: 0 0 16px;
+  line-height: 1.45;
+}
+
+.olano-empty-icon {
+  font-size: 44px;
+  color: var(--olano-muted);
+}
+
+.olano-empty-avatar {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.olano-filters {
+  padding: 4px 16px 0;
+}
+
+.olano-chips {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 0 2px;
+  scrollbar-width: none;
+}
+
+.olano-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.olano-chips ion-chip {
+  flex: none;
+  margin: 0;
+}
+
+/* An agent's conversation list: the source chips under the agent's header. */
+.olano-thread-filters {
+  padding: 0 16px 2px;
+}
+
+.olano-chip-count {
+  margin-left: 2px;
+  opacity: 0.6;
+  font-weight: 400;
+}
+
+.olano-chips ion-chip .olano-avatar {
+  margin-right: 6px;
+}
+
+.olano-cortex-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 2px 0;
+}
+
+.olano-kind {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(var(--ion-color-primary-rgb), 0.14);
+  color: var(--ion-color-primary);
+}
+
+.olano-kind.brainstorm {
+  background: rgba(142, 142, 147, 0.18);
+  color: var(--olano-muted);
+}
+.olano-kind.prototype {
+  background: rgba(88, 86, 214, 0.16);
+  color: #6e6cf0;
+}
+.olano-kind.project {
+  background: rgba(52, 199, 89, 0.16);
+  color: #2fb24f;
+}
+
+.olano-score {
+  font-size: 12px;
+  color: var(--olano-muted);
+}
+
+.olano-working {
+  font-size: 12px;
+  color: var(--ion-color-primary);
+}
+
+.olano-kind-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+}
+
+.olano-version {
+  display: block;
+  text-align: center;
+  padding: 8px 0 32px;
+  font-size: 13px;
+}
+
+.olano-account-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin: 12px 14px 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-primary);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.olano-account h2 {
+  font-weight: 600;
+}
+
+.olano-inline-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 8px 0;
+}
+
+.olano-read h3 {
+  font-weight: 400;
+  color: var(--olano-muted);
+}
+
+/* ── cards (Inbox) ─────────────────────────────────────────────────────── */
+
+.olano-cards {
+  padding: 12px 16px 24px;
+}
+
+.olano-card {
+  background: var(--olano-card);
+  border-radius: 14px;
+  padding: 14px 16px 6px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.olano-card h3 {
+  margin: 8px 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.olano-card p {
+  margin: 0 0 6px;
+  color: var(--olano-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* A card whose request is out: still readable, visibly waiting. */
+.olano-card.olano-card-busy {
+  opacity: 0.72;
+  transition: opacity 160ms ease;
+}
+
+/* A button that is working keeps its colour; the spinner and label carry
+   the news (ui/ActionButton.tsx). Ionic dims a disabled button to 0.5, which
+   reads as "not available" rather than "busy". */
+ion-button.olano-busy {
+  opacity: 0.92;
+}
+
+ion-button ion-spinner[slot="start"] {
+  width: 18px;
+  height: 18px;
+  margin-inline-end: 8px;
+}
+
+ion-button[size="small"] ion-spinner[slot="start"],
+ion-button[fill="clear"] ion-spinner[slot="start"] {
+  width: 16px;
+  height: 16px;
+  margin-inline-end: 6px;
+}
+
+.olano-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.olano-card-head ion-note {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.olano-agent-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.olano-risk {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ion-color-danger);
+}
+
+.olano-approval-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: 4px -6px 0 0;
+}
+
+/* ── conversation ──────────────────────────────────────────────────────── */
+
+.olano-conversation ion-toolbar ion-title {
+  padding-inline: 48px;
+}
+
+.olano-chat-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+.olano-chat-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.olano-chat-title-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  line-height: 1.15;
+}
+
+/*
+ * The conversation's model, a pill in the composer's bottom row that opens
+ * the model sheet: the model's name, then its reasoning level in grey.
+ */
+.olano-model-chip {
+  flex: 0 1 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  height: 38px;
+  margin: 0;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 19px;
+  background: var(--olano-bubble-agent);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--olano-bubble-agent-text);
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease;
+}
+
+.olano-model-chip:active {
+  transform: scale(0.96);
+}
+
+.olano-model-chip .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.olano-model-chip .level {
+  flex: none;
+  color: var(--olano-muted);
+}
+
+.olano-model-chip.picked .name {
+  color: var(--ion-color-primary);
+}
+
+.olano-model-note {
+  margin: 14px 20px 6px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+}
+
+.olano-model-levels {
+  margin: 8px 16px 4px;
+}
+
+.olano-model-levels-title {
+  margin: 0 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--olano-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.olano-model-search {
+  padding: 4px 8px 0;
+}
+
+.olano-model-group {
+  margin: 18px 20px -8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--olano-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.olano-model-loading {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.olano-tabbar-hidden {
+  display: none !important;
+}
+
+/*
+ * A toast lands above the tab bar, never on it. Ionic puts the overlay on the
+ * app root, outside the tabs, and sizes it to the whole screen (top 0, height
+ * 100%) with the toast at its bottom edge, which is where the bar is. While a
+ * bar is on screen the overlay stops above it; a full-screen page (a
+ * conversation, an issue) hides the bar, and the toast takes the bottom edge
+ * as before. The clearance is the bar's own geometry, per platform.
+ */
+html.ios {
+  --olano-tabbar-clearance: calc(max(10px, calc(var(--ion-safe-area-bottom, 0px) - 8px)) + 62px);
+}
+
+html.md {
+  --olano-tabbar-clearance: 72px;
+}
+
+body:has(ion-tab-bar:not(.olano-tabbar-hidden)) ion-toast {
+  height: auto;
+  bottom: var(--olano-tabbar-clearance, 0px);
+}
+
+/*
+ * The tab bar. On an iPhone it floats above the home indicator as a rounded,
+ * frosted bar the content scrolls under, as tab bars do since iOS 26; the
+ * selected tab sits in a soft pill. Docked, Ionic's bar left the icons at the
+ * top of an 83pt strip with a third of it empty below them.
+ */
+html.ios ion-tab-bar {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: max(10px, calc(var(--ion-safe-area-bottom, 0px) - 8px));
+  height: 62px;
+  /* Ionic pads the docked bar for the home indicator; this one floats above it. */
+  padding: 0 5px !important;
+  border-radius: 31px;
+  --border: 0;
+  --background: rgba(250, 250, 252, 0.78);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  backdrop-filter: blur(22px) saturate(180%);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.12),
+    0 0 0 0.5px rgba(0, 0, 0, 0.1);
+  contain: layout style;
+}
+
+html.ios.ion-palette-dark ion-tab-bar {
+  --background: rgba(36, 36, 40, 0.78);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.55),
+    0 0 0 0.5px rgba(255, 255, 255, 0.12);
+}
+
+/* Volt's floating bar is the card grey over the black page, not iOS's
+   blue-tinted dark. */
+html.ios.ion-palette-dark.olano-theme-volt ion-tab-bar {
+  --background: rgba(21, 21, 21, 0.82);
+}
+
+html.ios ion-tab-button {
+  --color: #6b6b70;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  height: 52px;
+  margin: 0 1px;
+  border-radius: 26px;
+  transition: background-color 160ms ease;
+}
+
+html.ios.ion-palette-dark ion-tab-button {
+  --color: #a1a1a8;
+}
+
+html.ios ion-tab-button.tab-selected {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+html.ios.ion-palette-dark ion-tab-button.tab-selected {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Cortex wears the dashboard's violet, selected or not (specific enough to
+   beat the platform tab colours above, light and dark). */
+html.ios ion-tab-button.olano-cortex-tab,
+html.md ion-tab-button.olano-cortex-tab,
+html.ios.ion-palette-dark ion-tab-button.olano-cortex-tab,
+html.md.ion-palette-dark ion-tab-button.olano-cortex-tab {
+  --color: var(--olano-cortex);
+  --color-selected: var(--olano-cortex);
+}
+
+html.ios ion-tab-button.olano-cortex-tab.tab-selected {
+  background: var(--olano-cortex-soft);
+}
+
+html.md ion-tab-button.olano-cortex-tab.tab-selected ion-icon {
+  background: var(--olano-cortex-soft);
+}
+
+html.ios ion-tab-button ion-icon {
+  font-size: 25px;
+  margin: 0;
+}
+
+html.ios ion-tab-button ion-label {
+  margin: 2px 0 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+html.ios ion-tab-button ion-badge {
+  top: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 3px 5px;
+  font-size: 11px;
+  border-radius: 9px;
+}
+
+/* Lists scroll clear of the floating bar (a conversation has no tab bar). */
+html.ios ion-tabs .ion-page:not(.olano-conversation) ion-content {
+  --padding-bottom: calc(var(--ion-safe-area-bottom, 0px) + 84px);
+}
+
+/* Android: Material's navigation bar, the selected icon in its indicator pill. */
+html.md ion-tab-bar {
+  height: 72px;
+  --border: 0;
+  --background: var(--ion-color-step-50, #f3f3f5);
+}
+
+html.md.ion-palette-dark ion-tab-bar {
+  --background: #1d1d20;
+}
+
+html.md.ion-palette-dark.olano-theme-volt ion-tab-bar {
+  --background: #151515;
+}
+
+html.md ion-tab-button ion-icon {
+  width: 56px;
+  height: 30px;
+  padding: 4px 0;
+  border-radius: 15px;
+  font-size: 22px;
+  transition: background-color 160ms ease;
+}
+
+html.md ion-tab-button.tab-selected ion-icon {
+  background: rgba(var(--ion-color-primary-rgb), 0.16);
+}
+
+html.md ion-tab-button ion-label {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.olano-messages {
+  padding: 12px 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.olano-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  margin-top: 14px;
+}
+
+.olano-msg.grouped {
+  margin-top: 4px;
+}
+
+.olano-msg.user {
+  align-items: flex-end;
+}
+
+.olano-msg.agent {
+  align-items: flex-start;
+}
+
+.olano-bubble {
+  max-width: min(84%, 640px);
+  padding: 9px 14px;
+  border-radius: 20px;
+  font-size: 16px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+.olano-bubble.user {
+  background: var(--olano-bubble-user);
+  color: var(--olano-bubble-user-text);
+  border-bottom-right-radius: 6px;
+  white-space: pre-wrap;
+}
+
+.olano-bubble.agent {
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  border-bottom-left-radius: 6px;
+  max-width: min(92%, 680px);
+}
+
+.olano-msg-note {
+  font-size: 12px;
+  color: var(--olano-muted);
+  margin: 4px 6px;
+}
+
+.olano-msg-error {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  color: var(--ion-color-danger);
+  font-size: 14px;
+  margin: 6px 6px 0;
+  max-width: 88%;
+}
+
+.olano-msg-error ion-icon {
+  flex: none;
+  margin-top: 2px;
+}
+
+.olano-system {
+  align-self: center;
+  font-size: 13px;
+  color: var(--olano-muted);
+  margin: 14px 24px 0;
+  text-align: center;
+}
+
+.olano-caret {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+  animation: olano-pulse 1s ease-in-out infinite;
+}
+
+.olano-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 6px 6px;
+  max-width: 92%;
+}
+
+.olano-steps-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 0;
+  padding: 2px 0;
+  color: var(--olano-muted);
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.olano-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  min-width: 0;
+  padding: 2px 0;
+}
+
+.olano-step ion-icon,
+.olano-step ion-spinner {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.olano-step.running {
+  color: var(--ion-text-color);
+}
+
+.olano-step-label {
+  flex: none;
+}
+
+.olano-step-detail {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.olano-todos {
+  background: var(--olano-card);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin: 0 0 6px;
+  max-width: 92%;
+  font-size: 14px;
+}
+
+.olano-todos-head {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.olano-todo {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 3px 0;
+}
+
+.olano-todo ion-icon {
+  flex: none;
+  margin-top: 2px;
+  color: var(--olano-muted);
+}
+
+.olano-todo.completed span {
+  color: var(--olano-muted);
+  text-decoration: line-through;
+}
+
+.olano-todo.completed ion-icon {
+  color: var(--olano-online);
+}
+
+.olano-todo.in_progress ion-icon {
+  color: var(--ion-color-primary);
+}
+
+.olano-approval {
+  background: var(--olano-card);
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 0.35);
+  border-radius: 16px;
+  padding: 12px 14px 6px;
+  margin-top: 8px;
+  max-width: 92%;
+  width: 340px;
+}
+
+.olano-approval.approved,
+.olano-approval.rejected {
+  border-color: transparent;
+  opacity: 0.75;
+}
+
+.olano-approval-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.olano-approval-action {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.olano-approval-action code {
+  font-size: 12px;
+  color: var(--olano-muted);
+}
+
+.olano-media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  max-width: 84%;
+}
+
+.olano-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.olano-file.sent small {
+  color: var(--olano-muted);
+  font-size: 12px;
+}
+
+.olano-typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  border-radius: 20px;
+  border-bottom-left-radius: 6px;
+  background: var(--olano-bubble-agent);
+  align-self: flex-start;
+}
+
+.olano-typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--olano-muted);
+  animation: olano-typing 1.2s infinite ease-in-out;
+}
+
+.olano-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.olano-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes olano-typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/*
+ * The composer: one rounded card floating over the conversation, the message
+ * (and anything attached) on top, growing as it gets longer, and a row of
+ * 38px controls under it: [+] [model]  ...  [mic] [send].
+ *
+ * A conversation sits inside the tabs with the tab bar hidden, and Ionic's
+ * footer leaves the home indicator to a bottom tab bar whenever the tabs have
+ * one; so the composer clears it itself. The keyboard covers the indicator,
+ * so it drops the space while the keyboard is up.
+ */
+.olano-composer ion-toolbar {
+  --background: transparent;
+  --padding-top: 6px;
+  --padding-bottom: 10px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --border-width: 0;
+  padding-bottom: var(--ion-safe-area-bottom, 0px);
+}
+
+.olano-keyboard-open .olano-composer ion-toolbar {
+  padding-bottom: 0;
+}
+
+/* The card carries its own edge: no hairline across the screen above it. */
+ion-footer.olano-composer ion-toolbar:first-of-type {
+  --border-width: 0;
+}
+
+ion-footer.olano-composer::before {
+  display: none;
+}
+
+.olano-composer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 10px 10px;
+  border-radius: 26px;
+  background: var(--olano-card);
+  border: 0.55px solid color-mix(in srgb, var(--olano-muted) 28%, transparent);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+}
+
+.olano-composer-card.recording {
+  padding-top: 10px;
+}
+
+.olano-composer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.olano-composer-gap {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.olano-composer-field {
+  min-width: 0;
+  min-height: 38px;
+  overflow: hidden;
+}
+
+/*
+ * ion-textarea's own defaults (`--padding-start: 0` and the rest) are scoped
+ * styles with one class's weight. A single class here tied with them, and
+ * which won depended on the order the stylesheets landed in: the production
+ * build put the text against the field's edge on an iPhone. Two classes win.
+ */
+.olano-composer-field ion-textarea.olano-composer-input {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --background: transparent;
+  min-height: 38px;
+  max-height: 160px;
+  font-size: 17px;
+  line-height: 22px;
+  margin: 0;
+}
+
+.olano-send {
+  --padding-start: 0;
+  --padding-end: 0;
+  --box-shadow: none;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin: 0;
+}
+
+.olano-send[disabled] {
+  opacity: 0.45;
+}
+
+.olano-send-error {
+  font-size: 13px;
+  color: var(--ion-color-danger);
+  padding: 6px 16px 0;
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+/* Messages typed while the agent works, waiting to be read. */
+.olano-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px 0;
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-queue-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 10px;
+  border-radius: 12px;
+  background: var(--olano-bubble-agent);
+  font-size: 14px;
+}
+
+.olano-queue-item > ion-icon {
+  flex: none;
+  color: var(--ion-color-primary);
+  font-size: 16px;
+}
+
+.olano-queue-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.olano-queue-text span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.olano-queue-text small {
+  color: var(--olano-muted);
+  font-size: 12px;
+}
+
+.olano-queue-item button {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--olano-muted);
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.olano-working-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 0;
+  font-size: 13px;
+  color: var(--olano-muted);
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-working-bar span {
+  flex: 1;
+  min-width: 0;
+}
+
+.olano-working-bar button {
+  flex: none;
+  border: 0;
+  border-radius: 14px;
+  padding: 5px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+}
+
+.olano-working-bar button.stop {
+  color: var(--ion-text-color, #000);
+  background: var(--olano-bubble-agent);
+}
+
+.olano-mode-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 16px 0;
+  border: 0;
+  text-align: left;
+  font-size: 13px;
+  color: var(--olano-muted);
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-mode-bar strong {
+  flex: none;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+.olano-plan-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 4px 0 0 2px;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+.olano-plan-actions ion-button {
+  margin: 0;
+}
+
+.olano-msg-note.steered {
+  align-self: flex-end;
+}
+
+/* ── reply text (rendered by the dashboard's renderProse) ──────────────── */
+
+.olano-md > div > :first-child {
+  margin-top: 0;
+}
+
+.olano-md > div > :last-child {
+  margin-bottom: 0;
+}
+
+.olano-md p {
+  margin: 0 0 8px;
+}
+
+.olano-md ul,
+.olano-md ol {
+  margin: 4px 0 8px;
+  padding-left: 22px;
+}
+
+.olano-md li {
+  margin: 2px 0;
+}
+
+.olano-md h1,
+.olano-md h2,
+.olano-md h3,
+.olano-md h4 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+/* Links read as links: the accent colour and an underline, in replies and in
+   your own messages. The phone's own long-press preview is off, because it
+   would open the page inside the app; the message's long-press menu offers
+   Open, Copy and Share instead. */
+.olano-md a,
+.olano-link {
+  color: var(--ion-color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  -webkit-touch-callout: none;
+  overflow-wrap: anywhere;
+}
+
+.olano-bubble.user .olano-link {
+  color: inherit;
+}
+
+.olano-md code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 14px;
+  background: rgba(127, 127, 127, 0.16);
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+.olano-md blockquote {
+  margin: 6px 0;
+  padding-left: 10px;
+  border-left: 3px solid rgba(127, 127, 127, 0.4);
+  color: var(--olano-muted);
+}
+
+/* A table scrolls sideways inside its own box, never squeezes. The bubble
+   wraps anywhere, and a table cell inherited that: the phone shrank whole
+   columns to one character ("Asking price" one letter per line). Cells wrap
+   at words only, and the renderer's column classes keep short columns on one
+   line and give text columns a readable minimum; past the bubble's width the
+   table scrolls under the finger while the conversation stays put. */
+.olano-md .md-table-wrap {
+  margin: 8px 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 12px;
+  background: var(--olano-card);
+}
+
+.olano-md table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.olano-md th,
+.olano-md td {
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: break-word;
+  word-break: normal;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+}
+
+.olano-md tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.olano-md th {
+  font-weight: 600;
+}
+
+.olano-md .md-col-s {
+  white-space: nowrap;
+}
+
+.olano-md .md-col-m {
+  min-width: 10em;
+}
+
+.olano-md .md-col-l {
+  min-width: 15em;
+}
+
+.olano-md img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.olano-code {
+  margin: 6px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--olano-code-bg);
+}
+
+.olano-code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--olano-muted);
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.18);
+}
+
+.olano-code-head button {
+  background: none;
+  border: 0;
+  color: var(--ion-color-primary);
+  font: inherit;
+  padding: 0;
+}
+
+.olano-code pre {
+  margin: 0;
+  padding: 10px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.olano-code pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+}
+
+/* ── a Cortex item ─────────────────────────────────────────────────────── */
+
+.olano-item h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 10px 0 8px;
+}
+
+.olano-item-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+}
+
+.olano-status {
+  text-transform: capitalize;
+  color: var(--olano-muted);
+}
+
+.olano-item-summary {
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--olano-muted);
+  margin: 0 0 16px;
+}
+
+/* The promotion banner: on its way (spinner), arrived (tick + Open), or
+   failed (alert). It sits between the summary and the actions, where the
+   eye lands after the tap. */
+.olano-item-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  margin: 0 0 16px;
+  border-radius: 14px;
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.olano-item-banner.promoted {
+  background: rgba(var(--ion-color-success-rgb), 0.12);
+}
+
+.olano-item-banner.failed {
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+}
+
+.olano-item-banner-icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--ion-color-primary);
+}
+
+.olano-item-banner-icon ion-spinner {
+  width: 22px;
+  height: 22px;
+}
+
+.olano-item-banner-icon ion-icon {
+  font-size: 24px;
+}
+
+.olano-item-banner.promoted .olano-item-banner-icon {
+  color: var(--ion-color-success);
+}
+
+.olano-item-banner.failed .olano-item-banner-icon {
+  color: var(--ion-color-danger);
+}
+
+.olano-item-banner-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.olano-item-banner-text span {
+  color: var(--olano-muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+/* The Open button takes its own line under the text, never a column beside it. */
+.olano-item-banner-action {
+  flex: 1 0 100%;
+  margin: 4px 0 0;
+  --border-radius: 10px;
+}
+
+.olano-rating {
+  display: flex;
+  gap: 14px;
+  background: rgba(var(--ion-color-primary-rgb), 0.08);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 0 0 16px;
+}
+
+.olano-rating p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.olano-rating-score strong {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+}
+
+.olano-rating-score span {
+  color: var(--olano-muted);
+}
+
+.olano-rating-rec {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.olano-item-actions {
+  margin: 0 0 20px;
+}
+
+.olano-item-actions ion-button {
+  --border-radius: 12px;
+  margin: 0 0 8px;
+}
+
+.olano-item-detail {
+  font-size: 16px;
+  line-height: 1.5;
+  padding-bottom: 24px;
+}
+
+.olano-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  margin: 0 0 16px;
+}
+
+.olano-progress ion-progress-bar {
+  flex: 1;
+}
+
+/* ── photos in a message ───────────────────────────────────────────────── */
+
+.olano-photos {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  margin-top: 6px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--olano-bubble-agent);
+  width: min(248px, 72vw);
+  /* A photo above a person's text bubble meets it like one message. */
+  margin-bottom: 2px;
+}
+
+.olano-msg.user .olano-photos + .olano-bubble.user {
+  margin-top: 2px;
+}
+
+.olano-photos.single {
+  width: auto;
+  display: block;
+}
+
+.olano-photos.pair {
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: min(150px, 44vw);
+}
+
+.olano-photos.trio {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: min(108px, 31vw) min(108px, 31vw);
+}
+
+.olano-photos.trio .olano-photo:first-child {
+  grid-row: span 2;
+}
+
+.olano-photos.grid {
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: min(123px, 35.5vw);
+}
+
+.olano-photo {
+  position: relative;
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--olano-bubble-agent);
+  overflow: hidden;
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.olano-photos.single .olano-photo {
+  max-width: min(248px, 72vw);
+}
+
+.olano-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: olano-fade-in 220ms ease-out;
+  transition: filter 150ms ease, transform 150ms ease;
+}
+
+.olano-photo:active img {
+  filter: brightness(0.85);
+}
+
+.olano-photo.loading {
+  background: linear-gradient(100deg, var(--olano-bubble-agent) 30%, var(--olano-card) 50%, var(--olano-bubble-agent) 70%);
+  background-size: 300% 100%;
+  animation: olano-shimmer 1.4s linear infinite;
+}
+
+.olano-photo-more {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.olano-photos.sending .olano-photo img {
+  filter: brightness(0.7) saturate(0.9);
+}
+
+.olano-photos-sending {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.olano-photos-sending ion-spinner {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+
+@keyframes olano-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes olano-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ── conversation: days, starters, jump to latest ──────────────────────── */
+
+/* Messages are pressed for a menu (copy, share), as in Messages: no text
+   selection callout fighting it. */
+.olano-msg {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.olano-day {
+  display: flex;
+  justify-content: center;
+  margin: 18px 0 2px;
+}
+
+.olano-day span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--olano-muted);
+  letter-spacing: 0.01em;
+}
+
+/* Above the earliest message held: earlier ones loading, a retry, or the start. */
+.olano-older {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 36px;
+  margin: 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--olano-muted);
+}
+
+/* Where a search found the words, under the conversation's title. */
+.olano-thread-match {
+  margin: 2px 0 2px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.olano-thread-match-role {
+  font-weight: 600;
+}
+
+.olano-older-retry {
+  background: none;
+  border: 0;
+  padding: 8px 12px;
+  font: inherit;
+  color: var(--ion-color-primary);
+}
+
+.olano-starters {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: min(100%, 320px);
+  margin: 22px auto 0;
+}
+
+.olano-starter {
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  background: var(--olano-card);
+  color: var(--ion-text-color);
+  border-radius: 16px;
+  padding: 11px 14px;
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.olano-starter:active {
+  transform: scale(0.98);
+  background: var(--olano-bubble-agent);
+}
+
+.olano-composer {
+  position: relative;
+}
+
+.olano-jump {
+  position: absolute;
+  right: 14px;
+  bottom: calc(100% + 12px);
+  width: 38px;
+  height: 38px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: var(--olano-card);
+  color: var(--olano-muted);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  animation: olano-fade-in 160ms ease-out;
+  z-index: 5;
+}
+
+.olano-jump-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  border: 2px solid var(--olano-card);
+}
+
+/* ── voice notes ───────────────────────────────────────────────────────── */
+
+.olano-voice-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: min(84%, 340px);
+  margin-top: 6px;
+}
+
+.olano-voice-wrap.mine {
+  align-items: flex-end;
+}
+
+.olano-voice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 22px;
+  min-width: 220px;
+}
+
+.olano-voice.mine {
+  background: var(--olano-bubble-user);
+  color: var(--olano-bubble-user-text);
+  border-bottom-right-radius: 6px;
+}
+
+.olano-voice.theirs {
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  border-bottom-left-radius: 6px;
+}
+
+.olano-voice.sending {
+  opacity: 0.75;
+}
+
+.olano-voice-play {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.olano-voice.mine .olano-voice-play {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--olano-bubble-user);
+}
+
+.olano-voice.theirs .olano-voice-play {
+  background: var(--ion-color-primary);
+  color: #fff;
+}
+
+.olano-voice-play ion-icon {
+  margin-left: 2px;
+}
+
+.olano-voice-play ion-spinner {
+  width: 18px;
+  height: 18px;
+}
+
+.olano-voice-wave {
+  flex: 1;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 120px;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.olano-voice-wave span {
+  flex: 1;
+  min-width: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.4;
+  transition: opacity 120ms linear;
+}
+
+.olano-voice-wave span.played {
+  opacity: 1;
+}
+
+.olano-voice-meta {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  min-width: 34px;
+}
+
+.olano-voice-time {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.olano-voice-rate {
+  border: 0;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(127, 127, 127, 0.25);
+  color: inherit;
+}
+
+.olano-voice-transcript {
+  margin: 4px 6px 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--olano-muted);
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.olano-voice-wrap.mine .olano-voice-transcript {
+  text-align: right;
+}
+
+.olano-voice-transcript.open {
+  -webkit-line-clamp: unset;
+}
+
+.olano-voice-transcript.muted {
+  font-size: 12px;
+}
+
+/* A voice note whose recording was not kept: what it said. */
+.olano-voice-heard-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* ── the buttons under a message (copy, edit, share, try again) ─────────── */
+
+.olano-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 2px 0 0 2px;
+}
+
+.olano-actions.mine {
+  align-self: flex-end;
+  margin: 2px 2px 0 0;
+}
+
+.olano-action {
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: var(--olano-muted);
+  font-size: 17px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.olano-action-labelled {
+  width: auto;
+  gap: 5px;
+  padding: 0 12px 0 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+}
+
+.olano-action-labelled ion-icon {
+  font-size: 16px;
+}
+
+.olano-action:active {
+  background: var(--olano-bubble-agent);
+  color: var(--ion-text-color, #000);
+}
+
+/* Reading a reply aloud: the speaker turns into a stop button, in colour. */
+.olano-action[aria-label="Stop reading"] {
+  color: var(--ion-color-primary);
+}
+
+.olano-action ion-spinner {
+  width: 16px;
+  height: 16px;
+  color: var(--ion-color-primary);
+}
+
+/* Above the composer while it holds a sent message's words. */
+.olano-editing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 0 16px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-editing ion-icon {
+  flex: none;
+  font-size: 16px;
+  color: var(--ion-color-primary);
+}
+
+.olano-editing span {
+  flex: 1;
+  min-width: 0;
+}
+
+.olano-editing button {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-muted);
+  font-size: 16px;
+}
+
+/* ── composer: recording a voice note ──────────────────────────────────── */
+
+.olano-mic {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  font-size: 20px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1.3), background-color 160ms ease;
+}
+
+.olano-mic.holding {
+  background: var(--ion-color-primary);
+  color: #fff;
+  transform: scale(1.45);
+  z-index: 2;
+}
+
+.olano-mic.locked,
+.olano-mic.finishing {
+  background: var(--ion-color-primary);
+  color: #fff;
+}
+
+.olano-mic ion-spinner {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+
+.olano-mic-lock {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  margin-left: -15px;
+  width: 30px;
+  padding: 6px 0;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  background: var(--olano-card);
+  color: var(--olano-muted);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+  animation: olano-lock-hint 1.4s ease-in-out infinite;
+}
+
+@keyframes olano-lock-hint {
+  50% {
+    margin-bottom: 4px;
+  }
+}
+
+.olano-recording {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px 0 12px;
+  border-radius: 20px;
+  background: var(--olano-bubble-agent);
+  overflow: hidden;
+}
+
+.olano-recording.locked {
+  padding-left: 4px;
+}
+
+.olano-recording-bin {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ion-color-danger);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.olano-recording-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff3b30;
+  animation: olano-recording-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes olano-recording-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* The microphone is still opening: nothing said yet is being kept. */
+.olano-recording.starting .olano-recording-dot {
+  background: #8e8e93;
+  animation-duration: 0.5s;
+}
+
+.olano-recording.starting .olano-recording-time {
+  color: var(--ion-color-medium);
+}
+
+.olano-recording-time {
+  flex: none;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  color: var(--olano-bubble-agent-text);
+}
+
+.olano-recording-bars {
+  flex: 1;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  overflow: hidden;
+  padding-right: 8px;
+}
+
+.olano-recording-bars span {
+  flex: none;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--ion-color-primary);
+  transition: height 90ms linear;
+}
+
+.olano-recording-hint {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 15px;
+  color: var(--olano-muted);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .olano-recording-dot,
+  .olano-mic-lock {
+    animation: none;
+  }
+}
+
+/* A press on the microphone that may still be a tap (where a tap dictates). */
+.olano-mic.pressing {
+  transform: scale(0.92);
+  background: color-mix(in srgb, var(--olano-bubble-agent) 70%, var(--olano-muted));
+}
+
+/* ── composer: live dictation ──────────────────────────────────────────── */
+
+/*
+ * The words so far sit where the message box was, in its type, and the row
+ * under them is [x] [waveform] [stop] [send]: the box keeps its shape, so the
+ * conversation above does not jump when dictation starts or ends.
+ */
+.olano-dictation-text {
+  min-height: 38px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 8px 4px;
+  font-size: 17px;
+  line-height: 22px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ion-text-color);
+}
+
+.olano-dictation-placeholder {
+  color: var(--olano-muted);
+}
+
+.olano-dictation-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.olano-dictation-cancel,
+.olano-dictation-stop {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  font-size: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.olano-dictation-stop span {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  background: var(--olano-bubble-agent-text);
+}
+
+.olano-dictation-stop:disabled {
+  opacity: 0.5;
+}
+
+/* Bars where there is sound, dots where there is quiet, newest on the right. */
+.olano-dictation-wave {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: 0 4px;
+  color: var(--olano-bubble-agent-text);
+  transition: opacity 200ms ease;
+}
+
+.olano-dictation-wave.waiting {
+  opacity: 0.35;
+}
+
+.olano-dictation-wave .dot,
+.olano-dictation-wave .bar {
+  flex: none;
+  width: 3px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.olano-dictation-wave .dot {
+  height: 3px;
+  opacity: 0.55;
+}
+
+.olano-dictation-wave .bar {
+  min-height: 6px;
+  transition: height 90ms linear;
+}
+
+/* ── composer: attach button and the photos waiting to be sent ─────────── */
+
+.olano-attach {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-muted);
+  font-size: 22px;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.olano-attach:active {
+  transform: scale(0.9);
+}
+
+.olano-composer-field.with-photos {
+  border-radius: 20px;
+}
+
+.olano-tray {
+  display: flex;
+  gap: 8px;
+  padding: 8px 8px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.olano-tray::-webkit-scrollbar {
+  display: none;
+}
+
+.olano-tray-item {
+  position: relative;
+  flex: none;
+  width: 64px;
+  height: 64px;
+  animation: olano-pop 220ms cubic-bezier(0.2, 0.8, 0.2, 1.2);
+}
+
+.olano-tray-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--olano-card);
+  position: relative;
+}
+
+.olano-tray-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.olano-tray-item.preparing img {
+  filter: brightness(0.75);
+}
+
+.olano-tray-thumb ion-spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+}
+
+.olano-tray-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* A bigger target than the 20px it draws. */
+.olano-tray-remove::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+/* Files waiting to be sent: one row each, name and size, with a remove button. */
+.olano-tray-files {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 8px 2px;
+}
+
+.olano-tray-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 6px 6px 6px 10px;
+  border-radius: 12px;
+  background: var(--olano-bubble-agent);
+  font-size: 14px;
+  animation: olano-pop 220ms cubic-bezier(0.2, 0.8, 0.2, 1.2);
+}
+
+.olano-tray-file > ion-icon {
+  flex: none;
+  font-size: 18px;
+  color: var(--ion-color-primary);
+}
+
+.olano-tray-file .name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.olano-tray-file .size {
+  flex: none;
+  color: var(--olano-muted);
+  font-size: 12px;
+}
+
+.olano-tray-file button {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--olano-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes olano-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.olano-hidden-input {
+  position: fixed;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* ── photos full screen ────────────────────────────────────────────────── */
+
+.olano-pv {
+  position: fixed;
+  inset: 0;
+  z-index: 40000;
+  background-color: #000;
+  animation: olano-pv-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@keyframes olano-pv-in {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: #000;
+  }
+}
+
+.olano-pv-pager {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+
+.olano-pv-pager::-webkit-scrollbar {
+  display: none;
+}
+
+.olano-pv-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.olano-pv-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+  -webkit-user-drag: none;
+}
+
+.olano-pv-loading {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  animation: olano-spin 0.9s linear infinite;
+}
+
+@keyframes olano-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.olano-pv-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: calc(var(--ion-safe-area-top, env(safe-area-inset-top)) + 6px) 12px 24px;
+  background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+  color: #fff;
+  transition: opacity 200ms ease;
+}
+
+.olano-pv-close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.olano-pv-count {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.olano-pv-spacer {
+  width: 40px;
+}
+
+.olano-pv-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--ion-safe-area-bottom, env(safe-area-inset-bottom)) + 18px);
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.olano-pv-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: background-color 150ms ease, transform 150ms ease;
+}
+
+.olano-pv-dots span.on {
+  background: #fff;
+  transform: scale(1.2);
+}
+
+.olano-pv.bare .olano-pv-bar,
+.olano-pv.bare .olano-pv-dots {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .olano-pv,
+  .olano-tray-item,
+  .olano-photo img {
+    animation: none;
+  }
+}
+
+/* ── a file from a reply, opened in the app (ui/FileViewer.tsx) ────────── */
+
+.olano-file-body {
+  padding: 16px 16px 32px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.olano-file-body .olano-code {
+  margin: 0;
+}
+
+/* A Markdown file reads as a document, not a chat bubble. */
+.olano-file-body .olano-md {
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.olano-file-body .olano-md h1 {
+  margin: 4px 0 12px;
+  font-size: 24px;
+  line-height: 1.25;
+}
+
+.olano-file-body .olano-md h2 {
+  margin: 22px 0 8px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.olano-file-body .olano-md h3 {
+  margin: 18px 0 6px;
+  font-size: 17px;
+}
+
+.olano-file-body .olano-code pre {
+  max-height: none;
+}
+
+.olano-file-loading {
+  display: flex;
+  justify-content: center;
+  padding: 64px 0;
+}
+
+.olano-file-note {
+  margin: 0 16px 32px;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+.olano-file-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.olano-file-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.olano-file-card > ion-icon {
+  font-size: 56px;
+  color: var(--olano-muted);
+  margin-bottom: 8px;
+}
+
+.olano-file-card h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.olano-file-card p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--olano-muted);
+}
+
+.olano-file-card .olano-file-error {
+  color: var(--ion-color-danger);
+}
+
+/* ── chats list: Pinned, folders, All agents, Group chats ──────────────── */
+
+/* A section heading that folds its section: a chevron, the name, a count,
+   and for a folder its options. */
+.olano-chat-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px 4px 12px;
+}
+
+.olano-chat-section-toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--olano-muted);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.md .olano-chat-section-toggle {
+  text-transform: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ion-color-primary);
+}
+
+.olano-chat-section-toggle ion-icon {
+  flex: none;
+  font-size: 14px;
+}
+
+.olano-chat-section-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.olano-chat-section-count {
+  flex: none;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.olano-chat-section-menu {
+  flex: none;
+  width: 34px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 15px;
+  background: none;
+  color: var(--olano-muted);
+  font-size: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.olano-chat-section-empty {
+  margin: 2px 16px 8px 34px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+}
+
+.olano-chat-section-cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: calc(100% - 32px);
+  margin: 4px 16px 16px;
+  padding: 12px 14px;
+  border: 1px dashed rgba(127, 127, 127, 0.35);
+  border-radius: 12px;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ion-color-primary);
+  text-align: left;
+}
+
+.olano-chat-section-cta ion-icon {
+  font-size: 20px;
+}
+
+.olano-row-pin {
+  font-size: 12px;
+  margin-left: 6px;
+  vertical-align: 1px;
+  color: var(--olano-muted);
+  transform: rotate(35deg);
+}
+
+/* A group's picture: its first two members, one tucked behind the other. */
+.olano-group-avatar {
+  position: relative;
+  display: inline-block;
+  flex: none;
+}
+
+.olano-group-avatar-back {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.olano-group-avatar-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+/* ── new group: pick agents ─────────────────────────────────────────────── */
+
+.olano-pick-avatar {
+  display: flex;
+  margin: 6px 12px 6px 0;
+}
+
+/* The order an agent was picked in: the first answers messages that name nobody. */
+.olano-pick-mark {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: inset 0 0 0 1.5px rgba(127, 127, 127, 0.45);
+}
+
+.olano-pick-mark.on {
+  background: var(--ion-color-primary);
+  box-shadow: none;
+}
+
+.olano-new-group-note {
+  margin: -8px 0 24px;
+}
+
+.md .olano-new-group-note {
+  margin-top: 0;
+}
+
+.olano-error-text {
+  color: var(--ion-color-danger);
+}
+
+/* ── group conversation ─────────────────────────────────────────────────── */
+
+.olano-chat-subtitle {
+  display: block;
+  max-width: 100%;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--olano-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Who wrote the lines below: an agent's face and name, or a person's initial. */
+.olano-author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 4px 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--olano-muted);
+}
+
+.olano-author-human {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--olano-hue-slate);
+}
+
+/* Who a message of yours went to, above its bubble. */
+.olano-to {
+  align-self: flex-end;
+  margin: 12px 4px 2px 0;
+  font-size: 12px;
+  color: var(--olano-muted);
+}
+
+.olano-group-typing {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+.olano-typing.inline {
+  margin: 0 0 0 2px;
+  padding: 7px 9px;
+}
+
+.olano-typing.inline span {
+  width: 5px;
+  height: 5px;
+}
+
+/* The agents answering each other after a reply, with a way to stop them. */
+.olano-cascade {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px 0 16px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-cascade ion-spinner {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.olano-cascade span {
+  flex: 1;
+  min-width: 0;
+}
+
+.olano-cascade button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(127, 127, 127, 0.16);
+  color: var(--ion-text-color, inherit);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* @ suggestions above the message box. */
+.olano-mentions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-mentions::-webkit-scrollbar {
+  display: none;
+}
+
+.olano-mention {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px 4px 4px;
+  border: 0;
+  border-radius: 16px;
+  background: rgba(127, 127, 127, 0.14);
+  color: var(--ion-text-color, inherit);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Who will answer the draft. */
+.olano-answering {
+  padding: 6px 16px 0;
+  font-size: 12px;
+  color: var(--olano-muted);
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-group-chat .olano-send ion-spinner {
+  width: 18px;
+  height: 18px;
+  color: #fff;
+}
+
+/* ── magic links: the Connect card and how it ended ─────────────────────── */
+
+.olano-connect {
+  align-self: flex-start;
+  width: min(84%, 360px);
+  margin-top: 8px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--olano-card);
+  box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.22);
+}
+
+.olano-connect-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.olano-connect-icon {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--ion-color-primary);
+  background: rgba(var(--ion-color-primary-rgb), 0.12);
+}
+
+.olano-connect-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.olano-connect-text strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.olano-connect-text span {
+  font-size: 13px;
+  color: var(--olano-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The PIN, big enough to read off; tapping it copies it. */
+.olano-connect-pin {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(127, 127, 127, 0.12);
+  color: var(--ion-text-color, inherit);
+  font: inherit;
+  text-align: left;
+}
+
+.olano-connect-pin span {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--olano-muted);
+}
+
+.olano-connect-pin strong {
+  flex: 1;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+}
+
+.olano-connect-pin ion-icon {
+  font-size: 18px;
+  color: var(--olano-muted);
+}
+
+.olano-connect-open {
+  margin: 12px 0 0;
+  --border-radius: 12px;
+}
+
+.olano-connect-hint {
+  margin: 8px 2px 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+}
+
+/* The inline secret form: the Connect card's frame with the fields in it. */
+.olano-connect-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.olano-connect-text span.wrap {
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.olano-connect-icon.done {
+  color: var(--olano-online);
+  background: color-mix(in srgb, var(--olano-online) 14%, transparent);
+}
+
+.olano-connect-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.olano-connect-field > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--olano-muted);
+}
+
+.olano-connect-field input,
+.olano-connect-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(127, 127, 127, 0.12);
+  color: var(--ion-text-color, inherit);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.olano-connect-field input:focus,
+.olano-connect-field select:focus {
+  box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.45);
+}
+
+.olano-connect-field small {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+}
+
+.olano-connect-error {
+  margin: 10px 2px 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ion-color-danger);
+}
+
+.olano-connect-result {
+  align-self: center;
+  display: flex;
+  gap: 10px;
+  width: min(92%, 420px);
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--olano-online) 12%, transparent);
+  color: var(--ion-text-color, inherit);
+}
+
+.olano-connect-result > ion-icon {
+  flex: none;
+  font-size: 22px;
+  color: var(--olano-online);
+}
+
+.olano-connect-result.warn {
+  background: color-mix(in srgb, var(--ion-color-warning) 14%, transparent);
+}
+
+.olano-connect-result.warn > ion-icon {
+  color: var(--ion-color-warning);
+}
+
+.olano-connect-result-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.olano-connect-result-text small {
+  font-size: 12px;
+  color: var(--olano-muted);
+}
+
+.olano-connect-result-text ion-button {
+  align-self: flex-start;
+  margin: 6px 0 0;
+}
+
+/* ── the agent's browser: floating window and full view ─────────────────── */
+
+/* The window floats over the conversation, in the corner it was dragged to,
+   clear of the header above and the message box below. */
+.olano-pip {
+  --pip-top: calc(var(--ion-safe-area-top, 0px) + 56px);
+  --pip-bottom: calc(var(--ion-safe-area-bottom, 0px) + 76px);
+  position: absolute;
+  z-index: 20;
+  width: 152px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #111;
+  color: #fff;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  transition: transform 0.18s ease;
+}
+
+.olano-pip.dragging {
+  transition: none;
+  opacity: 0.92;
+}
+
+.olano-pip.tl { top: var(--pip-top); left: 12px; }
+.olano-pip.tr { top: var(--pip-top); right: 12px; }
+.olano-pip.bl { bottom: var(--pip-bottom); left: 12px; }
+.olano-pip.br { bottom: var(--pip-bottom); right: 12px; }
+
+.olano-pip-picture {
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.olano-pip-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  pointer-events: none;
+}
+
+.olano-pip-wait {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  animation: olano-spin 0.9s linear infinite;
+}
+
+@keyframes olano-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.olano-pip-status,
+.olano-browser-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.olano-pip-status {
+  padding: 6px 8px 7px;
+}
+
+.olano-pip-status span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.olano-pip-status .dot,
+.olano-browser-status .dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--olano-online);
+}
+
+.olano-pip.user .dot,
+.olano-browser-status.user .dot {
+  background: #4fb0e8;
+}
+
+.olano-pip.attention .dot,
+.olano-pip.approval .dot,
+.olano-browser-status.attention .dot,
+.olano-browser-status.approval .dot {
+  background: var(--ion-color-primary);
+  animation: olano-pulse 1.2s ease-in-out infinite;
+}
+
+.olano-pip.attention,
+.olano-pip.approval {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28), 0 0 0 2px var(--ion-color-primary);
+}
+
+@keyframes olano-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.olano-pip-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 15px;
+}
+
+/* The header's globe, with a dot when the agent asked for help. */
+.olano-browser-button.attention::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+}
+
+/* The full view sits on black, like a photo viewer. */
+.olano-browser-view {
+  --ion-background-color: #000;
+}
+
+.olano-browser-view ion-toolbar {
+  --background: #111;
+  --color: #fff;
+  --border-color: transparent;
+}
+
+.olano-browser-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+}
+
+.olano-browser-title ion-spinner {
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.olano-browser-address {
+  padding: 0 12px 8px;
+  background: #111;
+}
+
+.olano-browser-address button,
+.olano-browser-address ion-input {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  --color: #fff;
+  --padding-start: 12px;
+}
+
+.olano-browser-address button:disabled {
+  opacity: 1;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.olano-browser-content {
+  --background: #000;
+}
+
+.olano-browser-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.olano-browser-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 12px 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.olano-browser-banner.attention {
+  background: rgba(var(--ion-color-primary-rgb), 0.22);
+}
+
+.olano-browser-banner span {
+  flex: 1;
+}
+
+.olano-browser-banner ion-button {
+  margin: 0;
+  --color: #fff;
+}
+
+.olano-live-box {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.olano-live-zoom {
+  position: relative;
+  flex: none;
+  will-change: transform;
+}
+
+.olano-live-picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.olano-live-box.interactive .olano-live-zoom {
+  box-shadow: 0 0 0 2px #4fb0e8;
+}
+
+/* Where the agent is about to click or type. */
+.olano-live-pointer {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+  transition: left 0.25s ease, top 0.25s ease;
+  pointer-events: none;
+}
+
+.olano-live-pointer.click::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid var(--ion-color-primary);
+  animation: olano-ripple 0.6s ease-out forwards;
+}
+
+@keyframes olano-ripple {
+  from {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.olano-browser-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.olano-browser-empty ion-button {
+  pointer-events: auto;
+}
+
+.olano-browser-footer {
+  background: #111;
+  color: #fff;
+  padding: 10px 12px calc(var(--ion-safe-area-bottom, 0px) + 10px);
+}
+
+.olano-browser-status {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 8px;
+}
+
+.olano-browser-take p {
+  margin: 6px 4px 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.olano-browser-take ion-button {
+  margin: 0;
+}
+
+.olano-browser-controls,
+.olano-browser-keys {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.olano-browser-keys {
+  margin-bottom: 8px;
+}
+
+.olano-browser-controls button,
+.olano-browser-keys button {
+  flex: none;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.olano-browser-controls button ion-icon,
+.olano-browser-keys button ion-icon {
+  font-size: 20px;
+}
+
+.olano-browser-controls button:disabled {
+  opacity: 0.35;
+}
+
+.olano-browser-controls button.on {
+  background: #4fb0e8;
+}
+
+.olano-browser-keys ion-input {
+  flex: 1;
+  min-height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  --color: #fff;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --padding-start: 12px;
+}
+
+.olano-browser-handback {
+  margin: 0 0 0 auto;
+  --border-radius: 12px;
+}
+
+/* ── scheduled tasks ───────────────────────────────────────────────────── */
+
+/* A line of help under an inset list, like the iOS Settings footers. */
+.olano-list-note {
+  display: block;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--olano-muted);
+  margin: -8px 0 16px;
+  padding: 0 32px;
+}
+
+.olano-list-note.warn {
+  color: var(--ion-color-warning-shade);
+}
+
+.olano-list-note.error {
+  color: var(--ion-color-danger);
+}
+
+.olano-task-group {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.olano-weekdays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 6px 0;
+}
+
+.olano-weekdays ion-chip {
+  margin: 2px;
+  min-width: 44px;
+  justify-content: center;
+}
+
+.olano-task-summary strong {
+  font-weight: 600;
+}
+
+.olano-task-actions {
+  padding: 0 16px;
+}
+
+.olano-task-prompt {
+  white-space: pre-wrap;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.olano-run-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.olano-run-full {
+  margin-top: 6px;
+  font-size: 14px;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ── alerts and issues ─────────────────────────────────────────────────── */
+
+/* What tapping an alert offers, under its text. */
+.olano-alert-hint {
+  margin-top: 4px !important;
+  color: var(--ion-color-primary) !important;
+  font-weight: 500;
+}
+
+.olano-alert-hint.dashboard {
+  color: var(--olano-muted) !important;
+  font-weight: 400;
+}
+
+.olano-issue {
+  padding: 8px 16px 24px;
+}
+
+.olano-issue h1 {
+  margin: 8px 0 10px;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.olano-issue-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.olano-issue-meta span {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+  text-transform: capitalize;
+}
+
+.olano-issue-meta .olano-issue-state.open {
+  background: var(--ion-color-success);
+  color: var(--ion-color-success-contrast);
+}
+
+.olano-issue-meta .olano-issue-state.closed {
+  background: var(--ion-color-medium);
+  color: var(--ion-color-medium-contrast);
+}
+
+.olano-issue-meta .olano-issue-label {
+  text-transform: none;
+  font-weight: 500;
+}
+
+.olano-issue-who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 12px;
+  font-size: 13px;
+}
+
+.olano-issue-body,
+.olano-issue-comment {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--olano-card);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.olano-issue-events {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.olano-issue-comment-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.olano-issue-event {
+  margin: 0;
+  font-size: 13px;
+  color: var(--olano-muted);
+  text-align: center;
+}
+
+.olano-issue-composer ion-toolbar {
+  --padding-start: 12px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+  --border-width: 0.55px 0 0;
+  padding-bottom: var(--ion-safe-area-bottom, 0px);
+}
+
+.olano-keyboard-open .olano-issue-composer ion-toolbar {
+  padding-bottom: 0;
+}
+
+.olano-issue-composer ion-textarea {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  max-height: 140px;
+}
+
+/* ── crash screen (ui/CrashScreen.tsx) ─────────────────────────────────── */
+
+.olano-crash {
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: calc(var(--ion-safe-area-top, 0px) + 24px) 24px calc(var(--ion-safe-area-bottom, 0px) + 24px);
+  background: var(--ion-background-color, #fff);
+  color: var(--ion-text-color, #000);
+  font-family: var(--ion-font-family, -apple-system, system-ui, sans-serif);
+}
+
+.olano-crash h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.olano-crash p {
+  margin: 0;
+  color: var(--olano-muted);
+  line-height: 1.4;
+}
+
+.olano-crash button {
+  align-self: flex-start;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 22px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font: inherit;
+  font-weight: 600;
+}
+
+.olano-crash pre {
+  margin: 8px 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  color: var(--olano-muted);
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ── Cortex: the Pulse card and the stage strip ────────────────────────── */
+
+.olano-pulse-card {
+  margin: 8px 16px 4px;
+  border-radius: 14px;
+  --background: var(--olano-cortex-soft);
+  --color: var(--ion-text-color);
+}
+
+.olano-pulse-card > ion-icon[slot="start"] {
+  color: var(--olano-cortex);
+  margin-inline-end: 12px;
+}
+
+.olano-pulse-card h2 {
+  font-weight: 600;
+}
+
+.olano-pulse-card .olano-pulse-chevron {
+  color: var(--olano-muted);
+  font-size: 18px;
+}
+
+/* The four stages in flow order, wrapping on a narrow phone. */
+.olano-stages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 2px;
+  padding: 10px 0 2px;
+}
+
+.olano-stage {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--ion-text-color);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.olano-stage.on {
+  background: var(--olano-cortex-soft);
+  color: var(--olano-cortex);
+  font-weight: 600;
+}
+
+.olano-stage-count {
+  margin-left: 2px;
+  color: var(--olano-muted);
+  font-weight: 400;
+}
+
+.olano-stage.on .olano-stage-count {
+  color: inherit;
+}
+
+.olano-stage-arrow {
+  color: var(--olano-muted);
+  font-size: 12px;
+}
+
+.olano-stage-note {
+  margin: 2px 10px 0;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+.olano-stage-note button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: var(--olano-cortex);
+  font: inherit;
+  font-weight: 600;
+}
+
+/* The Inbox's issue list. */
+.olano-issue-number {
+  color: var(--olano-muted);
+  font-weight: 500;
+}
+
+.olano-issue-row-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.olano-issue-type-tag,
+.olano-issue-closed {
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: var(--olano-bubble-agent);
+  color: var(--olano-bubble-agent-text);
+}
+
+.olano-issue-closed {
+  background: var(--ion-color-medium);
+  color: var(--ion-color-medium-contrast);
+}
+
+/* Credits and usage: the balance big, this month's included credits as a bar. */
+.olano-credits {
+  margin: 20px 16px 8px;
+  padding: 18px 18px 16px;
+  border-radius: 14px;
+  background: var(--ion-item-background, var(--ion-background-color));
+  text-align: center;
+}
+
+.olano-credits-balance {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.olano-credits-balance.low {
+  color: var(--ion-color-danger);
+}
+
+.olano-credits-caption {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+.olano-credits-month {
+  margin-top: 16px;
+  text-align: left;
+}
+
+.olano-credits-month-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--olano-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.olano-credits-bar {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(var(--ion-color-medium-rgb), 0.2);
+}
+
+.olano-credits-bar > div {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ion-color-primary);
+  transition: width 0.4s;
+}
+
+.olano-credits-bar.full > div {
+  background: var(--ion-color-danger);
+}
+
+.olano-credits-total ion-label {
+  font-weight: 600;
+}
+
+/* An agent's files: one line of where, size and when under each name. */
+.olano-file-row h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The agent's face in a conversation's title opens its page. */
+.olano-chat-title-avatar {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* An agent's page: a status dot, the reason it is not answering, the controls. */
+.olano-health-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ion-color-medium);
+}
+
+.olano-health-dot.running {
+  background: var(--ion-color-success);
+}
+
+.olano-health-dot.starting {
+  background: var(--ion-color-warning);
+}
+
+.olano-health-dot.error,
+.olano-health-dot.blocked {
+  background: var(--ion-color-danger);
+}
+
+.olano-health-detail p {
+  color: var(--olano-muted);
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.olano-agent-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 16px 12px;
+}
+
+/* Hands-free: one big button where the composer was, its ring following the voice. */
+.olano-handsfree {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px calc(8px + var(--ion-safe-area-bottom, 0px));
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+
+.olano-handsfree-orb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+  font-size: 32px;
+  cursor: pointer;
+}
+
+.olano-handsfree-orb ion-icon {
+  position: relative;
+}
+
+.olano-handsfree-pulse {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: rgba(var(--ion-color-primary-rgb), 0.22);
+  transition: transform 0.1s linear;
+}
+
+.olano-handsfree-orb.speaking {
+  background: var(--olano-cortex);
+}
+
+.olano-handsfree-orb.paused,
+.olano-handsfree-orb:disabled {
+  background: var(--ion-color-medium);
+}
+
+.olano-handsfree-orb.thinking .olano-handsfree-pulse,
+.olano-handsfree-orb.speaking .olano-handsfree-pulse {
+  animation: olano-handsfree-breathe 1.6s ease-in-out infinite;
+}
+
+@keyframes olano-handsfree-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.olano-handsfree-words {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.olano-handsfree-words span {
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+
+/* What the phone has heard so far, while it dictates: the newest words, large enough to check at a glance. */
+.olano-handsfree-heard {
+  margin: 2px 0 0;
+  max-width: 34em;
+  font-size: 17px;
+  line-height: 23px;
+  text-align: center;
+  color: var(--ion-text-color);
+  overflow-wrap: anywhere;
+}
+
+/* The app lock, over everything; the cover is the same screen without the words. */
+.olano-lock {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  background: var(--ion-background-color);
+  color: var(--ion-text-color);
+  text-align: center;
+}
+
+.olano-lock-icon {
+  font-size: 44px;
+  color: var(--ion-color-primary);
+}
+
+.olano-lock h2 {
+  margin: 4px 0 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.olano-lock p {
+  margin: 0;
+  color: var(--olano-muted);
+  font-size: 14px;
+}
+
+/* The message box while hands-free has its place (Ionic's toolbar ignores [hidden]). */
+ion-toolbar.olano-composer-away {
+  display: none;
+}
+
+/* "REC 0:42" beside the live browser's status line while a recording runs. */
+.olano-browser-rec {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(229, 72, 77, 0.14);
+  color: #e5484d;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.olano-browser-recording ion-icon {
+  color: #e5484d;
+}
+
+/* ── Cortex triage ──────────────────────────────────────────────────────── */
+
+/* A row this phone has not opened yet: a faint tint and a firmer title. */
+ion-item.olano-cortex-unread {
+  --background: color-mix(in srgb, var(--olano-cortex-soft) 40%, var(--olano-card, #fff));
+  --ion-item-background: color-mix(in srgb, var(--olano-cortex-soft) 40%, var(--olano-card, #fff));
+}
+
+ion-item.olano-cortex-unread .olano-thread-title {
+  font-weight: 700;
+}
+
+ion-item.olano-cortex-row:not(.olano-cortex-unread) .olano-thread-title {
+  font-weight: 500;
+}
+
+/* The row being promoted is on its way: no swipe, a quieter look. */
+ion-item.olano-moving {
+  opacity: 0.7;
+}
+
+/* The checkbox is drawn, not pressed: the whole row toggles the selection. */
+.olano-select-box {
+  pointer-events: none;
+  margin-inline-end: 4px;
+}
+
+.olano-swipe-hint {
+  color: var(--olano-muted);
+}
+
+/* Swipe options read as words, not stripes. */
+.olano-cortex-list ion-item-option {
+  font-size: 15px;
+  font-weight: 600;
+  padding-inline: 18px;
+}
+
+.olano-cortex-list ion-item-option ion-icon {
+  margin-inline-end: 6px;
+}
+
+.olano-select-bar ion-toolbar {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+.olano-select-bar ion-button {
+  --border-radius: 12px;
+  margin: 0;
+}
+
+/* The item page's Discard sits beside the other two, in the danger colour. */
+.olano-item-actions ion-button.olano-discard {
+  --border-color: rgba(var(--ion-color-danger-rgb), 0.5);
+}
+
+/* The conversation's "..." menu as a grouped sheet (ui/MenuSheet.tsx). */
+.olano-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 4px;
+}
+.olano-menu-header h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+.olano-menu-header p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--olano-muted);
+}
+.olano-menu-sheet ion-item p {
+  font-size: 13px;
+  color: var(--olano-muted);
+  white-space: normal;
+}
+.olano-menu-bottom {
+  height: calc(16px + env(safe-area-inset-bottom));
+}
+
+/* An agent that will not answer: where the composer was (ConversationPage). */
+.olano-unavailable {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 0.5px solid var(--ion-color-step-150, rgba(127, 127, 127, 0.3));
+  background: var(--ion-toolbar-background, var(--ion-background-color));
+}
+.olano-unavailable-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.olano-unavailable-text span {
+  color: var(--olano-muted);
+  font-size: 13px;
+}
+
+/* Agent row: why it will not answer, ahead of its last message. */
+.olano-row-state {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 17px;
+  vertical-align: 1px;
+  color: var(--olano-muted);
+  background: rgba(127, 127, 127, 0.18);
+}
+.olano-row-state-error,
+.olano-row-state-blocked {
+  color: var(--ion-color-danger);
+  background: rgba(var(--ion-color-danger-rgb), 0.14);
+}

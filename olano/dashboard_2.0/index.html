@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover is what makes env(safe-area-inset-*) report real
+         numbers; without it iOS letterboxes the app between the status bar and
+         the home indicator and every inset resolves to 0. The insets are only
+         consumed when installed (see the display-mode:standalone block in
+         globals.css), so a browser tab is unaffected. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <script>
+      // iOS Safari auto-zooms the page when a text control gains focus (and
+      // leaves it zoomed after the keyboard closes), which lets the whole app
+      // pan out of bounds — the chat composer's send button ends up off-screen.
+      // maximum-scale=1 suppresses that auto-zoom; since iOS 10 Safari ignores
+      // it for user pinch gestures, so manual zoom keeps working. Gated to iOS
+      // because Android Chrome *does* honor it for pinch, which would hurt
+      // accessibility there. (The iPad test: iPadOS reports itself as MacIntel
+      // but is the only "Mac" with a multi-touch screen.)
+      if (
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+      ) {
+        document
+          .querySelector('meta[name="viewport"]')
+          .setAttribute(
+            "content",
+            "width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover",
+          );
+      }
+    </script>
+    <title>Olano</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Installable app. The manifest carries the icons, the standalone
+         display mode and the Android share target; core/pwa.ts registers the
+         service worker that makes the install criteria complete.
+
+         Named .json, not .webmanifest, because the extension decides the
+         Content-Type on three different servers and only .json is mapped by
+         all of them: server.mjs's MIME table (what `olano dashboard` runs) has
+         no .webmanifest entry and would serve it as application/octet-stream,
+         and Go's builtin table — which Caddy's file_server consults on the
+         all-in-one deploys — has no entry either, leaving the type to content
+         sniffing. application/manifest+json is the spec's SHOULD; every
+         browser accepts application/json, which is what .json gets everywhere
+         with no per-server configuration to keep in sync. -->
+    <link rel="manifest" href="/manifest.json" />
+    <!-- Tints the OS chrome around the app. Two entries, not one: the app
+         defaults to its dark theme but ships light ones too, and a single
+         value would frame a light page in a dark bar (or the reverse). These
+         are the `--bg` of the default dark and light token sets. -->
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1f" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f3f4" />
+    <!-- iOS reads its own vendor-prefixed spellings; `mobile-web-app-capable`
+         is the standard one every other browser uses. `black-translucent` runs
+         the app under the status bar, which the --safe-top inset in
+         globals.css pads back out. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Olano" />
+    <script>
+      // Apply saved theme before paint to avoid a flash (default: dark).
+      document.documentElement.dataset.theme = localStorage.getItem("lc-theme") || "dark";
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Inter (UI) + Poppins (Olano wordmark).
+         Loaded non-render-blocking: as a plain stylesheet this gates first
+         paint on two serial cross-origin round-trips (googleapis for the CSS,
+         then gstatic for the woff2) — seconds on a high-latency link, and an
+         indefinite stall wherever Google's font CDN is unreachable. `media=print`
+         drops it out of the render-blocking set; onload promotes it to `all`.
+         The URL already carries `display=swap`, so text paints immediately in
+         the fallback face and swaps when the webfont lands. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:wght@500;600&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all';this.onload=null"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:wght@500;600&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

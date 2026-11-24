@@ -1,0 +1,8 @@
+# Caddy reverse proxy with automatic HTTPS (Let's Encrypt) for the relay.
+# Replace auth.olano.ai with your relay hostname (must resolve to this host).
+# Caddy provisions and renews the TLS cert automatically on ports 80/443.
+
+auth.olano.ai {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8900
+}

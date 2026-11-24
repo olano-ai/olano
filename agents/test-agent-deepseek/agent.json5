@@ -1,0 +1,12 @@
+{
+  // Test agent — DeepSeek. For TARGETED tests of DeepSeek model behaviour.
+  // Requires DEEPSEEK_API_KEY.
+  name: "test-agent-deepseek",
+  description: "Test agent on DeepSeek — for DeepSeek-specific (targeted) tests.",
+  emoji: "🧪",
+  model: "deepseek:deepseek-flash",
+  backend: { type: "filesystem", root_dir: "workspace" },
+  builtin_subagents: [],
+  // Internal-only: hidden from the dashboard and customers, still runnable for tests.
+  hidden: true,
+}
