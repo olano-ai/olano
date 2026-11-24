@@ -114,7 +114,7 @@ dependencies = [
     "deepagents-acp>=0.0.11",
     # CLI (click + rich) and the Textual setup wizard
     "click>=8.5.1",
-    "rich>=13.0.0",
+    "rich>=15.0.0",
     "textual>=8.2.8",
     # Configuration
     "pydantic>=2.14.4",
