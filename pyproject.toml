@@ -183,7 +183,7 @@ dependencies = [
     # so its packages ship in the base install. SQLite stays bundled above as the
     # opt-out backend and for the threads.db → Postgres migration reader.
     "langgraph-checkpoint-postgres>=3.1.3",
-    "psycopg[binary,pool]>=3.3.4",
+    "psycopg[binary,pool]>=3.3.9",
     "yfinance>=1.8.0",
     "stripe>=15.5.1",
     "tiktoken>=0.14.0",
