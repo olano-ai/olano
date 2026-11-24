@@ -68,6 +68,13 @@ updates:
       dashboard-deps:
         update-types: ["minor", "patch"]
         patterns: ["*"]
+    ignore:
+      # TypeScript 7 (the native compiler) cannot be installed yet: every
+      # openapi-typescript release, which generates src/core/types.gen.ts,
+      # declares a peer of typescript ^5, so `npm ci` refuses the tree and the
+      # dashboard build fails. Drop this once openapi-typescript accepts 7.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "npm"
     directory: "/whatsapp-bridge"
     schedule:
