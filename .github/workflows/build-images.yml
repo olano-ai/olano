@@ -52,7 +52,9 @@ name: Build runtime images (GHCR)
 
 on:
   schedule:
-    - cron: "0 */3 * * *" # every three hours (UTC)
+    # every three hours (UTC), off the hour: GitHub delays or drops scheduled
+    # runs that pile up at :00, and none fired here for a day after the rename
+    - cron: "23 */3 * * *"
   workflow_dispatch:
     inputs:
       force:

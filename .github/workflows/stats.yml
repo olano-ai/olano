@@ -1,0 +1,71 @@
+name: Repository stats
+
+# Once a day, records stars, forks, release downloads and (with STATS_TOKEN)
+# views and clones on the `stats` branch, and refreshes the shields.io endpoint
+# badge there.
+# The numbers are written by .github/scripts/collect_stats.py; its docstring
+# lists the files.
+#
+# Why a branch and not an artifact: the README badges need a stable public
+# URL (raw.githubusercontent.com/olano-ai/olano/stats/badges/...), and the
+# history is meant to outlive Actions' artifact retention. The branch holds
+# only data files with no history shared with `main`, so it never shows up in
+# a pull request, and the `main` ruleset does not cover it. Pushes made with
+# GITHUB_TOKEN start no other workflow.
+#
+# Views and clones: GitHub keeps them for 14 days and serves them only to a
+# token that can read the repository's administration settings, which
+# GITHUB_TOKEN cannot. To record them, add a fine-grained personal access token
+# as the repository secret STATS_TOKEN, scoped to olano-ai/olano with
+# "Administration: Read-only". Without it those two columns are skipped and
+# everything else still runs.
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # daily, 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repository-stats
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.repository == 'olano-ai/olano'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check out the stats branch
+        run: |
+          if git ls-remote --exit-code --heads origin stats >/dev/null; then
+            git fetch --depth=1 origin stats:stats
+            git worktree add data stats
+          else
+            git worktree add --detach data
+            git -C data checkout --orphan stats
+            git -C data rm -rfq .
+          fi
+
+      - name: Collect
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+        run: python3 .github/scripts/collect_stats.py --out data
+
+      - name: Commit and push
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No change."
+            exit 0
+          fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898299+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "stats: $(date -u +%F)"
+          git push origin HEAD:stats

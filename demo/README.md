@@ -121,8 +121,8 @@ SH
 DEMO_INSTALL_RESET=/tmp/olano-demo-reset.sh SLOW=3 DEMO=install demo/make.sh
 ```
 
-The terminal in both tutorials shows what the commands print: the installer's output is kept in
-`assets/install-output.log`, and `flow-source.mjs` uses the step headings of `install.sh`, the
+The terminal in both tutorials shows what the commands print: `flow-install.mjs` replays the
+installer's own output from a real run, and `flow-source.mjs` uses the step headings of `install.sh`, the
 prompts of `olano setup` and the tables `olano doctor` and `olano dashboard` printed on a real run.
 Long output between the headings is left out, and paths are shown as `/home/you/…`.
 
