@@ -2,20 +2,21 @@
 """Record the public repositories' adoption numbers on the `stats` branch.
 
 Run daily by .github/workflows/stats.yml. GitHub shows most of these numbers
-only as a current value (stars, forks, image downloads) or only for the last
-14 days (views and clones), so nothing remembers yesterday unless something
-writes it down. This script writes it down:
+only as a current value (stars, forks) or only for the last 14 days (views and
+clones), so nothing remembers yesterday unless something writes it down. This
+script writes it down:
 
   history.csv          one row per day: stars, forks and watchers of each
-                       public repository, release asset downloads, and the
-                       total downloads of each container image
+                       public repository, and release asset downloads
   traffic.csv          one row per day of olano-ai/olano views and clones,
                        merged so each run keeps the 14 days GitHub reports;
                        written only when the STATS_TOKEN secret is set, since
                        the traffic API needs a token with Administration read
   latest.json          the newest numbers in one document
-  badges/pulls.json    shields.io endpoint badge: container image downloads
   badges/stars.json    shields.io endpoint badge: stars across the repositories
+
+Container image downloads are deliberately not recorded: the managed fleet's
+own update pulls dominate them, so they say nothing about adoption.
 
 A number that cannot be read on a given day is left blank, never guessed, and
 never fails the run: a missing day is better than a wrong one.
@@ -30,7 +31,6 @@ import csv
 import datetime as dt
 import json
 import os
-import re
 import sys
 import urllib.error
 import urllib.request
@@ -38,12 +38,7 @@ from pathlib import Path
 
 OWNER = "olano-ai"
 REPOS = ("olano", "skills", "olano-agents")
-IMAGES = ("olano-backend", "olano-dashboard", "olano-sandbox", "olano-browser")
-
-# The package page renders the total as <h3 title="12345">12.3K</h3> under a
-# "Total downloads" label. There is no API for it.
-_TOTAL_LABEL = "Total downloads"
-_TITLE_NUMBER = re.compile(r'title="([\d,]+)"')
+BADGES = ("stars.json",)
 
 
 STATS_README = """# Olano adoption numbers
@@ -52,9 +47,8 @@ Written once a day by `.github/workflows/stats.yml` on `main`
 (`.github/scripts/collect_stats.py`). Nothing else writes to this branch.
 
 - `history.csv`: one row per day (UTC) with stars, forks and watchers of
-  olano, skills and olano-agents, release asset downloads, and the total
-  downloads of each container image. A blank cell means the number could not
-  be read that day.
+  olano, skills and olano-agents, and release asset downloads. A blank cell
+  means the number could not be read that day.
 - `traffic.csv`: olano-ai/olano views and clones per day. GitHub keeps only 14
   days of these, so this file is the long-term record. Needs the STATS_TOKEN
   secret.
@@ -116,30 +110,6 @@ def release_downloads(token: str | None) -> int | None:
         return None
 
 
-def parse_total_downloads(html: str) -> int | None:
-    """The number in the first title="..." after the "Total downloads" label."""
-    at = html.find(_TOTAL_LABEL)
-    if at < 0:
-        return None
-    match = _TITLE_NUMBER.search(html, at, at + 600)
-    return int(match.group(1).replace(",", "")) if match else None
-
-
-def image_downloads(name: str) -> int | None:
-    for url in (
-        f"https://github.com/orgs/{OWNER}/packages/container/package/{name}",
-        f"https://github.com/{OWNER}/olano/pkgs/container/{name}",
-    ):
-        try:
-            found = parse_total_downloads(_fetch(url, accept="text/html"))
-        except urllib.error.URLError:
-            continue
-        if found is not None:
-            return found
-    _warn(f"{name}: total downloads not found on the package page")
-    return None
-
-
 def traffic_rows(token: str) -> dict[str, dict[str, int]]:
     """Per-day views and clones for the last 14 days, keyed by date."""
     rows: dict[str, dict[str, int]] = {}
@@ -182,13 +152,13 @@ def _write_csv(path: Path, fields: list[str], rows: dict[str, dict[str, object]]
 
 
 def merge_daily(path: Path, new_rows: dict[str, dict[str, object]], fields: list[str]) -> None:
-    """Upsert rows by date, keeping every column ever written."""
-    old_fields, rows = _read_csv(path)
+    """Upsert rows by date. The columns are exactly `fields`, so a number this
+    script stops collecting leaves the file rather than lingering as blanks."""
+    _, rows = _read_csv(path)
     merged: dict[str, dict[str, object]] = {date: dict(row) for date, row in rows.items()}
     for date, row in new_rows.items():
         merged.setdefault(date, {"date": date}).update(row)
-    all_fields = ["date"] + [f for f in dict.fromkeys(old_fields + fields) if f != "date"]
-    _write_csv(path, all_fields, merged)
+    _write_csv(path, ["date"] + [f for f in fields if f != "date"], merged)
 
 
 def write_badge(path: Path, label: str, value: int | None, logo: str) -> None:
@@ -225,12 +195,6 @@ def main() -> int:
     row: dict[str, object] = {"date": today}
     row.update(repo_numbers(token))
     row["release_downloads"] = release_downloads(token)
-    pulls: dict[str, int | None] = {name: image_downloads(name) for name in IMAGES}
-    for name, count in pulls.items():
-        row[f"{name}_downloads"] = count
-
-    known_pulls = [count for count in pulls.values() if count is not None]
-    row["image_downloads_total"] = sum(known_pulls) if known_pulls else None
     stars = [row[f"{repo}_stars"] for repo in REPOS]
     known_stars = [s for s in stars if isinstance(s, int)]
     row["stars_total"] = sum(known_stars) if known_stars else None
@@ -251,13 +215,11 @@ def main() -> int:
     else:
         print("STATS_TOKEN not set: skipping views and clones.")
 
-    readme = out / "README.md"
-    if not readme.exists():
-        readme.write_text(STATS_README)
+    (out / "README.md").write_text(STATS_README)
     (out / "latest.json").write_text(json.dumps(row, indent=2) + "\n")
-    write_badge(
-        out / "badges" / "pulls.json", "image pulls", row["image_downloads_total"], "docker"
-    )  # type: ignore[arg-type]
+    for stale in (out / "badges").glob("*.json"):
+        if stale.name not in BADGES:
+            stale.unlink()  # a badge this script no longer writes
     write_badge(out / "badges" / "stars.json", "stars", row["stars_total"], "github")  # type: ignore[arg-type]
 
     print(json.dumps(row, indent=2))

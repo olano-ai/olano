@@ -1,8 +1,8 @@
 name: Repository stats
 
-# Once a day, records stars, forks, release downloads, container image
-# downloads and (with STATS_TOKEN) views and clones on the `stats` branch,
-# and refreshes the shields.io endpoint badges the README reads from there.
+# Once a day, records stars, forks, release downloads and (with STATS_TOKEN)
+# views and clones on the `stats` branch, and refreshes the shields.io endpoint
+# badge there.
 # The numbers are written by .github/scripts/collect_stats.py; its docstring
 # lists the files.
 #
