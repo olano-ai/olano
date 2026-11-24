@@ -3,7 +3,7 @@
 // Nothing is mocked: it records an Olano that the installer has just started. Before each take the
 // install is put back to "no accounts" by DEMO_INSTALL_RESET (a script that re-runs setup.sh on a
 // wiped data directory and prints the new setup code); the terminal replays the installer's own
-// output, captured in assets/install-output.log.
+// output, copied from a real run.
 import { execFileSync } from 'node:child_process';
 
 export const server = false;
