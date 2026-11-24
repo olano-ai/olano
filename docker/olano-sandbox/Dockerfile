@@ -2,7 +2,7 @@
 # gogcli ships no prebuilt release binaries, so build the pinned ref from source
 # in a throwaway Go stage and copy just the static binary into the final image.
 # Keeps the runtime image Go-toolchain-free.
-FROM golang:1.27.0-bookworm AS gog-builder
+FROM golang:1.27.4-bookworm AS gog-builder
 ARG GOGCLI_REF=v0.12.0
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates git make \
     && rm -rf /var/lib/apt/lists/*

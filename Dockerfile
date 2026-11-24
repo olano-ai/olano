@@ -2,7 +2,7 @@
 # gogcli has no prebuilt release binaries; build the pinned ref from source in a
 # throwaway Go stage and copy just the binary below (keeps the runtime image
 # Go-toolchain-free). Same pattern as the olano-sandbox image.
-FROM golang:1.27.0-bookworm AS gog-builder
+FROM golang:1.27.4-bookworm AS gog-builder
 ARG GOGCLI_REF=v0.12.0
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates git make \
     && rm -rf /var/lib/apt/lists/*
