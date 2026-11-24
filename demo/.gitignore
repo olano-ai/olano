@@ -1,0 +1,5 @@
+# Work folder (fonts, raw frames, logs) and the finished videos: rebuilt with make.sh
+.work/
+videos/
+__pycache__/
+audio/*/music.mp3

@@ -1,0 +1,13 @@
+{
+  "type": "column",
+  "kicker": "Kettle Hill Coffee",
+  "title": "October was the best month of the year",
+  "subtitle": "Revenue by month, both shops, USD",
+  "categories": ["May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+  "series": [{"name": "Revenue", "values": [41200, 43900, 42100, 45800, 47300, 54600]}],
+  "value_format": {"kind": "currency", "decimals": 0, "compact": true},
+  "ordinal": true,
+  "highlight": "Oct",
+  "annotations": [{"target": "Oct", "text": "+15% on September"}],
+  "notes": {"source": "Shop till exports", "as_of": "2026-11-01"}
+}

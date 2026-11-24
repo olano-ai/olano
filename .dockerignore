@@ -30,6 +30,12 @@ tests/
 # reads it. Its native projects (Gradle, Xcode) are large and change often.
 mobile/
 
+# ── demo videos ─────────────────────────────────────────────────────────────
+# demo/ records the product films (scripts, voiceover MP3s, a chart). Nothing
+# in either image reads it, and `COPY . .` would otherwise put several MB of
+# audio into every runtime image.
+demo/
+
 # ── dev/test agent fixtures ──────────────────────────────────────────────────
 # The repo-local agents/ dir holds only internal per-provider test agents
 # (test-agent-*, test-monetization-agent). Customer images must not contain

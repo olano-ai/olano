@@ -195,6 +195,9 @@ export function VaultView() {
           paddingLeft: indent ? 40 : 16,
           borderTop: "1px solid var(--border)",
           gap: 12,
+          // On a phone the actions drop under the name instead of squeezing it
+          // down to nothing (the name is the one thing the row is for).
+          flexWrap: "wrap",
           transition: "background var(--t-fast) var(--ease)",
         }}
         onMouseEnter={(e) => {
@@ -204,7 +207,7 @@ export function VaultView() {
           e.currentTarget.style.background = "";
         }}
       >
-        <div className="row" style={{ gap: 12, minWidth: 0 }}>
+        <div className="row" style={{ gap: 12, minWidth: 0, flex: "1 1 220px" }}>
           <span
             style={{
               width: 32,
@@ -252,7 +255,7 @@ export function VaultView() {
             </div>
           </div>
         </div>
-        <div className="row" style={{ gap: 6, flexShrink: 0 }}>
+        <div className="row" style={{ gap: 6, flexShrink: 0, marginLeft: "auto" }}>
           {s.expires_at &&
             (isExpired(s.expires_at) ? (
               <span
