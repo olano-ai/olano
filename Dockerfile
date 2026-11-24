@@ -2,7 +2,7 @@
 # gogcli has no prebuilt release binaries; build the pinned ref from source in a
 # throwaway Go stage and copy just the binary below (keeps the runtime image
 # Go-toolchain-free). Same pattern as the olano-sandbox image.
-FROM golang:1.27.0-bookworm AS gog-builder
+FROM golang:1.27.4-bookworm AS gog-builder
 ARG GOGCLI_REF=v0.12.0
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates git make \
     && rm -rf /var/lib/apt/lists/*
@@ -12,7 +12,7 @@ RUN git clone --depth 1 --branch ${GOGCLI_REF} https://github.com/steipete/gogcl
     && install -Dm755 ./bin/gog /out/gog
 
 
-FROM python:3.14-slim
+FROM python:3.15-slim
 
 # ── Layer order is the whole point of this file ──────────────────────────────
 # Every managed box pulls this image on first boot and on every console update,
