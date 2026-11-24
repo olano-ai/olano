@@ -324,7 +324,7 @@ exhaustion into timeouts.
 
 `approval_required` is the one list `auto_approve` never overrides. Whatever
 Fully Autonomous would otherwise apply, an item or background tool call in a
-listed category waits in Pulse → Approvals for a human: `identity_edit` (any
+listed category waits in Cortex → Self-Improve for a human: `identity_edit` (any
 write to SOUL.md / AGENTS.md / IDENTITY.md), `external_send` (email, calendar,
 posts, messages to other agents), `irreversible` (moving money, overwriting a
 stored secret). It is a plain list with a concrete default, not a three-state

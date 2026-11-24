@@ -18,7 +18,7 @@ flowchart TB
     CX --> ID["Ideas, brainstorms,<br/>prototypes"]
     CX --> PU["Pulse<br/>suggestions"]
     PU --> YOU["You: at the start of a session,<br/>on a channel or in a daily digest"]
-    CX -. "outward, irreversible<br/>or identity-changing" .-> AP["Waits in Pulse, Approvals"]
+    CX -. "outward, irreversible<br/>or identity-changing" .-> AP["Waits in Cortex, Self-Improve"]
 ```
 
 **Cortex is off until you turn it on.** On a new deployment the **Cortex
@@ -106,10 +106,11 @@ itself:
   and the org chart apply to background runs exactly as they do in chat.
 - `cognition.approval_required` still holds on every one of those runs, the
   self-scheduled steps included: by default an email, a payment or an identity
-  edit waits in **Pulse → Approvals**, and the item's `STATUS.md` says so.
+  edit waits in **Cortex → Self-Improve** (the tab that lists everything Cortex
+  is holding for your approval), and the item's `STATUS.md` says so.
 
 **With Fully Autonomous off**, ratings are advice. Each promotion candidate
-becomes a card in **Pulse → Approvals** whose **Approve** does exactly what the
+becomes a card in **Cortex → Self-Improve** whose **Approve** does exactly what the
 autonomous run would have done; nothing is discarded, and Advance Work develops
 items without scheduling, publishing or reaching out.
 

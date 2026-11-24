@@ -309,7 +309,7 @@ async def apply_decisions(
         queued = [queue_promotion_approval(config, workspace_root, it) for it in candidates]
         n = sum(1 for q in queued if q)
         if n:
-            parts.append(f"{n} promotion(s) wait for your approval in Pulse → Approvals.")
+            parts.append(f"{n} promotion(s) wait for your approval in Cortex → Self-Improve.")
     return parts, [a for a in artifacts if a]
 
 

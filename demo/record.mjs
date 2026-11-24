@@ -11,23 +11,25 @@ const LAYOUT = process.env.LAYOUT || 'landscape';
 const PORTRAIT = LAYOUT === 'portrait';
 const DEMO = process.env.DEMO || 'tour';
 const flow = await import(`./flow-${DEMO}.mjs`);
+// The app is in the iPhone: always in portrait, and in landscape too for a flow with `device: 'phone'`
+const PHONE = PORTRAIT || flow.device === 'phone';
 const OUT = path.join(WORK, `frames-${DEMO}-${LAYOUT}`);
 fs.rmSync(OUT, { recursive: true, force: true }); fs.mkdirSync(OUT, { recursive: true });
 const DSF = Number(process.env.DSF || 1.25);
 const K = Number(process.env.SLOW || 3);
 
 // The phone layout gets room for the status bar and the home indicator
-const DEMO_CSS = APP_CSS + (PORTRAIT ? (flow.phoneCss ?? '') : (flow.desktopCss ?? '')) + (flow.css ?? '');
+const DEMO_CSS = APP_CSS + (PHONE ? (flow.phoneCss ?? '') : (flow.desktopCss ?? '')) + (flow.css ?? '');
 
 const server = flow.server === false ? null : await startServer(flow.team ?? DEMO, K);
-const APP = server?.base_url ?? flow.app ?? 'http://127.0.0.1:1';     // flow.app: an Olano that is already running
+const APP = flow.app ?? server?.base_url ?? 'http://127.0.0.1:1';     // flow.app: an Olano that is already running
 const quit = async (code) => { server?.stop(); process.exit(code); };
 process.on('SIGINT', () => quit(1)); process.on('SIGTERM', () => quit(1));
 // A stuck setup ends the run; make.sh tries again.
 const watchdog = setTimeout(() => { console.log('stuck before recording'); quit(3); }, 120000);
 const b = await chromium.launch({ executablePath: CHROME, timeout: 30000, args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests', ...(flow.chromeArgs ?? [])] });
 const ctx = await b.newContext({ viewport: PORTRAIT ? { width: 1080, height: 1920 } : { width: 1920, height: 1080 },
-  deviceScaleFactor: DSF, locale: 'en-US', timezoneId: flow.timezone ?? 'America/New_York', colorScheme: 'dark', hasTouch: PORTRAIT });
+  deviceScaleFactor: DSF, locale: 'en-US', timezoneId: flow.timezone ?? 'America/New_York', colorScheme: 'dark', hasTouch: PHONE, ...(flow.userAgent ? { userAgent: flow.userAgent } : {}) });
 await prepare(ctx, { app: APP, appCss: DEMO_CSS });
 if (flow.init) await flow.init(ctx, { server, layout: LAYOUT, K });
 const STAGE = APP + '/__demo/stage.html';
@@ -51,7 +53,7 @@ const driver = (async () => {
 const page = await ctx.newPage();
 page.setDefaultTimeout(30000);
 page.on('pageerror', (e) => console.log('pageerror', e.message));
-await page.goto(STAGE + '?layout=' + LAYOUT);
+await page.goto(STAGE + '?layout=' + LAYOUT + (PHONE && !PORTRAIT ? '&device=phone' : ''));
 await page.evaluate(([c, w]) => window.stage.setup(c, w), [flow.captions, flow.keyboardWords ?? []]);
 if (flow.brand) await page.evaluate((l) => window.stage.brand(l), flow.brand);
 if (flow.address) await page.evaluate((a) => window.stage.address(a), flow.address);
@@ -73,16 +75,16 @@ const scr = await page.evaluate((portrait) => {
   const w = document.getElementById(portrait ? 'phone' : 'win'), sc = Number(getComputedStyle(w).getPropertyValue('--s'));
   return portrait ? { x: w.offsetLeft + 20 * sc, y: w.offsetTop + 72 * sc, width: 393 * sc, height: 780 * sc }
     : { x: w.offsetLeft, y: w.offsetTop + 40 * sc, width: 1200 * sc, height: 790 * sc };
-}, PORTRAIT);
+}, PHONE);
 const P = (fx, fy) => [scr.x + scr.width * fx, scr.y + scr.height * fy];
 async function center(loc) { const bb = await loc.boundingBox(); if (!bb) throw new Error('not visible: ' + loc); return [bb.x + bb.width / 2, bb.y + bb.height / 2]; }
 /** The pointer glides to the element, presses and clicks it. */
-async function tap(loc, { move = 650, hold = 130, after = 0, dispatch = PORTRAIT, at } = {}) {
+async function tap(loc, { move = 650, hold = 130, after = 0, dispatch = PHONE, at } = {}) {
   loc = loc.first();
   await loc.waitFor({ state: 'visible' });
   const [x, y] = at ?? await center(loc);
   await S('move', x, y, move);
-  if (!PORTRAIT) await page.mouse.move(x, y);       // hover states, as a real mouse gives
+  if (!PHONE) await page.mouse.move(x, y);       // hover states, as a real mouse gives
   await sleep(90);
   await S('press');
   await sleep(hold);
@@ -94,10 +96,10 @@ async function tap(loc, { move = 650, hold = 130, after = 0, dispatch = PORTRAIT
 async function point(loc, { move = 700, dx = 0, dy = 0 } = {}) {
   const [x, y] = await center(loc.first());
   await S('move', x + dx, y + dy, move);
-  if (!PORTRAIT) await page.mouse.move(x + dx, y + dy);
+  if (!PHONE) await page.mouse.move(x + dx, y + dy);
 }
 /** Type into the focused field, key by key (the iOS keyboard shows on the phone). */
-async function type(loc, text, { cps = 16, keyboard = PORTRAIT } = {}) {
+async function type(loc, text, { cps = 16, keyboard = PHONE } = {}) {
   await tap(loc, { move: 600 });
   await loc.first().focus();
   if (keyboard) { await S('keyboard', true); await S('hide'); await sleep(450); }
@@ -116,13 +118,13 @@ async function send(text, opts = {}) {
   await keyboardOff();
   await S('hide');
 }
-async function keyboardOff() { if (PORTRAIT) { await S('keyboard', false); await frame.evaluate(() => document.activeElement?.blur()); } }
+async function keyboardOff() { if (PHONE) { await S('keyboard', false); await frame.evaluate(() => document.activeElement?.blur()); } }
 const easeJs = 't < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2';
 /** Scroll smoothly by dy: the nearest scrollable ancestor of `sel` (or the page). */
 async function scroll(dy, ms = 1100, sel = null) {
-  if (PORTRAIT) { await S('show', ...P(.6, .7)); await sleep(80); }
+  if (PHONE) { await S('show', ...P(.6, .7)); await sleep(80); }
   await Promise.all([
-    PORTRAIT ? S('swipe', -Math.sign(dy) * Math.min(Math.abs(dy) * 0.5, scr.height * 0.4), ms) : Promise.resolve(),
+    PHONE ? S('swipe', -Math.sign(dy) * Math.min(Math.abs(dy) * 0.5, scr.height * 0.4), ms) : Promise.resolve(),
     frame.evaluate(([dy, ms, ez, sel]) => new Promise((res) => {
       const e = new Function('t', 'return ' + ez);
       let el = sel ? document.querySelector(sel) : null;
@@ -134,12 +136,12 @@ async function scroll(dy, ms = 1100, sel = null) {
       requestAnimationFrame(f);
     }), [dy, ms, easeJs, sel]),
   ]);
-  if (PORTRAIT) { await S('release'); await S('hide'); }
+  if (PHONE) { await S('release'); await S('hide'); }
 }
 /** Bring an element to `top` px below the top of the app (smoothly). */
 async function scrollTo(loc, top = 140, ms = 1100) {
   const bb = await loc.first().boundingBox();
-  const sc = scr.width / (PORTRAIT ? 393 : 1200);
+  const sc = scr.width / (PHONE ? 393 : 1200);
   const dy = (bb.y - scr.y) / sc - top;
   const h = await loc.first().elementHandle();
   await frame.evaluate((el) => { el.setAttribute('data-demo-target', '1'); }, h);
@@ -149,7 +151,7 @@ async function scrollTo(loc, top = 140, ms = 1100) {
 /** Go to a dashboard page: by its sidebar link when one is showing, otherwise by the router. */
 async function nav(path, { click = true } = {}) {
   const link = app.locator(`aside.sidebar a[href="${path}"]`).first();
-  if (click && !PORTRAIT && await link.isVisible().catch(() => false)) { await tap(link); return; }
+  if (click && !PHONE && await link.isVisible().catch(() => false)) { await tap(link); return; }
   await frame.evaluate((p) => { history.pushState({}, '', p); dispatchEvent(new PopStateEvent('popstate', { state: {} })); }, path);
 }
 /** Load a page of the app into the frame mid-flow (the tutorials start in the terminal). */
@@ -193,7 +195,7 @@ await sleep(400);
 
 let failed = null;
 try {
-  await flow.run({ page, app, get frame() { return frame; }, S, sleep, P, tap, point, type, send, keyboardOff, scroll, scrollTo, nav, openApp, term, mark, APP, K, server, PORTRAIT, LAYOUT });
+  await flow.run({ page, app, get frame() { return frame; }, S, sleep, P, tap, point, type, send, keyboardOff, scroll, scrollTo, nav, openApp, term, mark, APP, K, server, PORTRAIT, PHONE, LAYOUT });
 } catch (e) { failed = e; await page.screenshot({ path: path.join(WORK, 'failed.png') }); console.log('flow failed: see', path.join(WORK, 'failed.png'), '\n', e.message); }
 mark('stop');
 await cdp.send('Page.stopScreencast');

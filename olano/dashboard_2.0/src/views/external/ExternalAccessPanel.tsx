@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { chatPath } from "../../core/routeUrls";
+import { subscribeStream } from "../../core/agentStream";
 import { api, ApiError } from "../../core/api";
 import { useT } from "../../core/i18n";
 import { useConfirm } from "../../ui/confirm";
@@ -146,18 +147,22 @@ export function EndpointsCard({ status, agentName }: { status: ExternalStatus; a
   );
 }
 
-export function StatusBadge({ serving, enabled, https, requireHttps, originKnown }: {
+export function StatusBadge({ serving, enabled, https, requireHttps, originKnown, surfaceServing = serving }: {
   serving: boolean;
   enabled: boolean;
   https: boolean;
   requireHttps: boolean;
   originKnown: boolean;
+  /** The server's own verdict for the whole surface (`status.serving`). The server exempts
+   *  loopback and private-network origins from Require HTTPS, so a plain-http origin it does
+   *  serve must not read "Refused" here. Defaults to `serving`. */
+  surfaceServing?: boolean;
 }) {
   const t = useT(STR);
   let text = t("ext.status.off");
   let cls = "badge";
   if (enabled && !originKnown) text = t("ext.status.unknownOrigin");
-  else if (enabled && !https && requireHttps) text = t("ext.status.notHttps");
+  else if (enabled && !https && requireHttps && !surfaceServing) text = t("ext.status.notHttps");
   else if (serving) {
     text = t("ext.status.serving");
     cls = "badge admin";
@@ -455,22 +460,38 @@ export function RecentCallsCard({ agentName }: { agentName: string }) {
   const [rows, setRows] = useState<PairThread[] | null>(null);
   useEffect(() => {
     let alive = true;
-    api
-      .get<PairThread[]>("/api/a2a/threads?kind=external")
-      .then((all) => {
-        if (!alive) return;
-        const me = normName(agentName);
-        setRows(
-          (all || [])
-            .filter((row) => isExternalKind(row.kind) && (normName(row.b) === me || normName(row.a) === me))
-            .slice(0, 10),
-        );
-      })
-      .catch(() => {
-        if (alive) setRows([]);
-      });
+    const me = normName(agentName);
+    const load = () =>
+      api
+        .get<PairThread[]>("/api/a2a/threads?kind=external")
+        .then((all) => {
+          if (!alive) return;
+          setRows(
+            (all || [])
+              .filter((row) => isExternalKind(row.kind) && (normName(row.b) === me || normName(row.a) === me))
+              .slice(0, 10),
+          );
+        })
+        .catch(() => {
+          // A failed refresh keeps the rows already shown.
+          if (alive) setRows((cur) => cur ?? []);
+        });
+    void load();
+    // A call that arrives while the tab is open shows up without leaving and
+    // coming back: the list used to load once, so it kept reading "No
+    // external calls yet" beside a call the Agent to Agent view already had.
+    let timer: number | undefined;
+    const unsubscribe = subscribeStream((frame) => {
+      const ev = frame as { type?: string; data?: { kind?: string; from?: string; to?: string } };
+      if (ev.type !== "agent_message" || !isExternalKind(ev.data?.kind ?? "")) return;
+      if (normName(ev.data?.from ?? "") !== me && normName(ev.data?.to ?? "") !== me) return;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => void load(), 400);
+    });
     return () => {
       alive = false;
+      window.clearTimeout(timer);
+      unsubscribe();
     };
   }, [agentName]);
   if (rows === null) return null;

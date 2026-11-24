@@ -85,6 +85,11 @@ export const LINES = {
   ],
 };
 const DEMO = process.argv[2];
+// A flow can carry its own lines: `export const voice = [...]` in flow-<demo>.mjs
+if (DEMO && !Object.hasOwn(LINES, DEMO)) {
+  const flow = await import(`./flow-${DEMO}.mjs`).catch(() => null);
+  if (flow?.voice) LINES[DEMO] = flow.voice;
+}
 if (!Object.hasOwn(LINES, DEMO ?? '')) { console.error('usage: node voiceover.mjs <demo> [line numbers...]'); process.exit(1); }
 const DIR = path.join(path.dirname(new URL(import.meta.url).pathname), 'audio', DEMO);
 fs.mkdirSync(DIR, { recursive: true });

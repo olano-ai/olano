@@ -15,8 +15,8 @@ let out = '';
 ix.forEach((f, i) => { out += \"file '\" + f.file + \"'\nduration \" + (i < ix.length - 1 ? ix[i + 1].ts - f.ts : 0.5).toFixed(5) + '\n'; });
 fs.writeFileSync('$D/list.txt', out + \"file '\" + ix.at(-1).file + \"'\n\");"
 if [ "$L" = portrait ]; then S=1080:1920; else S=1920:1080; fi
-# Voiceover and music (audio/<demo>/) when present; otherwise a silent track
-if [ -f "$(dirname "$0")/audio/$DEMO/music.mp3" ]; then
+# Voiceover (audio/<demo>/, plus music with MUSIC=1) when present; otherwise a silent track
+if [ -f "$(dirname "$0")/audio/$DEMO/vo0.mp3" ]; then
   HOLD=$(node "$(dirname "$0")/mix.mjs" "$D" "$FFMPEG")
   AUDIO=(-i "$D/mix.wav"); TPAD=",tpad=stop_mode=clone:stop_duration=$HOLD"
 else

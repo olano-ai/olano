@@ -256,3 +256,55 @@ async def test_unreadable_prior_state_skips_recording_not_the_reply() -> None:
 
     # Undercount (skip), never a possible double-count.
     assert _acp_events() == []
+
+
+# ── tool results reach the editor with their true status ─────────────────────
+
+
+def _tool_update(text: str, status: str = "completed"):
+    # Built from the schema, the way deepagents-acp builds it: the helper
+    # functions the SDK once exported at its top level are gone in 1.0.
+    from acp import schema
+
+    return schema.ToolCallProgress(
+        session_update="tool_call_update",
+        tool_call_id="call_1",
+        status=status,
+        content=[
+            schema.ContentToolCallContent(
+                type="content", content=schema.TextContentBlock(type="text", text=text)
+            )
+        ],
+    )
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "[blocked] Path is outside the workspace: /srv/project/notes.md",
+        "Error: file not found: notes/missing.md",
+    ],
+)
+def test_a_failed_tool_result_is_not_reported_completed(text: str) -> None:
+    assert acp_server._with_true_status(_tool_update(text)).status == "failed"
+
+
+def test_a_successful_tool_result_stays_completed() -> None:
+    update = _tool_update("Updated file notes/checklist.md")
+    assert acp_server._with_true_status(update) is update
+
+
+async def test_the_editor_connection_gets_the_corrected_update() -> None:
+    conn = MagicMock()
+    conn.session_update = AsyncMock()
+    client = acp_server._TrueStatusClient(conn)
+
+    await client.session_update(
+        session_id="s1", update=_tool_update("[blocked] not allowed"), source="DeepAgent"
+    )
+
+    sent = conn.session_update.await_args.kwargs
+    assert sent["update"].status == "failed"
+    assert sent["session_id"] == "s1" and sent["source"] == "DeepAgent"
+    # Everything else on the connection passes straight through.
+    assert client.request_permission is conn.request_permission

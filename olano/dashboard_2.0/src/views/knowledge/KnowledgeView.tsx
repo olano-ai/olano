@@ -844,7 +844,9 @@ function HitCard({ hit }: { hit: SearchHit }) {
           }}
           title={hit.source}
         >
-          {hit.source}
+          {/* The file's name, as the Sources tab shows it: the full path was cut
+              off mid-way and is still in the tooltip. */}
+          {sourceLabel(hit.source)}
         </span>
       </div>
       <div

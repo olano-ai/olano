@@ -65,7 +65,7 @@ export async function run(c) {
   await term.clear();
   await term.run('uv run olano doctor', { cps: 18 });
   await term.out([
-    line('┌', '┬', '┐'), `│ ${'Check'.padEnd(20)} │ Status │ ${'Detail'.padEnd(PORTRAIT ? 16 : 30)} │`, line('├', '┼', '┤'),
+    line('┌', '┬', '┐'), `│ ${'Check'.padEnd(20)} │ Status │ ${'Detail'.padEnd(DW)} │`, line('├', '┼', '┤'),
     row('Python >= 3.11', P, '3.13.18'), row('deepagents installed', P, 'found'), row('Docker available', P, 'docker info ok'),
     row('Ollama available', W, 'ollama not installed'), row('Vault initialized', P, '/home/you/.olano/vault'), row('Workspace valid', P, '/home/you/.olano/workspace'),
     row('Disk space >= 500MB', P, '50980MB free'), row('Configured agents', P, 'merli'), row('Model runtime', P, 'openai credentials available'),

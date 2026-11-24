@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Records and builds a demo's videos: the take, the voice (if not made yet), the music (fitted to the
-# take's end card), then the MP4. A watchdog stops the run if free memory falls below 1.2 GB.
+# Records and builds a demo's videos: the take, the voice (if not made yet), then the MP4. MUSIC=1
+# also composes a music bed fitted to the take and mixes it under the voice. A watchdog stops the run
+# if free memory falls below 1.2 GB.
 #   [DEMO=tour] [SLOW=3] demo/make.sh [landscape] [portrait]
 set -uo pipefail
 cd "$(dirname "$0")"
@@ -26,7 +27,7 @@ record() {   # one take; a take that gets stuck before recording (exit 3) is tri
 for L in $LAYOUTS; do
   record "$L" || exit 1
   if [ ! -f "audio/$DEMO/vo0.mp3" ] && [ -n "${OPENAI_API_KEY:-}" ]; then node voiceover.mjs "$DEMO" || exit 1; fi
-  if [ -f "audio/$DEMO/vo0.mp3" ] && { [ ! -f "audio/$DEMO/music.mp3" ] || [ -n "${MUSIC:-}" ]; }; then
+  if [ -n "${MUSIC:-}" ] && [ -f "audio/$DEMO/vo0.mp3" ]; then     # optional music bed, fitted to this take
     END=$(node -e "console.log(require('$WORK/frames-$DEMO-$L/marks.json').end.toFixed(1))")
     (cd .. && uv run --quiet python demo/music.py "$DEMO" "$END") || exit 1
   fi

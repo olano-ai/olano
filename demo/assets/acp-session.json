@@ -1,0 +1,60 @@
+{
+  "help": [
+    "Usage: olano acp [OPTIONS]",
+    "",
+    "  Start an ACP server for an agent (editor integration).",
+    "",
+    "Options:",
+    "  -a, --agent TEXT  Agent name  [required]",
+    "  --http            Run HTTP/SSE mode instead of stdio",
+    "  --port INTEGER    Port for HTTP mode",
+    "  --help            Show this message and exit."
+  ],
+  "settings": [
+    "{",
+    "  \"agent_servers\": {",
+    "    \"Olano\": {",
+    "      \"type\": \"custom\",",
+    "      \"command\": \"olano\",",
+    "      \"args\": [\"acp\", \"--agent\", \"sage\"],",
+    "      \"env\": {}",
+    "    }",
+    "  }",
+    "}"
+  ],
+  "client": [
+    {
+      "prompt": null,
+      "out": [
+        "started: olano acp --agent sage",
+        "connected: ACP protocol version 1",
+        "session: 79a8a2bd"
+      ]
+    },
+    {
+      "prompt": "How do we store money values?",
+      "out": [
+        "[tool] Read `notes/conventions.md`",
+        "[tool] completed",
+        "As integer cents, never floats. The currency code has its own column, and amounts are rounded only when they are formatted for display.",
+        "[end_turn]"
+      ]
+    },
+    {
+      "prompt": "Add that to the review checklist.",
+      "out": [
+        "[tool] Edit `notes/checklist.md`",
+        "Added to notes/checklist.md.",
+        "[end_turn]"
+      ]
+    }
+  ],
+  "stderr": "",
+  "checklist": [
+    "# Review checklist",
+    "",
+    "- [ ] Tests cover the change",
+    "- [ ] No secrets in the diff",
+    "- [ ] Money is stored as integer cents, never floats"
+  ]
+}

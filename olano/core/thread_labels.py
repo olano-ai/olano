@@ -94,6 +94,13 @@ CLIENT_METADATA_KEY = "client"
 # "fact" about the user.
 AGENT_TEST_THREAD_PREFIX = "agenttest::"
 
+# The Knowledge page's console thread (dashboard ``views/knowledge/kb.ts``): the
+# page runs its kb_* tool calls through the chat endpoint on one thread per
+# visit. It is the page's plumbing, not a conversation: left unlabelled it sat
+# in the agent's chat list titled "Run this tool call now and…" and was the
+# conversation the agent's chat opened on next.
+KB_CONSOLE_THREAD_PREFIX = "kb-console-"
+
 # Thread-id prefixes that mark autonomous machinery rather than a conversation.
 # Mirrors ``analytics.journal._SYSTEM_THREAD_PREFIXES`` / ``tools.talk_to``.
 # ``issues_`` is the per-agent issue poll (``scheduler/cron.py:_add_issues_job``)
@@ -107,6 +114,7 @@ SYSTEM_THREAD_PREFIXES = (
     "cog::",
     "sub::",
     AGENT_TEST_THREAD_PREFIX,
+    KB_CONSOLE_THREAD_PREFIX,
 )
 
 # ``u:<user_id>:`` — the per-human namespace the dashboard used to prepend to
@@ -407,7 +415,9 @@ def classify_thread(
     # bucket holds it, instead of it passing for a human conversation.
     if tid.startswith("scheduled_") or tid.startswith("issues_"):
         return ORIGIN_SCHEDULED, channel or CHANNEL_SCHEDULER
-    if "cog::" in tid or tid.startswith(("sub::", AGENT_TEST_THREAD_PREFIX)):
+    if "cog::" in tid or tid.startswith(
+        ("sub::", AGENT_TEST_THREAD_PREFIX, KB_CONSOLE_THREAD_PREFIX)
+    ):
         return ORIGIN_AUTONOMOUS, ""
     if tid.startswith("acp::") or tid.startswith("delegate::"):
         return ORIGIN_PEER, ""

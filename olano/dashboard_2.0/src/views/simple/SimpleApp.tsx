@@ -903,9 +903,17 @@ export function SimpleApp() {
         onNewChatFor={newChatFor}
         onDeleteThread={(id) => void deleteThread(id)}
         onRename={renameRow}
-        onNewBot={() => setNewBotOpen(true)}
+        // On a phone the rail is a drawer drawn above dialogs (z-modal + 1), so
+        // it has to close first or the dialog opens underneath it.
+        onNewBot={() => {
+          setRailOpen(false);
+          setNewBotOpen(true);
+        }}
         onSelectGroup={selectGroup}
-        onNewGroup={() => setNewGroupOpen(true)}
+        onNewGroup={() => {
+          setRailOpen(false);
+          setNewGroupOpen(true);
+        }}
         onShowProfile={showProfileFor}
         onShowAllThreads={showAllThreadsFor}
         onMarkRead={markBotRead}
