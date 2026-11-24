@@ -111,7 +111,7 @@ dependencies = [
     # mcp removed); mcp itself is capped <2 in [tool.uv] constraint-dependencies.
     "langchain-mcp-adapters>=0.3.2",
     # ACP support
-    "deepagents-acp>=0.0.11",
+    "deepagents-acp>=0.1.0",
     # CLI (click + rich) and the Textual setup wizard
     "click>=8.5.1",
     "rich>=13.0.0",
