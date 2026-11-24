@@ -2798,7 +2798,16 @@ def test_live_browser_watch_and_take_control(phone: Any, mobile_app: MobileApp) 
         timeout=10000
     )
     assert [c.get("action") for c in captures] == ["start", "stop"]
-    viewer.get_by_role("button", name="Save a picture of the page").click()
+    # The toast sits under the viewer's header, not on its buttons, so a
+    # picture can be taken while it shows; that save gets a toast of its own.
+    saved_toast = page.locator("ion-toast .toast-wrapper", has_text="Saved browser-")
+    # Measured where it comes to rest, not mid-way through sliding in.
+    saved_toast.evaluate("w => Promise.allSettled(w.getAnimations().map(a => a.finished))")
+    toast_box = saved_toast.bounding_box()
+    header_box = viewer.locator("ion-header").first.bounding_box()
+    assert toast_box and header_box
+    assert toast_box["y"] >= header_box["y"] + header_box["height"], (toast_box, header_box)
+    viewer.get_by_role("button", name="Save a picture of the page").click(timeout=3000)
     page.get_by_text("Saved live-1.png in screenshots (20 KB).").wait_for(timeout=10000)
     assert captures[-1]["path"] == "picture"
 
