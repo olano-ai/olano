@@ -3,6 +3,7 @@
 import asyncio
 import os
 import sys
+from pathlib import Path
 
 from acp import PROTOCOL_VERSION, spawn_agent_process
 from acp.schema import (
@@ -47,7 +48,7 @@ async def main(agent):
         )
         print(f"started: {' '.join(command)}")
         print(f"connected: ACP protocol version {init.protocol_version}")
-        session = await conn.new_session(cwd=os.getcwd(), mcp_servers=[])
+        session = await conn.new_session(cwd=str(Path.cwd()), mcp_servers=[])
         print(f"session: {session.session_id[:8]}")
         while True:
             print("\n> ", end="", flush=True)

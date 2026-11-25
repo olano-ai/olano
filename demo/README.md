@@ -39,6 +39,7 @@ records it frame by frame; the voice is generated from the written lines, and on
 | `mobile` | The iPhone and Android app (`mobile/`): chats, Cortex, an approval in the Inbox, Settings | Tidewater Cycles, a bike shop |
 | `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic |
 | `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio |
+| `browser` | Browser control: Config, Browser; a web order placed in a live browser; the approval before the form is sent; taking control | Thistledown Pottery, a ceramics studio |
 
 ## How the dashboard is real and the agents are not
 
@@ -106,6 +107,10 @@ files and the chart are.
   what it printed.
 - `acp` replays `assets/acp-session.json`, the true output of the four commands on screen;
   `assets/acp-capture.py` records it again.
+- `browser` drives a real live browser, so it needs docker and the image
+  (`docker build -t olano-browser:latest docker/olano-browser`). The supplier's order form in it is
+  a page `teams/browser.py` serves on port 8930 (`DEMO_SUPPLIER_PORT`), reached at the docker
+  network's private address with `LIONCLAW_BROWSER_ALLOW_PRIVATE_NETWORK=1`, which the team file sets.
 
 ### The installation tutorials
 
