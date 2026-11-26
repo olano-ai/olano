@@ -168,7 +168,10 @@ def _tonight(hours: list[dict[str, Any]], tzname: str) -> list[dict[str, Any]]:
 
 def _verdict(aqi: int | None, cat: str) -> tuple[str, str]:
     if aqi is None:
-        return "No air reading", "the server did not return an air quality reading, so I cannot say."
+        return (
+            "No air reading",
+            "the server did not return an air quality reading, so I cannot say.",
+        )
     label = f"US AQI {aqi}, {cat.lower()}" if cat else f"US AQI {aqi}"
     if aqi <= 50:
         return "Go", f"the air is clean right now ({label})."
@@ -207,8 +210,13 @@ def _reply(ctx: dict[str, Any]) -> str:
     dry = [h for h in tonight if (h["rain"] or 0) <= 30] or tonight
     if dry:
         best = min(dry, key=lambda h: (h["feels"] if h["feels"] is not None else h["temp"]))
+        lead = (
+            f"**If you run anyway: {best['when']:%H:%M}.** It is"
+            if word == "Not tonight"
+            else f"**Best hour: {best['when']:%H:%M}.** It is"
+        )
         lines.append(
-            f"\n**Best hour: {best['when']:%H:%M}.** It is the coolest dry hour tonight: "
+            f"\n{lead} the coolest dry hour tonight: "
             f"{_fmt(best['temp'])}°C, feels like {_fmt(best['feels'])}°C, "
             f"{_fmt(best['rain'])}% chance of rain."
         )

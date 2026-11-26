@@ -72,7 +72,7 @@ export async function run({ app, S, sleep, tap, send, scrollTo, mark, PORTRAIT }
   await scrollTo(open, PORTRAIT ? 560 : 560, 800).catch(() => {});
   await sleep(300);
   await tap(open, { move: 800 });
-  await app.getByText('All files').first().waitFor({ timeout: 30000 });
+  await app.locator('main img').first().waitFor({ timeout: 30000 });
   await S('hide');
   await sleep(3600);
 
