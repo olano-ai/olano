@@ -20,25 +20,28 @@ records it frame by frame; the voice is generated from the written lines, and on
 
 ## The videos
 
-| Demo | Story | Fictional team (`teams/`) |
-|---|---|---|
-| `tour` | Olano in a minute: agents, a chat, the org chart, the scheduler, an approval | Harbor & Pine, an online home-goods shop |
-| `create` | A new agent from the New agent dialog, then its first conversation | Casa Lumen, a small hotel |
-| `chat` | One question: the steps, a chart in the answer, the report as a file, another model | Kettle Hill Coffee, a roaster |
-| `team` | One agent asks two others; the exchange on record; shared issues | Fieldnote Studio, a marketing studio |
-| `schedule` | A weekday task, the calendar, Run now, the run as its own conversation | Brightside Lettings, a property manager |
-| `control` | An approval before an email is sent, the Vault, Insights, Revisions | Marlow & Finch, an accounting firm |
-| `install` | The one-line Docker install, the setup code, the first-run wizard | none: a real, fresh install |
-| `source` | Clone, `./install.sh`, `olano setup`, `olano doctor`, `olano dashboard` | Harbor & Pine, for the final shot |
-| `connect` | The Connections tab, an MCP server from the directory, a magic link from the chat | Saltmarsh Cycles, a bike shop |
-| `memory` | MEMORY.md, the daily log, Notes, Knowledge, then a new chat that uses a saved fact | Juniper Lane Veterinary Clinic |
-| `cortex` | A Pulse card, brainstorms, rated ideas, approving a promotion, a prototype, a project | Fernway Garden Centre |
-| `simple` | The simple chat interface: replies only, detail levels, a photo, a new agent | Willow Lane Vets |
-| `groups` | A group chat: three agents answer in turn, then one by name | Saltmarsh Cycles, a bike shop |
-| `pages` | An agent publishes a web page; the Pages tab, its password, the page itself | Fernhill Yoga, a yoga studio |
-| `mobile` | The iPhone and Android app (`mobile/`): chats, Cortex, an approval in the Inbox, Settings | Tidewater Cycles, a bike shop |
-| `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic |
-| `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio |
+The finished videos are attached to the [`demo-videos-1` release](https://github.com/olano-ai/olano/releases/tag/demo-videos-1), not committed: release files cost a clone nothing, and a re-recorded video replaces its file there instead of adding a copy to the history.
+
+| Demo | Story | Fictional team (`teams/`) | Watch |
+|---|---|---|---|
+| `tour` | Olano in a minute: agents, a chat, the org chart, the scheduler, an approval | Harbor & Pine, an online home-goods shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-tour-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-tour-portrait.mp4) |
+| `create` | A new agent from the New agent dialog, then its first conversation | Casa Lumen, a small hotel | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-create-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-create-portrait.mp4) |
+| `chat` | One question: the steps, a chart in the answer, the report as a file, another model | Kettle Hill Coffee, a roaster | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-chat-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-chat-portrait.mp4) |
+| `team` | One agent asks two others; the exchange on record; shared issues | Fieldnote Studio, a marketing studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-team-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-team-portrait.mp4) |
+| `schedule` | A weekday task, the calendar, Run now, the run as its own conversation | Brightside Lettings, a property manager | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-schedule-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-schedule-portrait.mp4) |
+| `control` | An approval before an email is sent, the Vault, Insights, Revisions | Marlow & Finch, an accounting firm | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-control-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-control-portrait.mp4) |
+| `install` | The one-line Docker install, the setup code, the first-run wizard | none: a real, fresh install | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-install-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-install-portrait.mp4) |
+| `source` | Clone, `./install.sh`, `olano setup`, `olano doctor`, `olano dashboard` | Harbor & Pine, for the final shot | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-source-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-source-portrait.mp4) |
+| `connect` | The Connections tab, an MCP server from the directory, a magic link from the chat | Saltmarsh Cycles, a bike shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-connect-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-connect-portrait.mp4) |
+| `memory` | MEMORY.md, the daily log, Notes, Knowledge, then a new chat that uses a saved fact | Juniper Lane Veterinary Clinic | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-memory-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-memory-portrait.mp4) |
+| `cortex` | A Pulse card, brainstorms, rated ideas, approving a promotion, a prototype, a project | Fernway Garden Centre | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-cortex-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-cortex-portrait.mp4) |
+| `simple` | The simple chat interface: replies only, detail levels, a photo, a new agent | Willow Lane Vets | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-simple-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-simple-portrait.mp4) |
+| `groups` | A group chat: three agents answer in turn, then one by name | Saltmarsh Cycles, a bike shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-groups-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-groups-portrait.mp4) |
+| `pages` | An agent publishes a web page; the Pages tab, its password, the page itself | Fernhill Yoga, a yoga studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-pages-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-pages-portrait.mp4) |
+| `mobile` | The iPhone and Android app (`mobile/`): chats, Cortex, an approval in the Inbox, Settings | Tidewater Cycles, a bike shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-mobile-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-mobile-portrait.mp4) |
+| `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-portrait.mp4) |
+| `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-portrait.mp4) |
+| `browser` | Browser control: Config, Browser; a web order placed in a live browser; the approval before the form is sent; taking control | Thistledown Pottery, a ceramics studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-portrait.mp4) |
 
 ## How the dashboard is real and the agents are not
 
@@ -106,6 +109,10 @@ files and the chart are.
   what it printed.
 - `acp` replays `assets/acp-session.json`, the true output of the four commands on screen;
   `assets/acp-capture.py` records it again.
+- `browser` drives a real live browser, so it needs docker and the image
+  (`docker build -t olano-browser:latest docker/olano-browser`). The supplier's order form in it is
+  a page `teams/browser.py` serves on port 8930 (`DEMO_SUPPLIER_PORT`), reached at the docker
+  network's private address with `LIONCLAW_BROWSER_ALLOW_PRIVATE_NETWORK=1`, which the team file sets.
 
 ### The installation tutorials
 

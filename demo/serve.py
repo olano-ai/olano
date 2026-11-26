@@ -113,6 +113,9 @@ class ScriptedRunner:
         self._persist(tid, {"role": "user", "content": text, "channel": channel})
         workspace = Path(str(self.config.workspace))
         said: list[str] = []
+        # What a callable step is given; one dict for the whole turn, so a later step can read
+        # what an earlier one left (the decisions of an approval, under "decisions").
+        ctx: dict[str, Any] = {"agent": self.config.name, "message": text, "thread_id": tid}
         for step in turn["steps"]:
             if "wait" in step:
                 await asyncio.sleep(step["wait"] * SLOW)
@@ -159,11 +162,18 @@ class ScriptedRunner:
                             "ts_reply": _now(),
                         },
                     )
+                if "ask" in step:
+                    # A real tool that stops for a person mid-call (the browser's consequence
+                    # guard): ``ask(ctx)`` runs it up to the pause and returns the approval it
+                    # asks for; the card shows between the call and its result, as in a real turn.
+                    asked = await asyncio.to_thread(step["ask"], ctx)
+                    if asked:
+                        yield ("approval", {"actions": asked})
+                        if approval_handler is not None:
+                            ctx["decisions"] = await approval_handler(asked)
                 result = step.get("result", "ok")
                 if callable(result):  # the product's own tool, run for real (off the loop)
-                    result = await asyncio.to_thread(
-                        result, {"agent": self.config.name, "message": text, "thread_id": tid}
-                    )
+                    result = await asyncio.to_thread(result, ctx)
                 yield ("tool_result", {"id": call_id, "name": step["tool"], "content": result})
                 self._persist(
                     tid,
@@ -184,9 +194,7 @@ class ScriptedRunner:
                 gap = SLOW / float(step.get("wps", 14))
                 body = step["text"]
                 if callable(body):  # text the product computes (a real tool's output)
-                    body = await asyncio.to_thread(
-                        body, {"agent": self.config.name, "message": text, "thread_id": tid}
-                    )
+                    body = await asyncio.to_thread(body, ctx)
                 words = body.split(" ")
                 for i, word in enumerate(words):
                     chunk = word + (" " if i < len(words) - 1 else "")
@@ -474,8 +482,17 @@ def main(argv: list[str]) -> int:
         os.environ["LIONCLAW_VAULT_KEY"] = os.environ["OLANO_VAULT_KEY"]
     gateway = build_gateway(team)
     stop = threading.Event()
-    signal.signal(signal.SIGTERM, lambda *_: stop.set())
-    signal.signal(signal.SIGINT, lambda *_: stop.set())
+    stopping: list[int] = []
+
+    def _stop(*_: Any) -> None:
+        # Once: a second signal landing while the first is still inside ``stop.set()`` would
+        # wait for the Event's own lock on the same thread and hang the process.
+        if not stopping:
+            stopping.append(1)
+            stop.set()
+
+    signal.signal(signal.SIGTERM, _stop)
+    signal.signal(signal.SIGINT, _stop)
     with launch_dashboard(gateway) as dash:
         home = Path(os.environ["LIONCLAW_HOME"])
         PUSH_EVENT = dash.push_event
