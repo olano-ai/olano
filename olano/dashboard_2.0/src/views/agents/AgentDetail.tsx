@@ -2379,9 +2379,10 @@ function ConnectorDiagnosticsModal({ row, onClose }: { row: ConnectorRow; onClos
 // The card's headline. A server's identity is its host ("mcp.notion.com"), not
 // the full endpoint — the host fits a phone column, is what a user scans the
 // list for, and the complete URL is still printed underneath it. stdio servers
-// have no host, so they headline with the command they run.
+// have no host, so they headline with the name the user gave them (stored in
+// `url`), falling back to the command they run.
 function mcpLabel(m: McpServer): string {
-  if (m.transport === "stdio") return m.command || m.url;
+  if (m.transport === "stdio") return m.url || m.command || "";
   try {
     return new URL(m.url).host || m.url;
   } catch {
@@ -2608,8 +2609,12 @@ function McpTab({ cfg, agentName, reload }: { cfg: AgentConfig; agentName: strin
       reload();
       if (status?.url) setStatuses((prev) => ({ ...prev, [status.url]: status }));
       void refreshStatus(true);
+      // A saved, edited or deleted server changes the live toolset, so hot-reload
+      // the running agent as the enable switch does. Without this the card read
+      // Connected while the agent still lacked the tools until "Reload agent".
+      void reloadMcp();
     },
-    [reload, refreshStatus],
+    [reload, refreshStatus, reloadMcp],
   );
 
   async function updateServer(server: McpServer, patch: Partial<McpServer>, success?: string) {

@@ -826,7 +826,7 @@ export function McpModal({
   const { presets, examples } = useMcpDirectory();
   const [mode, setMode] = useState<"guided" | "json">("guided");
   const [url, setUrl] = useState(existing?.url || "");
-  const [transport, setTransport] = useState(existing?.transport || "sse");
+  const [transport, setTransport] = useState(existing?.transport || "auto");
   const [enabled, setEnabled] = useState(existing?.enabled ?? true);
   const [command, setCommand] = useState(existing?.command || "");
   const [argsText, setArgsText] = useState((existing?.args || []).join("\n"));
@@ -1010,7 +1010,7 @@ export function McpModal({
   function applyExample(example: McpExample) {
     const config = example.config;
     setUrl(config.url);
-    setTransport(config.transport || "sse");
+    setTransport(config.transport || "auto");
     setEnabled(config.enabled ?? true);
     setCommand(config.command || "");
     setArgsText((config.args || []).join("\n"));
@@ -1525,7 +1525,7 @@ export function McpModal({
                 style={{ fontFamily: "var(--font-mono)", fontSize: 13 }}
               />
             </Field>
-            <Field label={t("mcpmodal.transport")}>
+            <Field label={t("mcpmodal.transport")} hint={t("mcpmodal.transportHint")}>
               <select
                 className="input"
                 value={transport}
