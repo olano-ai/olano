@@ -153,14 +153,22 @@ def _summary_reply(ctx: dict[str, Any]) -> str:
             if rnd
             else "The drivers' championship:\n"
         )
-        parts += ["| | Driver | Team | Points | Wins |", "|---|---|---|---|---|"]
+        narrow = os.environ.get("LAYOUT") == "portrait"  # the phone gets a list, not a wide table
+        if not narrow:
+            parts += ["| | Driver | Team | Points | Wins |", "|---|---|---|---|---|"]
         for r in rows[:5]:
             d, cons = r.get("Driver") or {}, (r.get("Constructors") or [{}])[0]
             name = f"{d.get('givenName', '')} {d.get('familyName', '')}".strip()
-            parts.append(
-                f"| {r.get('position')} | {name} | {cons.get('name', '')} | "
-                f"{r.get('points')} | {r.get('wins')} |"
-            )
+            if narrow:
+                parts.append(
+                    f"{r.get('position')}. **{name}**, {cons.get('name', '')}: "
+                    f"{r.get('points')} pts, {r.get('wins')} win{'' if str(r.get('wins')) == '1' else 's'}"
+                )
+            else:
+                parts.append(
+                    f"| {r.get('position')} | {name} | {cons.get('name', '')} | "
+                    f"{r.get('points')} | {r.get('wins')} |"
+                )
         if len(rows) > 1:
             gap = (_num(rows[0].get("points")) or 0) - (_num(rows[1].get("points")) or 0)
             lead = (rows[0].get("Driver") or {}).get("familyName", "")

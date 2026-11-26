@@ -220,12 +220,12 @@ def _reply(ctx: dict[str, Any]) -> str:
             f"{_fmt(best['temp'])}°C, feels like {_fmt(best['feels'])}°C, "
             f"{_fmt(best['rain'])}% chance of rain."
         )
-        lines.append("\n| Hour | Temp | Feels like | Rain | Sky |\n|---|---|---|---|---|")
+        lines.append("\n| Hour | Temp | Feels like | Rain |\n|---|---|---|---|")
         for h in tonight[:6]:
             mark = " ✅" if h is best else ""
             lines.append(
                 f"| {h['when']:%H:%M}{mark} | {_fmt(h['temp'])}°C | {_fmt(h['feels'])}°C "
-                f"| {_fmt(h['rain'])}% | {h['cond'] or '-'} |"
+                f"| {_fmt(h['rain'])}% |"
             )
     lines.append(
         "\nAir quality is the reading now; the hours are Open-Meteo's forecast, "

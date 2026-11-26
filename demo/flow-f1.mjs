@@ -95,7 +95,16 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
   await S('caption', 4);
   await sleep(600);
   await scrollTo(app.locator('img[src*="race-laps"]').first(), PORTRAIT ? 160 : 110, 1200).catch(() => {});
-  await sleep(PORTRAIT ? 4600 : 5000);
+  if (PORTRAIT) {
+    // On the phone the chart is small in the chat: open it in Files, full width
+    await sleep(1800);
+    await tap(app.getByText('Open in Files').last(), { move: 700 });
+    await app.locator('img[src*="race-laps"]').first().waitFor({ timeout: 30000 }).catch(() => {});
+    await S('hide');
+    await sleep(3400);
+  } else {
+    await sleep(5000);
+  }
 
   mark('end');
   await S('caption', null);

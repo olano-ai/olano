@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import time
 from typing import Any
 
@@ -92,6 +93,10 @@ def _short(text: str, n: int = 70) -> str:
     return text if len(text) <= n else text[: n - 1].rstrip() + "…"
 
 
+# The phone layout gets lists instead of wide tables (a four-column table scrolls sideways there).
+NARROW = os.environ.get("LAYOUT") == "portrait"
+
+
 def _cell(text: str) -> str:
     return text.replace("|", "/")
 
@@ -116,9 +121,15 @@ def _pairs_reply(ctx: dict[str, Any]) -> str:
             "there is nothing to compare yet. I can ask again shortly."
         )
     lines = ["The same questions, priced on both markets, biggest gap first:\n"]
-    lines += ["| Question | Polymarket | Kalshi | Gap |", "|---|---|---|---|"]
-    for q, a, b, gap in rows:
-        lines.append(f"| {_cell(q)} | {_pct(a)} | {_pct(b)} | {gap:.0f} pts |")
+    if NARROW:
+        for q, a, b, gap in rows:
+            lines.append(
+                f"- **{q}**  \n  Polymarket {_pct(a)} · Kalshi {_pct(b)} · gap {gap:.0f} pts"
+            )
+    else:
+        lines += ["| Question | Polymarket | Kalshi | Gap |", "|---|---|---|---|"]
+        for q, a, b, gap in rows:
+            lines.append(f"| {_cell(q)} | {_pct(a)} | {_pct(b)} | {gap:.0f} pts |")
     q, a, b, gap = rows[0]
     hi, lo = ("Polymarket", "Kalshi") if a > b else ("Kalshi", "Polymarket")
     lines.append(
@@ -142,15 +153,27 @@ def _movers_reply(ctx: dict[str, Any]) -> str:
         if p is None or d is None:
             continue
         venue = VENUES.get(str(it.get("source")), str(it.get("source") or "").title())
-        rows.append((_short(it.get("question") or "", 60), venue, p, d))
+        rows.append(
+            (
+                _short(it.get("question") or "", 60),
+                venue,
+                p,
+                d,
+                _short(it.get("question") or "", 140),
+            )
+        )
     if not rows:
         return "pdata's server returned no movers just now. I can ask again shortly."
     lines = ["The biggest moves of the last 24 hours:\n"]
-    lines += ["| Question | Market | Now | 24 h change |", "|---|---|---|---|"]
-    for q, venue, p, d in rows:
+    if not NARROW:
+        lines += ["| Question | Market | Now | 24 h change |", "|---|---|---|---|"]
+    for q, venue, p, d, full in rows:
         arrow = "▲" if d > 0 else "▼" if d < 0 else ""
-        lines.append(f"| {_cell(q)} | {venue} | {_pct(p)} | {arrow} {d * 100:+.0f} pts |")
-    q, venue, p, d = rows[0]
+        if NARROW:
+            lines.append(f"- **{full}**  \n  {venue}: now {_pct(p)}, {arrow} {d * 100:+.0f} pts")
+        else:
+            lines.append(f"| {_cell(q)} | {venue} | {_pct(p)} | {arrow} {d * 100:+.0f} pts |")
+    _, venue, p, d, q = rows[0]
     way = "up" if d > 0 else "down"
     lines.append(f"\nThe biggest swing: **{q}**, {way} {abs(d) * 100:.0f} points on {venue}.")
     return "\n".join(lines)

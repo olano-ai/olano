@@ -434,22 +434,24 @@ def _rating_reply(ctx: dict[str, Any]) -> str:
         )
     perfs = user.get("perfs") if isinstance(user.get("perfs"), dict) else {}
     title = f" ({user['title']})" if user.get("title") else ""
-    rows = ["| | First rated | Peak | Now | Games |", "|---|---|---|---|---|"]
+    # Short cells, so the table fits a phone; dates and game counts go underneath.
+    rows = ["| | First | Peak | Now |", "|---|---|---|---|"]
+    notes = []
     for perf, pts in hist.items():
         first_d, first_v = pts[0]
         peak_d, peak_v = max(pts, key=lambda p: p[1])
         now = (perfs.get(perf) or {}).get("rating") or pts[-1][1]
         games = (perfs.get(perf) or {}).get("games")
-        rows.append(
-            f"| {perf.capitalize()} | {first_v} ({first_d:%b %Y}) | **{peak_v}** ({peak_d:%b %Y}) "
-            f"| {now} | {f'{games:,}' if isinstance(games, int) else '?'} |"
-        )
+        rows.append(f"| {perf.capitalize()} | {first_v} | **{peak_v}** | {now} |")
+        played = f", {games:,} games" if isinstance(games, int) else ""
+        notes.append(f"{perf} from {first_d:%b %Y}, peak in {peak_d:%b %Y}{played}")
     saved = "Saved:" in str(ctx.get("chart") or "")
     lines = [
-        f"Magnus Carlsen plays on Lichess as **DrNykterstein**{title}. "
-        "His Lichess ratings since the account's first rated games:",
+        f"Magnus Carlsen plays on Lichess as **DrNykterstein**{title}. His Lichess ratings:",
         "",
         "\n".join(rows),
+        "",
+        "Rated " + "; ".join(notes) + ".",
     ]
     if saved:
         lines += ["", "Saved: ratings/drnykterstein.png"]

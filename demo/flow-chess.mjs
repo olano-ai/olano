@@ -88,7 +88,7 @@ export async function run({ page, app, S, sleep, tap, point, type, send, keyboar
   await app.getByText('Calling render_html_image').first().waitFor({ timeout: 120000 }).catch(() => {});
 
   // 3. the board
-  await app.getByText("today's Lichess puzzle", { exact: false }).first().waitFor({ timeout: 180000 });
+  await app.getByText("Here is today's Lichess puzzle", { exact: false }).first().waitFor({ timeout: 180000 });
   mark('board');
   await S('caption', 3);
   await app.getByText('From the game', { exact: false }).first().waitFor({ timeout: 60000 });
@@ -97,8 +97,10 @@ export async function run({ page, app, S, sleep, tap, point, type, send, keyboar
   await sleep(500);
   await scrollTo(img, PORTRAIT ? 70 : 90, 1200).catch(() => {});
   await sleep(PORTRAIT ? 2600 : 2800);
-  await scrollTo(app.getByText('Solution, when you want it', { exact: false }).last(), PORTRAIT ? 380 : 420, 1000).catch(() => {});
-  await sleep(1500);
+  if (!PORTRAIT) {
+    await scrollTo(app.getByText('Solution, when you want it', { exact: false }).last(), 420, 1000).catch(() => {});
+    await sleep(1500);
+  } else await sleep(1200);
 
   // 4. Magnus Carlsen
   mark('magnus');
