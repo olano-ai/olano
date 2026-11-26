@@ -16,7 +16,7 @@ export const captions = [
   { eyebrow: 'Screenshot', h1: 'The page<br>it read', p: 'Saved with the answer.' },
 ];
 export const voice = [
-  'Mei keeps the books for a dumpling kitchen that is hiring a cook. Ask Mei what the monthly CPF contributions will be.',
+  'Mei keeps the books for a dumpling kitchen that is hiring its first cook. Ask Mei what the monthly CPF contributions will be, with his wage and birth date in the message.',
   "Mei opens the CPF Board's contribution calculator in its own browser, and fills in the numbers from the chat.",
   'The Calculate button submits a form, so the browser stops and asks first. Approve it.',
   "Mei reads the result and explains it: what comes out of the cook's pay, and what the kitchen adds.",

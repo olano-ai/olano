@@ -1,0 +1,32 @@
+{
+ "logo": {
+  "asset": "imagine-logo.png",
+  "file": "a-round-logo-for-little-ember-bakehouse--20261126-105325-544a-1.png",
+  "label": "openai:gpt-image-2.5-flare",
+  "result": "Generated 1 image(s) with openai:gpt-image-2.5-flare:\nSaved: /home/user/olano/demo/.work/imagine-gen/ws/images/a-round-logo-for-little-ember-bakehouse--20261126-105325-544a-1.png\n![a-round-logo-for-little-ember-bakehouse--20261126-105325-544a-1](/home/user/olano/demo/.work/imagine-gen/ws/images/a-round-logo-for-little-ember-bakehouse--20261126-105325-544a-1.png)",
+  "args": {
+   "prompt": "A round logo for Little Ember Bakehouse, a small neighbourhood bakery. A golden loaf of bread with a small ember-orange flame curling above it, warm hand-drawn style, cream background, the words LITTLE EMBER BAKEHOUSE lettered around the circle. Simple, friendly, works small.",
+   "aspect_ratio": "1:1"
+  }
+ },
+ "buns": {
+  "asset": "imagine-buns.png",
+  "file": "menu-photo-for-a-bakery-three-cardamom-b-20261126-105324-77ea-1.png",
+  "label": "openai:gpt-image-2.5-flare",
+  "result": "Generated 1 image(s) with openai:gpt-image-2.5-flare:\nSaved: /home/user/olano/demo/.work/imagine-gen/ws/images/menu-photo-for-a-bakery-three-cardamom-b-20261126-105324-77ea-1.png\n![menu-photo-for-a-bakery-three-cardamom-b-20261126-105324-77ea-1](/home/user/olano/demo/.work/imagine-gen/ws/images/menu-photo-for-a-bakery-three-cardamom-b-20261126-105324-77ea-1.png)",
+  "args": {
+   "prompt": "Menu photo for a bakery: three cardamom buns on a wooden board, close up, glossy tops dusted with pearl sugar, soft daylight from a window, shallow depth of field, clean neutral background.",
+   "aspect_ratio": "1:1"
+  }
+ },
+ "warm": {
+  "asset": "imagine-buns-warm.png",
+  "file": "same-photo-of-the-three-cardamom-buns-bu-20261126-105352-063a-1.png",
+  "label": "openai:gpt-image-2.5-flare",
+  "result": "Generated 1 image(s) with openai:gpt-image-2.5-flare:\nSaved: /home/user/olano/demo/.work/imagine-gen/ws/images/same-photo-of-the-three-cardamom-buns-bu-20261126-105352-063a-1.png\n![same-photo-of-the-three-cardamom-buns-bu-20261126-105352-063a-1](/home/user/olano/demo/.work/imagine-gen/ws/images/same-photo-of-the-three-cardamom-buns-bu-20261126-105352-063a-1.png)",
+  "args": {
+   "image": "images/menu-photo-for-a-bakery-three-cardamom-b-20261126-105324-77ea-1.png",
+   "prompt": "Same photo of the three cardamom buns, but warmer: golden late-afternoon light, cosier tones, and soft wisps of steam rising from the buns as if just out of the oven."
+  }
+ }
+}

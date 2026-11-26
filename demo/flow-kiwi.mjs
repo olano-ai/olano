@@ -51,7 +51,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await S('hide');
   await sleep(400);
   await d.getByText('feedback-to-devs').first().scrollIntoViewIfNeeded().catch(() => {});
-  await sleep(1600);
+  await sleep(PORTRAIT ? 900 : 1600);
   await tap(d.getByRole('button', { name: 'Save server' }), { move: 700, dispatch: true });
   await app.locator('main').getByText('Connected', { exact: true }).first().waitFor({ timeout: 60000 });
   await S('hide');
@@ -61,12 +61,12 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await tap(toggle, { move: 700 });
   await app.locator('main').getByText('1/2 tools enabled').first().waitFor({ timeout: 30000 }).catch(() => {});
   await S('hide');
-  await sleep(700);
+  await sleep(PORTRAIT ? 400 : 700);
   // A saved server reaches the running agent on its next reload: the tab's own Reload agent.
   const reload = app.getByRole('button', { name: 'Reload agent' }).first();
   await scrollTo(reload, PORTRAIT ? 220 : 300, 900).catch(() => {});
   await tap(reload, { move: 800 });
-  await sleep(1400);
+  await sleep(PORTRAIT ? 700 : 1400);
   await S('hide');
 
   mark('ask');
@@ -74,9 +74,9 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await nav('/chat/sora', { click: false });
   await app.locator('textarea').last().waitFor({ timeout: 30000 });
   await sleep(700);
-  await send('Find return flights from Singapore to Tokyo for 4 of us, out 13 January, back 17 January.', { cps: 26 });
+  await send('Find return flights from Singapore to Tokyo for 4 of us, out 13 January, back 17 January.', { cps: PORTRAIT ? 38 : 26 });
   await app.getByText('Calling search-flight').first().waitFor({ timeout: 90000 });
-  await sleep(1500);
+  await sleep(PORTRAIT ? 800 : 1500);
 
   await app.getByText('worth a look').first().waitFor({ timeout: 120000 });
   mark('answer');

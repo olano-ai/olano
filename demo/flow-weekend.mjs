@@ -60,16 +60,38 @@ export async function run({ app, S, sleep, tap, point, send, scrollTo, nav, mark
   if (!PORTRAIT) await point(app.locator('main li strong').last(), { move: 900 }).catch(() => {});
   await sleep(4200);
 
-  // 4. the Calendar: both weekend days
-  await nav('/calendar/month');
-  const chip = app.getByText(/^Weekend: /).first();
-  await chip.waitFor({ timeout: 30000 });
-  mark('calendar');
-  await S('caption', 4);
-  await sleep(800);
-  await scrollTo(chip, PORTRAIT ? 300 : 340, 1000).catch(() => {});
-  if (!PORTRAIT) await point(chip, { move: 900 }).catch(() => {});
-  await sleep(3800);
+  // 4. the Calendar: both weekend days (the month on a desktop; on a phone, the month's cells are
+  // too narrow for a name, so the day view of Saturday, then Sunday)
+  let chip;
+  if (PORTRAIT) {
+    const d = new Date();
+    d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7));
+    const pad = (n) => String(n).padStart(2, '0');
+    await nav(`/calendar/day?date=${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`);
+    chip = app.getByText(/^Weekend: /).first();
+    await chip.waitFor({ timeout: 30000 });
+    mark('calendar');
+    await S('caption', 4);
+    await sleep(800);
+    await scrollTo(chip, 330, 1000).catch(() => {});
+    await sleep(2600);
+    await tap(app.getByRole('button', { name: 'Next' }).first(), { move: 700 });
+    await sleep(1200);
+    chip = app.getByText(/^Weekend: /).first();
+    await chip.waitFor({ timeout: 30000 });
+    await scrollTo(chip, 330, 900).catch(() => {});
+    await sleep(1600);
+  } else {
+    await nav('/calendar/month');
+    chip = app.getByText(/^Weekend: /).first();
+    await chip.waitFor({ timeout: 30000 });
+    mark('calendar');
+    await S('caption', 4);
+    await sleep(800);
+    await scrollTo(chip, 340, 1000).catch(() => {});
+    await point(chip, { move: 900 }).catch(() => {});
+    await sleep(3800);
+  }
 
   // 5. one reminder, opened
   mark('detail');
