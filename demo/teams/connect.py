@@ -18,8 +18,9 @@ def _magic(tool: str, **kwargs: Any):
         from olano.tools import magic_link_tools
         from olano.tools._credentials import agent_runtime_context
 
-        with agent_runtime_context(ctx["agent"], None), push_request_context(
-            channel="api", session_id=ctx["thread_id"], is_owner=True
+        with (
+            agent_runtime_context(ctx["agent"], None),
+            push_request_context(channel="api", session_id=ctx["thread_id"], is_owner=True),
         ):
             return str(getattr(magic_link_tools, tool).invoke(kwargs))
 

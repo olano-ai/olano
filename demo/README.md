@@ -42,6 +42,23 @@ The finished videos are attached to the [`demo-videos-1` release](https://github
 | `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-portrait.mp4) |
 | `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-portrait.mp4) |
 | `browser` | Browser control: Config, Browser; a web order placed in a live browser; the approval before the form is sent; taking control | Thistledown Pottery, a ceramics studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-portrait.mp4) |
+| `kiwi` | Kiwi.com's public flight search MCP server added by its address; a real trip searched, then a day either way | Paper Kite Games, a board-game studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-kiwi-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-kiwi-portrait.mp4) |
+| `coingecko` | CoinGecko's keyless public MCP server added by its address; a market snapshot, then a weekday brief on the scheduler | Tidepool Notes, a newsletter on digital payments | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-coingecko-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-coingecko-portrait.mp4) |
+| `pricecheck` | Headless browser control on Amazon.sg: three earbuds compared from the live results page, then a daily price check on the scheduler | Pebble & Thread, a tailoring shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-pricecheck-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-pricecheck-portrait.mp4) |
+| `weekend` | A family weekend from the Gardens by the Bay and NParks events pages, read live; a reminder per event on the calendar | Brightwater Swim School | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-weekend-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-weekend-portrait.mp4) |
+| `calculator` | The CPF Board's public contribution calculator filled in live; the approval before Calculate; the result explained | Lantern Lane Dumplings, a dumpling kitchen | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-calculator-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-calculator-portrait.mp4) |
+| `deepwiki` | DeepWiki's public MCP server from the directory; how a public repository (langchain-ai/langgraph) is organised, then the raw results in verbose mode | Tessellate Data, a data platform team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-deepwiki-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-deepwiki-portrait.mp4) |
+| `huggingface` | Hugging Face's MCP server added as a custom server with no account (`hf_whoami` off); an Indonesian speech-to-text model found on the Hub, with its licence | Lontar Labs, a voice-notes app team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-huggingface-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-huggingface-portrait.mp4) |
+| `playwright` | Microsoft's Playwright MCP server, run locally with `npx` (stdio); a package's release history read off PyPI in the server's own browser | Halyard Software, a Python services team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-playwright-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-playwright-portrait.mp4) |
+| `kalshi` | Kalshi's official MCP server added by its address, no account; the market's odds of a December Fed cut, then the Super Bowl halftime show, in plain chances | Loose Change, a podcast about money and the news | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-kalshi-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-kalshi-portrait.mp4) |
+| `markets` | pdata's public prediction-market MCP server added by its address; where Polymarket and Kalshi price the same question differently, then the day's biggest moves | Second Look, a newsletter about forecasts | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-markets-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-markets-portrait.mp4) |
+| `sports` | Sports Hub (`npx -y mcp-sports-hub`, stdio) with only its ESPN provider; today's NFL games with kickoff, ESPN's favourite and who is out | The Corner Booth, a sports bar | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-sports-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-sports-portrait.mp4) |
+| `f1` | Sports Hub (`npx -y mcp-sports-hub`, stdio) with its Formula 1 preset; the standings and the last race, then two drivers' lap times as a chart | Slipstream, a sim-racing café | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-f1-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-f1-portrait.mp4) |
+| `chess` | `lichess-mcp` (`npx`, stdio) added as a custom server; today's Lichess puzzle drawn as a board, then Magnus Carlsen's Lichess rating history as a chart, both rendered with `render_html_image` | Endgame Club, a Saturday chess club for kids | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-chess-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-chess-portrait.mp4) |
+| `snack` | Open Food Facts (`npx @cyanheads/openfoodfacts-mcp-server`, stdio) added as a custom server; two cereals compared by barcode: Nutri-Score, NOVA, sugar, additives | The Okafor household's home agent | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-snack-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-snack-portrait.mp4) |
+| `imagine` | Olano's built-in `image_generate` and `image_edit`: a logo and a menu photo drawn inline in the chat, then the photo made warmer with steam, opened in Files | Little Ember Bakehouse, a neighbourhood bakery | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-imagine-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-imagine-portrait.mp4) |
+| `freeimages` | Pipeworx's public Wikimedia Commons MCP server added by its address; free-to-use latte art photos for a café poster with their licences, then the credit lines saved as a file | Little Fig Café | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-freeimages-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-freeimages-portrait.mp4) |
+| `runweather` | Weather MCP (`npx @dangahagan/weather-mcp`, stdio, Open-Meteo data) added as a custom server; is the air good enough for a run tonight in Bangkok, and the best hour | Lamplight Runners, a beginners' running club | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-runweather-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-runweather-portrait.mp4) |
 
 ## How the dashboard is real and the agents are not
 
@@ -113,6 +130,40 @@ files and the chart are.
   (`docker build -t olano-browser:latest docker/olano-browser`). The supplier's order form in it is
   a page `teams/browser.py` serves on port 8930 (`DEMO_SUPPLIER_PORT`), reached at the docker
   network's private address with `LIONCLAW_BROWSER_ALLOW_PRIVATE_NETWORK=1`, which the team file sets.
+- `kiwi` and `coingecko` add a real public MCP server during the take (`https://mcp.kiwi.com`,
+  `https://mcp.api.coingecko.com/mcp`, no account or key) and their agents' tool steps call it
+  for real, so they need network access; the replies are built from what the server returned.
+- `pricecheck`, `weekend` and `calculator` drive the product's headless browser against live public
+  websites (Amazon.sg; Gardens by the Bay and NParks; the CPF Board's calculator), so they need
+  network access. Where the web is reached only through an HTTPS proxy, the team files point the
+  product's per-agent `BROWSER_PROXY_URL` setting at `HTTPS_PROXY`; Chromium must trust that proxy's
+  certificate authority through the machine's own store (no check is turned off).
+- `kalshi`, `markets`, `sports` and `f1` connect a real MCP server during the take and their agents'
+  tool steps call it for real with the `mcp` SDK, so they need network access (`kalshi` and `markets`:
+  `api.elections.kalshi.com`, `api.pdata.world`; `sports` and `f1`: `npx` plus `site.api.espn.com`,
+  `api.jolpi.ca` and `api.openf1.org`). Behind an HTTPS proxy, the `sports` and `f1` team files start the
+  Node server with `NODE_USE_ENV_PROXY=1` (Node 22.21 or later). Live odds, games and standings change, so the
+  replies are built from whatever the servers return at take time.
+- `deepwiki`, `huggingface` and `playwright` connect a real MCP server during the take and their
+  agents' tool steps call it for real with the `mcp` SDK, so they need network access. `playwright`
+  also needs `npx` (it starts `@playwright/mcp@latest` over stdio, from the command saved in the
+  agent's `agent.json5`) and a Chrome for it to drive; behind an HTTPS proxy its team file passes the
+  proxy through Playwright MCP's own `PLAYWRIGHT_MCP_PROXY_SERVER` setting. The MCP tab's Reload
+  agent runs the product's own connect step for scripted agents (`serve.py`).
+- `chess` and `snack` add a local stdio MCP server during the take (`npx lichess-mcp`,
+  `npx @cyanheads/openfoodfacts-mcp-server`) and their agents' tool steps call it for real with the
+  `mcp` SDK, so they need network access and `npx`. Node's `fetch` honours an HTTPS proxy only with
+  `NODE_USE_ENV_PROXY=1`, which the team files set for the server. The Open Food Facts server needs
+  Node 24: `teams/snack.py` puts `/opt/node24/bin` first on the runtime's `PATH` when it exists.
+  `chess` works out the puzzle position with `python-chess` (`uv run --with chess`). Lichess can
+  briefly answer an empty rating history after many calls; wait a few minutes and take again.
+- `imagine` needs nothing extra: its three pictures were made once with the product's own
+  `image_generate` / `image_edit` (`openai:gpt-image-2.5-flare`) and are kept in
+  `assets/imagine-*.png` with each call's result in `assets/imagine-results.json`.
+- `freeimages` and `runweather` connect a real MCP server during the take and call it for real with
+  the `mcp` SDK, so they need network access (`runweather` also needs `npx`). Pipeworx caps anonymous
+  use at 50 calls a day, so `teams/freeimages.py` keeps each answer in `.work/freeimages-cache.json`
+  and reuses it; delete that file to ask again.
 
 ### The installation tutorials
 

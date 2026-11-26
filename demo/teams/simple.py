@@ -70,7 +70,12 @@ TEAM = {
         },
         "bram": {
             "stock-check": [
-                (1500, "user", "Do we have the joint supplement for large dogs?", {"channel": "api"}),
+                (
+                    1500,
+                    "user",
+                    "Do we have the joint supplement for large dogs?",
+                    {"channel": "api"},
+                ),
                 (
                     1499,
                     "assistant",
@@ -121,7 +126,7 @@ TEAM = {
                         "wps": 16,
                     },
                 ]
-            }
+            },
         ],
         "milo": [
             {

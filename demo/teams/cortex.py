@@ -145,17 +145,31 @@ async def scripted_worker(*, workspace_root: Path, worker_label: str = "worker",
         "data/deliveries-sample.csv": PROTO_DELIVERIES,
         "check_restock.py": PROTO_SCRIPT,
     }
-    jobs.note({"file_path": "ideas/text-me-when-it-s-back-in-stock/idea.md"}, type="tool", tool="read_file")
+    jobs.note(
+        {"file_path": "ideas/text-me-when-it-s-back-in-stock/idea.md"},
+        type="tool",
+        tool="read_file",
+    )
     await asyncio.sleep(0.5 * SLOW)
     jobs.note(RESTOCK_IDEA[:300], type="tool_result", tool="read_file")
     for rel, body in files.items():
-        jobs.note({"file_path": f"prototypes/back-in-stock-texts/{rel}"}, type="tool", tool="write_file")
+        jobs.note(
+            {"file_path": f"prototypes/back-in-stock-texts/{rel}"}, type="tool", tool="write_file"
+        )
         await asyncio.sleep(0.45 * SLOW)
         path = folder / rel
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(body, encoding="utf-8")
-        jobs.note(f"Updated file prototypes/back-in-stock-texts/{rel}", type="tool_result", tool="write_file")
-    jobs.note({"command": "python3 check_restock.py data/deliveries-sample.csv"}, type="tool", tool="safe_shell")
+        jobs.note(
+            f"Updated file prototypes/back-in-stock-texts/{rel}",
+            type="tool_result",
+            tool="write_file",
+        )
+    jobs.note(
+        {"command": "python3 check_restock.py data/deliveries-sample.csv"},
+        type="tool",
+        tool="safe_shell",
+    )
     await asyncio.sleep(0.6 * SLOW)
     ran = await asyncio.to_thread(
         subprocess.run,
@@ -168,7 +182,10 @@ async def scripted_worker(*, workspace_root: Path, worker_label: str = "worker",
     printed = ran.stdout.strip()
     jobs.note(printed, type="tool_result", tool="safe_shell")
     (folder / "RESULTS.md").write_text(
-        PROTO_RESULTS + "\n## Output\n\n" + "\n".join(f"    {line}" for line in printed.splitlines()) + "\n",
+        PROTO_RESULTS
+        + "\n## Output\n\n"
+        + "\n".join(f"    {line}" for line in printed.splitlines())
+        + "\n",
         encoding="utf-8",
     )
     await asyncio.sleep(0.3 * SLOW)
@@ -200,7 +217,10 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
     bram = home / "agents" / "bram" / "workspace"
 
     def rate(ws: Path, item: dict, score: int, why: str, rec: str, nxt: str) -> dict:
-        return ci.set_rating(ws, item["id"], score, rationale=why, recommendation=rec, next_step=nxt) or item
+        return (
+            ci.set_rating(ws, item["id"], score, rationale=why, recommendation=rec, next_step=nxt)
+            or item
+        )
 
     # bram has ideas of his own
     s1 = ci.add_item(
@@ -211,7 +231,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         detail="## The idea\n\nA weekly page made from the supplier confirmations, pinned by the tills.\n",
         tags=["stock"],
     )
-    rate(bram, s1, 7, "Answers the most common question at the tills with data that already exists.", "keep", "Draft next week's page.")
+    rate(
+        bram,
+        s1,
+        7,
+        "Answers the most common question at the tills with data that already exists.",
+        "keep",
+        "Draft next week's page.",
+    )
     ci.add_item(
         bram,
         kind="brainstorm",
@@ -231,7 +258,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         "3. Soup and seed catalogues on Saturdays\n4. A swap shelf for cuttings\n",
         tags=["winter", "footfall"],
     )
-    rate(sage, b1, 6, "Several angles overlap; the houseplant clinic is the strongest.", "explore", "Cost the houseplant clinic for one Saturday.")
+    rate(
+        sage,
+        b1,
+        6,
+        "Several angles overlap; the houseplant clinic is the strongest.",
+        "explore",
+        "Cost the houseplant clinic for one Saturday.",
+    )
     b2 = ci.add_item(
         sage,
         kind="brainstorm",
@@ -248,7 +282,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         detail="## Questions heard this week\n\n- Will it survive frost?\n- When is it back in stock?\n- Is it safe for cats?\n",
         tags=["customers"],
     )
-    rate(sage, b3, 7, "Grounded in what the till staff hear; two angles already became ideas.", "keep", "Ask the till staff for a week of tallies.")
+    rate(
+        sage,
+        b3,
+        7,
+        "Grounded in what the till staff hear; two angles already became ideas.",
+        "keep",
+        "Ask the till staff for a week of tallies.",
+    )
 
     # Ideas
     rescue = ci.add_item(
@@ -261,7 +302,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         links={"from_item": b2["id"], "from_path": b2["path"]},
     )
     ideation._mark_promoted(sage, b2, rescue)
-    rate(sage, rescue, 7, "Cheap to try and it cuts waste. It leans on a price cut, which the direction says to avoid.", "keep", "Try it for two Fridays and count trays.")
+    rate(
+        sage,
+        rescue,
+        7,
+        "Cheap to try and it cuts waste. It leans on a price cut, which the direction says to avoid.",
+        "keep",
+        "Try it for two Fridays and count trays.",
+    )
     i3 = ci.add_item(
         sage,
         kind="idea",
@@ -270,7 +318,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         detail="## The idea\n\nA standing list of three workshops, announced the evening before a wet Saturday.\n",
         tags=["winter", "events"],
     )
-    rate(sage, i3, 6, "Good fit for the quiet months, but it needs a second member of staff on the day.", "explore", "Ask who could run a terrarium session.")
+    rate(
+        sage,
+        i3,
+        6,
+        "Good fit for the quiet months, but it needs a second member of staff on the day.",
+        "explore",
+        "Ask who could run a terrarium session.",
+    )
     i4 = ci.add_item(
         sage,
         kind="idea",
@@ -279,7 +334,14 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
         detail="## The idea\n\nA paper stamp card kept at the till.\n",
         tags=["sales"],
     )
-    rate(sage, i4, 3, "The creative direction says to avoid discounts and loyalty points.", "discard", "")
+    rate(
+        sage,
+        i4,
+        3,
+        "The creative direction says to avoid discounts and loyalty points.",
+        "discard",
+        "",
+    )
 
     # A prototype that became a project
     proto = ci.add_item(
@@ -307,14 +369,22 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
     folder = sage / project["path"]
     (folder / "PLAN.md").write_text(PLAN, encoding="utf-8")
     (folder / "STATUS.md").write_text(
-        "# Status\n\nPhase 1 done. The test sheet of labels is printed. Next: label the benches.\n", encoding="utf-8"
+        "# Status\n\nPhase 1 done. The test sheet of labels is printed. Next: label the benches.\n",
+        encoding="utf-8",
     )
     (folder / "JOURNAL.md").write_text(
         "# Journal\n\n- Wrote 20 care cards and checked them with Lena.\n- Printed a test sheet of QR labels.\n",
         encoding="utf-8",
     )
     ideation._mark_promoted(sage, proto, project)
-    rate(sage, project, 8, "Phase 1 is finished and the next step needs no one's sign-off.", "execute", "Label the houseplant benches.")
+    rate(
+        sage,
+        project,
+        8,
+        "Phase 1 is finished and the next step needs no one's sign-off.",
+        "execute",
+        "Label the houseplant benches.",
+    )
 
     # The idea the take promotes: made last, so it tops the list.
     restock = ci.add_item(
