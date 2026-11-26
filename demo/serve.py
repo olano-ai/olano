@@ -121,7 +121,11 @@ class ScriptedRunner:
                 await asyncio.sleep(step["wait"] * SLOW)
             elif "tool" in step:
                 call_id = "call_" + uuid.uuid4().hex[:10]
-                args = json.dumps(step.get("args", {}), ensure_ascii=False)
+                raw_args = step.get("args", {})
+                if callable(raw_args):  # arguments that depend on an earlier step's real result
+                    raw_args = await asyncio.to_thread(raw_args, ctx)
+                ctx["args"] = raw_args  # what this step's callable result is called with
+                args = json.dumps(raw_args, ensure_ascii=False)
                 yield ("tool_call", {"id": call_id, "name": step["tool"], "args": args})
                 self._persist(
                     tid,
@@ -293,7 +297,27 @@ def build_gateway(team: dict[str, Any]) -> Any:
     import olano.scheduler.cron as cron
 
     cron.get_active_scheduler = lambda: StandInScheduler()  # type: ignore[assignment]
-    return _gateway_for(runners)
+    gateway = _gateway_for(runners)
+    gateway.reload_agent_mcp = _reload_agent_mcp
+    return gateway
+
+
+async def _reload_agent_mcp(name: str, **_: Any) -> dict[str, Any]:
+    """The MCP tab's Reload agent: reconnect the agent's saved MCP servers.
+
+    The real runtime rebuilds the agent (``RuntimeServer.reload_agent_mcp``); a scripted agent has
+    no graph to rebuild, so this runs only the product's own connect step, which records the live
+    per-server summary the chat's MCP indicator reads. The connections are real.
+    """
+    from olano.config.loader import load_agent_config
+    from olano.core.builder import _build_mcp_tools
+    from olano.core.mcp_setup import clear_boot_failures
+
+    if GATEWAY is None or name not in GATEWAY._runners:
+        return {"ok": False, "running": False, "reason": "agent not running"}
+    clear_boot_failures()
+    _tools, summary = await _build_mcp_tools(load_agent_config(name))
+    return {"ok": True, "running": True, "servers": summary, "notice": ""}
 
 
 def seed_home(team: dict[str, Any], gateway: Any, home: Path, runtime_url: str) -> None:

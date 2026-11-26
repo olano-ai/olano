@@ -56,14 +56,21 @@ TEAM = {
             "AGENTS.md": "# milo\n\nWorkshop planner at Tidewater Cycles.\n",
             "workshop/jobs.md": JOBS,
         },
-        "wren": {"AGENTS.md": "# wren\n\nCustomer desk at Tidewater Cycles. Ask before sending email.\n"},
+        "wren": {
+            "AGENTS.md": "# wren\n\nCustomer desk at Tidewater Cycles. Ask before sending email.\n"
+        },
         "otto": {"AGENTS.md": "# otto\n\nStock and orders at Tidewater Cycles.\n"},
     },
     # Earlier conversations: (minutes ago, role, content)
     "threads": {
         "wren": {
             "saturday-hours": [
-                (190, "user", "What did we tell customers about Saturday hours?", {"channel": "dashboard"}),
+                (
+                    190,
+                    "user",
+                    "What did we tell customers about Saturday hours?",
+                    {"channel": "dashboard"},
+                ),
                 (
                     189,
                     "assistant",
@@ -125,9 +132,13 @@ def after_seed(home: Path, dash: object = None, **_: object) -> None:
     from olano.runtime import notifications
     from olano.security import hitl
 
-    def item(agent: str, kind: str, title: str, summary: str, detail: str, score: int, why: str, rec: str) -> None:
+    def item(
+        agent: str, kind: str, title: str, summary: str, detail: str, score: int, why: str, rec: str
+    ) -> None:
         workspace = home / "agents" / agent / "workspace"
-        row = cortex_items.add_item(workspace, kind=kind, title=title, summary=summary, detail=detail)
+        row = cortex_items.add_item(
+            workspace, kind=kind, title=title, summary=summary, detail=detail
+        )
         cortex_items.set_rating(workspace, row["id"], score, rationale=why, recommendation=rec)
 
     item(
@@ -189,7 +200,10 @@ def after_seed(home: Path, dash: object = None, **_: object) -> None:
             "wren",
             "gmail_send",
             "Send the pickup notice to Noor Castellan",
-            payload={"args": EMAIL, "origin": {"root_source": "scheduler", "call_path": ["scheduler"]}},
+            payload={
+                "args": EMAIL,
+                "origin": {"root_source": "scheduler", "call_path": ["scheduler"]},
+            },
             risk="medium",
             timeout_seconds=6 * 3600,
         ),

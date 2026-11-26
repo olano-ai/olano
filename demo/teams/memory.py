@@ -118,7 +118,10 @@ def _kb(ctx: dict[str, Any]) -> str:
     from olano.tools import knowledge_tools as kt
 
     message = ctx["message"]
-    found = re.search(r"kb_search\(\"((?:[^\"\\]|\\.)*)\"(?:, k=(\d+))?(?:, collection=\"([^\"]*)\")?(?:, mode=\"([^\"]*)\")?", message)
+    found = re.search(
+        r"kb_search\(\"((?:[^\"\\]|\\.)*)\"(?:, k=(\d+))?(?:, collection=\"([^\"]*)\")?(?:, mode=\"([^\"]*)\")?",
+        message,
+    )
     if found:
         query = found.group(1).replace('\\"', '"').replace("\\\\", "\\")
         return str(
@@ -249,4 +252,6 @@ def after_seed(home: Path, runtime_url: str, gateway: Any, **_: object) -> None:
             "Dr. Halvorsen is away next Monday. Rabbit and bird appointments move to Wednesday.",
             "The Brandt family asked for a text, not a call, when Pepper is ready to go home.",
         ):
-            api.post("/api/memory", params={"agent": "willa"}, json={"content": note}).raise_for_status()
+            api.post(
+                "/api/memory", params={"agent": "willa"}, json={"content": note}
+            ).raise_for_status()

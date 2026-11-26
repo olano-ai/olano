@@ -42,6 +42,8 @@ The finished videos are attached to the [`demo-videos-1` release](https://github
 | `external` | An agent as an MCP server: switch it on, mint a token, a real MCP client calls it | Pinecrest Veterinary Clinic | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-external-portrait.mp4) |
 | `acp` | `olano acp` for editors: the Zed entry, a real ACP session from a test client | Copperline Labs, a software studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-acp-portrait.mp4) |
 | `browser` | Browser control: Config, Browser; a web order placed in a live browser; the approval before the form is sent; taking control | Thistledown Pottery, a ceramics studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-portrait.mp4) |
+| `kiwi` | Kiwi.com's public flight search MCP server added by its address; a real trip searched, then a day either way | Paper Kite Games, a board-game studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-kiwi-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-kiwi-portrait.mp4) |
+| `coingecko` | CoinGecko's keyless public MCP server added by its address; a market snapshot, then a weekday brief on the scheduler | Tidepool Notes, a newsletter on digital payments | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-coingecko-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-coingecko-portrait.mp4) |
 
 ## How the dashboard is real and the agents are not
 
@@ -113,6 +115,9 @@ files and the chart are.
   (`docker build -t olano-browser:latest docker/olano-browser`). The supplier's order form in it is
   a page `teams/browser.py` serves on port 8930 (`DEMO_SUPPLIER_PORT`), reached at the docker
   network's private address with `LIONCLAW_BROWSER_ALLOW_PRIVATE_NETWORK=1`, which the team file sets.
+- `kiwi` and `coingecko` add a real public MCP server during the take (`https://mcp.kiwi.com`,
+  `https://mcp.api.coingecko.com/mcp`, no account or key) and their agents' tool steps call it
+  for real, so they need network access; the replies are built from what the server returned.
 
 ### The installation tutorials
 
