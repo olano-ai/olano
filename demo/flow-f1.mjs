@@ -99,9 +99,11 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
     // On the phone the chart is small in the chat: open it in Files, full width
     await sleep(1800);
     await tap(app.getByText('Open in Files').last(), { move: 700 });
-    await app.locator('img[src*="race-laps"]').first().waitFor({ timeout: 30000 }).catch(() => {});
+    await app.getByText('All files', { exact: false }).first().waitFor({ timeout: 30000 }).catch(() => {});
+    await app.getByText('Loading', { exact: false }).first().waitFor({ state: 'hidden', timeout: 30000 }).catch(() => {});
+    await app.locator('img[src*="race-laps"]').last().waitFor({ state: 'visible', timeout: 30000 }).catch(() => {});
     await S('hide');
-    await sleep(3400);
+    await sleep(3600);
   } else {
     await sleep(5000);
   }
