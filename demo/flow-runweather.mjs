@@ -17,8 +17,8 @@ export const captions = [
 export const voice = [
   "Ploy coaches a running club in Bangkok. She adds a weather MCP server to Kip, her run planner. It runs locally with npx and needs no key.",
   'It connects and lists its weather tools. Save it, and reload Kip.',
-  'Ploy asks Kip if the air is good enough for a run tonight, and when to go.',
-  'Kip checks the air quality and the hourly forecast, then answers: go or no-go, and the best hour.',
+  'Ploy asks Kip if the air is good enough for a run tonight, and when to go. Kip asks the server for the air quality, then the hourly forecast.',
+  'The answer is a plain go or no-go, with the best hour to run.',
   'In verbose mode, every step shows what the server sent back.',
   'Olano. Know before you go.',
 ];
@@ -82,12 +82,13 @@ export async function run({ page, app, S, sleep, tap, point, type, send, keyboar
   await app.getByText('Calling get_forecast').first().waitFor({ timeout: 150000 });
   await sleep(600);
 
-  await app.getByText('through Weather MCP').first().waitFor({ timeout: 180000 });
+  await app.getByText(/right now|did not answer|air quality reading/).first().waitFor({ timeout: 180000 });
   mark('answer');
   await S('caption', 3);
-  await sleep(500);
+  await app.getByText(/through Weather MCP|did not answer/).first().waitFor({ timeout: 120000 });
+  await sleep(300);
   await scrollTo(app.locator('.tool-activity').first(), PORTRAIT ? 100 : 130, 1200).catch(() => {});
-  await sleep(PORTRAIT ? 5200 : 5600);
+  await sleep(PORTRAIT ? 3600 : 4000);
 
   mark('verbose');
   await S('caption', 4);

@@ -40,13 +40,13 @@ FROOT_LOOPS = "0064100595729"
 CHEERIOS = "0016000275263"
 
 ADDITIVE_NAMES = {
-    "e100": "curcumin (colour)", "e101": "riboflavin", "e102": "tartrazine (colour)",
-    "e110": "sunset yellow (colour)", "e129": "allura red (colour)",
-    "e133": "brilliant blue (colour)", "e150a": "caramel (colour)",
-    "e150c": "ammonia caramel (colour)", "e160a": "carotenes (colour)",
-    "e160b": "annatto (colour)", "e300": "vitamin C", "e301": "sodium ascorbate",
-    "e306": "vitamin E", "e307": "alpha-tocopherol", "e320": "BHA (preservative)",
-    "e321": "BHT (preservative)", "e322": "lecithins", "e330": "citric acid",
+    "e100": "curcumin, a colour", "e101": "riboflavin", "e102": "tartrazine, a colour",
+    "e110": "sunset yellow, a colour", "e129": "allura red, a colour",
+    "e133": "brilliant blue, a colour", "e150a": "caramel, a colour",
+    "e150c": "ammonia caramel, a colour", "e160a": "carotenes, a colour",
+    "e160b": "annatto, a colour", "e300": "vitamin C", "e301": "sodium ascorbate",
+    "e306": "vitamin E", "e307": "alpha-tocopherol", "e320": "BHA, a preservative",
+    "e321": "BHT, a preservative", "e322": "lecithins", "e330": "citric acid",
     "e339": "sodium phosphates", "e340": "potassium phosphates", "e341": "calcium phosphates", "e375": "niacin",
     "e422": "glycerol", "e471": "mono- and diglycerides", "e500": "sodium carbonates",
     "e503": "ammonium carbonates", "e1400": "dextrins", "e1422": "modified starch",
@@ -195,12 +195,13 @@ def _g(v: float | None) -> str:
     return f"{v:.0f} g" if v >= 10 else f"{v:.1f} g".replace(".0 g", " g")
 
 
-def _additives(codes: list[str]) -> str:
-    """E-numbers with their common names; a sub-code (E340iii) folds into its family (E340)."""
-    codes = [c for c in codes if not any(c != o and c.startswith(o) for o in codes)]
-    if not codes:
-        return "none listed"
-    return ", ".join(f"E{c[1:]} {ADDITIVE_NAMES.get(c, '')}".strip() for c in codes)
+def _codes(codes: list[str]) -> list[str]:
+    """E-numbers, with a sub-code (e340iii) folded into its family (e340)."""
+    return [c for c in codes if not any(c != o and c.startswith(o) for o in codes)]
+
+
+def _e(code: str) -> str:
+    return f"E{code[1:]}"
 
 
 def _reply(ctx: dict[str, Any]) -> str:
@@ -214,19 +215,36 @@ def _reply(ctx: dict[str, Any]) -> str:
             "half a picture. I can try again in a minute."
         )
     na, nb = a["name"] or "the first box", b["name"] or "the second box"
+    # Short cells, so the table fits a phone; what the codes mean goes underneath.
     rows = [
         f"| | **{na}** | **{nb}** |",
         "|---|---|---|",
-        f"| Nutri-Score (A best, E worst) | **{a['nutri'] or '?'}** | **{b['nutri'] or '?'}** |",
-        f"| NOVA group | {a['nova'] or '?'}: {NOVA.get(a['nova'], 'not rated')} "
-        f"| {b['nova'] or '?'}: {NOVA.get(b['nova'], 'not rated')} |",
-        f"| Sugar per 100 g | {_g(a['sugar100'])} | {_g(b['sugar100'])} |",
-        f"| Sugar per bowl | {_g(a['sugar_serving'])} in {a['serving'] or '?'} "
-        f"| {_g(b['sugar_serving'])} in {b['serving'] or '?'} |",
-        f"| Fibre per 100 g | {_g(a['fibre100'])} | {_g(b['fibre100'])} |",
-        f"| Additives | {_additives(a['additives'])} | {_additives(b['additives'])} |",
+        f"| Nutri-Score | **{a['nutri'] or '?'}** | **{b['nutri'] or '?'}** |",
+        f"| NOVA group | {a['nova'] or '?'} | {b['nova'] or '?'} |",
+        f"| Sugar, 100 g | {_g(a['sugar100'])} | {_g(b['sugar100'])} |",
+        f"| Sugar, bowl | {_g(a['sugar_serving'])} | {_g(b['sugar_serving'])} |",
+        f"| Fibre, 100 g | {_g(a['fibre100'])} | {_g(b['fibre100'])} |",
+        f"| Additives | {', '.join(map(_e, _codes(a['additives']))) or 'none'} "
+        f"| {', '.join(map(_e, _codes(b['additives']))) or 'none'} |",
     ]
     lines = ["Here is what the two labels say, from Open Food Facts:", "", "\n".join(rows), ""]
+    notes = ["Nutri-Score runs from A (best) to E."]
+    novas = sorted({x["nova"] for x in (a, b) if x["nova"] in NOVA}, reverse=True)
+    if novas:
+        notes.append(
+            "NOVA "
+            + ", ".join(f"{n} means {NOVA[n]}" for n in novas[:-1])
+            + (" and " if len(novas) > 1 else "")
+            + f"{novas[-1]} means {NOVA[novas[-1]]}."
+        )
+    if a["serving"] or b["serving"]:
+        notes.append(
+            f"A bowl is the serving on each box: {a['serving'] or '?'} and {b['serving'] or '?'}."
+        )
+    named = [c for x in (a, b) for c in _codes(x["additives"]) if c in ADDITIVE_NAMES]
+    if named:
+        notes.append(" ".join(f"{_e(c)} is {ADDITIVE_NAMES[c]}." for c in dict.fromkeys(named)))
+    lines += [" ".join(notes), ""]
     grades = "ABCDE"
     if a["nutri"] in grades and b["nutri"] in grades and a["nutri"] != b["nutri"]:
         better, worse = (a, b) if grades.index(a["nutri"]) < grades.index(b["nutri"]) else (b, a)

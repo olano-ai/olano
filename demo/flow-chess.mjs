@@ -66,15 +66,15 @@ export async function run({ page, app, S, sleep, tap, point, type, send, keyboar
   await d.getByText('Connection ready').first().waitFor({ timeout: 120000 });
   await S('hide');
   await d.getByText('lichess_get_daily_puzzle').first().scrollIntoViewIfNeeded().catch(() => {});
-  await sleep(1800);
+  await sleep(1200);
   await tap(d.getByRole('button', { name: 'Save server' }), { move: 700, dispatch: true });
   await app.locator('main').getByText('Connected', { exact: true }).first().waitFor({ timeout: 60000 });
   await S('hide');
   await sleep(400);
   await tap(app.getByRole('button', { name: 'Reload agent' }).first(), { move: 800 });
-  await app.getByText('Reloaded MCP tools').first().waitFor({ timeout: 120000 }).catch(() => {});
   await S('hide');
-  await scrollTo(app.locator('main').getByText('lichess_get_daily_puzzle', { exact: true }).first(), PORTRAIT ? 420 : 380, 1000).catch(() => {});
+  await sleep(900);
+  await scrollTo(app.locator('main').getByText('lichess_get_user', { exact: true }).first(), PORTRAIT ? 420 : 380, 1000).catch(() => {});
   await sleep(1300);
 
   // 2. the puzzle

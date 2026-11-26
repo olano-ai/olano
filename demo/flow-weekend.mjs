@@ -17,11 +17,11 @@ export const captions = [
   { eyebrow: 'Details', h1: 'What it<br>will say', p: 'The event, the place, the link.' },
 ];
 export const voice = [
-  "Remi assists the owner of a swim school. Ask Remi to plan a family weekend from what's on at Gardens by the Bay and NParks.",
+  "Remi assists the owner of a swim school. Ask Remi to plan a family weekend from what's on at Gardens by the Bay and NParks, and to put the best events on the calendar.",
   "Remi opens each site's events page in its own browser, closes the notices, and reads the listings.",
   'For each event it picks, Remi adds a reminder to the calendar, an hour before the start.',
   'The plan gives each event its day, time and place, with a link to the page it came from.',
-  'In the Calendar, the reminders sit on Saturday and Sunday, with everything else that is scheduled.',
+  'In the Calendar, each reminder sits on its day and time, in the same place as every other scheduled task.',
   'Open one to see what Remi will send, and when.',
   'Olano. The weekend, planned.',
 ];

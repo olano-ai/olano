@@ -266,15 +266,9 @@ def _board_html(ctx: dict[str, Any]) -> str:
             if r == ranks[-1]:
                 coord += f'<i class="fl">{"abcdefgh"[f]}</i>'
             cells.append(f'<div class="{cls}">{coord}<span class="{colour}">{glyph}</span></div>')
-    side = "Black" if black else "White"
-    themes = [t for t in p.get("themes") or [] if isinstance(t, str)]
-    mate = next((t for t in themes if t.startswith("mateIn")), "")
-    goal = f"mate in {mate[6:]}" if mate else "find the best move"
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
 body {{ margin: 0; background: #1d1b18; font-family: 'DejaVu Sans', sans-serif; color: #f2ede4; }}
-.wrap {{ padding: 28px 30px; }}
-h1 {{ margin: 0 0 4px; font-size: 30px; }}
-p {{ margin: 0 0 18px; color: #c9bfae; font-size: 19px; }}
+.wrap {{ padding: 10px; }}
 .board {{ display: grid; grid-template-columns: repeat(8, 80px); grid-template-rows: repeat(8, 80px);
   border-radius: 6px; overflow: hidden; width: 640px; }}
 .board div {{ position: relative; display: flex; align-items: center; justify-content: center; }}
@@ -283,11 +277,9 @@ p {{ margin: 0 0 18px; color: #c9bfae; font-size: 19px; }}
 span {{ font-size: 64px; line-height: 1; }}
 span.w {{ color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000, 0 0 1px #000; }}
 span.b {{ color: #111; }}
-i {{ position: absolute; font-style: normal; font-size: 14px; font-weight: 700; color: #6b5640; }}
+i {{ position: absolute; font-style: normal; font-size: 17px; font-weight: 700; color: #6b5640; }}
 .d i {{ color: #f0d9b5; }} .rk {{ top: 3px; left: 4px; }} .fl {{ bottom: 2px; right: 5px; }}
 </style></head><body><div class="wrap">
-<h1>Lichess puzzle of the day</h1>
-<p>{side} to move: {goal} · rated {p.get("rating", "?")}</p>
 <div class="board">{"".join(cells)}</div></div></body></html>"""
 
 
@@ -299,7 +291,7 @@ def _puzzle_file(ctx: dict[str, Any]) -> dict[str, Any]:
 
 def _puzzle_render(ctx: dict[str, Any]) -> dict[str, Any]:
     stem = ctx["board_png"][: -len(".png")]
-    return {"html": f"{stem}.html", "save_path": ctx["board_png"], "width": 700, "height": 772}
+    return {"html": f"{stem}.html", "save_path": ctx["board_png"], "width": 660, "height": 660}
 
 
 THEME_NAMES = {
@@ -373,7 +365,7 @@ def _chart_html(ctx: dict[str, Any]) -> str:
     hist = _history(ctx)
     if not hist:
         return ""
-    w, h, left, right, top, bottom = 1000, 520, 70, 30, 30, 50
+    w, h, left, right, top, bottom = 1000, 500, 90, 40, 20, 50
     days = [d for pts in hist.values() for d, _ in pts]
     vals = [v for pts in hist.values() for _, v in pts]
     d0, d1 = min(days), max(days)
@@ -390,29 +382,29 @@ def _chart_html(ctx: dict[str, Any]) -> str:
     for v in range(lo, hi + 1, 100):
         grid.append(
             f'<line x1="{left}" x2="{w - right}" y1="{y(v):.1f}" y2="{y(v):.1f}" class="g"/>'
-            f'<text x="{left - 10}" y="{y(v) + 5:.1f}" class="t" text-anchor="end">{v}</text>'
+            f'<text x="{left - 12}" y="{y(v) + 8:.1f}" class="t" text-anchor="end">{v}</text>'
         )
     for year in range(d0.year + 1, d1.year + 1):
         gx = x(date(year, 1, 1))
         grid.append(
             f'<line x1="{gx:.1f}" x2="{gx:.1f}" y1="{top}" y2="{h - bottom}" class="g"/>'
-            f'<text x="{gx:.1f}" y="{h - bottom + 26}" class="t" text-anchor="middle">{year}</text>'
+            f'<text x="{gx:.1f}" y="{h - bottom + 34}" class="t" text-anchor="middle">{year}</text>'
         )
     lines = []
     legend = []
     for perf, pts in hist.items():
         path = " ".join(f"{x(d):.1f},{y(v):.1f}" for d, v in pts)
         lines.append(
-            f'<polyline points="{path}" fill="none" stroke="{COLOURS[perf]}" stroke-width="3"/>'
+            f'<polyline points="{path}" fill="none" stroke="{COLOURS[perf]}" stroke-width="4"/>'
         )
         legend.append(f'<span><b style="background:{COLOURS[perf]}"></b>{perf.capitalize()}</span>')
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
 body {{ margin: 0; background: #16181d; color: #e9eaee; font-family: 'DejaVu Sans', sans-serif; }}
-.wrap {{ padding: 26px 30px; }} h1 {{ margin: 0 0 6px; font-size: 28px; }}
-.k {{ color: #a9adb8; font-size: 17px; margin-bottom: 10px; }}
+.wrap {{ padding: 26px 30px; }} h1 {{ margin: 0 0 6px; font-size: 38px; }}
+.k {{ color: #c3c6cf; font-size: 26px; margin-bottom: 10px; }}
 .k span {{ margin-right: 22px; }} .k b {{ display: inline-block; width: 22px; height: 6px;
   border-radius: 3px; margin-right: 8px; vertical-align: middle; }}
-.g {{ stroke: #2c303a; stroke-width: 1; }} .t {{ fill: #8b909c; font-size: 15px; }}
+.g {{ stroke: #2c303a; stroke-width: 1; }} .t {{ fill: #a3a8b4; font-size: 24px; }}
 </style></head><body><div class="wrap">
 <h1>DrNykterstein on Lichess</h1>
 <div class="k">{"".join(legend)}</div>

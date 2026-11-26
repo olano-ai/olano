@@ -29,7 +29,7 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
   await S('appIn');
   await sleep(300);
   await S('caption', 0);
-  await sleep(1200);
+  await sleep(900);
   await tap(app.getByText('Add MCP server').first(), { move: 700 });
   const d = app.locator('[role=dialog]').first();
   await d.getByText('Connect a service').first().waitFor({ timeout: 30000 });
@@ -42,10 +42,10 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
   await sleep(500);
   await S('press'); await transport.selectOption('stdio'); await S('release');
   await sleep(400);
-  await type(d.locator('input[placeholder="time"]'), 'formula1', { cps: 16 });
+  await type(d.locator('input[placeholder="time"]'), 'formula1', { cps: 22 });
   await type(d.locator('input[placeholder="uvx"]'), 'npx', { cps: 12 });
-  await typeLines(d.locator('textarea').nth(0), ['-y', 'mcp-sports-hub@1.4.1'], 20);
-  await typeLines(d.locator('textarea').nth(1), ['SPORTS_HUB_PROVIDERS=f1'], 22);
+  await typeLines(d.locator('textarea').nth(0), ['-y', 'mcp-sports-hub@1.4.1'], 30);
+  await typeLines(d.locator('textarea').nth(1), ['SPORTS_HUB_PROVIDERS=f1'], 32);
   await keyboardOff();
   await S('hide');
   await sleep(700);
@@ -78,8 +78,8 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
   await app.getByText('through the Sports Hub server', { exact: false }).first().waitFor({ timeout: 180000 });
   await sleep(400);
   await scrollTo(app.getByText("The drivers' championship", { exact: false }).first(), PORTRAIT ? 90 : 110, 1100).catch(() => {});
-  await sleep(PORTRAIT ? 2000 : 2600);
-  if (PORTRAIT) { await scroll(380, 1300); await sleep(1600); }
+  await sleep(PORTRAIT ? 1600 : 2200);
+  if (PORTRAIT) { await scroll(380, 1200); await sleep(1300); }
 
   // 3. the chart request
   mark('chart');
@@ -95,7 +95,7 @@ export async function run({ page, app, S, sleep, tap, type, send, keyboardOff, s
   await S('caption', 4);
   await sleep(600);
   await scrollTo(app.locator('img[src*="race-laps"]').first(), PORTRAIT ? 160 : 110, 1200).catch(() => {});
-  await sleep(PORTRAIT ? 4200 : 4600);
+  await sleep(PORTRAIT ? 4600 : 5000);
 
   mark('end');
   await S('caption', null);
