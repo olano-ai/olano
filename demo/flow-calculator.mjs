@@ -78,7 +78,11 @@ export async function run({ app, page, S, sleep, tap, point, send, scrollTo, mar
   await S('caption', 4);
   const shot = app.locator('main img').last();
   await shot.waitFor({ timeout: 30000 });
-  await scrollTo(shot, PORTRAIT ? 200 : 170, 1200).catch(() => {});
+  await sleep(300);
+  // The file card under the picture: bringing it up shows the whole screenshot, and the chat
+  // is then at its end, so its "Jump to latest" button goes away.
+  const files = app.getByText('Open in Files').last();
+  await scrollTo(files, PORTRAIT ? 640 : 600, 1300).catch(() => {});
   await sleep(4200);
 
   mark('end');

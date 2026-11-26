@@ -44,6 +44,12 @@ The finished videos are attached to the [`demo-videos-1` release](https://github
 | `browser` | Browser control: Config, Browser; a web order placed in a live browser; the approval before the form is sent; taking control | Thistledown Pottery, a ceramics studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-browser-portrait.mp4) |
 | `kiwi` | Kiwi.com's public flight search MCP server added by its address; a real trip searched, then a day either way | Paper Kite Games, a board-game studio | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-kiwi-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-kiwi-portrait.mp4) |
 | `coingecko` | CoinGecko's keyless public MCP server added by its address; a market snapshot, then a weekday brief on the scheduler | Tidepool Notes, a newsletter on digital payments | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-coingecko-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-coingecko-portrait.mp4) |
+| `pricecheck` | Headless browser control on Amazon.sg: three earbuds compared from the live results page, then a daily price check on the scheduler | Pebble & Thread, a tailoring shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-pricecheck-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-pricecheck-portrait.mp4) |
+| `weekend` | A family weekend from the Gardens by the Bay and NParks events pages, read live; a reminder per event on the calendar | Brightwater Swim School | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-weekend-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-weekend-portrait.mp4) |
+| `calculator` | The CPF Board's public contribution calculator filled in live; the approval before Calculate; the result explained | Lantern Lane Dumplings, a dumpling kitchen | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-calculator-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-calculator-portrait.mp4) |
+| `deepwiki` | DeepWiki's public MCP server from the directory; how a public repository (langchain-ai/langgraph) is organised, then the raw results in verbose mode | Tessellate Data, a data platform team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-deepwiki-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-deepwiki-portrait.mp4) |
+| `huggingface` | Hugging Face's MCP server added as a custom server with no account (`hf_whoami` off); an Indonesian speech-to-text model found on the Hub, with its licence | Lontar Labs, a voice-notes app team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-huggingface-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-huggingface-portrait.mp4) |
+| `playwright` | Microsoft's Playwright MCP server, run locally with `npx` (stdio); a package's release history read off PyPI in the server's own browser | Halyard Software, a Python services team | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-playwright-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-1/olano-playwright-portrait.mp4) |
 
 ## How the dashboard is real and the agents are not
 
@@ -118,6 +124,17 @@ files and the chart are.
 - `kiwi` and `coingecko` add a real public MCP server during the take (`https://mcp.kiwi.com`,
   `https://mcp.api.coingecko.com/mcp`, no account or key) and their agents' tool steps call it
   for real, so they need network access; the replies are built from what the server returned.
+- `pricecheck`, `weekend` and `calculator` drive the product's headless browser against live public
+  websites (Amazon.sg; Gardens by the Bay and NParks; the CPF Board's calculator), so they need
+  network access. Where the web is reached only through an HTTPS proxy, the team files point the
+  product's per-agent `BROWSER_PROXY_URL` setting at `HTTPS_PROXY`; Chromium must trust that proxy's
+  certificate authority through the machine's own store (no check is turned off).
+- `deepwiki`, `huggingface` and `playwright` connect a real MCP server during the take and their
+  agents' tool steps call it for real with the `mcp` SDK, so they need network access. `playwright`
+  also needs `npx` (it starts `@playwright/mcp@latest` over stdio, from the command saved in the
+  agent's `agent.json5`) and a Chrome for it to drive; behind an HTTPS proxy its team file passes the
+  proxy through Playwright MCP's own `PLAYWRIGHT_MCP_PROXY_SERVER` setting. The MCP tab's Reload
+  agent runs the product's own connect step for scripted agents (`serve.py`).
 
 ### The installation tutorials
 

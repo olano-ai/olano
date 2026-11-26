@@ -70,7 +70,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await nav('/chat/remy', { click: false });
   await app.locator('textarea').last().waitFor({ timeout: 30000 });
   await sleep(600);
-  await send('Give me a market snapshot: Bitcoin, Ethereum and Solana with the 24 hour change, and what is trending.', { cps: 28 });
+  await send('Give me a market snapshot: Bitcoin, Ethereum and Solana with the 24 hour change, and what is trending.', { cps: PORTRAIT ? 40 : 28 });
   await app.getByText('Calling search_docs').first().waitFor({ timeout: 90000 });
   await app.getByText('Calling execute').first().waitFor({ timeout: 120000 });
   await sleep(800);
@@ -81,15 +81,15 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await app.getByText('move by the minute').first().waitFor({ timeout: 60000 }).catch(() => {});
   await sleep(500);
   await scrollTo(app.getByText('snapshot from CoinGecko').last(), PORTRAIT ? 90 : 120, 1100).catch(() => {});
-  await sleep(3800);
+  await sleep(PORTRAIT ? 3000 : 3800);
 
   mark('schedule');
   await S('caption', 4);
-  await send('Put this on the schedule for 8 am every weekday.', { cps: 24 });
+  await send('Put this on the schedule for 8 am every weekday.', { cps: PORTRAIT ? 34 : 24 });
   await app.getByText('Calling scheduler_create').first().waitFor({ timeout: 60000 });
   await app.getByText('is on the scheduler').first().waitFor({ timeout: 60000 });
   await app.getByText('when you get in').first().waitFor({ timeout: 60000 }).catch(() => {});
-  await sleep(2600);
+  await sleep(PORTRAIT ? 1400 : 2600);
 
   await nav('/scheduler');
   const row = app.locator('.card', { hasText: 'Morning market brief' }).last();
@@ -99,7 +99,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await sleep(600);
   await scrollTo(row, PORTRAIT ? 250 : 260, 900).catch(() => {});
   if (!PORTRAIT) await point(row.getByText('Morning market brief').first(), { move: 800, dx: 40, dy: 26 });
-  await sleep(3600);
+  await sleep(PORTRAIT ? 2800 : 3600);
 
   mark('end');
   await S('caption', null);

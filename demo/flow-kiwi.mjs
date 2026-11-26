@@ -85,16 +85,16 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await sleep(600);
   await scrollTo(app.getByText('worth a look').last(), PORTRAIT ? 90 : 110, 1200).catch(() => {});
   await sleep(3200);
-  if (PORTRAIT) { await scroll(260, 1000); await sleep(1600); }
+  if (PORTRAIT) { await scroll(260, 1000); await sleep(800); }
 
   mark('flex');
   await S('caption', 4);
-  await send('Is it cheaper if we fly a day earlier or later?', { cps: 24 });
+  await send('Is it cheaper if we fly a day earlier or later?', { cps: PORTRAIT ? 34 : 24 });
   await app.getByText('date pairs').first().waitFor({ timeout: 120000 });
   await app.getByText('in total.').last().waitFor({ timeout: 60000 });
   await sleep(600);
   await scrollTo(app.getByText('date pairs').last(), PORTRAIT ? 90 : 120, 1100).catch(() => {});
-  await sleep(4200);
+  await sleep(PORTRAIT ? 2400 : 4200);
 
   mark('end');
   await S('caption', null);

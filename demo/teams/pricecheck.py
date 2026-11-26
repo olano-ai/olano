@@ -100,8 +100,11 @@ def parse_results(snapshot: str) -> list[dict[str, Any]]:
         name = title.group(1).replace('\\"', '"')
         short = re.split(r",| - | \| |\(", name)[0].strip()
         words = short.split()
-        if len(words) > 7:
-            short = " ".join(words[:7])
+        if len(words) > 1 and words[0].lower() == words[1].lower():  # "Brand Brand Model"
+            words = words[1:]
+            short = " ".join(words)
+        if len(words) > 5:
+            short = " ".join(words[:5])
         items.append(
             {
                 "name": short,
@@ -136,9 +139,7 @@ def compare(ctx: dict) -> str:
             "compare yet. I can try again in a minute."
         )
     rows = "\n".join(
-        f"| [{i['name']}]({i['url']}) | S${i['price']:.2f} | {i['rating']:.1f} of 5"
-        f" ({i['ratings']:,}) |"
-        for i in best
+        f"| [{i['name']}]({i['url']}) | S${i['price']:.2f} | {i['rating']:.1f} of 5 |" for i in best
     )
     SCHEDULE_ARGS.update(_schedule_args())  # what the next turn's call shows and sends
     cheapest = min(best, key=lambda i: i["price"])

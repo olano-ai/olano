@@ -207,7 +207,15 @@ def open_nparks(ctx: dict) -> str:
 
 
 def read_nparks(ctx: dict) -> str:
-    out = tool("browser_snapshot", {})(ctx)
+    import time
+
+    # The listing is drawn by the page's script after it loads: read again, as a person would
+    # wait for it, until the events are there (about half a minute at most).
+    for _ in range(6):
+        out = tool("browser_snapshot", {})(ctx)
+        if nparks_events(out):
+            break
+        time.sleep(5)
     PAGES["nparks"] = out
     PLAN[:] = make_plan()
     for i, slot in enumerate(REMINDERS):
