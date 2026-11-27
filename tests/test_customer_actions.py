@@ -327,6 +327,36 @@ def test_subscription_status_reports_only_the_asker(home: Path):
     assert "/subscribe" in out
 
 
+def test_subscription_status_reports_trial_days_left(home: Path):
+    """The gate ends a trial at trial_start + trial_days and never sets
+    current_period_end on it, so the tool must count from the same start."""
+    import time
+
+    from olano.monetization.store import (
+        EntitlementRecord,
+        EntitlementStatus,
+        get_entitlement_store,
+    )
+    from olano.monetization.tools import make_subscription_tools
+
+    get_entitlement_store().upsert(
+        EntitlementRecord(
+            agent=AGENT,
+            channel="telegram",
+            user_id="carol",
+            status=EntitlementStatus.TRIAL,
+            trial_start=time.time() - 2 * 86400 - 3600,
+        )
+    )
+    status = _tool(make_subscription_tools(AGENT, trial_days=7), "subscription_status")
+    with push_request_context(source="channel", channel="telegram", user_id="carol"):
+        out = status.invoke({})
+    assert "trial" in out.lower()
+    # Same rounding as the gate and /trial: 4.96 days remaining reads as 5.
+    assert "About 5 day(s) left." in out
+    assert "/subscribe" in out
+
+
 def test_subscription_status_for_an_unknown_user_points_at_subscribe(home: Path):
     from olano.monetization.tools import make_subscription_tools
 

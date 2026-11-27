@@ -1870,7 +1870,12 @@ def _build_memory_tools(
             if getattr(config.monetization, "enabled", False):
                 from olano.monetization.tools import make_subscription_tools
 
-                customer_extras.extend(make_subscription_tools(config.name))
+                customer_extras.extend(
+                    make_subscription_tools(
+                        config.name,
+                        trial_days=int(getattr(config.monetization, "trial_days", 3) or 0),
+                    )
+                )
 
             # Per-user scheduling (opt-in): the end-user can keep a few
             # scheduled jobs of their own, stored with THEIR identity and run
