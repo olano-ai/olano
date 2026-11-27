@@ -14,7 +14,7 @@ export const captions = [
   { eyebrow: 'Org chart', h1: 'People and<br>their agents', p: 'Who owns which agent.' },
   { eyebrow: 'Member view', h1: 'Only what<br>is hers', p: 'Her agent. No admin pages.' },
   { eyebrow: 'On her behalf', h1: 'Agent asks<br>agent', p: "cobb asks Tom's agent, then answers her." },
-  { eyebrow: "Tom's view", h1: 'His side<br>of it', p: 'Signed in as Tom: what tilde shared.' },
+  { eyebrow: "Tom's view", h1: 'What his<br>agent shared', p: 'Only exchanges with tilde.' },
 ];
 export const voice = [
   'Nadia runs Brightmoor Architects. From the Admin page she invites Ines, and gets a link to send her.',
@@ -22,7 +22,7 @@ export const voice = [
   'The org chart shows each person and the agent they own.',
   'Ines opens her link and sets a password. She sees her own agent, and no admin pages.',
   "Ines asks cobb for a costing. Cobb asks Tom's agent for the floor area, and brings the answer back to her.",
-  "Tom signs in to his own view. His agent's side of the exchange is in his list.",
+  "Tom signs in to his own view. He sees what tilde shared with Ines's agent, and only that.",
   'Olano. Each person, their own agent.',
 ];
 
@@ -143,14 +143,19 @@ export async function run(h) {
   await tap(app.getByRole('button', { name: 'Sign in', exact: true }), { move: 500 });
   await app.getByText('Overview').first().waitFor({ timeout: 30000 });
   await S('hide');
+  await sleep(1400);
+  await nav('/activity', { click: false });
+  if (PORTRAIT) {       // a phone shows the list of conversations first
+    const row = app.locator('[data-testid="a2a-rail"]').getByText('tilde').first();
+    await row.waitFor({ timeout: 30000 });
+    await sleep(1200);
+    await tap(row, { move: 700 });
+  }
+  const q = app.getByText('What is the floor area of the Fenwick extension').first();
+  await q.waitFor({ timeout: 30000 });
   await sleep(700);
-  if (PORTRAIT) await drawer();
-  await tap(side().getByText('tilde', { exact: true }), { move: 700 });
-  await sleep(1000);
-  if (PORTRAIT && !(await side().isVisible().catch(() => false))) await drawer();
-  await tap(side().getByText('What is the floor area').first(), { move: 700 });
-  await app.getByText('a kitchen-diner of 31 m²').first().waitFor({ timeout: 30000 });
-  await sleep(3800);
+  if (!PORTRAIT) await point(q, { move: 900 });
+  await sleep(3600);
 
   mark('end');
   await S('caption', null);

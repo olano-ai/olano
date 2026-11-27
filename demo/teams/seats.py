@@ -126,6 +126,15 @@ TEAM = {
             "rates/2026.md": "# Rates 2026\n\nSingle-storey extension shell: £2,350 / m²\n",
         },
     },
+    # An earlier exchange tilde took no part in: Tom's view leaves it out, Nadia's shows it.
+    "a2a": [
+        {
+            "from": "orla",
+            "to": "cobb",
+            "message": "What fee should we quote for the Harrow Lane loft?",
+            "reply": "Nine percent of the build cost, as on the last two lofts.",
+        },
+    ],
     "threads": {
         "tilde": {
             "fenwick-revisions": [
