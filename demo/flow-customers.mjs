@@ -50,7 +50,9 @@ export async function run({ app, S, sleep, tap, point, type, keyboardOff, scroll
   await tap(sw, { move: 800 });
   await app.getByText('Allowed actions', { exact: true }).first().waitFor({ timeout: 30000 });
   await S('hide');
-  await sleep(2400);
+  await sleep(1200);
+  await point(app.getByText('Many people share this agent').first(), { move: 900 });
+  await sleep(5400);
 
   // 1. the allowed action, and its script
   mark('action');
@@ -163,6 +165,8 @@ export async function run({ app, S, sleep, tap, point, type, keyboardOff, scroll
   await sleep(600);
   const back = app.getByText('All files', { exact: true }).first();
   if (await back.isVisible().catch(() => false)) await tap(back, { move: 700 });
+  const close = app.locator('.files-pane-close').first();       // the deleted MEMORY.md's preview
+  if (await close.isVisible().catch(() => false)) await tap(close, { move: 700 });
   const tomasDir = app.getByText('telegram-' + TOMAS.id).first();
   await tomasDir.waitFor({ timeout: 30000 });
   const refresh = app.locator('button[title*="efresh" i], button[aria-label*="efresh" i]').first();

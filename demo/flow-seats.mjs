@@ -95,7 +95,11 @@ export async function run(h) {
     await sleep(900);
     await point(app.locator('.org-node', { hasText: 'Cost Planning' }), { move: 800 });
   }
-  await sleep(PORTRAIT ? 3600 : 1800);
+  if (PORTRAIT) {       // a phone draws the whole chart small; bring it closer
+    await sleep(800);
+    for (let i = 0; i < 2; i++) { await tap(app.getByRole('button', { name: 'Zoom in' }), { move: 500 }); await sleep(350); }
+  }
+  await sleep(PORTRAIT ? 1600 : 1800);
 
   mark('ines');
   await S('caption', 3);
@@ -151,7 +155,7 @@ export async function run(h) {
     await sleep(1200);
     await tap(row, { move: 700 });
   }
-  const q = app.getByText('What is the floor area of the Fenwick extension').first();
+  const q = app.locator(':text("What is the floor area of the Fenwick extension"):visible').first();
   await q.waitFor({ timeout: 30000 });
   await sleep(700);
   if (!PORTRAIT) await point(q, { move: 900 });
