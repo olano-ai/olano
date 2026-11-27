@@ -122,7 +122,9 @@ class TelegramSeam:
             **({"username": user["username"]} if user.get("username") else {}),
             "language_code": user.get("language_code", "en"),
         }
-        chat = {k: v for k, v in sender.items() if k in ("id", "first_name", "last_name", "username")}
+        chat = {
+            k: v for k, v in sender.items() if k in ("id", "first_name", "last_name", "username")
+        }
         message: dict[str, Any] = {
             "message_id": next(self._message_ids),
             "from": sender,
@@ -148,12 +150,19 @@ class TelegramSeam:
             await self.adapter._handle_text_message(upd, None)
 
 
-def serve(seams: dict[str, TelegramSeam], loop: asyncio.AbstractEventLoop, port: int) -> None:
+def serve(
+    seams: dict[str, TelegramSeam],
+    loop: asyncio.AbstractEventLoop,
+    port: int,
+    extra_routes: dict[str, Any] | None = None,
+) -> None:
     """A local endpoint the flow posts messages to and reads the bot's calls from.
 
     POST /message {"agent", "user": {...}, "text"} -> the Update is delivered; answers the Update.
     GET  /calls?agent=..&since=<n> -> the Bot API calls recorded from index n on.
+    POST <extra route> {"user_id"} -> ``extra_routes[route](user_id)`` (a team's own hook).
     """
+    routes = extra_routes or {}
 
     class Handler(http.server.BaseHTTPRequestHandler):
         def log_message(self, *_: Any) -> None:
@@ -182,6 +191,9 @@ def serve(seams: dict[str, TelegramSeam], loop: asyncio.AbstractEventLoop, port:
 
         def do_POST(self) -> None:
             body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)))
+            if self.path in routes:
+                self._json({"ok": routes[self.path](str(body.get("user_id", "")))})
+                return
             seam = seams.get(body.get("agent", ""))
             if seam is None:
                 self._json({"error": "unknown agent"}, 404)

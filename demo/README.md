@@ -59,6 +59,11 @@ The finished videos are attached to the [`demo-videos-1` release](https://github
 | `imagine` | Olano's built-in `image_generate` and `image_edit`: a logo and a menu photo drawn inline in the chat, then the photo made warmer with steam, opened in Files | Little Ember Bakehouse, a neighbourhood bakery | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-imagine-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-imagine-portrait.mp4) |
 | `freeimages` | Pipeworx's public Wikimedia Commons MCP server added by its address; free-to-use latte art photos for a café poster with their licences, then the credit lines saved as a file | Little Fig Café | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-freeimages-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-freeimages-portrait.mp4) |
 | `runweather` | Weather MCP (`npx @dangahagan/weather-mcp`, stdio, Open-Meteo data) added as a custom server; is the air good enough for a run tonight in Bangkok, and the best hour | Lamplight Runners, a beginners' running club | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-runweather-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-runweather-portrait.mp4) |
+| `revisions` | Every change on the record: an agent's turn committed under its name, the commit's line-by-line diff, a file held back because it holds a password, the GitHub backup dialog (shown, not submitted) | Saltwick Paddle Co., a kayak and paddleboard hire | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-revisions-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-revisions-portrait.mp4) |
+| `themes` | The thirteen dashboard themes: the account menu's Theme dropdown, the theme button through every theme on a chat with a chart, the Overview, the org chart, Config's list (kept per browser) | Nightjar Records, a record shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-themes-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-themes-portrait.mp4) |
+| `seats` | A team on one dashboard, each person with an agent of their own: an invite, a seat (agent owner), the org chart, the invited member's own view, her agent asking a colleague's agent for her, and the colleague's own view of it; every sign-in is the product's real auth | Brightmoor Architects, an architecture practice | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-seats-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-seats-portrait.mp4) |
+| `customers` | One support agent, many customers kept apart: customer service mode on the Multi-user tab, an allowed action (`my_order`) whose script reads the customer's id from its environment, two customers on Telegram, `forget_me` | Inkwell & Ivy, an online stationery shop | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-customers-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-customers-portrait.mp4) |
+| `monetization` | An agent sold by the month: the Stripe key in the agent's vault, the plan on the Monetization tab (Stripe price, Telegram Stars, trial), a learner's trial on Telegram, the paywall and a real test-mode Stripe Checkout session | Puente Spanish, an online Spanish-tutoring service | [desktop](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-monetization-landscape.mp4), [phone](https://github.com/olano-ai/olano/releases/download/demo-videos-2/olano-monetization-portrait.mp4) |
 
 ## How the dashboard is real and the agents are not
 
@@ -164,6 +169,12 @@ files and the chart are.
   the `mcp` SDK, so they need network access (`runweather` also needs `npx`). Pipeworx caps anonymous
   use at 50 calls a day, so `teams/freeimages.py` keeps each answer in `.work/freeimages-cache.json`
   and reuses it; delete that file to ask again.
+- `customers` and `monetization` deliver Telegram messages to the product's own Telegram adapter and
+  runtime handler as Bot API updates (`teams/_telegram.py`, a local endpoint on ports 8961 and 8962):
+  there is no bot token, so the bot's outgoing Bot API calls are recorded instead of sent.
+  `monetization` also needs `api.stripe.com` and `OLANO_STRIPE_SANDBOX_SECRET_KEY` (a test-mode
+  `sk_test_` key; the team file refuses any other and drops every live Stripe variable from its
+  environment). Its price is a test-mode price made once with `assets/monetization-stripe-setup.py`.
 
 ### The installation tutorials
 

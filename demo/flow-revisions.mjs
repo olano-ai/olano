@@ -76,7 +76,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   mark('held');
   await S('caption', 3);
   const held = app.locator('[data-testid="revisions-held-back"]');
-  await scrollTo(held, PORTRAIT ? 60 : 90, 1300);
+  await scrollTo(held, PORTRAIT ? 125 : 90, 1300);
   await sleep(500);
   await point(held.locator('code').first(), { move: 800 });
   await sleep(4800);

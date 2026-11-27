@@ -16,9 +16,12 @@ export const captions = [
   { eyebrow: 'Themes', h1: 'One dashboard,<br>thirteen looks', p: 'Here in Olano Dark, the default.' },
   { eyebrow: 'Pick', h1: 'From the<br>account menu', p: 'Theme, then the one you want.' },
   { eyebrow: 'All of them', h1: 'Dark ones,<br>pale ones', p: 'The theme button steps through each.' },
-  { eyebrow: 'Overview', h1: 'Every page<br>follows', p: 'Midnight, then Sepia.' },
+  // A phone picks from a drawer that covers the page, so it shows one theme per page, not two.
   PORTRAIT_TAKE
-    ? { eyebrow: 'Agents', h1: 'The whole<br>team, too', p: 'Volt, then Sakura.' }
+    ? { eyebrow: 'Overview', h1: 'Every page<br>follows', p: 'The Overview, in Midnight.' }
+    : { eyebrow: 'Overview', h1: 'Every page<br>follows', p: 'Midnight, then Sepia.' },
+  PORTRAIT_TAKE
+    ? { eyebrow: 'Agents', h1: 'The whole<br>team, too', p: 'The Agents page, in Sakura.' }
     : { eyebrow: 'Org chart', h1: 'The whole<br>team, too', p: 'Volt, then Sakura.' },
   { eyebrow: 'Per browser', h1: 'Kept in<br>this browser', p: 'Not in config.yaml. Each browser has its own.' },
 ];
@@ -26,8 +29,8 @@ export const voice = [
   "Olano's dashboard comes in thirteen themes. Here is Lyra, the sales agent, answering with a chart.",
   'Pick a theme from the account menu. It changes straight away.',
   'Or press the theme button and step through them all: dark ones, pale ones, black and white, and high contrast.',
-  'Every page follows. The Overview, in Midnight, then Sepia.',
-  PORTRAIT_TAKE ? 'The agents page, in Volt, then Sakura.' : 'The org chart, in Volt, then Sakura.',
+  'Every page follows the theme you pick. Here, the Overview.',
+  'And the whole team, too.',
   'Config lists them too. The choice is kept in this browser, not on the server.',
   'Olano. Make it look like yours.',
 ];
@@ -43,7 +46,7 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
     if (PORTRAIT) await drawer(true);
     const profile = app.locator('.profile-btn').first();
     await tap(profile, { move: 700 });
-    await sleep(600);
+    await sleep(PORTRAIT ? 1000 : 600);   // the menu settles before the pointer measures the dropdown
     const select = app.locator('select[aria-label="Theme"]').first();
     await point(select, { move: 600 });
     await sleep(150);
@@ -92,10 +95,15 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
   await S('caption', 3);
   await nav('/overview');
   await app.getByText('Scheduled tasks').first().waitFor();
-  await pickTheme('midnight');
-  await sleep(1200);
-  await pickTheme('sepia');
-  await sleep(1200);
+  if (PORTRAIT) {
+    await pickTheme('midnight');
+    await sleep(2600);
+  } else {
+    await pickTheme('midnight');
+    await sleep(1200);
+    await pickTheme('sepia');
+    await sleep(1200);
+  }
 
   // 4. The org chart (the Agents page on a phone), in two more
   mark('team');
@@ -108,17 +116,22 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
     await app.getByText('Shop Manager').first().waitFor();
   }
   await sleep(500);
-  await pickTheme('volt');
-  await sleep(1200);
-  await pickTheme('sakura');
-  await sleep(1200);
+  if (PORTRAIT) {
+    await pickTheme('sakura');
+    await sleep(2600);
+  } else {
+    await pickTheme('volt');
+    await sleep(1200);
+    await pickTheme('sakura');
+    await sleep(1200);
+  }
 
   // 5. Config's theme list, and what it says about where the choice lives
   mark('config');
-  await S('caption', 5);
   await nav('/config');
   const list = app.locator('.menu-item', { hasText: 'Harbor' }).first();
   await list.waitFor();
+  await S('caption', 5);
   await sleep(400);
   await scrollTo(app.getByText('Appearance for this browser').first(), PORTRAIT ? 90 : 120, 900);
   await sleep(400);

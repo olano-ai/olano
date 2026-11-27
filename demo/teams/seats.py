@@ -126,6 +126,15 @@ TEAM = {
             "rates/2026.md": "# Rates 2026\n\nSingle-storey extension shell: £2,350 / m²\n",
         },
     },
+    # An earlier exchange tilde took no part in: Tom's view leaves it out, Nadia's shows it.
+    "a2a": [
+        {
+            "from": "orla",
+            "to": "cobb",
+            "message": "What fee should we quote for the Harrow Lane loft?",
+            "reply": "Nine percent of the build cost, as on the last two lofts.",
+        },
+    ],
     "threads": {
         "tilde": {
             "fenwick-revisions": [
@@ -148,7 +157,7 @@ TEAM = {
                         "tool": "talk_to_agent",
                         "args": {"agent": "tilde", "message": AREA_Q},
                         "result": _ask_tilde,
-                        "took": 2.6,
+                        "took": 1.8,
                         "peer": {"to": "tilde", "message": AREA_Q, "reply": AREA_A},
                     },
                     {
@@ -156,9 +165,9 @@ TEAM = {
                         "args": {"file_path": "costs/fenwick-estimate.md"},
                         "write": {"costs/fenwick-estimate.md": ESTIMATE},
                         "result": "Wrote costs/fenwick-estimate.md",
-                        "took": 1.2,
+                        "took": 0.6,
                     },
-                    {"text": COST_REPLY, "wps": 16},
+                    {"text": COST_REPLY, "wps": 24},
                 ]
             }
         ],

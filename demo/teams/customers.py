@@ -37,22 +37,24 @@ TOMAS = {
 }
 
 MY_ORDER = '''\
-"""my_order: the latest order of the customer who is asking.
+"""my_order: the latest order of the customer asking.
 
-Olano runs this script for one customer at a time. Who that is comes
-from the environment, never from the agent, so it cannot be changed
-by anything said in the chat.
+Olano runs this for one customer at a time and says
+who in the environment. The agent never passes it.
 """
 import json
 import os
 from pathlib import Path
 
-platform = os.environ["LIONCLAW_CUSTOMER_PLATFORM"]   # telegram
-customer = os.environ["LIONCLAW_CUSTOMER_ID"]         # their Telegram id
+platform = os.environ["LIONCLAW_CUSTOMER_PLATFORM"]
+customer = os.environ["LIONCLAW_CUSTOMER_ID"]
 
-orders = json.loads((Path(__file__).parents[1] / "shop/orders.json").read_text())
-mine = [o for o in orders if o["platform"] == platform and o["customer"] == customer]
-print(json.dumps(mine[-1] if mine else {"order": None}, indent=2))
+shop = Path(__file__).parents[1] / "shop"
+orders = json.loads((shop / "orders.json").read_text())
+mine = [o for o in orders
+        if o["platform"] == platform
+        and o["customer"] == customer]
+print(json.dumps(mine[-1] if mine else {}, indent=2))
 '''
 
 ORDERS = [
@@ -138,7 +140,9 @@ def _order(ctx: dict[str, Any]) -> dict[str, Any]:
 def _maya_reply(ctx: dict[str, Any]) -> str:
     o = _order(ctx)
     if not o.get("order"):
-        return "Thanks, Maya. I could not find an order for you yet. Could you send the order number?"
+        return (
+            "Thanks, Maya. I could not find an order for you yet. Could you send the order number?"
+        )
     items = " and ".join(i.lower() if n else i for n, i in enumerate(o["items"]))
     return (
         f"Hi Maya! Your order {o['order']} ({items}) has {o['status']} with {o['carrier']}. "
@@ -195,7 +199,12 @@ TEAM = {
                 "match": "forget me",
                 "steps": [
                     {"wait": 0.8},
-                    {"tool": "forget_me", "args": {}, "result": _tool("forget_me", {}, "forget"), "took": 0.8},
+                    {
+                        "tool": "forget_me",
+                        "args": {},
+                        "result": _tool("forget_me", {}, "forget"),
+                        "took": 0.8,
+                    },
                     {"wait": 0.4},
                     {"text": _forget_reply, "wps": 12},
                 ],
@@ -226,7 +235,9 @@ TEAM = {
                     {"wait": 0.8},
                     {
                         "tool": "remember",
-                        "args": {"fact": "Name: Maya Ortiz. Prefers delivery updates in this chat."},
+                        "args": {
+                            "fact": "Name: Maya Ortiz. Prefers delivery updates in this chat."
+                        },
                         "result": _tool(
                             "remember",
                             {"fact": "Name: Maya Ortiz. Prefers delivery updates in this chat."},
@@ -252,7 +263,6 @@ TEAM = {
 def after_seed(home: Path, gateway: Any, **_: object) -> None:
     """Connect Nell's Telegram adapter to the runtime handler and open the local message endpoint."""
     import __main__
-
     from teams import _telegram
 
     _HOME["home"] = home
