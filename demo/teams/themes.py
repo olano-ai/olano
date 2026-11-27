@@ -114,27 +114,31 @@ TEAM = {
         },
     ],
     "threads": {
-        "lyra": {
-            "october-report": [
-                (4400, "user", "How did October go overall?", {"channel": "api"}),
-                (
-                    4399,
-                    "assistant",
-                    "October was steady: 1,543 records sold, close to September.",
-                    {"channel": "api"},
-                ),
-            ],
-        },
         "fern": {
             "preorders": [
-                (900, "user", "How many pre-orders for the Record Store Day release?", {"channel": "api"}),
-                (899, "assistant", "Twenty-three so far, nine of them for shop pickup.", {"channel": "api"}),
+                (
+                    900,
+                    "user",
+                    "How many pre-orders for the Record Store Day release?",
+                    {"channel": "api"},
+                ),
+                (
+                    899,
+                    "assistant",
+                    "Twenty-three so far, nine of them for shop pickup.",
+                    {"channel": "api"},
+                ),
             ],
         },
         "ivy": {
             "distributors": [
                 (1600, "user", "When does the next delivery arrive?", {"channel": "api"}),
-                (1599, "assistant", "Thursday morning, two boxes from the jazz distributor.", {"channel": "api"}),
+                (
+                    1599,
+                    "assistant",
+                    "Thursday morning, two boxes from the jazz distributor.",
+                    {"channel": "api"},
+                ),
             ],
         },
     },
@@ -172,7 +176,9 @@ TEAM = {
                         "result": "Saved reports/november-genres.png (1200x640)",
                         "took": 1.0,
                         "write": {
-                            "reports/november-genres.png": (ASSETS / "themes-genres.png").read_bytes()
+                            "reports/november-genres.png": (
+                                ASSETS / "themes-genres.png"
+                            ).read_bytes()
                         },
                     },
                     {

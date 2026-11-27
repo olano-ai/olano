@@ -31,8 +31,7 @@ TOM = {
     "email": "tom@brightmoor.example",
     "password": "brightmoor-tom-1",
     "username": "tom-reyes",
-    "title": "Architect",
-}
+    }
 
 AREA_Q = "What is the floor area of the Fenwick extension in plan revision C?"
 AREA_A = (
@@ -191,9 +190,10 @@ def after_seed(runtime_url: str, **_: Any) -> None:
         r = api.post("/api/auth/bootstrap", json={**ADMIN, "setup_code": first_run_setup_code()})
         r.raise_for_status()
         nadia_id = r.json()["user"]["id"]
-        api.post(
-            "/api/agents/orla/access", json={"user_id": nadia_id, "role": "owner"}
-        ).raise_for_status()
+        # The first account is made owner of every agent that exists; Nadia keeps her own
+        # agent and hands the other seats out. As admin she still reaches every agent.
+        for agent in ("tilde", "cobb"):
+            api.delete(f"/api/agents/{agent}/access/{nadia_id}").raise_for_status()
         r = api.post("/api/admin/users", json={**TOM, "is_admin": False})
         r.raise_for_status()
         tom_id = r.json()["user"]["id"]
