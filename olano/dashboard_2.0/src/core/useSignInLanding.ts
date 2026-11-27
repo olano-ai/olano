@@ -16,12 +16,16 @@ export function useSignInLanding(ready: boolean, userId: string | null): boolean
   // when it is the same account. Setting state during render is React's
   // pattern for "derive from the previous render".
   if (!ready && settled !== null) setSettled(null);
-  const pending = ready && !!userId && settled !== userId;
+  const unsettled = ready && !!userId && settled !== userId;
+  // Hold the app only when the route really has to change. Holding on every
+  // new session unmounted whatever was on screen for a frame, which threw away
+  // in-page state that belongs to the same person (first-run setup's wizard
+  // creating the admin mid-flow). Reading the rule is a localStorage lookup.
+  const reset = unsettled && !!userId && landingFor(browserStore(), userId).reset;
 
   useLayoutEffect(() => {
-    if (!pending || !userId) return;
+    if (!unsettled || !userId) return;
     const store = browserStore();
-    const { reset } = landingFor(store, userId);
     if (reset) {
       // The previous person's in-session UI state (selections, drafts, the
       // remembered agent) is theirs too.
@@ -34,7 +38,7 @@ export function useSignInLanding(ready: boolean, userId: string | null): boolean
     recordSignIn(store, userId);
     setSignedOutToastSuppression(false);
     setSettled(userId);
-  }, [pending, userId, pathname, navigate]);
+  }, [unsettled, reset, userId, pathname, navigate]);
 
-  return pending;
+  return reset;
 }

@@ -126,7 +126,7 @@ function MaybeVaultMonitor({ enabled, children }: { enabled: boolean; children: 
 }
 
 function GatedApp() {
-  const { phase, user, uiMode, switchingUiMode, onboardingRequired } = useAuth();
+  const { phase, user, multiUser, uiMode, switchingUiMode, onboardingRequired } = useAuth();
   const simple = uiMode === "simple";
 
   // Warm the route chunks in the background once we're past the auth gate, so
@@ -149,7 +149,10 @@ function GatedApp() {
   useThreadSync(phase === "ready" && !onboardingRequired);
   // After a sign-out, or a sign-in as someone else, start at home instead of
   // the previous person's page. True while that decision is being applied.
-  const holdingLanding = useSignInLanding(phase === "ready", user?.id ?? null);
+  // Only real accounts count: a single-user box's implicit owner is nobody's
+  // session, and first-run setup turning it into the new admin is the same
+  // person mid-wizard, not a hand-over (passing it reset the wizard to home).
+  const holdingLanding = useSignInLanding(phase === "ready", multiUser ? (user?.id ?? null) : null);
 
   if (phase === "loading") {
     return (
