@@ -154,13 +154,33 @@ class ToolDescription:
 # and a bare ``search`` both land somewhere sensible. Order matters: earlier
 # entries win, so put specific families above generic verbs.
 _TOOL_RULES: tuple[tuple[tuple[str, ...], str, str, tuple[str, ...]], ...] = (
-    # Memory / knowledge — the user explicitly wants these visible.
+    # Memory / knowledge: the user explicitly wants these visible. Writes and
+    # erasures sit above the searches, and `remember` / `forget_me` have rules
+    # of their own: `remember` used to share the search rule and read
+    # "Searching memory" while it was saving a fact.
+    (("forget_me", "forget"), "🧠", "Forgetting what is stored", ()),
     (
-        ("search_memory", "memory_search", "recall", "remember", "memory"),
+        (
+            "remember",
+            "memory_save",
+            "memory_append",
+            "profile_save",
+            "preference_save",
+            "guidance_save",
+        ),
+        "🧠",
+        "Saving to memory",
+        ("fact", "content", "text", "entry"),
+    ),
+    (("memory_compact",), "🧠", "Compacting memory", ()),
+    (("recall_all", "memory_read"), "🧠", "Reading memory", ("path",)),
+    (
+        ("search_memory", "memory_search", "recall"),
         "🧠",
         "Searching memory",
         ("query", "q", "text", "content", "search"),
     ),
+    (("memory",), "🧠", "Reading memory", ("query", "q", "path")),
     (
         ("search_knowledge", "knowledge", "rag", "retrieve"),
         "📚",

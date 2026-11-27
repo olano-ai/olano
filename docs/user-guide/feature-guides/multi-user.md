@@ -61,3 +61,23 @@ config that uses one without it fails to load rather than quietly ignoring it.
 
 Configure it on the agent's **Multi-user** tab, which also lists end users and
 blocks or unblocks them.
+
+The **End users** list on that tab shows everyone who has talked to the agent,
+one row per person per platform (a Telegram user and a WhatsApp user are
+separate rows): their id on that platform, the platform, the name of their
+private folder (for example `telegram-449281`) and when it last changed. It is
+visible to admins and to the agent's owner.
+
+- **Block** stops every scheduled run and every scheduled or proactive message
+  to that person: their own reminders, the agent-wide per-user jobs and any
+  message the agent sends them outside a reply. It applies at once, without a
+  restart, and **Unblock** lifts it. Only an admin or the agent's owner can
+  block or unblock; nothing said to the agent can.
+- Blocking does **not** stop live chat: a blocked person can still message the
+  agent and get answers. To refuse their messages, leave them out of the
+  channel connector's allowed-users list.
+- **Muted** means the person paused their own scheduled messages by asking the
+  agent. It is theirs to lift by asking again, so the list shows it but has no
+  button for it.
+- A person who asked the agent to forget them has no folder and does not
+  appear.

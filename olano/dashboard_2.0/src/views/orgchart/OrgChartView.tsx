@@ -99,6 +99,11 @@ const NODE_W = 176;
 const NODE_H = 62;
 const H_NODE_W = 158;
 const H_NODE_H = 54;
+// A person with a title carries a third line (name, title, badges): the card
+// grows by one line so the HUMAN / role badges are never cut off at the bottom.
+const H_TITLE_ROW_H = 17;
+const humanCardH = (h: { title?: string | null }): number =>
+  H_NODE_H + ((h.title || "").trim() ? H_TITLE_ROW_H : 0);
 const COL_GAP = 40;
 const COL_W = NODE_W + COL_GAP;
 const LAYER_GAP = 96;
@@ -281,7 +286,8 @@ function computeLayout(
   const layers: string[][] = [];
   for (const n of names) (layers[depthOf(n)] ||= []).push(n);
   const depthY: number[] = [];
-  let y = PAD_TOP + (humans.length ? H_NODE_H + HUMAN_BAND_GAP : 0);
+  const humanBandH = humans.length ? Math.max(...humans.map(humanCardH)) : 0;
+  let y = PAD_TOP + (humans.length ? humanBandH + HUMAN_BAND_GAP : 0);
   layers.forEach((layer, d) => {
     if (!layer) return;
     depthY[d] = y;
@@ -305,7 +311,7 @@ function computeLayout(
         x: PAD_X + i * slot + slot / 2 - H_NODE_W / 2,
         y: PAD_TOP,
         w: H_NODE_W,
-        h: H_NODE_H,
+        h: humanCardH(h),
       });
     });
   }
@@ -905,6 +911,7 @@ const SCOPED_CSS = `
 }
 .org-node .org-name { font-weight: 600; font-size: 12.5px; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .org-node .org-sub { font-size: 11px; color: var(--text-3); white-space: normal; overflow: hidden; overflow-wrap: anywhere; line-height: 1.35; }
+.org-node .org-sub.org-title-line { white-space: nowrap; text-overflow: ellipsis; flex-shrink: 0; }
 .org-pip { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 1px var(--border); }
 .org-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .org-dot.on { box-shadow: 0 0 0 3px var(--success-soft); }
@@ -1377,7 +1384,9 @@ export function OrgChartView() {
       const auto = layout?.positions.get(id);
       const o = overrides[id];
       if (!o) return auto;
-      if (auto && o.h < auto.h && chipCards.has(id)) return { ...o, h: auto.h };
+      // A person card's auto height is its content's (one more line with a
+      // title), so a hand-placed one is never drawn shorter than that either.
+      if (auto && o.h < auto.h && (chipCards.has(id) || id.startsWith("h:"))) return { ...o, h: auto.h };
       return o;
     },
     [overrides, layout, chipCards],
@@ -2075,7 +2084,12 @@ export function OrgChartView() {
                         <span className="org-avatar" style={{ background: roleColor(role) }}>{initials(h.name)}</span>
                         <span style={{ minWidth: 0, display: "flex", flexDirection: "column", gap: 1, flex: 1 }}>
                           <span className="org-name" style={{ fontFamily: "var(--font-sans)" }}>{h.name}</span>
-                          {!!(h.title || "").trim() && <span className="org-sub">{h.title}</span>}
+                          {!!(h.title || "").trim() && (
+                            // One line: the card budgets exactly one for it.
+                            <span className="org-sub org-title-line" title={h.title || undefined}>
+                              {h.title}
+                            </span>
+                          )}
                           <span className="org-sub row" style={{ gap: 4 }}>
                             <span className="org-badge" style={{ borderColor: HUMAN_COLOR, color: HUMAN_COLOR }}>{t("badge.human")}</span>
                             <span className="org-badge" style={{ borderColor: roleColor(role), color: roleColor(role) }}>

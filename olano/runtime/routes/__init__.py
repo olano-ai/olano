@@ -37,6 +37,7 @@ from olano.runtime.routes import (
     cognition,
     connections,
     credits,
+    customers,
     feedback,
     files,
     hitl,
@@ -79,6 +80,7 @@ def register_all_routes(app: FastAPI, runtime: Any) -> None:
     archetypes.register_archetypes_routes(app, runtime, closures)
     subagents.register_subagents_routes(app, runtime, closures)
     channels.register_channels_routes(app, runtime, closures)
+    customers.register_customers_routes(app, runtime, closures)
     webhooks.register_webhooks_routes(app, runtime, closures)
     mcp.register_mcp_routes(app, runtime, closures)
     threads.register_threads_routes(app, runtime, closures)

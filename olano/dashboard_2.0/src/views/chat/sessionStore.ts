@@ -198,6 +198,8 @@ export interface ThreadMessage {
   // Provenance the server records per turn (runtime/api.py's get_thread).
   channel?: string;
   sender?: string;
+  /** A `peer_inbound` row's calling agent (the server also maps it to `sender`). */
+  from?: string;
   name?: string;
   args?: string;
   tool_call_id?: string;
@@ -555,7 +557,7 @@ function foldRow(out: Msg[], m: ThreadMessage): void {
       subs: [],
       ts,
       channel: m.channel || undefined,
-      sender: m.sender || undefined,
+      sender: m.sender || (m.role === "peer_inbound" ? m.from : "") || undefined,
       steer: m.steer || undefined,
     };
     // Chat-uploaded files (saved server-side under uploads/, referenced by a

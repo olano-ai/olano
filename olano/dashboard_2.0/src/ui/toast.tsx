@@ -23,12 +23,27 @@ export function setErrorToastSuppression(suppress: boolean): void {
   suppressErrorToasts = suppress;
 }
 
+// Between a deliberate sign-out and the next sign-in, the signed-out person's
+// views still have requests in flight; each comes back 401 and would leave a
+// "Could not load ..." on screen for whoever signs in next. Error toasts are
+// dropped for that window, and the toasts already showing are cleared when
+// the next person is in (core/useSignInLanding.ts).
+let suppressWhileSignedOut = false;
+let clearAll: (() => void) | null = null;
+export function setSignedOutToastSuppression(suppress: boolean): void {
+  suppressWhileSignedOut = suppress;
+}
+export function clearToasts(): void {
+  clearAll?.();
+}
+
 export function ToastProvider({ children }: { children: ReactNode }) {
   const { t } = useI18n();
   const [items, setItems] = useState<ToastItem[]>([]);
+  clearAll = () => setItems([]);
 
   const push = useCallback((msg: string, kind: "info" | "error" | "success" = "info") => {
-    if (kind === "error" && suppressErrorToasts) return;
+    if (kind === "error" && (suppressErrorToasts || suppressWhileSignedOut)) return;
     const id = ++seq;
     setItems((x) => [...x, { id, msg, kind }]);
     // Errors linger longer — they're the primary failure channel and 4s was

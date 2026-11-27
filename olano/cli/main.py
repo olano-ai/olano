@@ -6901,24 +6901,17 @@ def customers() -> None:
 @click.argument("agent")
 def customers_list(agent: str) -> None:
     """List an agent's customers with their mute/block state."""
-    from olano.memory.customer_memory import customers_base
-    from olano.memory.customer_prefs import read_prefs
+    from olano.memory.customer_prefs import list_customers
 
-    base = customers_base(agent)
-    folders = (
-        sorted((p for p in base.iterdir() if p.is_dir()), key=lambda p: p.name)
-        if base.is_dir()
-        else []
-    )
-    if not folders:
+    rows = list_customers(agent)
+    if not rows:
         console.print(f"No customers yet for agent '{agent}'.")
         return
-    for folder in folders:
-        prefs = read_prefs(folder)
-        flags = [f for f in ("blocked", "muted") if prefs.get(f)]
+    for row in rows:
+        flags = [f for f in ("blocked", "muted") if row.get(f)]
         suffix = f"  [{', '.join(flags)}]" if flags else ""
-        console.print(f"  {folder.name}{suffix}")
-    console.print(f"{len(folders)} customer(s).")
+        console.print(f"  {row['key']}{suffix}")
+    console.print(f"{len(rows)} customer(s).")
 
 
 @customers.command(name="block")

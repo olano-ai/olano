@@ -12,6 +12,7 @@ import { api, ApiError } from "../../core/api";
 import { useToast } from "../../ui/toast";
 import { Field } from "./Modal";
 import { Toggle, KvRow } from "./Toggle";
+import { WholeNumberInput } from "../../ui/WholeNumberInput";
 import { useT } from "../../core/i18n";
 import { STR } from "./strings";
 import type { AgentConfig, MonetizationConfig, MonetizationPlan } from "./types";
@@ -138,13 +139,10 @@ export function MonetizationTab({
           <Toggle checked={!!draft.enabled} onChange={(v) => setDraft((d) => ({ ...d, enabled: v }))} />
         </KvRow>
         <KvRow label={t("mon.trialDays")} hint={t("mon.trialDaysHint")}>
-          <input
-            type="number"
-            className="input"
+          <WholeNumberInput
             style={{ width: 90 }}
-            min={0}
             value={draft.trial_days ?? 3}
-            onChange={(e) => setDraft((d) => ({ ...d, trial_days: Math.max(0, Number(e.target.value) || 0) }))}
+            onChange={(n) => setDraft((d) => ({ ...d, trial_days: n }))}
           />
         </KvRow>
         <KvRow label={t("mon.gateGroups")} hint={t("mon.gateGroupsHint")}>
@@ -164,13 +162,7 @@ export function MonetizationTab({
       <Card title={t("mon.pricing")}>
         <div className="row" style={{ gap: 12, flexWrap: "wrap" }}>
           <Field label={t("mon.priceCents")} hint={t("mon.priceCentsHint")}>
-            <input
-              type="number"
-              className="input"
-              min={0}
-              value={plan.price_cents ?? 0}
-              onChange={(e) => setPlan({ price_cents: Math.max(0, Number(e.target.value) || 0) })}
-            />
+            <WholeNumberInput value={plan.price_cents ?? 0} onChange={(n) => setPlan({ price_cents: n })} />
           </Field>
           <Field label={t("mon.currency")}>
             <select
@@ -196,13 +188,7 @@ export function MonetizationTab({
             </select>
           </Field>
           <Field label={t("mon.starsAmount")} hint={t("mon.starsAmountHint")}>
-            <input
-              type="number"
-              className="input"
-              min={0}
-              value={plan.stars_amount ?? 0}
-              onChange={(e) => setPlan({ stars_amount: Math.max(0, Number(e.target.value) || 0) })}
-            />
+            <WholeNumberInput value={plan.stars_amount ?? 0} onChange={(n) => setPlan({ stars_amount: n })} />
           </Field>
         </div>
         <Field label={t("mon.stripePriceId")} hint={t("mon.stripePriceIdHint")}>

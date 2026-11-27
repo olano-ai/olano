@@ -28,7 +28,8 @@ import { BotNav, type BotNavHandle } from "./nav/BotNav";
 import { NewAgentButton } from "./nav/NewAgentButton";
 import { PwaBanners } from "./pwa/PwaBanners";
 import { useI18n } from "../core/i18n";
-import { getTheme, cycleTheme, type Theme } from "../core/theme";
+import { cycleTheme } from "../core/theme";
+import { useTheme } from "../core/useTheme";
 import { useToast } from "../ui/toast";
 import { BrandIcon, BrandWordmark } from "../ui/BrandMark";
 import { ThemeSelect, LanguageSelect } from "../ui/PreferenceSelects";
@@ -221,7 +222,7 @@ export function Layout() {
   // once here rather than per view — it only queries the document.
   useSettingFocus();
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [theme, setThemeState] = useState<Theme>(getTheme());
+  const theme = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(
     () => localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "true",
   );
@@ -512,7 +513,7 @@ export function Layout() {
             <NotificationBell />
             <button
               className="btn ghost sidebar-icon-btn theme-toggle"
-              onClick={() => setThemeState(cycleTheme())}
+              onClick={() => cycleTheme()}
               aria-label="Switch theme"
               title="Switch theme"
             >

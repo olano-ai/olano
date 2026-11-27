@@ -424,3 +424,24 @@ def test_assistant_rows_keep_their_segments_in_the_live_frame(captured) -> None:
     from olano.runtime import api as api_mod
 
     assert msg == api_mod._transcript_message("merli", dict(entry))
+
+
+def test_peer_inbound_row_names_the_calling_agent_as_sender():
+    """talk_to writes `from` and no `sender`; the chat labelled the peer's
+    question "You" in the callee's thread until the projection mapped it."""
+    from olano.runtime import api as api_mod
+
+    msg = api_mod._transcript_message(
+        "callee",
+        {"role": "peer_inbound", "from": "caller", "content": "Can you check the logs?"},
+    )
+    assert msg is not None
+    assert msg["sender"] == "caller"
+    assert msg["from"] == "caller"
+    # An explicit sender still wins, and a user row never borrows `from`.
+    explicit = api_mod._transcript_message(
+        "callee", {"role": "peer_inbound", "from": "caller", "sender": "Caller", "content": "x"}
+    )
+    assert explicit is not None and explicit["sender"] == "Caller"
+    user = api_mod._transcript_message("callee", {"role": "user", "from": "x", "content": "hi"})
+    assert user is not None and user["sender"] == ""

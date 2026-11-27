@@ -58,8 +58,28 @@ def _days_until(timestamp: float | None, *, now: float) -> int | None:
     return max(0, int((timestamp - now) // 86400))
 
 
-def make_subscription_tools(agent_name: str) -> list:
-    """Build the read-only subscription tool for *agent_name*."""
+def _trial_days_left(record, trial_days: int, *, now: float) -> int | None:
+    """Days left in a trial, by the same rule the paywall enforces.
+
+    The gate ends a trial at ``trial_start + trial_days`` (``gate._trial_end``)
+    and never sets ``current_period_end`` on a trial record, so reading that
+    field (as this tool once did) always found nothing and the tool could never
+    say how long a trial had left. Rounded up like the gate and ``/trial``.
+    """
+    from olano.monetization.gate import _trial_end
+
+    if trial_days <= 0 or not (record.trial_start or record.updated_at):
+        return None
+    end = _trial_end(record, trial_days)
+    return max(0, int((end - now) // 86400) + 1) if end > now else 0
+
+
+def make_subscription_tools(agent_name: str, *, trial_days: int = 3) -> list:
+    """Build the read-only subscription tool for *agent_name*.
+
+    *trial_days* is the agent's ``monetization.trial_days``, the length the
+    gate uses to end a trial.
+    """
 
     @tool
     def subscription_status() -> str:
@@ -89,10 +109,10 @@ def make_subscription_tools(agent_name: str) -> list:
         lines = [_STATUS_TEXT.get(record.status, str(record.status))]
 
         if record.status == EntitlementStatus.TRIAL:
-            # trial_start + the agent's trial_days is what the gate uses; report
-            # the period end when the store has one, else stay silent about
-            # timing rather than invent a date.
-            left = _days_until(record.current_period_end, now=now)
+            # trial_start + the agent's trial_days is what the gate uses. With
+            # no start on the record, stay silent about timing rather than
+            # invent a date.
+            left = _trial_days_left(record, trial_days, now=now)
             if left is not None:
                 lines.append(f"About {left} day(s) left.")
             lines.append("Send /subscribe to keep access when it ends.")

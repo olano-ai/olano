@@ -81,14 +81,66 @@ export const LIGHT_THEMES: readonly Theme[] = [
   "contrast",
 ];
 
-export function getTheme(): Theme {
-  const stored = localStorage.getItem(KEY);
+// One source of truth for "which theme is active". Every surface that shows
+// the current theme (the sidebar toggle's icon, the account menu's select, the
+// Config picker) reads it through `useTheme()` / `subscribeTheme`, and every
+// writer goes through `setTheme`, which notifies them all. Each surface used to
+// keep its own `useState(getTheme())`, so a change made in one left the others
+// showing the theme that was active when they mounted.
+
+const listeners = new Set<() => void>();
+
+function readStored(): Theme {
+  let stored: string | null = null;
+  try {
+    stored = localStorage.getItem(KEY);
+  } catch {
+    stored = null;
+  }
   return THEMES.includes(stored as Theme) ? (stored as Theme) : "dark";
 }
 
+let current: Theme | null = null;
+
+export function getTheme(): Theme {
+  if (current === null) current = readStored();
+  return current;
+}
+
+function emit(): void {
+  for (const fn of [...listeners]) fn();
+}
+
 export function setTheme(theme: Theme): void {
-  localStorage.setItem(KEY, theme);
-  document.documentElement.dataset.theme = theme;
+  current = theme;
+  try {
+    localStorage.setItem(KEY, theme);
+  } catch {
+    // Private mode or blocked storage: the choice still applies to this page.
+  }
+  if (typeof document !== "undefined") document.documentElement.dataset.theme = theme;
+  emit();
+}
+
+// Subscribe to theme changes (the shape `useSyncExternalStore` expects). A
+// change made in another tab arrives as a `storage` event and is applied here
+// too, so two open tabs never disagree about their own toggle icon.
+export function subscribeTheme(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
+  window.addEventListener("storage", (e: StorageEvent) => {
+    if (e.key !== KEY) return;
+    const next = readStored();
+    if (next === current) return;
+    current = next;
+    if (typeof document !== "undefined") document.documentElement.dataset.theme = next;
+    emit();
+  });
 }
 
 // Advance to the next theme in THEMES, wrapping around. Used by the sidebar

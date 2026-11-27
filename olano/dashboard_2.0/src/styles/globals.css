@@ -8470,6 +8470,45 @@ a.notification-row-main:focus-visible {
   color: var(--text-3);
 }
 
+/* The simple shell's approval in words (views/chat/approvalSummary.ts): one
+   sentence, the one detail that matters, the raw call behind a disclosure. */
+.approval-plain {
+  display: grid;
+  gap: 4px;
+}
+.approval-plain-say {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.approval-plain-target {
+  font-size: 12.5px;
+  color: var(--text-2, var(--text));
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.approval-plain-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.approval-plain-details {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+.approval-plain-details > summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.approval-plain-details[open] > summary {
+  margin-bottom: 6px;
+}
+.approval-plain-note {
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--text-3);
+}
+
 /* Browser tab: "Actions that don't ask" (views/browser/AutoApprovals.tsx). */
 .browser-aa { padding: 18px; margin-top: 14px; display: grid; gap: 10px; }
 .browser-aa-title {

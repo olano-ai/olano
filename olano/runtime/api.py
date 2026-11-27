@@ -682,6 +682,11 @@ def _transcript_message(
         body, tag_sender = split_sender_tag(str(msg.get("content") or ""))
         msg["content"] = body
         msg["sender"] = msg.get("sender") or tag_sender
+    # A peer agent's message (talk_to / runner write `from`, never `sender`).
+    # Without this the chat had no author for the row and labelled the other
+    # agent's question "You" in the callee's thread.
+    if role == "peer_inbound" and not msg["sender"]:
+        msg["sender"] = str(entry.get("from") or "")
     # The assistant turn's ordered text segments (runner.astream_events), so
     # the chat can put tool cards between the paragraphs they belong to.
     # Optional: a turn that never interleaved text with tools has none.
@@ -1672,7 +1677,30 @@ def _agent_config_path(name: str, create_dir: bool = False) -> Path:
 # read path was worse still: `_read_agent_config` rewrites the file when it
 # strips, so a hand-edited `acp_enabled: true` was deleted from disk by the next
 # dashboard read.
-_LEGACY_AGENT_KEYS: tuple[str, ...] = ("sandbox", "sandbox_backend")
+#
+# `sandbox` is NOT in this list any more: it was removed as an on/off scalar and
+# came back as a live block of resource ceilings (`SandboxResourceOverride`).
+# Listing it stripped a real `sandbox: {memory: "4g"}` on every dashboard read
+# and write, and it made every `save_agent_config` (which writes `sandbox: null`
+# for an unset block) followed by a page load rewrite the file, so Revisions
+# recorded a change to agents nobody touched. Only the old scalar spelling is
+# legacy now; `_strip_legacy_sandbox` drops that and leaves a block or a null.
+_LEGACY_AGENT_KEYS: tuple[str, ...] = ("sandbox_backend",)
+
+
+def _strip_legacy_sandbox(data: dict) -> bool:
+    """Drop the old on/off ``sandbox:`` scalar. True if it was removed.
+
+    A dict (resource ceilings) or an explicit null is a valid value and stays,
+    so reading an unchanged file never rewrites it.
+    """
+    if "sandbox" not in data:
+        return False
+    value = data["sandbox"]
+    if value is None or isinstance(value, dict):
+        return False
+    data.pop("sandbox", None)
+    return True
 
 
 # Map dashboard's friendly backend shorthands → modern BackendConfig blocks.
@@ -1793,6 +1821,8 @@ def _strip_legacy_keys(data: dict) -> tuple[dict, list[str]]:
         if k in data:
             data.pop(k, None)
             removed.append(k)
+    if _strip_legacy_sandbox(data):
+        removed.append("sandbox(scalar)")
     if _normalize_backend(data):
         removed.append("backend(string→block)")
     if _flatten_nested_channel_config(data):
@@ -2071,7 +2101,9 @@ def _read_agent_config(name: str) -> dict:
     data = data or {}
     data, removed = _strip_legacy_keys(data)
     if removed:
-        path.write_text(_serialize_agent_config(data), encoding="utf-8")
+        from olano.config.loader import write_agent_config_text
+
+        write_agent_config_text(path, _serialize_agent_config(data))
         logger.info("Migrated legacy fields %s in %s", removed, path)
     return data
 

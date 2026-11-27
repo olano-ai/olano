@@ -8,11 +8,13 @@
 // a restart — hence the note at the bottom.
 
 import { useEffect, useState } from "react";
+import { type ActionRow, mergeActionRows, rowsFromActions, savedShape } from "./actionRows";
 import { Copy } from "lucide-react";
 import { api } from "../../core/api";
 import { useT } from "../../core/i18n";
 import { useToast } from "../../ui/toast";
 import { Toggle, KvRow } from "./Toggle";
+import { CustomersCard } from "./CustomersCard";
 import { STR } from "./strings";
 import type { AgentConfig, CustomerServiceConfig, MessagePolicyConfig } from "./types";
 
@@ -177,12 +179,11 @@ function ActionsEditor({
 }) {
   const t = useT(STR);
   const toast = useToast();
-  const toRows = (a: Record<string, string>) =>
-    Object.entries(a).map(([name, script]) => ({ name, script }));
-  const [rows, setRows] = useState(toRows(actions));
-  useEffect(() => setRows(toRows(actions)), [actions]);
+  const [rows, setRows] = useState<ActionRow[]>(rowsFromActions(actions));
+  useEffect(() => setRows((prev) => mergeActionRows(prev, actions)), [actions]);
 
-  const dirty = JSON.stringify(toRows(actions)) !== JSON.stringify(rows);
+  const dirty =
+    JSON.stringify(rowsFromActions(actions)) !== JSON.stringify(savedShape(rows));
 
   function commit() {
     const next: Record<string, string> = {};
@@ -244,7 +245,7 @@ function ActionsEditor({
         <button
           className="btn ghost"
           style={{ padding: "3px 10px", fontSize: 12 }}
-          onClick={() => setRows((r) => [...r, { name: "", script: "" }])}
+          onClick={() => setRows((r) => [...r, { name: "", script: "", draft: true }])}
         >
           {t("mu.actionAdd")}
         </button>
@@ -606,6 +607,8 @@ export function MultiUserTab({
 
       {enabled ? (
         <>
+          <CustomersCard agent={cfg.name} />
+
           <Card title={t("mu.actionsTitle")}>
             <p className="muted" style={{ fontSize: 11, lineHeight: 1.5, margin: "0 0 10px" }}>
               {t("mu.actionsHint")}
