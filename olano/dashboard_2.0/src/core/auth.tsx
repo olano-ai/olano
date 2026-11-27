@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { api, ApiError } from "./api";
 import { refreshCapabilities } from "./capabilities";
+import { browserStore, recordSignOut } from "./signInLanding";
+import { setSignedOutToastSuppression } from "../ui/toast";
 import {
   DEFAULT_UI_MODE,
   type AgentAccessRow,
@@ -196,7 +198,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(async () => {
-    await api.post("/api/auth/logout");
+    // The views on screen still have requests in flight; their 401s are this
+    // person's leftovers, not news for whoever signs in next.
+    setSignedOutToastSuppression(true);
+    try {
+      await api.post("/api/auth/logout");
+    } catch (e) {
+      setSignedOutToastSuppression(false); // still signed in: errors are news again
+      throw e;
+    }
+    // Whoever signs in next on this browser starts at home, not on the page
+    // this person was reading (core/signInLanding.ts).
+    recordSignOut(browserStore());
     await refresh();
   }, [refresh]);
 

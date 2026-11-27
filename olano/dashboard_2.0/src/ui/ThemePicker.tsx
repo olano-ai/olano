@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { THEMES, getTheme, setTheme, type Theme } from "../core/theme";
+import { THEMES, setTheme, type Theme } from "../core/theme";
+import { useTheme } from "../core/useTheme";
 import { useI18n } from "../core/i18n";
 import { SunIcon, MoonIcon, ContrastIcon, PaletteIcon, ZapIcon, CheckIcon } from "./icons";
 
@@ -22,7 +22,7 @@ export function themeIcon(id: Theme, size = 15) {
 // preference, so this is intentionally NOT wired to any server-side form.
 export function ThemePicker({ onChange }: { onChange?: (theme: Theme) => void }) {
   const { t } = useI18n();
-  const [theme, setThemeState] = useState<Theme>(getTheme());
+  const theme = useTheme();
   return (
     <>
       {THEMES.map((id) => (
@@ -32,7 +32,6 @@ export function ThemePicker({ onChange }: { onChange?: (theme: Theme) => void })
           className="menu-item"
           onClick={() => {
             setTheme(id);
-            setThemeState(id);
             onChange?.(id);
           }}
         >

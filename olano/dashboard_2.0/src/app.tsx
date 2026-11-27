@@ -18,6 +18,7 @@ import { loadRoute, useRouteChunkPrefetch } from "./core/routeChunks";
 import { useIdlePrefetch } from "./core/catalogResource";
 import { useConnectNotices } from "./views/chat/connectNotices";
 import { useThreadSync } from "./views/chat/threadSync";
+import { useSignInLanding } from "./core/useSignInLanding";
 import { prefetchArchetypes } from "./views/agents/archetypes";
 import { importChunk } from "./core/chunkRecovery";
 import type { ReactNode } from "react";
@@ -146,6 +147,9 @@ function GatedApp() {
   // lands in the shared chat store as it happens, so a thread open here is
   // never behind what a reload would show.
   useThreadSync(phase === "ready" && !onboardingRequired);
+  // After a sign-out, or a sign-in as someone else, start at home instead of
+  // the previous person's page. True while that decision is being applied.
+  const holdingLanding = useSignInLanding(phase === "ready", user?.id ?? null);
 
   if (phase === "loading") {
     return (
@@ -156,6 +160,13 @@ function GatedApp() {
   }
   if (phase === "setup") return <BootstrapView />;
   if (phase === "login") return <LoginView />;
+  if (holdingLanding) {
+    return (
+      <div className="auth-wrap">
+        <div className="spinner" />
+      </div>
+    );
+  }
   // First admin sign-in on a deployed instance → the guided setup wizard
   // replaces the whole app until completed or skipped (server-side flag via
   // /api/auth/me, so it follows the deployment, not this browser).

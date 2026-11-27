@@ -814,7 +814,7 @@ export function SimpleChatView({
                   )}
 
                   {m.approvals?.map((ap, idx) => (
-                    <ApprovalCard key={idx} state={ap} onDecide={(c) => resolveApproval(m.id, idx, c)} />
+                    <ApprovalCard key={idx} state={ap} plain onDecide={(c) => resolveApproval(m.id, idx, c)} />
                   ))}
 
                   {mine ? (

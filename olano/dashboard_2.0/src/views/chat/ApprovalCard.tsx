@@ -4,6 +4,7 @@ import type { ApprovalAction } from "../../core/types";
 import { needsPersonEveryTime } from "../browser/approval";
 import { displayUrl } from "../browser/LiveScreen";
 import { STR } from "./strings";
+import { summarizeApproval } from "./approvalSummary";
 
 export type ApprovalChoice = "once" | "all" | "reject";
 
@@ -76,9 +77,13 @@ function browserAsk(a: ApprovalAction): BrowserAsk | null {
 export function ApprovalCard({
   state,
   onDecide,
+  plain = false,
 }: {
   state: ApprovalState;
   onDecide: (choice: ApprovalChoice) => void;
+  /** The simple shell: say what the agent wants to do in words, with the
+   *  tool name and raw arguments behind a disclosure (approvalSummary.ts). */
+  plain?: boolean;
 }) {
   const t = useT(STR);
   const { actions, resolved, choice, auto } = state;
@@ -141,6 +146,34 @@ export function ApprovalCard({
             );
           }
           const args = argsString(a);
+          if (plain) {
+            const sum = summarizeApproval(a.name, a.args ?? a.tool_input ?? a.input);
+            return (
+              <div className="approval-row approval-plain" key={i} data-testid="approval-plain">
+                <div className="approval-plain-say">
+                  {t(`approval.say.${sum.say}`, { tool: sum.tool, service: sum.service || sum.tool })}
+                </div>
+                {sum.target && (
+                  <div className="approval-plain-target">
+                    <span className="muted">{t(`approval.target.${sum.target.key}`)}:</span>{" "}
+                    <span className="approval-plain-value">{sum.target.value.slice(0, 200)}</span>
+                  </div>
+                )}
+                <details className="approval-plain-details">
+                  <summary>{t("approval.details")}</summary>
+                  <div className="approval-row-head">
+                    <span className="approval-row-name">{a.name || "tool"}</span>
+                    {a.risk && (
+                      <span className="badge" style={{ padding: "0 6px", color: RISK_COLOR[a.risk] || "var(--text-3)" }}>
+                        {a.risk}
+                      </span>
+                    )}
+                  </div>
+                  {args && <pre className="approval-row-args">{args.slice(0, 600)}</pre>}
+                </details>
+              </div>
+            );
+          }
           return (
             <div className="approval-row" key={i}>
               <div className="approval-row-head">
@@ -160,6 +193,7 @@ export function ApprovalCard({
           );
         })}
       </div>
+      {plain && !needsPersonEveryTime(actions) && <div className="approval-plain-note">{t("approval.plainNote")}</div>}
       <div className="approval-actions">
         <button className="btn" style={{ padding: "4px 11px", fontSize: 12 }} onClick={() => onDecide("reject")}>
           <X size={13} /> {t("approval.reject")}

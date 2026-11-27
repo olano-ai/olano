@@ -67,6 +67,16 @@ function writeLastAgent(name: string): void {
   }
 }
 
+// Drop the remembered agent: the next person to sign in on this browser starts
+// from their own roster rather than the previous person's choice.
+export function forgetLastAgent(): void {
+  try {
+    localStorage.removeItem(LAST_AGENT_KEY);
+  } catch {
+    // Blocked storage: nothing was remembered.
+  }
+}
+
 export function CurrentAgentProvider({
   children,
   shell = "dashboard",
