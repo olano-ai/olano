@@ -46,7 +46,7 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
     if (PORTRAIT) await drawer(true);
     const profile = app.locator('.profile-btn').first();
     await tap(profile, { move: 700 });
-    await sleep(600);
+    await sleep(PORTRAIT ? 1000 : 600);   // the menu settles before the pointer measures the dropdown
     const select = app.locator('select[aria-label="Theme"]').first();
     await point(select, { move: 600 });
     await sleep(150);

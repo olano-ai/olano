@@ -110,7 +110,7 @@ export async function run(h) {
   await sleep(1200);
   if (PORTRAIT) await drawer();
   await tap(app.locator('.profile-btn'), { move: 800 });
-  await sleep(2600);
+  await sleep(2200);
   await tap(app.locator('.profile-btn'), { move: 300 });
   await sleep(400);
 

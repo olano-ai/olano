@@ -57,7 +57,7 @@ function script(name, args, env = {}) {
   });
 }
 
-export async function run({ app, S, sleep, tap, point, type, keyboardOff, scroll, scrollTo, nav, term, mark, PORTRAIT }) {
+export async function run({ page, app, S, sleep, tap, point, type, keyboardOff, scroll, scrollTo, nav, term, mark, PORTRAIT }) {
   // 0. the Stripe key, in Lumi's vault
   mark('vault');
   await S('appIn');
@@ -87,10 +87,17 @@ export async function run({ app, S, sleep, tap, point, type, keyboardOff, scroll
   await tap(sw('Telegram Stars'), { move: 500 });
   const field = (label) => app.locator('.field', { has: app.getByText(label, { exact: true }) }).locator('input, textarea').first();
   await scrollTo(app.getByText('Pricing', { exact: true }).first(), PORTRAIT ? 70 : 90, 900);
-  await field('Price (cents)').fill('');
-  await type(field('Price (cents)'), '900', { cps: 10 });
-  await field('Telegram Stars amount').fill('');
-  await type(field('Telegram Stars amount'), '450', { cps: 10 });
+  // A number field here never empties (it falls back to 0), so the take selects the old value and types over it
+  const retype = async (loc, text) => {
+    await tap(loc, { move: 600 });
+    await loc.focus();
+    await page.keyboard.press('ControlOrMeta+A');
+    if (PORTRAIT) { await S('keyboard', true); await S('hide'); await sleep(450); }
+    for (const ch of text) { if (PORTRAIT) await S('key', ch); await page.keyboard.type(ch); await sleep(110); }
+    await sleep(250);
+  };
+  await retype(field('Price (cents)'), '900');
+  await retype(field('Telegram Stars amount'), '450');
   await type(field('Stripe Price ID'), PRICE_ID, { cps: 40 });
   await field('Product name').fill('');
   await type(field('Product name'), 'Lumi Spanish, monthly', { cps: 34 });

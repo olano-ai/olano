@@ -157,7 +157,7 @@ TEAM = {
                         "tool": "talk_to_agent",
                         "args": {"agent": "tilde", "message": AREA_Q},
                         "result": _ask_tilde,
-                        "took": 2.6,
+                        "took": 1.8,
                         "peer": {"to": "tilde", "message": AREA_Q, "reply": AREA_A},
                     },
                     {
@@ -165,9 +165,9 @@ TEAM = {
                         "args": {"file_path": "costs/fenwick-estimate.md"},
                         "write": {"costs/fenwick-estimate.md": ESTIMATE},
                         "result": "Wrote costs/fenwick-estimate.md",
-                        "took": 1.2,
+                        "took": 0.6,
                     },
-                    {"text": COST_REPLY, "wps": 16},
+                    {"text": COST_REPLY, "wps": 24},
                 ]
             }
         ],
