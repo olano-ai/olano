@@ -69,7 +69,7 @@ export async function run({ page, app, S, sleep, tap, point, type, keyboardOff, 
   await point(key, { move: 900 });
   await sleep(1400);
   await point(app.getByText('Stripe sandbox (test mode) secret key').first(), { move: 700 });
-  await sleep(2400);
+  await sleep(4600);
 
   // 1. the plan: trial, Stripe price, Stars amount; saved, then a restart
   mark('plan');
@@ -183,7 +183,7 @@ export async function run({ page, app, S, sleep, tap, point, type, keyboardOff, 
     await sleep(140);
   }
   await term.prompt();
-  await sleep(PORTRAIT ? 5200 : 5600);
+  await sleep(PORTRAIT ? 6400 : 6800);
 
   mark('end');
   await S('caption', null);

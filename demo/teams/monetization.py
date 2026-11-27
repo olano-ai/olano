@@ -6,7 +6,7 @@ restarts the agent; the Stripe secret key is in Lumi's vault, saved through the 
 
 The key is the **test-mode** key of a Stripe sandbox (``OLANO_STRIPE_SANDBOX_SECRET_KEY``,
 ``sk_test_``; this file refuses anything else), and the price is a real test-mode price created in
-that sandbox for this video (``.work/monetization-stripe-setup.py``): product "Olano demo: Lumi
+that sandbox for this video (``assets/monetization-stripe-setup.py``): product "Olano demo: Lumi
 Spanish tutor monthly", $9 a month. No live key is ever read: every ``*LIVE*`` Stripe variable is
 removed from this process's environment before anything else runs.
 
