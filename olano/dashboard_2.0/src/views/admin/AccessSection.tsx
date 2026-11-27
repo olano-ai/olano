@@ -375,7 +375,7 @@ function DrillIn({
   );
 }
 
-export function AccessSection() {
+export function AccessSection({ revision = 0 }: { revision?: number }) {
   const t = useT(STR);
   const toast = useToast();
   const confirm = useConfirm();
@@ -390,7 +390,9 @@ export function AccessSection() {
       .then(setData)
       .catch(() => toast.push(t("access.toast.loadFailed"), "error"));
   }, [toast, t]);
-  useEffect(load, [load]);
+  // `revision` moves when the Users section changes the people list, so a
+  // person created a moment ago is in the overview and the Grant dialog.
+  useEffect(load, [load, revision]);
 
   const byId = useMemo(() => {
     const m = new Map<string, User>();

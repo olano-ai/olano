@@ -47,6 +47,12 @@ interface CreateUserResponse {
 
 export function AdminView() {
   const t = useT(STR);
+  // Bumped whenever the people list changes (created, invited, edited,
+  // removed). The access overview has its own fetch, and it used to keep the
+  // roster it loaded on mount, so a person invited a moment ago was missing
+  // from its Grant access dialog until the page was reloaded.
+  const [peopleRevision, setPeopleRevision] = useState(0);
+  const peopleChanged = useCallback(() => setPeopleRevision((n) => n + 1), []);
   return (
     <>
       <div className="topbar">
@@ -57,8 +63,8 @@ export function AdminView() {
         <p className="muted" style={{ margin: "2px 0 0" }}>
           {t("page.subtitle")}
         </p>
-        <UsersSection />
-        <AccessSection />
+        <UsersSection onChanged={peopleChanged} />
+        <AccessSection revision={peopleRevision} />
         {/* Rendered again. It was hidden on the reasoning that plan limits were
             "practically unlimited" — and then one bit: an agent refused every
             turn against a monthly token ceiling nothing on the box named, warned
@@ -242,7 +248,7 @@ function TitleCell({
   );
 }
 
-function UsersSection() {
+function UsersSection({ onChanged }: { onChanged?: () => void }) {
   const toast = useToast();
   const confirm = useConfirm();
   const t = useT(STR);
@@ -265,6 +271,12 @@ function UsersSection() {
       .catch(() => toast.push(t("users.toast.loadFailed"), "error"));
   }, [toast, t]);
   useEffect(load, [load]);
+  // After a change to the people list: refresh it here and tell the access
+  // overview, which reads the same people.
+  const afterChange = useCallback(() => {
+    load();
+    onChanged?.();
+  }, [load, onChanged]);
 
   async function create(e: FormEvent) {
     e.preventDefault();
@@ -283,7 +295,7 @@ function UsersSection() {
       setTitle("");
       setPassword("");
       setIsAdmin(false);
-      load();
+      afterChange();
       if (res.invite) {
         setLinkInfo({ payload: res.invite, kind: "invite" });
       } else {
@@ -328,7 +340,7 @@ function UsersSection() {
       // interface would otherwise stay in the old one until a manual reload.
       // Langfuse links ride /api/auth/me the same way.
       if (("ui_mode" in body || "langfuse_links" in body) && u.id === auth.user?.id) void auth.refresh();
-      load();
+      afterChange();
     } catch (err) {
       toast.push(
         err instanceof ApiError && err.detail === "last_admin"
@@ -350,7 +362,7 @@ function UsersSection() {
     if (!ok) return;
     try {
       await api.del(`/api/admin/users/${u.id}`);
-      load();
+      afterChange();
     } catch (err) {
       toast.push(
         err instanceof ApiError && err.detail === "last_admin"
