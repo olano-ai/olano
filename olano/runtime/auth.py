@@ -514,7 +514,18 @@ def _member_forbidden(request: Request) -> bool:
         and "/threads" not in path
         and "/access" not in path
         and "/vault/" not in path
+        and not _is_agent_customers_path(path)
     )
+
+
+def _is_agent_customers_path(path: str) -> bool:
+    """``/api/agents/{name}/customers/...``: owner-or-admin, checked in-handler.
+
+    Matched by segment, never by substring, so an agent that happens to be
+    named ``customers`` does not exempt its own config routes.
+    """
+    parts = path.split("/")
+    return len(parts) > 5 and parts[1:3] == ["api", "agents"] and parts[4] == "customers"
 
 
 # ── dependencies ─────────────────────────────────────────────────────────────

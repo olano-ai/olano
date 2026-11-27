@@ -83,17 +83,84 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+def _customer_folder(agent_name: str, customer_key: str) -> Path | None:
+    """The folder a customer key names, or None when it names no customer.
+
+    A key is one folder name directly under the agent's ``customers/`` root.
+    Anything else (a path separator, ``..``, a hidden name) is refused before
+    it reaches the filesystem: the key arrives from the dashboard API and the
+    CLI, and ``customers_base / "../.."`` would otherwise write a
+    preferences file outside the customer store.
+    """
+    from olano.memory.customer_memory import customers_base
+
+    key = str(customer_key or "")
+    if not key or key.startswith(".") or "/" in key or "\\" in key or "\x00" in key:
+        return None
+    folder = customers_base(agent_name) / key
+    if not folder.is_dir() or folder.is_symlink():
+        return None
+    return folder
+
+
+def _last_active(folder: Path) -> float | None:
+    """Newest mtime among the folder and its memory files, best-effort."""
+    newest: float | None = None
+    for candidate in (folder, folder / "MEMORY.md", folder / "memories"):
+        try:
+            mtime = candidate.stat().st_mtime
+        except OSError:
+            continue
+        newest = mtime if newest is None else max(newest, mtime)
+    return newest
+
+
+def list_customers(agent_name: str) -> list[dict]:
+    """Every end user a multi-user agent has a folder for, with their flags.
+
+    One row per ``customers/<platform>-<id>/`` folder, sorted by key:
+    ``key`` (the folder name, what :func:`set_blocked` takes), ``platform``
+    and ``user_id`` (from the identity sidecar, else the folder name),
+    ``blocked`` / ``muted`` and their timestamps, and ``last_active`` (epoch
+    seconds, the newest write to the folder or its memory files). Read-only;
+    an agent with no folder returns ``[]``.
+    """
+    from olano.memory.customer_memory import customers_base, load_customer_identity
+
+    base = customers_base(agent_name)
+    if not base.is_dir():
+        return []
+    rows: list[dict] = []
+    for folder in sorted(base.iterdir(), key=lambda p: p.name):
+        if folder.name.startswith(".") or folder.is_symlink() or not folder.is_dir():
+            continue
+        prefs = read_prefs(folder)
+        identity = load_customer_identity(folder)
+        rows.append(
+            {
+                "key": folder.name,
+                "platform": identity[0] if identity else "",
+                "user_id": identity[1] if identity else folder.name,
+                "blocked": bool(prefs.get("blocked")),
+                "muted": bool(prefs.get("muted")),
+                "blocked_at": prefs.get("blocked_at") if prefs.get("blocked") else None,
+                "muted_at": prefs.get("muted_at") if prefs.get("muted") else None,
+                "last_active": _last_active(folder),
+            }
+        )
+    return rows
+
+
 def set_blocked(agent_name: str, customer_key: str, blocked: bool) -> bool:
     """Operator-side block/unblock of one customer folder by its key.
 
     Never exposed as a model tool. Returns False when the folder does not
-    exist — blocking someone who never contacted the agent is a no-op, and
-    silently creating a folder for them would invent a phantom customer.
+    exist (blocking someone who never contacted the agent is a no-op, and
+    silently creating a folder for them would invent a phantom customer) and
+    when the key is not a plain folder name (see :func:`_customer_folder`).
     """
-    from olano.memory.customer_memory import customers_base
-
-    folder = customers_base(agent_name) / customer_key
-    if not folder.is_dir():
+    folder = _customer_folder(agent_name, customer_key)
+    if folder is None:
         return False
     updates: dict = {"blocked": bool(blocked)}
     updates["blocked_at" if blocked else "unblocked_at"] = _now()

@@ -13,6 +13,7 @@ import { api } from "../../core/api";
 import { useT } from "../../core/i18n";
 import { useToast } from "../../ui/toast";
 import { Toggle, KvRow } from "./Toggle";
+import { CustomersCard } from "./CustomersCard";
 import { STR } from "./strings";
 import type { AgentConfig, CustomerServiceConfig, MessagePolicyConfig } from "./types";
 
@@ -606,6 +607,8 @@ export function MultiUserTab({
 
       {enabled ? (
         <>
+          <CustomersCard agent={cfg.name} />
+
           <Card title={t("mu.actionsTitle")}>
             <p className="muted" style={{ fontSize: 11, lineHeight: 1.5, margin: "0 0 10px" }}>
               {t("mu.actionsHint")}
