@@ -20,7 +20,7 @@ export const voice = [
   'Cove runs the bookings desk. It updates the price list, saves the school discount to memory, and asks before changing its own instructions.',
   'In Revisions, that turn is already a commit under Cove\'s name, next to earlier work by Tide and Gull.',
   'Open the commit to see its three files, and the new price, line by line.',
-  'A note of Tide\'s holds a database password, so history holds that file back. Secrets belong in the Vault.',
+  'Tide\'s note holds a password, so history holds it back. Secrets go in the Vault.',
   'For a copy off-site, connect a private, empty GitHub repository with an access token.',
   'Then choose when it pushes: by hand, once a day, or after every commit.',
   'Olano. Every change, on the record.',
@@ -79,7 +79,7 @@ export async function run({ app, S, sleep, tap, point, type, send, keyboardOff, 
   await scrollTo(held, PORTRAIT ? 60 : 90, 1300);
   await sleep(500);
   await point(held.locator('code').first(), { move: 800 });
-  await sleep(4200);
+  await sleep(4800);
 
   mark('github');
   await S('caption', 4);

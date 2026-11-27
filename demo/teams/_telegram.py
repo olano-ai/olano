@@ -37,7 +37,12 @@ _ids = itertools.count(1000)
 class RecordingBot:
     """The adapter's ``telegram.Bot``, minus the network: each Bot API call is recorded."""
 
-    def __init__(self) -> None:
+    def __init__(self, username: str = "demo_bot", bot_id: int = 8000000001) -> None:
+        # What getMe would have told the adapter about its own bot.
+        self.username = username
+        self.id = bot_id
+        self.first_name = username
+        self.is_bot = True
         self.calls: list[dict[str, Any]] = []
         self.lock = threading.Lock()
 
@@ -86,12 +91,14 @@ def _plain(value: Any) -> Any:
 class TelegramSeam:
     """One agent's Telegram adapter, wired to the runtime's own platform handler."""
 
-    def __init__(self, agent: str, runner: Any, extra: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self, agent: str, runner: Any, bot_username: str, extra: dict[str, Any] | None = None
+    ) -> None:
         self.agent = agent
         self.runner = runner
         self.extra = extra or {}
         self.adapter: Any = None
-        self.bot = RecordingBot()
+        self.bot = RecordingBot(bot_username)
         self._update_ids = itertools.count(880001)
         self._message_ids = itertools.count(41)
 
@@ -231,10 +238,29 @@ def channel_runner(runner: Any) -> Any:
                 if row.get("role") == "user" and name and name != str(ctx.user_id or ""):
                     row["sender"] = name
             super()._persist(thread_id, row)
+            publish_thread_updated(self.config.name, thread_id, {"ts": _iso(), **row})
+
+        async def astream_events(self, message: Any, thread_id: str | None = None, **kw: Any):
+            from olano.core.thread_events import publish_thread_activity
+            from olano.core.thread_labels import channel_for_request
+            from olano.security.request_context import get_request_context
+
+            channel = channel_for_request(get_request_context())
+            tid = thread_id or ""
+            publish_thread_activity(self.config.name, tid, "thinking", channel=channel)
             try:
-                publish_thread_updated(self.config.name, thread_id, {"ts": _iso(), **row})
-            except Exception:
-                pass
+                async for item in super().astream_events(message, thread_id=thread_id, **kw):
+                    yield item
+            finally:
+                publish_thread_activity(self.config.name, tid, "idle", channel=channel)
+
+    # The runtime's publisher for those frames, as ``RuntimeServer`` binds it at boot
+    # (``talk_to.bind_runtime(self, publisher=_push_event)``); the launcher binds none.
+    from olano.runtime.api import _push_event
+    from olano.tools import talk_to
+
+    if getattr(talk_to, "_PUBLISHER", None) is None:
+        talk_to._PUBLISHER = _push_event
 
     new = ChannelRunner.__new__(ChannelRunner)
     new.__dict__.update(runner.__dict__)

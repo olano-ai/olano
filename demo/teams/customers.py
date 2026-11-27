@@ -78,7 +78,7 @@ ORDERS = [
         "order": "II-2044",
         "platform": "telegram",
         "customer": str(MAYA["id"]),
-        "items": ["Linen-bound sketchbook, A4", "Brass pencil sharpener"],
+        "items": ["Linen-bound A4 sketchbook", "Brass pencil sharpener"],
         "status": "shipped",
         "carrier": "Parcelway",
         "tracking": "PW 4471 2208 93",
@@ -259,6 +259,6 @@ def after_seed(home: Path, gateway: Any, **_: object) -> None:
     loop = __main__.LOOP
     runner = _telegram.channel_runner(gateway._runners[AGENT])
     gateway._runners[AGENT] = runner
-    seams = {AGENT: _telegram.TelegramSeam(AGENT, runner)}
+    seams = {AGENT: _telegram.TelegramSeam(AGENT, runner, "InkwellIvyBot")}
     _telegram.attach_all(seams, loop)
     _telegram.serve(seams, loop, PORT)
