@@ -61,6 +61,21 @@ def test_describe_recognizes_memory_search():
     assert desc.detail == "telegram token"
 
 
+def test_describe_labels_customer_memory_tools_by_what_they_do():
+    """`remember` saves a fact; it used to read "Searching memory"."""
+    saved = describe_tool("remember", {"fact": "prefers email", "section": "General"})
+    assert saved.verb == "Saving to memory"
+    assert saved.detail == "prefers email"
+    assert describe_tool("memory_save", {"fact": "x"}).verb == "Saving to memory"
+    recall = describe_tool("recall", {"query": "shipping address"})
+    assert recall.verb == "Searching memory"
+    assert recall.detail == "shipping address"
+    assert describe_tool("recall_all", {}).verb == "Reading memory"
+    forget = describe_tool("forget_me", {})
+    assert forget.verb == "Forgetting what is stored"
+    assert describe_tool("memory_read", {}).verb == "Reading memory"
+
+
 def test_describe_recognizes_web_search():
     desc = describe_tool("web_search", {"query": "spiderman showtimes"})
     assert desc.verb == "Searching the web"
