@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from "react";
-import { THEMES, getTheme, setTheme, type Theme } from "../core/theme";
+import { type ReactNode } from "react";
+import { THEMES, setTheme, type Theme } from "../core/theme";
+import { useTheme } from "../core/useTheme";
 import { LANGS, useI18n, type Lang } from "../core/i18n";
 import { SunIcon, LanguageIcon } from "./icons";
 
@@ -26,7 +27,7 @@ function PrefRow({ icon, label, children }: { icon: ReactNode; label: string; ch
 
 export function ThemeSelect({ label }: { label: string }) {
   const { t } = useI18n();
-  const [theme, setThemeState] = useState<Theme>(getTheme());
+  const theme = useTheme();
   return (
     <PrefRow icon={<SunIcon size={15} strokeWidth={1.75} />} label={label}>
       <select
@@ -34,9 +35,7 @@ export function ThemeSelect({ label }: { label: string }) {
         aria-label={label}
         value={theme}
         onChange={(e) => {
-          const next = e.target.value as Theme;
-          setTheme(next);
-          setThemeState(next);
+          setTheme(e.target.value as Theme);
         }}
       >
         {THEMES.map((id) => (

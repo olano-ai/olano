@@ -208,3 +208,41 @@ def test_simple_account_menu_controls_are_quiet(page) -> None:
     menu = page.locator(".simple-account-menu")
     menu.wait_for(state="visible", timeout=10_000)
     _assert_quiet_controls(page, menu)
+
+
+def test_the_sidebar_theme_icon_follows_the_account_menu(page) -> None:
+    """The sidebar's theme button wears the active theme's icon, and it used
+    to keep its own copy of the theme: picking one from the account menu (or
+    Config) left the button showing the theme that was active before."""
+    _set_ui_mode("advanced")
+    page.evaluate("() => localStorage.setItem('lc-theme', 'dark')")
+    page.reload()
+    wait_for_app_shell(page)
+    if page.locator(HAMBURGER).is_visible():
+        open_mobile_nav(page)
+    toggle = page.locator(".theme-toggle")
+    before = toggle.inner_html()
+
+    wrap = page.locator(".profile-menu-wrap")
+    wrap.locator("button").first.click()
+    menu = wrap.locator(".menu")
+    menu.wait_for(state="visible", timeout=10_000)
+    # Olano Dark wears the sun; Volt wears the bolt.
+    menu.locator("select.menu-select").first.select_option("volt")
+    assert page.evaluate("() => document.documentElement.dataset.theme") == "volt"
+    page.wait_for_function(
+        "(before) => document.querySelector('.theme-toggle')?.innerHTML !== before", arg=before
+    )
+
+    # And the button's own cycle continues from the theme the menu picked.
+    if page.locator(HAMBURGER).is_visible():
+        # On a phone Escape closes the nav drawer the button lives in as well
+        # as the menu: let it close, then open it again.
+        page.keyboard.press("Escape")
+        page.locator(".app-shell.mobile-nav-open").wait_for(state="detached", timeout=5_000)
+        open_mobile_nav(page)
+    else:
+        page.keyboard.press("Escape")
+    toggle.click()
+    assert page.evaluate("() => document.documentElement.dataset.theme") == "bw"
+    page.evaluate("() => localStorage.setItem('lc-theme', 'dark')")
