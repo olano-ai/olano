@@ -682,6 +682,11 @@ def _transcript_message(
         body, tag_sender = split_sender_tag(str(msg.get("content") or ""))
         msg["content"] = body
         msg["sender"] = msg.get("sender") or tag_sender
+    # A peer agent's message (talk_to / runner write `from`, never `sender`).
+    # Without this the chat had no author for the row and labelled the other
+    # agent's question "You" in the callee's thread.
+    if role == "peer_inbound" and not msg["sender"]:
+        msg["sender"] = str(entry.get("from") or "")
     # The assistant turn's ordered text segments (runner.astream_events), so
     # the chat can put tool cards between the paragraphs they belong to.
     # Optional: a turn that never interleaved text with tools has none.
