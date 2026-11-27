@@ -6,17 +6,17 @@ agent. Everything about people goes through the product's own auth: the first ad
 admin, and his seat by ``/api/agents/{name}/access``. Ines is invited during the take, from the
 Admin page, and signs in through her invite link.
 
-When cobb (Ines's agent) asks tilde (Tom's agent) for something, the step runs tilde's own runner
-on the pair thread the real ``talk_to_agent`` uses (``acp::cobb::tilde``), so the exchange is in
-tilde's transcript; tilde's later answer to Tom is read from that transcript.
+When cobb (Ines's agent) asks tilde (Tom's agent) for something, tilde's side of the exchange is
+written on the pair thread the real ``talk_to_agent`` uses (``acp::cobb::tilde``), with the rows the
+real runner writes for a peer turn, so Tom finds it in his own agent's chat list.
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +31,7 @@ TOM = {
     "email": "tom@brightmoor.example",
     "password": "brightmoor-tom-1",
     "username": "tom-reyes",
-    }
+}
 
 AREA_Q = "What is the floor area of the Fenwick extension in plan revision C?"
 AREA_A = (
@@ -64,38 +64,29 @@ Floor area: 42 m² (plan revision C, from tilde)
 PAIR_THREAD = "acp::cobb::tilde"
 
 
-def _serve() -> Any:
-    """The running serve.py (it is ``__main__``): its gateway and loop."""
-    return sys.modules["__main__"]
-
-
 def _ask_tilde(ctx: dict) -> str:
-    """tilde answers cobb on the pair thread, with its own runner, on the runtime's loop."""
-    serve = _serve()
-    runner = serve.GATEWAY._runners["tilde"]
-    fut = asyncio.run_coroutine_threadsafe(
-        runner.ainvoke(AREA_Q, thread_id=PAIR_THREAD), serve.LOOP
-    )
-    return fut.result(timeout=120)
+    """tilde answers cobb on the pair thread the real ``talk_to_agent`` runs it on.
 
-
-def _what_came_in(ctx: dict) -> str:
-    """tilde tells Tom what it answered for a colleague's agent, from its own transcript."""
+    The rows are the ones the real runner writes for a peer turn (``peer_inbound`` from the
+    caller, then the reply with ``via_peer``), so tilde's own chat list shows the exchange.
+    """
     home = Path(os.environ["LIONCLAW_HOME"])
-    path = home / "sessions" / "tilde" / f"{PAIR_THREAD}.jsonl"
-    rows = []
-    if path.is_file():
-        rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
-    asked = next((r["content"] for r in rows if r.get("role") == "user"), "")
-    answered = next((r["content"] for r in reversed(rows) if r.get("role") == "assistant"), "")
-    if not asked:
-        return "Nothing came in for you today. No one else's agent has asked me anything."
-    return (
-        "One request today, from **cobb**, Ines's agent, working on the Fenwick costing.\n\n"
-        f"> {asked}\n\n"
-        f"I answered from plan revision C:\n\n> {answered}\n\n"
-        "Nothing else was shared. Your drawings stayed in your workspace."
-    )
+    sessions = home / "sessions" / "tilde"
+    sessions.mkdir(parents=True, exist_ok=True)
+    now = datetime.now(timezone.utc)
+    rows = [
+        {"ts": now.isoformat(), "role": "peer_inbound", "from": "cobb", "content": AREA_Q},
+        {
+            "ts": (now + timedelta(seconds=2)).isoformat(),
+            "role": "assistant",
+            "content": AREA_A,
+            "via_peer": "cobb",
+        },
+    ]
+    with (sessions / f"{PAIR_THREAD}.jsonl").open("a", encoding="utf-8") as fh:
+        for row in rows:
+            fh.write(json.dumps(row, ensure_ascii=False) + "\n")
+    return AREA_A
 
 
 TEAM = {
@@ -170,10 +161,6 @@ TEAM = {
                     {"text": COST_REPLY, "wps": 16},
                 ]
             }
-        ],
-        "tilde": [
-            {"match": "floor area", "steps": [{"wait": 0.6}, {"text": AREA_A, "wps": 30}]},
-            {"steps": [{"wait": 0.8}, {"text": _what_came_in, "wps": 15}]},
         ],
     },
 }

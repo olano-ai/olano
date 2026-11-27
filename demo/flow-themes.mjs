@@ -39,7 +39,7 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
     else { await tap(app.locator('.mobile-nav-backdrop'), { move: 500, at: P(0.92, 0.55) }); await sleep(500); }
   };
   /** The account menu's Theme dropdown: open the menu, pick, close it again. */
-  const pickTheme = async (value, { pause = 700 } = {}) => {
+  const pickTheme = async (value, { pause = 500 } = {}) => {
     if (PORTRAIT) await drawer(true);
     const profile = app.locator('.profile-btn').first();
     await tap(profile, { move: 700 });
@@ -82,7 +82,7 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
   await sleep(300);
   for (let i = 0; i < 11; i++) {
     await tap(toggle, { move: 60, hold: 90 });
-    await sleep(1050);
+    await sleep(950);
   }
   if (PORTRAIT) await drawer(false);
   await sleep(1400);
@@ -93,9 +93,9 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
   await nav('/overview');
   await app.getByText('Scheduled tasks').first().waitFor();
   await pickTheme('midnight');
-  await sleep(1700);
+  await sleep(1200);
   await pickTheme('sepia');
-  await sleep(1700);
+  await sleep(1200);
 
   // 4. The org chart (the Agents page on a phone), in two more
   mark('team');
@@ -109,9 +109,9 @@ export async function run({ app, S, sleep, tap, point, send, nav, scrollTo, mark
   }
   await sleep(500);
   await pickTheme('volt');
-  await sleep(1700);
+  await sleep(1200);
   await pickTheme('sakura');
-  await sleep(1700);
+  await sleep(1200);
 
   // 5. Config's theme list, and what it says about where the choice lives
   mark('config');
