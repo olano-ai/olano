@@ -132,6 +132,8 @@ const STR: LocalDict = {
     "preview.selectFile": "Select a file to preview",
     "preview.hint": "Markdown, HTML, code, images, audio, video and PDFs render inline.",
     "preview.failed.title": "Could not read the file",
+    "preview.gone.title": "This file no longer exists",
+    "preview.gone.sub": "It was deleted or moved after it was opened here. Close the preview, or pick another file in the tree.",
     "preview.binary.title": "No preview for this file",
     "preview.binary.sub": "It isn't text, an image, audio, video or a PDF, so it can't be shown here. Download it to open it in another app.",
     "preview.binary.subReadOnly": "It isn't text, an image, audio, video or a PDF, so it can't be shown here.",
@@ -260,6 +262,8 @@ const STR: LocalDict = {
     "preview.selectFile": "选择一个文件以预览",
     "preview.hint": "Markdown、HTML、代码、图片、音频、视频和 PDF 均可内嵌渲染。",
     "preview.failed.title": "无法读取文件",
+    "preview.gone.title": "此文件已不存在",
+    "preview.gone.sub": "它在此处打开后被删除或移动。请关闭预览，或在左侧选择其他文件。",
     "preview.binary.title": "此文件无法预览",
     "preview.binary.sub": "它不是文本、图片、音频、视频或 PDF，无法在此显示。请下载后用其他应用打开。",
     "preview.binary.subReadOnly": "它不是文本、图片、音频、视频或 PDF，无法在此显示。",
@@ -388,6 +392,8 @@ const STR: LocalDict = {
     "preview.selectFile": "Selecciona un archivo para previsualizar",
     "preview.hint": "Markdown, HTML, código, imágenes, audio, video y PDF se muestran en línea.",
     "preview.failed.title": "No se pudo leer el archivo",
+    "preview.gone.title": "Este archivo ya no existe",
+    "preview.gone.sub": "Se eliminó o se movió después de abrirlo aquí. Cierra la vista previa o elige otro archivo en el árbol.",
     "preview.binary.title": "No hay vista previa para este archivo",
     "preview.binary.sub": "No es texto, imagen, audio, video ni PDF, así que no se puede mostrar aquí. Descárgalo para abrirlo en otra aplicación.",
     "preview.binary.subReadOnly": "No es texto, imagen, audio, video ni PDF, así que no se puede mostrar aquí.",
@@ -530,6 +536,10 @@ interface FileContent {
   /** Set when the read failed: the pane shows this and a Retry instead of a
    *  spinner that never stops (the toast alone expires in seconds). */
   error?: string;
+  /** The file is not there any more (deleted or moved after it was opened):
+   *  the pane says so and offers Close, rather than a spinner or a Retry
+   *  that can only fail again. */
+  gone?: boolean;
 }
 
 /** Per-file bits remembered per session (bounded, see PREFS_CAP). */
@@ -541,12 +551,11 @@ interface FilePrefs {
   draft?: string;
 }
 
-/** Live `file_updated` SSE event shape (see api.py:_push_event). */
+/** Live `file_updated` SSE frame (see api.py:_push_event): the payload rides
+ *  under `data`, like every other /api/stream frame. */
 interface FileUpdatedEvent {
   type: string;
-  agent?: string | null;
-  path?: string;
-  size?: number;
+  data?: { agent?: string | null; path?: string; size?: number };
 }
 
 /** Encode each path segment but keep the slashes for FastAPI's `{path:path}`. */
@@ -1199,7 +1208,11 @@ export function FilesView() {
   // selection and dropped the response — a spinner that never ended.
   const previewKeyRef = useRef<NodeKey | null>(null);
   const previewFile = useCallback(
-    async (agent: string, entry: Pick<FileEntry, "name" | "path" | "abs_path">) => {
+    async (
+      agent: string,
+      entry: Pick<FileEntry, "name" | "path" | "abs_path">,
+      opts: { verify?: boolean } = {},
+    ) => {
       const cat = categorize(entry.name);
       const key = nodeKey(agent, entry.path);
       previewKeyRef.current = key;
@@ -1209,7 +1222,20 @@ export function FilesView() {
       // Media render straight from /api/files-raw. A known binary format asks
       // for one byte, which is all it takes to learn the file's size.
       const named = cat.kind === "binary";
-      if (!named && !TEXT_KINDS.has(cat.kind)) return;
+      if (!named && !TEXT_KINDS.has(cat.kind)) {
+        // A live change to an open image/PDF/audio/video: one byte says
+        // whether it is still there (a deleted one would otherwise show a
+        // broken frame or a "no preview" card for a file that is gone).
+        if (!opts.verify) return;
+        try {
+          await api.get(`/api/files/${encodePath(entry.path)}${agentQuery(agent)}&max_bytes=1`);
+        } catch (e) {
+          if (previewKeyRef.current === key && e instanceof ApiError && e.status === 404) {
+            setContent({ key, text: "", size: 0, truncated: false, totalSize: 0, gone: true });
+          }
+        }
+        return;
+      }
       try {
         const res = await api.get<FileContentResponse>(
           `/api/files/${encodePath(entry.path)}${agentQuery(agent)}&max_bytes=${named ? 1 : PREVIEW_MAX_BYTES}`,
@@ -1225,6 +1251,13 @@ export function FilesView() {
           binary,
         });
       } catch (e) {
+        if (e instanceof ApiError && e.status === 404) {
+          // Deleted or moved since it was opened: the pane says so itself.
+          if (previewKeyRef.current === key) {
+            setContent({ key, text: "", size: 0, truncated: false, totalSize: 0, gone: true });
+          }
+          return;
+        }
         const detail = errMessage(e, t("toast.openFailed"));
         toast.push(t("toast.cannotPreview", { detail }), "error");
         if (previewKeyRef.current === key) {
@@ -1405,17 +1438,21 @@ export function FilesView() {
       }
       const cur = selectedRef.current;
       if (cur && cur.agent === agent && paths.has(cur.path)) {
-        void previewFile(agent, { name: cur.name, path: cur.path, abs_path: cur.absPath });
+        void previewFile(agent, { name: cur.name, path: cur.path, abs_path: cur.absPath }, { verify: true });
       }
     };
     const unsubscribe = subscribeStream((frame) => {
       const event = frame as FileUpdatedEvent;
       if (event.type !== "file_updated") return;
-      const agent = event.agent || "";
+      // The payload is under `data`. This read the top level, so it never
+      // matched: the tree and the open file only caught up on a manual
+      // refresh, and a file deleted under the preview stayed on screen.
+      const agent = event.data?.agent || "";
       if (!agent) return;
-      if (event.path) {
+      const path = event.data?.path;
+      if (path) {
         if (!touched.has(agent)) touched.set(agent, new Set());
-        touched.get(agent)!.add(event.path);
+        touched.get(agent)!.add(path);
       }
       if (!timers.has(agent)) timers.set(agent, window.setTimeout(() => flush(agent), SSE_DEBOUNCE_MS));
     });
@@ -2379,7 +2416,8 @@ function PreviewPane({ file, content, readOnly, onClose, onSaved, onDelete, onRe
   const isBinary = cat.kind === "binary" || !!content?.binary;
   const isText = TEXT_KINDS.has(cat.kind) && !isBinary;
   const loadingText = (isText || cat.kind === "binary") && content === null;
-  const failed = !!content?.error;
+  const gone = !!content?.gone;
+  const failed = !!content?.error || gone;
   const truncated = !!content?.truncated;
   // Read-only members may view but never edit; neither may anyone edit a head
   // — saving it would write the head back over the whole file.
@@ -2446,7 +2484,7 @@ function PreviewPane({ file, content, readOnly, onClose, onSaved, onDelete, onRe
           </span>
         </div>
         <div className="files-pane-actions">
-          {(cat.kind === "markdown" || isHtml) && !loadingText && !isBinary && (
+          {(cat.kind === "markdown" || isHtml) && !loadingText && !isBinary && !gone && (
             <span className="files-pane-seg">
               <Segmented
                 value={raw ? "raw" : "preview"}
@@ -2473,7 +2511,7 @@ function PreviewPane({ file, content, readOnly, onClose, onSaved, onDelete, onRe
               {copyIcon}
             </button>
           )}
-          {!readOnly && (
+          {!readOnly && !gone && (
             <a
               className="btn ghost icon"
               href={rawUrl(file.path, file.agent)}
@@ -2484,7 +2522,7 @@ function PreviewPane({ file, content, readOnly, onClose, onSaved, onDelete, onRe
               {downloadIcon}
             </a>
           )}
-          {!readOnly && (
+          {!readOnly && !gone && (
             <button className="btn ghost danger icon" onClick={onDelete} title={t("btn.delete.title")} aria-label={t("btn.delete")}>
               {trashIcon}
             </button>
@@ -2517,7 +2555,17 @@ function PreviewPane({ file, content, readOnly, onClose, onSaved, onDelete, onRe
         className="files-preview-body"
         data-fill={FILL_KINDS.has(cat.kind) || (isHtml && !raw) ? "" : undefined}
       >
-        {failed && content ? (
+        {gone ? (
+          <div data-testid="preview-gone" style={{ padding: 24, textAlign: "center" }}>
+            <div style={{ fontWeight: 600, marginBottom: 4 }}>{t("preview.gone.title")}</div>
+            <div className="muted" style={{ fontSize: 12, marginBottom: 12, maxWidth: 420, margin: "0 auto 12px" }}>
+              {t("preview.gone.sub")}
+            </div>
+            <button className="btn" onClick={onClose}>
+              {t("btn.close")}
+            </button>
+          </div>
+        ) : failed && content ? (
           <div style={{ padding: 24, textAlign: "center" }}>
             <div style={{ fontWeight: 600, marginBottom: 4 }}>{t("preview.failed.title")}</div>
             <div className="muted" style={{ fontSize: 12, marginBottom: 12, overflowWrap: "anywhere" }}>
