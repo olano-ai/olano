@@ -1,0 +1,11 @@
+{
+  "type": "bar",
+  "kicker": "Nightjar Records",
+  "title": "Jazz outsold every other genre in November",
+  "subtitle": "Records sold by genre, both shop and online",
+  "categories": ["Jazz", "Soul", "Rock", "Electronic", "Hip-hop", "Folk"],
+  "series": [{"name": "Records sold", "values": [412, 356, 318, 241, 197, 143]}],
+  "highlight": "Jazz",
+  "annotations": [{"target": "Jazz", "text": "+38% on October"}],
+  "notes": {"source": "Till and web shop exports", "as_of": "2026-11-26"}
+}
