@@ -8,6 +8,7 @@
 // a restart — hence the note at the bottom.
 
 import { useEffect, useState } from "react";
+import { type ActionRow, mergeActionRows, rowsFromActions, savedShape } from "./actionRows";
 import { Copy } from "lucide-react";
 import { api } from "../../core/api";
 import { useT } from "../../core/i18n";
@@ -178,12 +179,11 @@ function ActionsEditor({
 }) {
   const t = useT(STR);
   const toast = useToast();
-  const toRows = (a: Record<string, string>) =>
-    Object.entries(a).map(([name, script]) => ({ name, script }));
-  const [rows, setRows] = useState(toRows(actions));
-  useEffect(() => setRows(toRows(actions)), [actions]);
+  const [rows, setRows] = useState<ActionRow[]>(rowsFromActions(actions));
+  useEffect(() => setRows((prev) => mergeActionRows(prev, actions)), [actions]);
 
-  const dirty = JSON.stringify(toRows(actions)) !== JSON.stringify(rows);
+  const dirty =
+    JSON.stringify(rowsFromActions(actions)) !== JSON.stringify(savedShape(rows));
 
   function commit() {
     const next: Record<string, string> = {};
@@ -245,7 +245,7 @@ function ActionsEditor({
         <button
           className="btn ghost"
           style={{ padding: "3px 10px", fontSize: 12 }}
-          onClick={() => setRows((r) => [...r, { name: "", script: "" }])}
+          onClick={() => setRows((r) => [...r, { name: "", script: "", draft: true }])}
         >
           {t("mu.actionAdd")}
         </button>
