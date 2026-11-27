@@ -32,6 +32,14 @@ const ADMIN = { email: 'nadia@brightmoor.example', password: 'brightmoor-nadia-1
 export async function init(ctx, { server }) {
   const r = await ctx.request.post(server.base_url + '/api/auth/login', { data: ADMIN });
   if (!r.ok()) throw new Error('admin sign-in failed: ' + r.status());
+  // The dev server compiles a page's code on its first visit; open the pages the take visits once,
+  // off camera, so none of them shows a loading spinner.
+  const warm = await ctx.newPage();
+  for (const p of ['/orgchart', '/activity', '/chat/orla', '/']) {
+    await warm.goto(server.base_url + p).catch(() => {});
+    await warm.waitForTimeout(2500);
+  }
+  await warm.close();
 }
 
 export async function run(h) {
@@ -98,8 +106,9 @@ export async function run(h) {
   if (PORTRAIT) {       // a phone draws the whole chart small; bring it closer
     await sleep(800);
     for (let i = 0; i < 2; i++) { await tap(app.getByRole('button', { name: 'Zoom in' }), { move: 500 }); await sleep(350); }
+    await S('hide');
   }
-  await sleep(PORTRAIT ? 1600 : 1800);
+  await sleep(PORTRAIT ? 2600 : 1800);
 
   mark('ines');
   await S('caption', 3);
@@ -154,6 +163,7 @@ export async function run(h) {
     await row.waitFor({ timeout: 30000 });
     await sleep(1200);
     await tap(row, { move: 700 });
+    await S('hide');
   }
   const q = app.locator(':text("What is the floor area of the Fenwick extension"):visible').first();
   await q.waitFor({ timeout: 30000 });
