@@ -324,6 +324,11 @@ def save_agent_config(
     agent_dir = base / config.name
     path = agent_dir / "agent.json5"
     new_raw = config.model_dump(exclude={"workspace"})
+    # An unset sandbox block is the default; writing it as `sandbox: null` only
+    # adds a key that older dashboard readers treated as legacy and stripped
+    # (rewriting the file on the next page load). Omit it like a missing key.
+    if new_raw.get("sandbox") is None:
+        new_raw.pop("sandbox", None)
     # An MCP OAuth client secret never reaches the file as plain text: this is
     # the one write path every model-based writer shares (mutate_agent_config,
     # admin.update_agent, add_mcp_server, the magic-link credentials form), so
