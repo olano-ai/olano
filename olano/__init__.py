@@ -6,7 +6,7 @@ file at the repository root.
 
 from olano.env_aliases import apply_env_aliases as _apply_env_aliases
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 __copyright__ = "Copyright (c) 2026 Olano AI"
 
 # ``OLANO_*`` and ``LIONCLAW_*`` are two spellings of one variable. Mirror them

@@ -29,10 +29,12 @@ def test_check_mode_no_writes(tmp_path: Path, monkeypatch):
     # checkout, which the mode-aware check would otherwise detect as "source".
     monkeypatch.setenv("LIONCLAW_INSTALL_MODE", "local")
     write_install_state(tmp_path, InstallState(version="1.0.0"))
-    with patch("olano.update._query_latest_version", return_value="1.1.0"):
+    # Far above any real release, so the check always sees an update whatever
+    # version this checkout is (1.1.0 used to be "newer" until it shipped).
+    with patch("olano.update._query_latest_version", return_value="9.9.0"):
         report = run_update(tmp_path, check=True)
     assert report.check_only is True
-    assert report.to_version == "1.1.0"
+    assert report.to_version == "9.9.0"
     # version must not be updated on disk
     assert read_install_state(tmp_path).version == "1.0.0"
 
@@ -122,14 +124,14 @@ def test_cli_update_check_flag(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("LIONCLAW_INSTALL_MODE", "local")
     runner = CliRunner()
     write_install_state(tmp_path, InstallState(version="1.0.0"))
-    with patch("olano.update._query_latest_version", return_value="1.1.0"):
+    with patch("olano.update._query_latest_version", return_value="9.9.0"):
         result = runner.invoke(
             cli,
             ["--home", str(tmp_path), "update", "--check"],
             catch_exceptions=False,
         )
     assert result.exit_code == 0
-    assert "1.1.0" in result.output or "Update available" in result.output
+    assert "9.9.0" in result.output or "Update available" in result.output
 
 
 def test_cli_update_legacy_workspace_flag(tmp_path: Path):
