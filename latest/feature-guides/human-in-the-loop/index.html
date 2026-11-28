@@ -7,7 +7,7 @@
       
       
       
-        <link rel="canonical" href="https://docs.olano.ai/1.0/feature-guides/human-in-the-loop/">
+        <link rel="canonical" href="https://docs.olano.ai/1.1/feature-guides/human-in-the-loop/">
       
       
         <link rel="prev" href="../agent-to-agent/">
@@ -2125,7 +2125,7 @@ background work skips the queue, but <code>cognition.approval_required</code> �
 <code>["external_send", "irreversible", "identity_edit"]</code> — always needs a human,
 whatever <code>auto_approve</code> says. Anything that sends something outside, cannot be
 undone, or rewrites who the agent is, gets a person in the loop: the item waits
-in <strong>Pulse → Approvals</strong> instead of being applied, and a background run that
+in <strong>Cortex → Self-Improve</strong> instead of being applied, and a background run that
 tries such a step pauses on it the same way. So does a step the agent scheduled
 for itself from a background run (<code>cortex_schedule</code>, shown in <strong>Scheduler</strong> as
 <code>Cortex: &lt;item&gt;</code>): it runs under the same rule as the run that booked it, not

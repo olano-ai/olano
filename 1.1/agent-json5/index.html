@@ -1,0 +1,5696 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.1/agent-json5/">
+      
+      
+        <link rel="prev" href="../dashboard/admin/">
+      
+      
+        <link rel="next" href="../config-yaml/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>agent.json5 reference - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#agentjson5-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              agent.json5 reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-and-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model and prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subagents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#org-who-may-talk-to-whom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        org — who may talk to whom
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_visibility-who-this-agent-knows-about" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agent_visibility — who this agent knows about
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-and-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access and lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp_servers-external-tool-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mcp_servers — external tool servers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote_agents-external-agents-over-a2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remote_agents — external agents over A2A
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external_access-letting-outside-systems-reach-this-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        external_access — letting outside systems reach this agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-actions-that-dont-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        browser — actions that don't ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-tracing-this-agent-to-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        observability: tracing this agent to Langfuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channels-messaging-connectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        channels — messaging connectors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-recurring-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schedule — recurring work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat-and-issues-inherit-by-default-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heartbeat and issues — inherit-by-default blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gmail_watch-wake-on-new-email" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gmail_watch: wake on new email
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customer_service-per-end-user-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        customer_service — per-end-user isolation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#message_policy-message-length-caps-and-silence-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        message_policy — message length caps and silence rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monetization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        monetization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        security
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#egress_allow-egress_deny-which-internet-destinations-the-agent-may-reach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        egress_allow / egress_deny — which internet destinations the agent may reach
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        budget
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pulse-proactive-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pulse — proactive suggestions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cognition-the-cortex-engine-per-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cognition — the Cortex engine, per agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wallet-on-chain-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wallet — on-chain operations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands-slash-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        commands — slash commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared_paths-sharing-files-between-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shared_paths — sharing files between agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-where-the-agents-tools-actually-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backend — where the agent's tools actually run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runtime-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-a-config-fail-to-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a config fail to load
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../feature-guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#identity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-and-prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model and prompt
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subagents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subagents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#org-who-may-talk-to-whom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        org — who may talk to whom
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agent_visibility-who-this-agent-knows-about" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        agent_visibility — who this agent knows about
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#access-and-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Access and lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcp_servers-external-tool-servers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mcp_servers — external tool servers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote_agents-external-agents-over-a2a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        remote_agents — external agents over A2A
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#external_access-letting-outside-systems-reach-this-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        external_access — letting outside systems reach this agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-actions-that-dont-ask" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        browser — actions that don't ask
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability-tracing-this-agent-to-langfuse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        observability: tracing this agent to Langfuse
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#channels-messaging-connectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        channels — messaging connectors
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedule-recurring-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        schedule — recurring work
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat-and-issues-inherit-by-default-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heartbeat and issues — inherit-by-default blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gmail_watch-wake-on-new-email" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        gmail_watch: wake on new email
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#webhooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        webhooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        memory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customer_service-per-end-user-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        customer_service — per-end-user isolation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#message_policy-message-length-caps-and-silence-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        message_policy — message length caps and silence rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monetization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        monetization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        security
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#egress_allow-egress_deny-which-internet-destinations-the-agent-may-reach" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        egress_allow / egress_deny — which internet destinations the agent may reach
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        budget
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pulse-proactive-suggestions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pulse — proactive suggestions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cognition-the-cortex-engine-per-agent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cognition — the Cortex engine, per agent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wallet-on-chain-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wallet — on-chain operations
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#commands-slash-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        commands — slash commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#shared_paths-sharing-files-between-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shared_paths — sharing files between agents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backend-where-the-agents-tools-actually-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        backend — where the agent's tools actually run
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runtime-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Runtime knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-a-config-fail-to-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes a config fail to load
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/agent-json5.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="agentjson5-reference"><code>agent.json5</code> reference<a class="headerlink" href="#agentjson5-reference" title="Permanent link">¶</a></h1>
+<p>One file per agent, at <code>~/.olano/agents/&lt;name&gt;/agent.json5</code>. JSON5, so
+comments, trailing commas and unquoted keys are allowed. Most people edit it
+through the dashboard's Agents tab; this section is the complete field list for
+when you edit it directly, or when an agent writes one for you.</p>
+<p><code>${VAR}</code> in a string is expanded from the environment when the file loads.
+<strong>Never put a secret in this file</strong> — put it in the vault and reference it by
+name (see <a href="../feature-guides/channels-and-connectors/">Channels and connectors</a>).</p>
+<p>A minimal agent:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nv">name</span><span class="p">:</span><span class="w"> </span><span class="s">"finance"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">description</span><span class="p">:</span><span class="w"> </span><span class="s">"Watches revenue and flags anomalies"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">emoji</span><span class="p">:</span><span class="w"> </span><span class="s">"📊"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">model</span><span class="p">:</span><span class="w"> </span><span class="s">"olano:pro"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">system_prompt</span><span class="p">:</span><span class="w"> </span><span class="s">"You are a finance analyst. Be precise with numbers."</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">tools</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"sql"</span><span class="p">,</span><span class="w"> </span><span class="s">"stripe"</span><span class="p">],</span>
+<span class="w">  </span><span class="nv">channels</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w"> </span><span class="nv">type</span><span class="p">:</span><span class="w"> </span><span class="s">"telegram"</span><span class="p">,</span><span class="w"> </span><span class="nv">allowed_users</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"123456789"</span><span class="p">]</span><span class="w"> </span><span class="p">}],</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="identity">Identity<a class="headerlink" href="#identity" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>The agent's permanent handle. Lowercase letters, digits, dash and underscore, starting with a letter or digit. It is the folder its workspace lives in, the path segment in every <code>/api/agents/…</code> URL, and the exact string other agents use to reach it. <strong>It cannot be changed after the agent is created</strong> — a rename would strand its threads, memories, saved credentials and issue history. Put anything you may want to change later in <code>display_name</code>.</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>string</td>
+<td>the handle</td>
+<td>What the agent is <em>called</em>, as opposed to how it is addressed. Never empty: leave it unset and it becomes the handle itself. Free text — spaces, capitals, accents and punctuation are all fine (<code>"Merli the Analyst"</code>). It appears on the agent's dashboard cards and chat header, in its own system prompt and <code>whoami</code> output, in the roster other agents read when choosing who to delegate to, and in the <code>From:</code> line of any email it sends. Empty falls back to <code>name</code>. Unlike <code>name</code> this can be edited at any time — nothing is keyed off it, so changing it keeps every thread, memory and issue intact.</td>
+</tr>
+<tr>
+<td><code>org.title</code></td>
+<td>string | null</td>
+<td>the archetype's label, else <code>null</code></td>
+<td>The agent's <strong>title</strong> — its position, what it <em>is</em> as opposed to what it is called (<code>"Recruitment Specialist"</code> for an agent named <code>Hillary</code>). Shown under the name on its cards, in the detail header, in the simple chat's header and profile, and on the org chart; told to the agent in its own prompt and <code>whoami</code> output, so it introduces itself by its name and describes its role by its title; and listed beside its name in the roster other agents read when delegating. Installing an archetype fills it with the archetype's human label unless you give one, so naming an install "Hillary" never costs her the role. Free text, optional, editable any time — <strong>Title</strong> on the Overview tab or the Talk to Agent tab. Empty means no position.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>One line explaining what the agent is for. Shown in the roster and to other agents deciding whether to delegate to it.</td>
+</tr>
+<tr>
+<td><code>emoji</code></td>
+<td>string</td>
+<td><code>"🦁"</code></td>
+<td>The agent's face wherever no avatar is set.</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>CSS hex accent, e.g. <code>"#c96442"</code>. Themes the dashboard when this agent is active.</td>
+</tr>
+<tr>
+<td><code>avatar_url</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>URL of a square image used as the agent's face. Falls back to <code>emoji</code>.</td>
+</tr>
+<tr>
+<td><code>archetype</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>The template this agent was created from. Informational.</td>
+</tr>
+</tbody>
+</table>
+<p>Every place an agent is created asks for <strong>one name</strong> — the New agent dialog
+(the custom tab and the Team/Expert/Integration tabs alike) and the simple
+chat's New bot dialog — and that name is the display name. The handle is <strong>generated from it</strong>, never typed: the
+form shows what it will be under the name field (<code>Hillary</code> → <code>hillary</code>), and
+if that handle is already taken a number is appended (<code>hillary-2</code>). Installing
+a catalog archetype with a name of your own keeps the archetype's human label
+as the agent's <strong>title</strong> (so "Hillary" installed from the Recruitment
+Specialist archetype is Hillary, the Recruitment Specialist — and introduces
+herself that way); the New agent dialog prefills its <strong>Title</strong> field with
+that label so you can change it before installing. Installing an archetype
+without a name of your own keeps the archetype's label as the display name
+too (so a support archetype installs as "Customer Service Agent", not as its
+internal handle). Asking AgentFather to "install the Recruitment Specialist
+as Hillary" does the same thing.</p>
+<h2 id="model-and-prompt">Model and prompt<a class="headerlink" href="#model-and-prompt" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>string</td>
+<td><code>default:turbo</code></td>
+<td><code>provider:model</code>, e.g. <code>anthropic:claude-sonnet-4-6</code>, <code>openai:gpt-5.5</code>, an Olano tier like <code>olano:pro</code> — or a <strong>deployment default alias</strong>: <code>default:turbo</code>, <code>default:pro</code>, <code>default:max</code>. An alias follows whatever target is set in <strong>Config → Default models</strong>, so retargeting it there re-points every agent using it with no per-agent edits. New agents start on <code>default:turbo</code>, AgentFather included. See <a href="../models-and-credits/">Models and credits</a>.</td>
+</tr>
+<tr>
+<td><code>system_prompt</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The agent's core instructions. Merged with the workspace identity files.</td>
+</tr>
+<tr>
+<td><code>reasoning_effort</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td><code>"low"</code>, <code>"medium"</code> or <code>"high"</code>, for models that support it. Ignored otherwise.</td>
+</tr>
+<tr>
+<td><code>model_kwargs</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Extra parameters passed to the model (e.g. <code>temperature</code>).</td>
+</tr>
+<tr>
+<td><code>prompt_mode</code></td>
+<td><code>"full"</code> | <code>"task"</code> | <code>"minimal"</code> | <code>"none"</code></td>
+<td><code>"full"</code></td>
+<td>How much scaffolding goes into the system prompt. <code>full</code> is the everyday value; the narrower modes suit single-purpose agents where a shorter prompt is cheaper and more focused.</td>
+</tr>
+<tr>
+<td><code>vibes_preset</code></td>
+<td><code>"precise"</code> | <code>"warm"</code> | <code>"executive-brief"</code> | <code>"hacker-lab"</code></td>
+<td><code>"precise"</code></td>
+<td>Baseline tone. <code>SOUL.md</code> refines it.</td>
+</tr>
+<tr>
+<td><code>default_verbosity</code></td>
+<td><code>"quiet"</code> | <code>"normal"</code> | <code>"verbose"</code></td>
+<td><code>"normal"</code></td>
+<td>How much of its work the agent narrates. <code>quiet</code> = the answer only; <code>normal</code> = the answer plus a note when a turn ran tools silently; <code>verbose</code> = full play-by-play. This is the <strong>starting point</strong> for new chats, not a ceiling — a user who runs <code>/verbosity</code> pins their own chat and that wins from then on.</td>
+</tr>
+<tr>
+<td><code>prompt_cache</code></td>
+<td>object</td>
+<td>see below</td>
+<td><code>optimize_boundaries</code> (default <code>true</code>) and <code>sort_tools</code> (default <code>true</code>). Leave both on unless you are debugging prompt construction.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>A model string that will be rejected:</strong> <code>olano:vision</code> and the Olano image
+group are <em>utility</em> models the product calls on the agent's behalf. They cannot
+be an agent's brain, and setting one as <code>model</code> fails to load.</p>
+<h2 id="tools">Tools<a class="headerlink" href="#tools" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tools</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Toolkits and individual tools to enable, e.g. <code>["sql", "slack", "stripe"]</code>. Listing a tool here binds it unconditionally.</td>
+</tr>
+<tr>
+<td><code>disabled_tools</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Remove specific tools that would otherwise be granted automatically. Use this to drop one tool without switching off a whole category.</td>
+</tr>
+<tr>
+<td><code>default_internal_tools</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Master switch for every implicit grant — the universal tools, memory, notes, knowledge-graph, workspace context. Turning it off gives you a locked-down agent that only has what <code>tools</code> names.</td>
+</tr>
+<tr>
+<td><code>top_level_memory_tools</code></td>
+<td>string[] | null</td>
+<td><code>null</code></td>
+<td>When set, an <strong>allow-list</strong>: only these memory tools survive. <code>null</code> means "all of them".</td>
+</tr>
+<tr>
+<td><code>top_level_rag_tools</code></td>
+<td>string[] | null</td>
+<td><code>null</code></td>
+<td>Same, for document-search tools.</td>
+</tr>
+<tr>
+<td><code>top_level_graph_tools</code></td>
+<td>string[] | null</td>
+<td><code>null</code></td>
+<td>Same, for knowledge-graph tools.</td>
+</tr>
+<tr>
+<td><code>top_level_workspace_context</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Whether the agent can load extra workspace files on demand.</td>
+</tr>
+<tr>
+<td><code>allowed_actions</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td><code>{ "action_name": "path/to/script" }</code> — named scripts the agent may run via <code>execute_action</code>. Only bound when per-customer memory is on.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Every agent automatically gets a universal set</strong> you do not have to ask for:
+self-awareness (<code>whoami</code>), time (<code>get_current_time</code>), peer messaging
+(<code>talk_to_agent</code>), outbound
+notifications (<code>notification_send_text</code> / <code>_photo</code> / <code>_document</code>), chat
+directory lookups, the issue-tracker tools, web search and fetch, document
+readers, HTML rendering to PNG / PDF / SVG (<code>render_html_image</code> /
+<code>render_html_pdf</code> / <code>render_html_svg</code> — how charts, slides and social graphics
+are made, see the <code>charts</code> skill), a recoverable trash can, and the
+operations tools: the scheduler (<code>scheduler_*</code>), heartbeat checks
+(<code>heartbeat_*</code>), PULSE (<code>pulse_*</code>), approvals (<code>approvals_*</code>) and the ops queue
+(<code>ops_*</code>). Keep these unless you have a specific reason not to; several
+features assume they exist.</p>
+<p>Any of them can be switched off one at a time: untick it on the agent's
+<strong>Tools</strong> tab, or name it in <code>disabled_tools</code> (for example
+<code>"disabled_tools": ["scheduler_delete", "approvals_approve"]</code>). Ticking it
+again, or removing it from <code>disabled_tools</code>, puts it back. Listing it under
+<code>tools</code> does not remove it, because these are added to every agent whatever
+<code>tools</code> says. <code>default_internal_tools: false</code> turns the whole set off at once.</p>
+<p>Two things to know about the operations tools. An agent in Customer Service
+mode does not get them (a customer must never see or change your scheduler or
+approvals); list one under <code>tools</code> if such an agent really needs it. And the
+ones that act on held work (<code>approvals_approve</code>, <code>approvals_reject</code>,
+<code>approvals_defer</code>, <code>approvals_clear_expired</code>, <code>pulse_accept</code>, <code>pulse_undo</code>,
+<code>scheduler_run_now</code>, <code>heartbeat_configure</code>) only work for an owner: another
+agent, an outside caller or a non-admin member asking for them is refused.</p>
+<p><strong>The knowledge-base tools are not in that set.</strong> <code>kb_search</code>, <code>kb_list</code>,
+<code>kb_add_file</code>, <code>kb_add_url</code>, <code>kb_create_store</code>, <code>kb_sync</code>, <code>kb_delete</code> and
+<code>kb_remove_file</code> bind only when <code>tools</code> names them. An agent without them cannot
+search your documents, and the dashboard's Knowledge tab cannot route through
+it. Add them to any agent you want answering from the document library.</p>
+<p>Tools are grouped into these categories in the dashboard: Self &amp; Time, Agent
+Mesh, User Interaction, Web &amp; Documents, Multimodal, Housekeeping, Operations, Cortex,
+Memory, Customer Memory, Multi-user Actions &amp; Scheduling, Knowledge (RAG),
+Knowledge Graph, Notes, Workspace, Agent Loop, Filesystem &amp; Shell — plus 80+
+service toolkits (Slack, Notion, Stripe, SQL, Google, GitHub, HubSpot,
+Salesforce, Apollo.io, Lusha, Shopify, Jira, Linear, and many more).</p>
+<p><strong>Multimodal tools are automatic when they can work.</strong> <code>image_describe</code>,
+<code>image_generate</code>, <code>image_edit</code>, <code>text_to_speech</code> and <code>audio_to_text</code> bind
+whenever the credentials to run them resolve. On a managed deployment
+everything except <code>text_to_speech</code> runs on Olano credits with no configuration
+at all; a self-hosted install with an Olano API key on Providers → Olano gets
+the same. On an install with neither they appear once you set the matching
+provider key. <code>text_to_speech</code> is the one deliberate exception on every install: voice
+replies stay off until you pick a text-to-speech provider under Config →
+Speech (on a managed deployment choose <em>Olano</em> there to run it on credits).</p>
+<p><strong>Rendering HTML to an image, a PDF or an SVG.</strong> The <code>render</code> tools turn HTML
+and CSS into a PNG, a PDF or a vector SVG at exact pixel dimensions, using the
+browser that ships with every install — no API key, no network, nothing
+billed. They are on for every agent (switch them off with <code>disabled_tools</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>render_html_image</code></td>
+<td>An HTML document or <code>.html</code> file → a PNG at exactly the width and height you ask for. <code>scale: 2</code> exports at twice the pixel size for retina.</td>
+</tr>
+<tr>
+<td><code>render_html_pdf</code></td>
+<td>The same, to a PDF, one page per <code>break-after: page</code> block — reports, printable documents, and what a LinkedIn native document (carousel) post needs.</td>
+</tr>
+<tr>
+<td><code>render_html_svg</code></td>
+<td>Saves one <code>&lt;svg&gt;</code> of the rendered page as a standalone vector file — a chart that scales in a slide deck or a design tool.</td>
+</tr>
+</tbody>
+</table>
+<p>All three take <code>wait_for</code>, a CSS selector to wait for before capturing, for
+pages that draw with JavaScript (the <code>charts</code> skill's pages add
+<code>.render-done</code> when finished). The tools pair with <code>image_generate</code>: the
+image model paints the background, and anything a person is meant to <em>read</em> —
+headline, statistic, logo, call to action — is set in CSS, so it comes out
+correct every time and a copy change is a re-render rather than a new image.
+Each accepts an inline HTML document or a path to an <code>.html</code> file, and writes
+to <code>workspace/renders/</code> unless you pass <code>save_path</code>, which must point inside
+the agent's workspace or a shared folder it can write to. Data charts go through
+the <code>charts</code> skill, which builds the page (recipes, or any Vega-Lite spec, in
+the clean / midnight / editorial / brand themes) and renders it with these
+tools; no plotting library is ever installed. A document may only load local
+files from the agent's workspace, its skills and its shared folders (an HTML
+path outside them is refused), and remote images, stylesheets and fonts follow
+the agent's outbound-access lists. Anything refused is left out of the render
+and named at the end of the result.</p>
+<p><strong>Driving a web browser.</strong> When browser control is turned on for the machine
+(see <a href="../feature-guides/browser/">Browser control</a>), the <code>browser</code> toolkit gives
+an agent a Chrome it can navigate, read, click and type in. <code>browser_snapshot</code> lists what
+is on the page (headings, links, buttons, fields) with a short ref such as
+<code>e12</code> next to each element, and <code>browser_click</code> / <code>browser_type</code> accept that
+ref, so the agent acts on exactly the element it saw instead of guessing a
+selector. <code>page_screenshot</code> takes a one-off screenshot with nothing kept
+afterwards.</p>
+<ul>
+<li><strong>Each agent has its own browser session.</strong> Cookies, site storage and the
+  open page belong to one agent; a site an agent signs in to is not signed in
+  for any other agent on the box.</li>
+<li><strong>Sign-ins are kept.</strong> The session's cookies and site storage are saved by
+  the deployment, outside every workspace (readable only by the deployment, not
+  by the agent or its shell), and restored the next time the agent opens the
+  browser, including after a restart. Asking the agent to close the browser and
+  forget its profile signs it out everywhere; the agent's <strong>Browser</strong> tab has
+  the same button.</li>
+<li><strong>Idle sessions close themselves.</strong> After <code>browser.idle_timeout</code> seconds
+  without a browser call (10 minutes by default, set in <code>config.yaml</code>) the
+  session is saved and closed.</li>
+<li><strong>A limited number run at once.</strong> Each open session uses a few hundred MB of
+  memory, so at most <code>browser.max_sessions</code> are open at a time. When the limit
+  is reached, the session idle the longest is saved and closed to make room; if
+  every session is in use, the agent is told the browser is busy and retries.</li>
+<li><strong>Outbound access applies to everything the browser loads</strong>, not only the
+  address the agent opens. See <a href="#security">Security</a>.</li>
+<li><strong>Screenshots stay in the workspace.</strong> A <code>save_path</code> outside the agent's
+  workspace (or a shared folder it can write to) is refused, the same rule
+  the agent's file tools follow.</li>
+<li><strong>Local files.</strong> In <code>headless</code> mode the browser can open a file in the
+  agent's workspace (a <code>file://</code> address), and a page opened that way can load
+  other files from the workspace, the agent's skills and its shared folders.
+  The live browser and a remote provider run elsewhere and open no local files
+  (one-shot screenshots still can, unless the provider is remote). Every other file on
+  the machine is refused, including through a link or a shortcut (symlink) that
+  points outside, and so are browser-internal addresses such as
+  <code>view-source:</code> or <code>chrome:</code>.</li>
+</ul>
+<p><strong>Private repositories.</strong> Local git — <code>status</code>, <code>add</code>, <code>commit</code>, <code>diff</code>,
+<code>checkout</code>, <code>log</code> — runs in the agent's own shell and needs no credential. The
+verbs that talk to GitHub go through the <code>git</code> toolkit, which runs them with
+the connected GitHub account and lands the files in the agent's workspace; the
+credential itself never enters the agent's sandbox, so a <code>printenv</code> there
+shows nothing before, during or after.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git_clone(url, dest, branch, depth)</code></td>
+<td>Clone a repository into the workspace (<code>dest</code> relative to it; <code>branch</code> and a shallow <code>depth</code> optional).</td>
+</tr>
+<tr>
+<td><code>git_fetch(repo_path, remote)</code></td>
+<td>Fetch a remote of a repository in the workspace.</td>
+</tr>
+<tr>
+<td><code>git_pull(repo_path, remote, branch)</code></td>
+<td>Pull into a checkout in the workspace.</td>
+</tr>
+<tr>
+<td><code>git_push(repo_path, remote, branch, set_upstream)</code></td>
+<td>Push a branch; <code>set_upstream</code> for a new one. Always raises an approval card. Force-pushing is refused.</td>
+</tr>
+</tbody>
+</table>
+<p>HTTPS URLs only — an SSH URL is refused with the HTTPS form to use instead. The
+account comes from whatever way GitHub was connected (Connections → GitHub, a
+sign-in code, a magic link from the chat, or a <code>GITHUB_TOKEN</code> in the Vault); a
+missing one answers <code>[missing-credentials]</code> and names the link to send, never a
+request to paste a token. Add <code>"git"</code> to <code>tools</code> — or ask the agent, which adds
+it alongside the GitHub toolkit when you ask it to connect GitHub.</p>
+<p><strong>Bookkeeping.</strong> The <code>quickbooks</code> toolkit works a connected QuickBooks Online
+company across the four areas Olano's Intuit app is registered for. Connect it
+under Connections → QuickBooks (the <strong>environment</strong> field picks a sandbox
+company instead of the live one), then add <code>"quickbooks"</code> to <code>tools</code> — or use
+the built-in <strong>QuickBooksAgent</strong> subagent, which carries the whole set.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Customers</td>
+<td><code>quickbooks_list_customers</code>, <code>quickbooks_search_customers</code>, <code>quickbooks_get_customer</code>, <code>quickbooks_create_customer</code>, <code>quickbooks_update_customer</code></td>
+</tr>
+<tr>
+<td>Invoicing &amp; payments</td>
+<td><code>quickbooks_create_invoice</code>, <code>quickbooks_list_invoices</code>, <code>quickbooks_get_invoice</code>, <code>quickbooks_send_invoice</code>, <code>quickbooks_void_invoice</code>, <code>quickbooks_list_estimates</code>, <code>quickbooks_create_estimate</code>, <code>quickbooks_list_sales_receipts</code>, <code>quickbooks_create_sales_receipt</code>, <code>quickbooks_list_payments</code>, <code>quickbooks_record_payment</code></td>
+</tr>
+<tr>
+<td>Expenses</td>
+<td><code>quickbooks_list_vendors</code>, <code>quickbooks_create_vendor</code>, <code>quickbooks_list_bills</code>, <code>quickbooks_create_bill</code>, <code>quickbooks_pay_bill</code>, <code>quickbooks_list_expenses</code>, <code>quickbooks_create_expense</code></td>
+</tr>
+<tr>
+<td>Business insights</td>
+<td><code>quickbooks_profit_and_loss</code>, <code>quickbooks_balance_sheet</code>, <code>quickbooks_cash_flow</code>, <code>quickbooks_ar_aging</code>, <code>quickbooks_ap_aging</code>, <code>quickbooks_sales_by_customer</code>, <code>quickbooks_expenses_by_vendor</code>, <code>quickbooks_trial_balance</code></td>
+</tr>
+</tbody>
+</table>
+<p>Three behaviours are worth knowing before you ask an agent to post anything:</p>
+<ul>
+<li><strong>Writes need the right reference id, and there are tools to find them.</strong>
+  <code>quickbooks_list_accounts</code> returns the chart of accounts (filter it by type,
+  e.g. <code>Expense</code>) — a bill or an expense needs one to categorise the money, and
+  paying a bill needs the bank or credit-card account it comes out of.
+  <code>quickbooks_list_items</code> returns the products and services an invoice line can
+  point at. An invoice left without an item id falls back to the company's first
+  active product/service rather than failing.</li>
+<li><strong>Invoices can carry many lines.</strong> Pass <code>line_items</code> a JSON array —
+  <code>[{"amount": 100, "description": "Design"}, {"quantity": 2, "unit_price": 50}]</code>
+  — and it replaces the single amount/description pair. Estimates and sales
+  receipts take the same shape; bills and expenses take the same shape with an
+  <code>account_id</code> per line.</li>
+<li><strong>Invoices are voided, never deleted.</strong> <code>quickbooks_void_invoice</code> keeps the
+  document on the books at zero value so the audit trail survives, which is what
+  an accountant expects. Updates change only the fields you pass; everything
+  else on the record is left alone.</li>
+</ul>
+<p>Reports come back as a readable outline rather than raw data, so an agent can
+quote a figure straight into a chat message or feed one into the <code>charts</code> skill.</p>
+<p><strong>Microsoft 365.</strong> The <code>microsoft365</code> toolkit works a connected Microsoft 365
+account: Outlook mail and calendar, contacts, To Do, OneDrive and SharePoint
+files, Excel workbooks, and Teams. Connect it under Connections → Microsoft 365
+(or ask the agent for a sign-in link), then add <code>"microsoft365"</code> to <code>tools</code>, or
+use the built-in <strong>Microsoft365Agent</strong> subagent, which carries the whole set.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mail</td>
+<td><code>ms365_list_messages</code>, <code>ms365_get_message</code>, <code>ms365_send_mail</code>, <code>ms365_create_draft</code>, <code>ms365_update_draft</code>, <code>ms365_send_draft</code>, <code>ms365_reply</code>, <code>ms365_forward</code>, <code>ms365_update_message</code>, <code>ms365_move_message</code>, <code>ms365_list_mail_folders</code>, <code>ms365_download_attachment</code></td>
+</tr>
+<tr>
+<td>Calendar</td>
+<td><code>ms365_list_events</code>, <code>ms365_get_event</code>, <code>ms365_create_event</code>, <code>ms365_update_event</code>, <code>ms365_delete_event</code>, <code>ms365_respond_to_event</code>, <code>ms365_find_meeting_times</code>, <code>ms365_get_availability</code>, <code>ms365_list_calendars</code></td>
+</tr>
+<tr>
+<td>People &amp; mailbox</td>
+<td><code>ms365_find_people</code>, <code>ms365_get_profile</code>, <code>ms365_list_contacts</code>, <code>ms365_create_contact</code>, <code>ms365_set_auto_reply</code></td>
+</tr>
+<tr>
+<td>Files</td>
+<td><code>ms365_list_drive_items</code>, <code>ms365_search_drive</code>, <code>ms365_search_files</code>, <code>ms365_upload_drive_file</code>, <code>ms365_download_drive_file</code>, <code>ms365_create_folder</code>, <code>ms365_share_drive_item</code>, <code>ms365_move_drive_item</code>, <code>ms365_delete_drive_item</code>, <code>ms365_find_sites</code></td>
+</tr>
+<tr>
+<td>Excel</td>
+<td><code>ms365_excel_list_sheets</code>, <code>ms365_excel_read_range</code>, <code>ms365_excel_write_range</code>, <code>ms365_excel_add_rows</code></td>
+</tr>
+<tr>
+<td>Teams</td>
+<td><code>ms365_list_teams</code>, <code>ms365_list_channels</code>, <code>ms365_send_channel_message</code>, <code>ms365_list_chats</code>, <code>ms365_read_chat</code>, <code>ms365_send_chat_message</code></td>
+</tr>
+<tr>
+<td>To Do</td>
+<td><code>ms365_list_task_lists</code>, <code>ms365_list_tasks</code>, <code>ms365_create_task</code>, <code>ms365_update_task</code></td>
+</tr>
+</tbody>
+</table>
+<p>What to know before asking an agent to act on it:</p>
+<ul>
+<li><strong>Drafts are the safe default.</strong> <code>ms365_create_draft</code> saves a message (or a
+  reply or forward that keeps the thread) in Outlook's Drafts folder and returns
+  a link to review it there; nothing leaves until <code>ms365_send_draft</code>, or until
+  you send it yourself from Outlook. Ask for "a draft" when you want to read it
+  first.</li>
+<li><strong>Mail is HTML, and pictures can sit inside it.</strong> Every message, reply,
+  forward and draft goes out as an HTML body, so headings, bullet lists, tables
+  and links render the way Outlook shows them. A picture can appear inside the
+  text in two ways: a hosted image by its <code>https://</code> address, or a file from
+  the agent's workspace embedded in the message (<code>inline_images</code>, referenced in
+  the body by its file name), which is how a header banner or a signature logo
+  travels with the email. Regular <code>attachments</code> take any file type up to 150 MB
+  each. Reading works the same way round: <code>ms365_get_message</code> lists every
+  attachment, including a screenshot someone pasted into the body, and
+  <code>ms365_download_attachment</code> saves them into the workspace so the agent can
+  open or describe them (<code>include_inline: false</code> skips the embedded pictures).</li>
+<li><strong>Meetings send real invitations.</strong> <code>ms365_create_event</code> with attendees makes
+  Outlook email each of them an invitation, and <code>online_meeting</code> adds a Teams
+  join link. Changing the time or the attendee list sends an update, and
+  deleting a meeting you organize sends a cancellation with your note. When you
+  name people rather than addresses, the agent looks them up first
+  (<code>ms365_find_people</code> searches the people you work with, your organization's
+  directory and your contacts), and it can ask Outlook for a time that suits
+  everyone (<code>ms365_find_meeting_times</code>) before booking.</li>
+<li><strong>Times follow your mailbox.</strong> An agent reads and writes times in the time
+  zone set in your Outlook settings unless you name another one.</li>
+<li><strong>Anything that reaches other people asks first</strong> under the <code>safe</code> and
+  <code>production</code> security profiles: sending, replying and forwarding mail, sending
+  a draft, creating, changing or cancelling a meeting, answering an invitation,
+  turning on an automatic reply, uploading, sharing or deleting a file, writing
+  to a workbook, and posting to Teams. Drafts, flags, folder moves, contacts and
+  To Do tasks do not.</li>
+<li><strong>Files land in the workspace.</strong> Attachments and downloaded files are saved in
+  the agent's <code>downloads</code> folder, where its other tools can open them; a
+  download can also be converted to PDF on the way.</li>
+<li><strong>Some features need a work or school account.</strong> Teams, meeting-time
+  suggestions and availability, the organization directory, SharePoint, search
+  across shared files, and Excel are not available on a personal Microsoft
+  account; mail, calendar, contacts, OneDrive files and To Do are.</li>
+<li><strong>A connection made before these features existed needs one fresh sign-in.</strong>
+  It keeps working for what it could already do, and anything newer (drafts,
+  mail folders, availability, people search, contacts, To Do, SharePoint and
+  shared files, Teams chats) answers that the permission is missing; the agent
+  then offers you a sign-in link. Signing in again replaces the connection in
+  place. If your organization requires an administrator to approve app
+  permissions, the administrator approves the new ones once.</li>
+</ul>
+<p><strong>HubSpot.</strong> The <code>hubspot</code> toolkit works a HubSpot CRM account: contacts,
+companies, deals, tickets, products, line items, quotes and invoices; notes,
+tasks, calls, emails and meetings logged against them; pipelines, owners,
+associations, properties and lists; imports and exports; workflows, forms,
+marketing and transactional email; blog posts, pages and HubDB. Connect it under
+Connections → HubSpot (or ask the agent for a sign-in link), then add
+<code>"hubspot"</code> to <code>tools</code>, or use the built-in <strong>HubSpotAgent</strong> subagent, which
+carries the whole set. A private-app token stored in the <strong>Vault</strong> as
+<code>HUBSPOT_ACCESS_TOKEN</code> still works instead of a connection, but it never renews
+on its own.</p>
+<ul>
+<li><strong>The sign-in adapts to your HubSpot plan.</strong> Contacts, companies, deals and
+  owners are part of every plan and are always granted. Everything else (tickets,
+  quotes, workflows, CMS, marketing email, …) is granted only when your plan
+  includes it and the person signing in has access to it in HubSpot. A tool for a
+  feature the connection was not granted answers that a scope is missing instead
+  of failing; if your plan does include it, sign in again as a HubSpot user with
+  access to that feature.</li>
+<li><strong>Sign in as a user with the access the agent needs.</strong> HubSpot applies that
+  user's permissions to every call the agent makes.</li>
+</ul>
+<p><strong>Apollo.io.</strong> The <code>apollo</code> toolkit works an Apollo.io account: searching
+Apollo's database for people and companies, enriching a person (work email,
+title, employment history) or a company (industry, headcount, revenue, funding,
+technologies), job postings and news about a company; the contacts, accounts and
+deals saved in Apollo, with their stages, lists, notes and tasks; and sequences
+(finding them, enrolling contacts, removing or stopping them, checking the
+emails they sent). Add <code>"apollo"</code> to <code>tools</code>, or use the built-in
+<strong>ApolloAgent</strong> subagent, which carries the whole set. It needs an Apollo API
+key stored in the <strong>Vault</strong> as <code>APOLLO_API_KEY</code>; ask the agent and it sends you
+a secure form for it.</p>
+<ul>
+<li><strong>Use a master key unless you want to limit the agent.</strong> In Apollo (Settings,
+  Integrations, API keys) a key is either a master key or limited to the
+  endpoints ticked when it was created. A limited key answers "not allowed to
+  call this endpoint" for anything else, and listing your team's users or the
+  API usage needs a master key. Apollo runs every call as your workspace's
+  longest-standing active admin, whoever created the key.</li>
+<li><strong>Some steps spend Apollo credits.</strong> The people search is free and never
+  returns emails or phone numbers. Enriching a person costs a credit when Apollo
+  finds them (personal emails and phone numbers cost more), enriching a company
+  costs one per company, and company search, job postings and news cost one per
+  page. When you ask for one of these, the agent runs it without asking you to
+  confirm, then reports the credits used and can show your remaining balance.
+  Phone numbers arrive a few minutes later; the agent gives you the rest first
+  and fetches them when Apollo has finished.</li>
+<li><strong>Enrolling contacts in a sequence sends real email.</strong> Only saved contacts can
+  be enrolled, so the agent saves a prospect first (matching an existing contact
+  instead of duplicating it). Under the Supervised and Locked-down profiles the
+  enrollment waits for your approval, as does the agent's general-purpose
+  Apollo request, which can reach any endpoint. Searches, enrichment and record
+  edits do not ask.</li>
+</ul>
+<p><strong>Lusha.</strong> The <code>lusha</code> toolkit works a Lusha account: looking up people and
+companies you already know and revealing their emails, phone numbers and company
+data (industry, headcount, revenue, funding, technologies, open jobs, parent
+companies); finding new prospects and companies by role, seniority, size,
+industry, technology, buying intent and recent activity; people and companies
+similar to examples you give; the buying committee at a target company; job
+changes, promotions, hiring surges, news and intent changes; scores against your
+Target Profiles and by buying signals; the companies visiting your tracked
+websites; sales calls recorded by Lusha Conversations; Lusha tables; and webhook
+subscriptions. Add <code>"lusha"</code> to <code>tools</code>, or use the built-in <strong>LushaAgent</strong>
+subagent, which carries the whole set. It needs a Lusha API key stored in the
+<strong>Vault</strong> as <code>LUSHA_API_KEY</code> (Lusha dashboard: Enrich, API, Manage API keys);
+ask the agent and it sends you a secure form for it.</p>
+<ul>
+<li><strong>Your Lusha plan decides what works.</strong> The key needs a plan with API access,
+  and everything beyond basic lookups (prospecting, lookalikes, signals, scores,
+  tables) needs Lusha's v3 API access, which Lusha's account team turns on. A
+  call your plan does not cover answers that the account is inactive or lacks v3
+  access; tell your Lusha contact. Website visitors need the sites set up for
+  tracking in Lusha first.</li>
+<li><strong>Most steps spend Lusha credits.</strong> Searches and prospecting return previews
+  without emails or phone numbers and charge per result; revealing emails or
+  phones charges per field and per person; company data, lookalikes, signals,
+  scores and reading a table's rows charge too. Listing filter values, signal
+  types, Target Profiles and tables is free. The agent runs a step you ask for
+  without asking first and reports the credits it used; it can show your
+  balance and the price of every action. Phone numbers that Lusha fetches from
+  other providers (Data Waterfall, when you have it on) can arrive a little
+  later; the agent fetches them when Lusha has finished.</li>
+<li><strong>Tables act as a person.</strong> Lusha needs the email of a user on your Lusha
+  account to create, read or change a table; the agent asks you for it.</li>
+<li><strong>Some steps wait for approval.</strong> Under the Supervised and Locked-down
+  profiles, the agent asks before it creates or changes a webhook subscription
+  (Lusha would send your contact and company data to the address it names),
+  deletes a subscription, a table or a table column, rotates the webhook
+  signing secret, or uses its general-purpose Lusha request, which can reach any
+  endpoint; reading the webhook signing secret asks too. Searches, enrichment,
+  scores and table edits do not ask.</li>
+</ul>
+<p>Gmail (the <code>google</code> toolkit) works the same way for evidence and files:</p>
+<ul>
+<li><strong>Each message shows two times.</strong> <em>Date</em> is what the sender's mail program
+  wrote; <em>Received (UTC)</em> is Gmail's own record of when the message arrived or
+  was sent. Cite the second when the time matters, for example when an order
+  was placed.</li>
+<li><strong>Attachments save into the workspace.</strong> A message lists its attachments by
+  name, size and type, and <code>gmail_download_attachments</code> saves them (all of
+  them, or the names you pick) into <code>downloads/gmail/&lt;message id&gt;/</code> unless you
+  name another folder inside the workspace. Saving the same file twice reuses
+  the copy already there. Saving needs no approval: the file stays inside the
+  agent's own workspace.</li>
+<li><strong>Mail written only in HTML</strong> (common for broker and bank notifications) is
+  read as plain text instead of coming back empty.</li>
+<li><strong>New mail can wake the agent.</strong> See <a href="#gmail_watch-wake-on-new-email"><code>gmail_watch</code></a>.</li>
+</ul>
+<h2 id="subagents">Subagents<a class="headerlink" href="#subagents" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subagents</code></td>
+<td>object[]</td>
+<td><code>[]</code></td>
+<td>Specialists this agent can delegate to.</td>
+</tr>
+<tr>
+<td><code>builtin_subagents</code></td>
+<td>list or object</td>
+<td><code>[]</code></td>
+<td>Ready-made subagents. <code>"all"</code>, <code>"none"</code>, or a list of names. The operations manager (<code>"ops"</code>) is no longer added by default, since its scheduler, heartbeat, PULSE and approvals tools are on every agent directly; list <code>"ops"</code> to add it anyway.</td>
+</tr>
+</tbody>
+</table>
+<p>Each entry in <code>subagents</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>How the parent addresses it.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>What it is for — the parent reads this to decide when to delegate.</td>
+</tr>
+<tr>
+<td><code>system_prompt</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>Its instructions.</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Inherits the parent's model when unset. Use a cheaper model here for narrow work.</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Its own tools.</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Its own skills.</td>
+</tr>
+<tr>
+<td><code>subagents</code></td>
+<td>object[]</td>
+<td><code>[]</code></td>
+<td>Nested specialists.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>from_archetype</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Build this subagent from a ready-made archetype instead of writing it out.</td>
+</tr>
+<tr>
+<td><code>system_prompt_extension</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Text <strong>appended</strong> to the subagent's prompt at build time, under an "Additional owner instructions" heading. Made for catalog-sourced subagents: the catalog prompt stays live, your additions ride on top.</td>
+</tr>
+<tr>
+<td><code>backend</code></td>
+<td>object | null</td>
+<td><code>null</code></td>
+<td>Give the subagent its own filesystem/sandbox.</td>
+</tr>
+</tbody>
+</table>
+<p>Subagents are <strong>internal</strong> to their parent — they are not agents in the roster,
+they have no channels of their own, and nobody outside can message them. Use a
+subagent for a specialty the parent needs; use a separate top-level agent when
+the thing needs its own inbox, schedule or memory.</p>
+<p><strong>Customizing a catalog-sourced member.</strong> A <code>from_archetype</code> entry (and a
+<code>builtin_subagents</code> integration) takes overrides <em>next to</em> the reference — any
+field you set wins over what the catalog ships, everything else keeps tracking
+the catalog:</p>
+<div class="highlight"><pre><span></span><code><span class="err">subagents</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nv">from_archetype</span><span class="p">:</span><span class="w"> </span><span class="s">"sales-coach"</span><span class="w"> </span><span class="p">},</span><span class="w">                          </span><span class="c1">// all catalog defaults</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nv">from_archetype</span><span class="p">:</span><span class="w"> </span><span class="s">"sales-engineer"</span><span class="p">,</span><span class="w"> </span><span class="nv">model</span><span class="p">:</span><span class="w"> </span><span class="s">"default:pro"</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="c1">// stronger brain, same prompt</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">from_archetype</span><span class="p">:</span><span class="w"> </span><span class="s">"sales-pipeline-analyst"</span><span class="p">,</span>
+<span class="w">    </span><span class="nv">system_prompt_extension</span><span class="p">:</span><span class="w"> </span><span class="s">"Report figures in EUR. Our quarter ends in February."</span><span class="p">,</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>In the dashboard this is the pencil on any subagent card (<strong>Subagents</strong> tab):
+pick a model ("Inherit" keeps the member's own default), read the base prompt,
+type additions into <strong>Additional instructions</strong>, or — deliberately, behind a
+warning — <strong>detach</strong> and replace the whole prompt, which freezes it against
+catalog updates. Team installs offer the same model choice per member in the
+New agent dialog before anything is created.</p>
+<h2 id="org-who-may-talk-to-whom"><code>org</code> — who may talk to whom<a class="headerlink" href="#org-who-may-talk-to-whom" title="Permanent link">¶</a></h2>
+<p>Covered in depth in <a href="../feature-guides/agent-to-agent/">Agent-to-agent and the org chart</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>string | null</td>
+<td>the archetype's label</td>
+<td>The agent's position — shown under its name on cards, in the detail and chat headers and on the org chart, and told to the agent so it introduces itself by name and describes its role by title. Editable from the <strong>Title</strong> field on the Overview tab as well as here; see <a href="#identity">Identity</a>.</td>
+</tr>
+<tr>
+<td><code>manager</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>The agent this one reports to.</td>
+</tr>
+<tr>
+<td><code>reports</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Its direct reports.</td>
+</tr>
+<tr>
+<td><code>coworkers</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Peers at a similar level. Display only.</td>
+</tr>
+<tr>
+<td><code>input_agents</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Agents allowed to message this one. <strong>Empty means no restriction.</strong></td>
+</tr>
+<tr>
+<td><code>output_agents</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Agents this one may message. <strong>Empty means no restriction.</strong></td>
+</tr>
+<tr>
+<td><code>input_mode</code></td>
+<td><code>"everyone"</code> | <code>"none"</code> | <code>"list"</code> | null</td>
+<td><code>null</code></td>
+<td>Explicit inbound policy. <code>null</code> infers from the list.</td>
+</tr>
+<tr>
+<td><code>output_mode</code></td>
+<td><code>"everyone"</code> | <code>"none"</code> | <code>"list"</code> | null</td>
+<td><code>null</code></td>
+<td>Explicit outbound policy.</td>
+</tr>
+<tr>
+<td><code>mutating_from_manager_only</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>When true, only the manager may trigger actions that change things; other peers get read-only service.</td>
+</tr>
+<tr>
+<td><code>autogenerate</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Derive both allow-lists from the hierarchy instead of maintaining them by hand.</td>
+</tr>
+</tbody>
+</table>
+<p>Two rules worth committing to memory: an <strong>empty list means unrestricted</strong>, not
+"nobody"; and an agent's <strong>manager and direct reports can always exchange
+messages</strong>, whatever the allow-lists say, so declaring a reporting line is
+enough to make delegation work.</p>
+<h2 id="agent_visibility-who-this-agent-knows-about"><code>agent_visibility</code> — who this agent knows about<a class="headerlink" href="#agent_visibility-who-this-agent-knows-about" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mode</code></td>
+<td><code>"none"</code> | <code>"all"</code> | <code>"list"</code></td>
+<td><code>"none"</code></td>
+<td>Which other agents this one is told exist.</td>
+</tr>
+<tr>
+<td><code>agents</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>The list, when <code>mode: "list"</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Visibility is <strong>awareness, not permission</strong>. It controls what the agent is told
+about its colleagues; <code>org</code> controls what it is allowed to do. An agent that can
+see a peer but has no <code>org</code> permission still cannot message it.</p>
+<h2 id="access-and-lifecycle">Access and lifecycle<a class="headerlink" href="#access-and-lifecycle" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>human_only</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Refuse all inbound agent-to-agent messages. Use for an agent that only ever takes direction from a person — the deployment operator, for example.</td>
+</tr>
+<tr>
+<td><code>fleet_access</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Lets this agent's shell and file tools reach the whole deployment instead of only its own workspace: every agent's folder under the Olano home's <code>agents/</code> (read and write: workspaces, <code>agent.json5</code> files and connection files, including agents created later), the common skills folder <code>skills/</code> (read and write) and the deployment logs in <code>logs/</code> (read only). The vault, the conversation databases and <code>config.yaml</code> stay out of reach. Meant for AgentFather, which ships with it on, so it can search every agent's files and logs and fix a shared skill in place. Only an administrator can turn it on for an agent: AgentFather cannot grant it to another agent without an administrator in the conversation. Approvals for file writes and shell commands still apply. Changing it rebuilds the agent's sandbox on its next restart. In the dashboard it is the <strong>Fleet file access</strong> switch on the agent's Overview tab (<strong>Access &amp; Safety</strong> card), which asks you to confirm before turning it on.</td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>An internal/test agent: not booted, and excluded from every listing — the dashboard roster, the org chart, admin and access-management views included.</td>
+</tr>
+<tr>
+<td><code>external_access</code></td>
+<td>object</td>
+<td>all off</td>
+<td>Whether systems <strong>outside</strong> the deployment may send this agent messages, over MCP and/or A2A, and the public description they see. Edited on the agent's <strong>External access</strong> tab; see <a href="#external_access-letting-outside-systems-reach-this-agent"><code>external_access</code></a> and <a href="../feature-guides/a2a-and-mcp/">Beyond the deployment: A2A and MCP</a>.</td>
+</tr>
+<tr>
+<td><code>browser</code></td>
+<td>object</td>
+<td>no rules</td>
+<td>This agent's browser settings. <code>auto_approve</code> lists narrow exceptions to the approval the browser asks for before sending, posting or submitting; see <a href="#browser-actions-that-dont-ask"><code>browser</code></a> and <a href="../feature-guides/browser/#actions-that-dont-ask">Browser control</a>. Only admins and the agent's owners can change it.</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Extra directories to load skills from, absolute or relative to the workspace. The agent's own <code>workspace/skills/</code> and the shared common skills are always included and do not need listing here.</td>
+</tr>
+<tr>
+<td><code>disabled_skills</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Skills this agent must <strong>not</strong> load, by skill name (the <code>name:</code> at the top of its <code>SKILL.md</code>, which is also its folder name) — e.g. <code>["canvas-design", "xlsx"]</code>. One name per entry; matching ignores capitalisation. A named skill is not described in the agent's prompt, cannot be delegated to, and is ignored by self-learning, but it stays on disk and stays listed (marked <em>Off</em>), so it can be switched back on. Naming a common skill takes it away from <strong>this agent only</strong> — every other agent keeps it, which is the reason this is a denylist rather than a deletion. An entry naming a skill that is not installed is harmless and does nothing. Empty (the default) means every discovered skill is loaded. Editable in the dashboard: <strong>Agents → agent → Skills</strong>, the switch on each row. Applies after a restart.</td>
+</tr>
+<tr>
+<td><code>workspace</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Derived automatically. <strong>Do not set this by hand.</strong></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Per-agent environment values. Non-secret settings only.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mcp_servers-external-tool-servers"><code>mcp_servers</code> — external tool servers<a class="headerlink" href="#mcp_servers-external-tool-servers" title="Permanent link">¶</a></h2>
+<p>See <a href="../feature-guides/mcp-servers/">MCP servers</a> for the full walkthrough.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>The server endpoint.</td>
+</tr>
+<tr>
+<td><code>transport</code></td>
+<td><code>"sse"</code> | <code>"http"</code> | <code>"stdio"</code></td>
+<td><code>"sse"</code></td>
+<td>How to reach it. <code>stdio</code> runs the server as a process instead of connecting over the network — on managed deployments that process runs inside an isolated sandbox container.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>command</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>For <code>stdio</code>: the executable to run.</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>For <code>stdio</code>: its arguments.</td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>For <code>stdio</code>: environment for the child process. Values may reference a stored credential as <code>${vault:NAME}</code>.</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Extra HTTP headers — the usual way to pass an API key to an <code>http</code>/<code>sse</code> server. Values may reference a stored credential as <code>${vault:NAME}</code>.</td>
+</tr>
+<tr>
+<td><code>auth</code></td>
+<td><code>"none"</code> | <code>"oauth"</code></td>
+<td><code>"none"</code></td>
+<td>Use <code>oauth</code> for servers that require a sign-in.</td>
+</tr>
+<tr>
+<td><code>oauth_scope</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Requested scope.</td>
+</tr>
+<tr>
+<td><code>oauth_client_id</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>For servers that need a pre-registered client.</td>
+</tr>
+<tr>
+<td><code>oauth_client_secret</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Prefer the vault over writing this here.</td>
+</tr>
+<tr>
+<td><code>disabled_tools</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Hide specific tools the server offers. A hidden tool is never offered to the model; only the enabled ones are bound and listed in its prompt. The agent can still see what is hidden through <code>self_list_mcp_tools</code> and suggest enabling one when a task needs it.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="remote_agents-external-agents-over-a2a"><code>remote_agents</code> — external agents over A2A<a class="headerlink" href="#remote_agents-external-agents-over-a2a" title="Permanent link">¶</a></h2>
+<p>Agents hosted <strong>outside</strong> this deployment that this agent may hand work to,
+over the open Agent2Agent (A2A) protocol. See
+<a href="../feature-guides/a2a-and-mcp/">Beyond the deployment: A2A and MCP</a> for the walkthrough. Listing at
+least one enabled entry gives the agent the <code>a2a_list_agents</code>,
+<code>a2a_discover_agent</code>, <code>a2a_send_message</code> and <code>a2a_get_task</code> tools; an empty
+list (the default) means it can reach no external agent at all.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>The handle the agent uses, e.g. <code>acme-support</code>. Letters, digits, <code>-</code>, <code>_</code>; matching ignores capitalisation.</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>Base URL of the remote agent, e.g. <code>https://agents.acme.com/support</code>. Its Agent Card is read from <code>&lt;url&gt;/.well-known/agent-card.json</code>. Must be <code>https://</code>; hosts on private, link-local or cloud-metadata addresses are always refused.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Off keeps the entry but removes the agent from reach.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>What the remote agent is for, shown to your agent when it lists them. Empty falls back to the remote card's own description.</td>
+</tr>
+<tr>
+<td><code>auth</code></td>
+<td><code>"none"</code> | <code>"bearer"</code> | <code>"api_key"</code></td>
+<td><code>"none"</code></td>
+<td>How to authenticate. <code>bearer</code> sends <code>Authorization: Bearer &lt;credential&gt;</code>; <code>api_key</code> sends the credential in the header named by <code>api_key_header</code>.</td>
+</tr>
+<tr>
+<td><code>credential</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>The secret for <code>bearer</code>/<code>api_key</code>, ideally a vault reference such as <code>${vault:ACME_A2A_TOKEN}</code> so it never sits in this file. Resolved per agent (this agent's override, then the shared entry).</td>
+</tr>
+<tr>
+<td><code>api_key_header</code></td>
+<td>string</td>
+<td><code>"X-API-Key"</code></td>
+<td>Header name for <code>api_key</code> mode.</td>
+</tr>
+<tr>
+<td><code>timeout_seconds</code></td>
+<td>integer</td>
+<td><code>120</code></td>
+<td>How long one message waits for an answer (5–900). A task still running at the deadline comes back as in progress with an id to poll.</td>
+</tr>
+<tr>
+<td><code>allow_insecure_http</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Permit <code>http://</code> for a loopback host only (local development). Never for anything on a network.</td>
+</tr>
+<tr>
+<td><code>same_origin_endpoint</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Require the service endpoint the remote card advertises to share scheme, host and port with <code>url</code>, so a compromised card cannot redirect your credential elsewhere.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="external_access-letting-outside-systems-reach-this-agent"><code>external_access</code> — letting outside systems reach this agent<a class="headerlink" href="#external_access-letting-outside-systems-reach-this-agent" title="Permanent link">¶</a></h2>
+<p>The <strong>inbound</strong> direction: someone else sending this agent messages. Not to be
+confused with <code>mcp_servers</code> (servers this agent uses) or <code>remote_agents</code>
+(agents this agent calls). Edited on the agent's <strong>External access</strong> tab; the
+matching home-wide switches live under <strong>Config → External access</strong>
+(<a href="../config-yaml/#external_access-letting-outside-systems-reach-your-agents"><code>external_access:</code> — letting outside systems reach your agents</a>). Both
+flags are off by default; the walkthrough is <a href="../feature-guides/a2a-and-mcp/">Beyond the deployment: A2A and MCP</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mcp</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Publish the agent as an <code>ask_&lt;agent&gt;</code> tool on the deployment's MCP endpoint for platforms that speak the Model Context Protocol (Claude, ChatGPT, Cursor, agent frameworks). Needs the home-wide MCP switch too. Applies on the agent's next restart.</td>
+</tr>
+<tr>
+<td><code>a2a</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Publish an Agent Card and JSON-RPC endpoint for agents and platforms that speak the Agent2Agent protocol. Needs the home-wide A2A switch too. Applies on the next restart.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td><strong>Required while either flag is on.</strong> One to three plain sentences on what the agent can do for an outside caller, what it needs and what it will not do — the MCP tool description and the A2A card description, i.e. everything a remote caller sees. Written for a stranger; it is <em>not</em> the system prompt and is never shown to the agent itself. Up to 2000 characters. A config that turns a flag on without it is refused.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="browser-actions-that-dont-ask"><code>browser</code> — actions that don't ask<a class="headerlink" href="#browser-actions-that-dont-ask" title="Permanent link">¶</a></h2>
+<p>Every send, post, form submit or purchase the agent tries in its browser waits
+for a person to approve it. <code>auto_approve</code> lists narrow exceptions: each rule
+names one site and the kinds of action there that go ahead without asking.
+Edited on the agent's <strong>Browser</strong> tab (admins and the agent's owners only);
+the walkthrough is <a href="../feature-guides/browser/#actions-that-dont-ask">Actions that don't ask</a>.
+Rules apply to the agent's next action, with no restart.</p>
+<div class="highlight"><pre><span></span><code><span class="err">browser</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">auto_approve</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nv">site</span><span class="p">:</span><span class="w"> </span><span class="s">"linkedin.com"</span><span class="p">,</span><span class="w"> </span><span class="nv">actions</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"send"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="p">}</span><span class="err">,</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto_approve</code></td>
+<td>object[]</td>
+<td><code>[]</code></td>
+<td>The rules, at most 20, one per site. Empty means every committing action asks.</td>
+</tr>
+<tr>
+<td><code>auto_approve[].site</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>A bare host name such as <code>linkedin.com</code> (covers the site and its sub-domains) or <code>*.example.com</code> (sub-domains only). No <code>https://</code>, path or port. The action must happen on this site and a form must send its data to it.</td>
+</tr>
+<tr>
+<td><code>auto_approve[].actions</code></td>
+<td>string[]</td>
+<td><strong>required</strong></td>
+<td>One or more of <code>send</code> (send, reply, post, publish, invite), <code>submit</code> (other forms that save or change something; <em>Submit</em>, <em>Confirm</em>), <code>signup</code> (subscribe, sign up, create account, book, reserve).</td>
+</tr>
+<tr>
+<td><code>auto_approve[].in_background</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Also apply in scheduled jobs and background (Cortex) runs. When off, the rule applies only in a conversation started by a person who owns the agent or is an admin.</td>
+</tr>
+</tbody>
+</table>
+<p>Purchases, payments, transfers, donations, deletions, approvals and merges
+always ask, whatever a rule says, and no rule applies to a request from another
+agent, an outside MCP/A2A caller, a webhook or a watched email.</p>
+<h2 id="observability-tracing-this-agent-to-langfuse"><code>observability</code>: tracing this agent to Langfuse<a class="headerlink" href="#observability-tracing-this-agent-to-langfuse" title="Permanent link">¶</a></h2>
+<p>Overrides the deployment's tracing settings (<code>observability</code> in
+<a href="../config-yaml/"><code>config.yaml</code></a>) for this agent. Every field is empty by
+default, which keeps the deployment's value; a value here wins. Only an admin
+can change it: an agent's own tools and AgentFather refuse to, unless an admin
+is the person asking.</p>
+<div class="highlight"><pre><span></span><code><span class="err">observability</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">langfuse</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">enabled</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span><span class="w">      </span><span class="c1">// trace this agent even if the deployment does not</span>
+<span class="w">    </span><span class="nv">capture</span><span class="p">:</span><span class="w"> </span><span class="s">"full"</span><span class="p">,</span><span class="w">    </span><span class="c1">// or "metadata"</span>
+<span class="w">    </span><span class="nv">sample_rate</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w">   </span><span class="c1">// one turn in five</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span><span class="err">,</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>langfuse.enabled</code></td>
+<td>boolean or empty</td>
+<td>empty</td>
+<td><code>true</code> traces this agent's turns, <code>false</code> never traces them, empty follows the deployment. Tracing still needs Langfuse keys.</td>
+</tr>
+<tr>
+<td><code>langfuse.capture</code></td>
+<td>string or empty</td>
+<td>empty</td>
+<td><code>metadata</code> or <code>full</code>, with the same meaning as in <code>config.yaml</code>. Anything else reads as <code>metadata</code>.</td>
+</tr>
+<tr>
+<td><code>langfuse.sample_rate</code></td>
+<td>number or empty</td>
+<td>empty</td>
+<td>Share of this agent's turns to trace, <code>0.0</code> to <code>1.0</code>, clamped.</td>
+</tr>
+</tbody>
+</table>
+<p>An agent can also send its traces to a different Langfuse project: an admin
+saves that agent's own keys in the Observability settings.</p>
+<h2 id="channels-messaging-connectors"><code>channels</code> — messaging connectors<a class="headerlink" href="#channels-messaging-connectors" title="Permanent link">¶</a></h2>
+<p>A list of objects, each with a <code>type</code> plus that connector's own settings.
+Connector fields vary widely and each is documented in the dashboard's
+Connectors tab. <strong>Credentials are never written here</strong> — see
+<a href="../feature-guides/channels-and-connectors/">Channels and connectors</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="err">channels</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nv">type</span><span class="p">:</span><span class="w"> </span><span class="s">"telegram"</span><span class="p">,</span><span class="w"> </span><span class="nv">allowed_users</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"123456789"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="nv">type</span><span class="p">:</span><span class="w"> </span><span class="s">"slack"</span><span class="p">,</span><span class="w"> </span><span class="nv">channels</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"#ops"</span><span class="p">]</span><span class="w"> </span><span class="p">},</span>
+<span class="p">]</span>
+</code></pre></div>
+<p>Supported types: <code>telegram</code>, <code>slack</code>, <code>discord</code>, <code>whatsapp</code>, <code>whatsapp_twilio</code>,
+<code>whatsapp_meta_api</code>, <code>signal</code>, <code>email</code> / <code>imap</code>, <code>matrix</code>, <code>mattermost</code>, <code>sms</code>, <code>homeassistant</code>,
+<code>dingtalk</code>, <code>feishu</code>, <code>wecom</code>, <code>weixin</code>, <code>qqbot</code>, <code>bluebubbles</code>, <code>debox</code>,
+<code>api_server</code>, <code>webhook</code>.</p>
+<h2 id="schedule-recurring-work"><code>schedule</code> — recurring work<a class="headerlink" href="#schedule-recurring-work" title="Permanent link">¶</a></h2>
+<p>See <a href="../feature-guides/scheduler-and-heartbeat/">Scheduler and heartbeat</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cron</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Standard 5-field cron (minute, hour, day of month, month, day of week), e.g. <code>"0 9 * * 1-5"</code> for weekdays at 09:00. The day of week is standard cron: <code>0</code> or <code>7</code> is Sunday, <code>1</code> is Monday; names (<code>mon-fri</code>, <code>mon,thu</code>) work too. Shorthand for the five fields below.</td>
+</tr>
+<tr>
+<td><code>minute</code> / <code>hour</code> / <code>day</code> / <code>month</code> / <code>day_of_week</code></td>
+<td>string</td>
+<td><code>"*"</code></td>
+<td>The fields, when you are not using <code>cron</code>.</td>
+</tr>
+<tr>
+<td><code>timezone</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>IANA zone, e.g. <code>"America/Costa_Rica"</code>. Defaults to the deployment's zone.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>What to send the agent when the job fires. Required for a normal job.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>A label for the dashboard.</td>
+</tr>
+<tr>
+<td><code>thread_id</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Run in a specific conversation thread.</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Run this job on a different model than the agent's, as <code>provider:model</code> (<code>"olano:pro"</code>, <code>"openai:gpt-6.1-sol"</code>). <code>null</code> follows the agent's configured model.</td>
+</tr>
+<tr>
+<td><code>reasoning_effort</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Reasoning effort for this job's runs, one of the levels the model it runs on accepts (<code>model</code> when set, else the agent's). <code>null</code> uses the agent's own setting. A level the model does not accept is dropped at run time with a log line; the dashboard and the scheduler tools refuse to save one.</td>
+</tr>
+<tr>
+<td><code>for_each_customer</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Fan the job out: run once per end user. Requires multi-user mode.</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Run a named entry from <code>allowed_actions</code> instead of sending a message. Only valid with <code>for_each_customer</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>In fan-out mode the message may use <code>{customer_key}</code>, <code>{platform}</code> and
+<code>{user_id}</code> placeholders.</p>
+<h2 id="heartbeat-and-issues-inherit-by-default-blocks"><code>heartbeat</code> and <code>issues</code> — inherit-by-default blocks<a class="headerlink" href="#heartbeat-and-issues-inherit-by-default-blocks" title="Permanent link">¶</a></h2>
+<p>Both use the same three-state pattern: <code>null</code> (or the key omitted) means
+<strong>inherit the deployment default from <code>config.yaml</code></strong>; an explicit value
+overrides it for this agent only.</p>
+<p><code>heartbeat</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit; on)</td>
+<td>Whether the agent wakes up periodically to check <code>HEARTBEAT.md</code>.</td>
+</tr>
+<tr>
+<td><code>interval_minutes</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 60)</td>
+<td>How often. Clamped to 1–1440.</td>
+</tr>
+</tbody>
+</table>
+<p><code>issues</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto_process</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit; on)</td>
+<td>Whether the agent picks up issues assigned to it on its own. <code>false</code> = manual: issues wait for a person to prompt the agent.</td>
+</tr>
+<tr>
+<td><code>poll_minutes</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 15)</td>
+<td>How often it checks. Clamped to 1–1440.</td>
+</tr>
+</tbody>
+</table>
+<p><code>context_window</code> — how this agent's conversations are bounded inside its
+model's context window. Every field is <code>null</code> = inherit the home-wide
+<code>context_window:</code> block in <a href="../config-yaml/#context_window-compaction-and-oversized-tool-results"><code>context_window:</code> — compaction and oversized tool results</a>,
+which also explains what each one does:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>keep_fraction</code></td>
+<td>number | null</td>
+<td><code>null</code> (inherit; 0.35)</td>
+<td>Share of the window kept verbatim after a compaction, when the window is known. 0.05–0.8.</td>
+</tr>
+<tr>
+<td><code>keep_tokens</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 40000)</td>
+<td>The same budget in tokens, used when the window is unknown. 2000–2000000.</td>
+</tr>
+<tr>
+<td><code>trigger_fraction</code></td>
+<td>number | null</td>
+<td><code>null</code> (inherit; 0.85)</td>
+<td>When automatic compaction fires, as a share of the window. 0.3–0.98.</td>
+</tr>
+<tr>
+<td><code>trigger_tokens</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 170000)</td>
+<td>The same trigger in tokens, when the window is unknown. 8000–4000000.</td>
+</tr>
+<tr>
+<td><code>mcp_result_token_limit</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 5000)</td>
+<td>MCP results larger than this are saved to a workspace file and replaced by a preview. <code>0</code> = no cap.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gmail_watch-wake-on-new-email"><code>gmail_watch</code>: wake on new email<a class="headerlink" href="#gmail_watch-wake-on-new-email" title="Permanent link">¶</a></h2>
+<p>Starts a turn for the agent when new mail matching a Gmail search reaches its
+connected Gmail. Off by default. Set it on the agent's <strong>Overview</strong> tab, in the
+<strong>Gmail watch</strong> card, which also shows the agent's Google connection and the
+watch's last check; AgentFather can set it too. Changes apply immediately, no
+restart.</p>
+<p><strong>It needs the agent's Google connection.</strong> The watch reads the mailbox through
+the same Google sign-in the Gmail tools use (<strong>Connections</strong>, per agent or
+shared). Without one it reads nothing: the card shows <em>Not connected</em> with a
+<strong>Connect Google</strong> button, and the bell raises one notification that clears
+itself on the first check after you connect. Mail that arrived before the
+connection is not replayed. If Google refuses the saved sign-in later, the card
+and the bell say so the same way. If the mailbox cannot be connected to Google
+at all, add it on the <strong>Connectors</strong> tab as an <strong>Email</strong> connector instead: it
+checks the mailbox over IMAP with an app password and wakes the agent for every
+new message, without a search filter.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Turns the watch on. The agent needs the Google connection (Connections) with Gmail access.</td>
+</tr>
+<tr>
+<td><code>query</code></td>
+<td>string</td>
+<td><code>""</code> (watches <code>in:inbox</code>)</td>
+<td>A Gmail search, typed exactly as in Gmail's search box, for example <code>from:(@broker.example) has:attachment</code>.</td>
+</tr>
+<tr>
+<td><code>poll_minutes</code></td>
+<td>integer</td>
+<td><code>5</code></td>
+<td>How often Gmail is checked, 1 to 1440. New mail is picked up within this many minutes.</td>
+</tr>
+<tr>
+<td><code>prompt</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>What the agent should do with the new messages. Empty tells it to read each one, save the attachments it needs and act on its instructions.</td>
+</tr>
+<tr>
+<td><code>max_per_check</code></td>
+<td>integer</td>
+<td><code>10</code></td>
+<td>At most this many messages go into one turn, oldest first, 1 to 50. The rest wait for the next check.</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="err">gmail_watch</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">enabled</span><span class="p">:</span><span class="w"> </span><span class="k">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">query</span><span class="p">:</span><span class="w"> </span><span class="s">"from:(@broker.example) has:attachment"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">poll_minutes</span><span class="p">:</span><span class="w"> </span><span class="mf">5</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">prompt</span><span class="p">:</span><span class="w"> </span><span class="s">"Match each confirmation to its Trade ID and record the execution evidence."</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>How it behaves:</p>
+<ul>
+<li><strong>Switching it on never replays your inbox.</strong> The first check only records
+  the time; mail that arrives after it is delivered. Changing <code>query</code> starts
+  over the same way.</li>
+<li><strong>One message wakes the agent once.</strong> The ids already delivered are kept
+  in the workspace, so a restart or a busy inbox never hands the same message
+  over twice.</li>
+<li><strong>A failed turn is retried.</strong> If the agent's turn fails, the same messages
+  are offered again on the next check, up to three times, after which they are
+  skipped so one bad message cannot wake the agent forever.</li>
+<li><strong>Email is treated as a stranger's words.</strong> The turn starts with the list of
+  new messages (sender, subject, received time, ids) and the agent reads them
+  with its Gmail tools. Low-risk actions go ahead; anything that needs approval
+  waits in the dashboard's Approvals list, whatever the agent's security
+  profile says about scheduled jobs. The turn cannot change the agent's own
+  settings or use owner-only tools.</li>
+<li>These runs appear in the agent's chat list with its other scheduled runs.</li>
+</ul>
+<p>Gmail can also push new mail instantly, but only through a Google Cloud
+Pub/Sub topic you would have to create and authorize. The watch avoids that
+setup at the cost of a few minutes' delay.</p>
+<h2 id="webhooks"><code>webhooks</code><a class="headerlink" href="#webhooks" title="Permanent link">¶</a></h2>
+<p>See <a href="../feature-guides/webhooks/">Webhooks</a> for examples of both directions.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>A label.</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td><code>"outbound"</code> | <code>"inbound"</code></td>
+<td><code>"outbound"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Outbound: where to POST. Required for outbound, must be <code>http(s)</code>.</td>
+</tr>
+<tr>
+<td><code>events</code></td>
+<td>string[]</td>
+<td><code>["*"]</code></td>
+<td>Outbound: which events to send.</td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Outbound: HMAC signing secret. Supports <code>${VAR}</code>. Never returned by the API.</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Outbound: extra headers.</td>
+</tr>
+<tr>
+<td><code>timeout_seconds</code></td>
+<td>number</td>
+<td><code>10.0</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>max_retries</code></td>
+<td>integer</td>
+<td><code>2</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>rate_limit_per_minute</code></td>
+<td>integer</td>
+<td><code>60</code></td>
+<td><code>0</code> = unlimited.</td>
+</tr>
+<tr>
+<td><code>verify_tls</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>block_private_addresses</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Refuse to deliver to internal addresses. Leave on.</td>
+</tr>
+<tr>
+<td><code>prompt</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Inbound: what the agent should do with each payload.</td>
+</tr>
+<tr>
+<td><code>respond</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Inbound: run synchronously and return the agent's reply in the HTTP response.</td>
+</tr>
+<tr>
+<td><code>accumulate_thread</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Inbound: one persistent conversation for all payloads, rather than a fresh one each time.</td>
+</tr>
+<tr>
+<td><code>max_body_bytes</code></td>
+<td>integer</td>
+<td><code>256000</code></td>
+<td>Inbound: reject larger payloads.</td>
+</tr>
+</tbody>
+</table>
+<p>Outbound event names: <code>message.received</code>, <code>message.sent</code>, <code>agent.started</code>,
+<code>agent.stopped</code>, <code>agent.error</code>, <code>task.scheduled</code>, <code>task.completed</code>,
+<code>tool.called</code>, <code>approval.requested</code>, <code>budget.exceeded</code>, or <code>*</code> for all.</p>
+<h2 id="memory"><code>memory</code><a class="headerlink" href="#memory" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>markdown</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Keep <code>MEMORY.md</code> and daily logs.</td>
+</tr>
+<tr>
+<td><code>rag</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Also index memory for meaning-based search.</td>
+</tr>
+<tr>
+<td><code>rag_collection</code></td>
+<td>string</td>
+<td><code>"lionclaw_memory"</code></td>
+<td>Where indexed memory is stored. The default keeps Olano's previous name, lionclaw, so indexes built by earlier versions stay readable.</td>
+</tr>
+<tr>
+<td><code>self_learning</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Distil conversations into durable memory in the background.</td>
+</tr>
+<tr>
+<td><code>self_learning_interval</code></td>
+<td>integer</td>
+<td><code>3600</code></td>
+<td>Seconds between distillation passes.</td>
+</tr>
+<tr>
+<td><code>per_customer</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Give every end user their own isolated memory. Turns on multi-user mode (see <a href="../feature-guides/multi-user/">Multi-user: two different features</a>).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="customer_service-per-end-user-isolation"><code>customer_service</code> — per-end-user isolation<a class="headerlink" href="#customer_service-per-end-user-isolation" title="Permanent link">¶</a></h2>
+<p>For a shared agent that many people talk to. See
+<a href="../feature-guides/multi-user/">Multi-user: two different features</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Turn on per-end-user isolation. Mirrors <code>memory.per_customer</code>.</td>
+</tr>
+<tr>
+<td><code>prompt_extension</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Extra instructions for handling many users. Blank uses a sensible default.</td>
+</tr>
+<tr>
+<td><code>user_scheduling</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Let end users schedule their own reminders.</td>
+</tr>
+<tr>
+<td><code>max_jobs_per_user</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>Cap per user.</td>
+</tr>
+<tr>
+<td><code>min_job_interval_minutes</code></td>
+<td>integer</td>
+<td><code>60</code></td>
+<td>Minimum spacing between a user's jobs.</td>
+</tr>
+<tr>
+<td><code>connections</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Let end users connect to each other, with consent.</td>
+</tr>
+<tr>
+<td><code>max_connections_per_user</code></td>
+<td>integer</td>
+<td><code>25</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>max_connection_sends_per_day</code></td>
+<td>integer</td>
+<td><code>20</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>connection_invite_ttl_hours</code></td>
+<td>integer</td>
+<td><code>168</code></td>
+<td>How long an invite stays valid.</td>
+</tr>
+<tr>
+<td><code>connection_contact_info</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Shown to users in connection flows.</td>
+</tr>
+<tr>
+<td><code>user_credentials</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Let end users store their own credentials for the agent to use on their behalf.</td>
+</tr>
+<tr>
+<td><code>customer_credential_names</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>The allow-list of credential names they may store.</td>
+</tr>
+</tbody>
+</table>
+<p><code>user_scheduling</code>, <code>connections</code>, <code>user_credentials</code> and per-customer schedule
+fan-out all require multi-user mode; setting one without it makes the config
+fail to load rather than silently doing nothing.</p>
+<h2 id="message_policy-message-length-caps-and-silence-rules"><code>message_policy</code> — message length caps and silence rules<a class="headerlink" href="#message_policy-message-length-caps-and-silence-rules" title="Permanent link">¶</a></h2>
+<p>For an agent whose chat address is public. Everything here is off unless you
+set it, so an existing agent is unaffected. Edit it in <strong>Agents → your agent →
+Multi-user → Message policy</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_input_chars</code></td>
+<td>integer | null</td>
+<td><code>null</code></td>
+<td>Longest inbound message accepted, in characters of the sender's own text. Checked before any model call, so an over-long message costs nothing. <code>null</code> = unlimited.</td>
+</tr>
+<tr>
+<td><code>on_oversize</code></td>
+<td><code>"reject"</code> | <code>"truncate"</code> | <code>"ignore"</code></td>
+<td><code>"reject"</code></td>
+<td>What happens past that limit. <code>reject</code> sends a short notice and runs no turn; <code>truncate</code> trims to the limit and answers the shortened text; <code>ignore</code> drops it with no reply. Only applies while <code>max_input_chars</code> is set.</td>
+</tr>
+<tr>
+<td><code>oversize_notice</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Your wording for the <code>reject</code> notice. Blank uses the built-in line, which names both the limit and the length actually sent.</td>
+</tr>
+<tr>
+<td><code>ignore_patterns</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Regular expressions. A message matching any of them is dropped before any model call — free and exact. Matching is case-insensitive and unanchored; use <code>^…$</code> to require the whole message. An invalid expression makes the config fail to load rather than silently never matching. Keep them simple: a pattern with nested repeats (<code>(a+)+</code>) can take seconds per message, and only the first 20,000 characters of a message are scanned.</td>
+</tr>
+<tr>
+<td><code>ignore_rules</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Plain-language conditions the <strong>model</strong> judges, e.g. <code>"The message is not written in English"</code>. Added to the system prompt; the agent replies with a silence marker and the runtime sends nothing. Handles what a regex cannot — language, tone, intent — at the cost of one model turn per ignored message.</td>
+</tr>
+<tr>
+<td><code>ignore_notice</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>What an ignored sender sees. Blank = true silence (nothing is sent). Text = that one line instead. Applies to patterns, rules, and <code>on_oversize: "ignore"</code>.</td>
+</tr>
+<tr>
+<td><code>max_output_tokens</code></td>
+<td>integer | null</td>
+<td><code>null</code></td>
+<td>Hard ceiling on one reply, translated to whichever parameter your provider uses. <code>null</code> = the provider's own maximum.</td>
+</tr>
+</tbody>
+</table>
+<p>Four things worth knowing before you rely on these:</p>
+<ul>
+<li><strong>Slash commands are never screened.</strong> <code>/new</code>, <code>/help</code>, <code>/model</code> and the rest
+  pass through whatever you set, so a tight limit or a broad pattern cannot
+  lock you out of your own bot.</li>
+<li><strong>Only external conversations are screened</strong> — messenger channels, dashboard
+  and REST chat, and the OpenAI-compatible API. Scheduled runs, heartbeats and
+  background thinking are not, so a capped support desk can still write a long
+  nightly report.</li>
+<li><strong>A capped reply stops mid-sentence and is not continued.</strong> Without a cap,
+  Olano automatically asks the model to carry on when a reply is cut short;
+  with one, that retry is switched off, because otherwise every capped reply
+  would cost several extra turns — the opposite of what a cap is for.</li>
+<li><strong>On reasoning models the output ceiling counts thinking as well as the
+  answer</strong>, so a low value can return an empty reply. Keep it above ~1024
+  there, or set <code>reasoning_effort</code> to <code>none</code>/<code>low</code>.</li>
+</ul>
+<p>Patterns and rules are the cheap and the flexible halves of the same job.
+Anything a regular expression can already decide belongs in <code>ignore_patterns</code>,
+where it costs nothing; <code>ignore_rules</code> is for the judgements only a model can
+make. Pairing rules with <code>max_input_chars</code> and <code>max_output_tokens</code> keeps the
+turn they cost small.</p>
+<div class="highlight"><pre><span></span><code><span class="err">message_policy</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">max_input_chars</span><span class="p">:</span><span class="w"> </span><span class="mf">500</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">on_oversize</span><span class="p">:</span><span class="w"> </span><span class="s">"reject"</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">ignore_patterns</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"^</span><span class="se">\\</span><span class="s">W*$"</span><span class="p">,</span><span class="w"> </span><span class="s">"</span><span class="se">\\</span><span class="s">b(buy|cheap) followers</span><span class="se">\\</span><span class="s">b"</span><span class="p">],</span>
+<span class="w">  </span><span class="nv">ignore_rules</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s">"The message is not written in English"</span><span class="p">,</span>
+<span class="w">    </span><span class="s">"The message is nonsense or just testing the bot"</span><span class="p">,</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nv">ignore_notice</span><span class="p">:</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w">          </span><span class="c1">// stay completely silent</span>
+<span class="w">  </span><span class="nv">max_output_tokens</span><span class="p">:</span><span class="w"> </span><span class="mf">300</span><span class="p">,</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="monetization"><code>monetization</code><a class="headerlink" href="#monetization" title="Permanent link">¶</a></h2>
+<p>See <a href="../feature-guides/subscriptions-and-monetization/">Subscriptions and monetization</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>providers</code></td>
+<td><code>"stripe"</code> | <code>"telegram_stars"</code> list</td>
+<td><code>[]</code></td>
+<td>How people pay.</td>
+</tr>
+<tr>
+<td><code>trial_days</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>Free trial length.</td>
+</tr>
+<tr>
+<td><code>channels</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Which channels the paywall applies to.</td>
+</tr>
+<tr>
+<td><code>gate_groups</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Also require a subscription in group chats.</td>
+</tr>
+<tr>
+<td><code>plan.price_cents</code></td>
+<td>integer</td>
+<td><code>500</code></td>
+<td>Display amount.</td>
+</tr>
+<tr>
+<td><code>plan.currency</code></td>
+<td>string</td>
+<td><code>"usd"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan.interval</code></td>
+<td><code>"month"</code> | <code>"year"</code></td>
+<td><code>"month"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan.stripe_price_id</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Empty means Stripe is off.</td>
+</tr>
+<tr>
+<td><code>plan.stars_amount</code></td>
+<td>integer</td>
+<td><code>0</code></td>
+<td><code>0</code> means Telegram Stars is off.</td>
+</tr>
+<tr>
+<td><code>plan.product_name</code></td>
+<td>string</td>
+<td><code>"Subscription"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>plan.offer_copy</code></td>
+<td>string</td>
+<td>see default</td>
+<td>The pitch shown to users.</td>
+</tr>
+<tr>
+<td><code>plan.success_url</code> / <code>plan.cancel_url</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>Where checkout returns to.</td>
+</tr>
+</tbody>
+</table>
+<p>Payment provider secrets go in the vault, never in this block.</p>
+<h2 id="security"><code>security</code><a class="headerlink" href="#security" title="Permanent link">¶</a></h2>
+<p>See <a href="../feature-guides/privacy-and-security/">Privacy and security</a> for what each control actually does.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>profile</code></td>
+<td><code>"safe"</code> | <code>"developer"</code> | <code>"production"</code></td>
+<td><code>"developer"</code></td>
+<td>Preset that fills in the unset fields below.</td>
+</tr>
+<tr>
+<td><code>trust_level</code></td>
+<td>integer 0–4</td>
+<td><code>2</code></td>
+<td><code>0</code> observer, <code>1</code> assistant, <code>2</code> collaborator, <code>3</code> autonomous, <code>4</code> developer.</td>
+</tr>
+<tr>
+<td><code>hitl_enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Require human approval before risky actions.</td>
+</tr>
+<tr>
+<td><code>hitl_shell</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Approve every shell command.</td>
+</tr>
+<tr>
+<td><code>hitl_write_tools</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Approve every tool that changes something.</td>
+</tr>
+<tr>
+<td><code>hitl_auto_approve_low_risk</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Let clearly-safe actions through without asking.</td>
+</tr>
+<tr>
+<td><code>hitl_timeout_seconds</code></td>
+<td>integer</td>
+<td><code>300</code></td>
+<td>How long a request waits before expiring.</td>
+</tr>
+<tr>
+<td><code>pii_scan_input</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Scan what comes in for personal data.</td>
+</tr>
+<tr>
+<td><code>pii_scan_output</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Scan what goes out.</td>
+</tr>
+<tr>
+<td><code>pii_scan_peer</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Also scan agent-to-agent traffic.</td>
+</tr>
+<tr>
+<td><code>pii_action</code></td>
+<td><code>"warn"</code> | <code>"redact"</code> | <code>"block"</code></td>
+<td><code>"warn"</code></td>
+<td>What to do on a hit.</td>
+</tr>
+<tr>
+<td><code>input_scan</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Detect prompt-injection attempts in incoming text.</td>
+</tr>
+<tr>
+<td><code>output_scan</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Screen outgoing text.</td>
+</tr>
+<tr>
+<td><code>web_scan</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Also screen fetched web content.</td>
+</tr>
+<tr>
+<td><code>shell_guard</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Block dangerous shell patterns.</td>
+</tr>
+<tr>
+<td><code>skill_audit</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Audit skills before running them.</td>
+</tr>
+<tr>
+<td><code>skill_audit_level</code></td>
+<td><code>"permissive"</code> | <code>"strict"</code> | <code>"paranoid"</code></td>
+<td><code>"strict"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>credential_scrub</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Strip anything that looks like a secret from output.</td>
+</tr>
+<tr>
+<td><code>ssrf_protection</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Block requests to internal network addresses.</td>
+</tr>
+<tr>
+<td><code>ssrf_allowed_domains</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>The older spelling of the top-level <code>egress_allow</code> (below). Still honoured — the two are combined.</td>
+</tr>
+<tr>
+<td><code>ssrf_blocked_domains</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>The older spelling of the top-level <code>egress_deny</code>. Still honoured — the two are combined.</td>
+</tr>
+<tr>
+<td><code>rate_limits</code></td>
+<td>object</td>
+<td>see <a href="../feature-guides/privacy-and-security/">Privacy and security</a></td>
+<td>Per-tool and per-message caps.</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Fine-grained per-tool permissions.</td>
+</tr>
+</tbody>
+</table>
+<p>Setting <code>profile</code> fills in any of <code>trust_level</code>, <code>pii_action</code>, <code>input_scan</code>,
+<code>output_scan</code>, <code>hitl_enabled</code>, <code>hitl_auto_approve_low_risk</code> and
+<code>skill_audit_level</code> you have not set yourself. Anything you set explicitly wins.</p>
+<h3 id="egress_allow-egress_deny-which-internet-destinations-the-agent-may-reach"><code>egress_allow</code> / <code>egress_deny</code> — which internet destinations the agent may reach<a class="headerlink" href="#egress_allow-egress_deny-which-internet-destinations-the-agent-may-reach" title="Permanent link">¶</a></h3>
+<p>Two <strong>top-level</strong> lists in <code>agent.json5</code> (not under <code>security</code>), edited in the
+agent's <strong>Advanced</strong> tab:</p>
+<div class="highlight"><pre><span></span><code><span class="err">egress_allow</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s">"api.github.com"</span><span class="p">,</span><span class="w"> </span><span class="s">"example.com"</span><span class="p">]</span><span class="err">,</span><span class="w">   </span><span class="c1">// empty = inherit the deployment's list</span>
+<span class="err">egress_deny</span><span class="p">:</span><span class="w">  </span><span class="p">[</span><span class="s">"pastebin.com"</span><span class="p">]</span><span class="err">,</span><span class="w">                    </span><span class="c1">// empty = add nothing</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>egress_allow</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Domains this agent's web and HTTP tools may reach. Empty inherits the deployment's list (<strong>Config → Outbound access</strong>); when that is empty too, every public destination is allowed. A non-empty list here <strong>replaces</strong> the deployment's allow list for this agent.</td>
+</tr>
+<tr>
+<td><code>egress_deny</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Domains this agent's tools must never reach. <strong>Added to</strong> the deployment's deny list — an agent can block more, never less.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Format.</strong> One bare domain per entry, like <code>api.github.com</code>. A domain covers
+its subdomains, so <code>example.com</code> also matches <code>files.example.com</code>. A leading
+<code>*.</code>, an <code>https://</code> prefix, a port or a path are stripped when the config
+loads; anything that is not a domain name or an IPv4 address fails the config
+to load, the way a bad <code>sandbox.memory</code> does. Deny is checked before allow, so
+a denied domain stays blocked even when it is also allowed.</p>
+<p><strong>What it governs.</strong> Everything the agent can reach the internet with:</p>
+<ul>
+<li>its web and HTTP tools, the headless browser, the HTML render tools, and
+  calls to remote agents.
+  For the browser that means every page a click, a link or a script opens,
+  every image, script and request a page loads, and redirects: an allowed page
+  that redirects to a refused site is stopped before the browser follows the
+  redirect, and a page whose images or scripts come from refused sites loads
+  without them;</li>
+<li>every integration toolkit (Stripe, Salesforce, Slack and the rest), whichever
+  service they talk to;</li>
+<li><strong>its sandbox shell</strong> — a <code>curl</code>, <code>pip install</code>, <code>npm install</code> or <code>git clone</code>
+  inside a shell command.</li>
+</ul>
+<p>A blocked destination comes back as a readable error (<code>Host 'x' is not in the
+allowlist.</code>) rather than a silent failure or a hang, so the agent can tell you
+what it could not reach. Internal and private-network addresses are blocked
+regardless of these lists (<code>ssrf_protection</code>), and your deployment can always
+reach its own control plane whatever you put in the lists — otherwise a typo
+could take a box offline with no way to tell you.</p>
+<p><strong>When it applies.</strong> The very next tool or shell command after you save — no
+restart, no container rebuild. An agent needs every service it actually uses on
+its allow list: a support agent that reads email and writes to your CRM needs
+both, and a missing entry shows up as that one integration failing. If an agent
+suddenly cannot install a package, check whether its allow list covers the
+package index it is downloading from.</p>
+<p><strong>One limit worth knowing.</strong> Confining the sandbox shell needs the host's
+firewall. On a deployment where that is unavailable — an unusual setup without
+the required privileges — the shell is still <em>pointed</em> at the policy and
+ordinary tools obey it, but a program written to ignore that setting could go
+around it. The runtime writes a warning at startup naming this, and the agent's
+tools are unaffected either way. Managed deployments always have it.</p>
+<h2 id="budget"><code>budget</code><a class="headerlink" href="#budget" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>daily_usd</code> / <code>weekly_usd</code> / <code>monthly_usd</code></td>
+<td>number | null</td>
+<td><code>null</code></td>
+<td>Spending caps. <code>null</code> = no cap.</td>
+</tr>
+<tr>
+<td><code>alert_at</code></td>
+<td>number</td>
+<td><code>0.8</code></td>
+<td>Warn at this fraction of the cap.</td>
+</tr>
+<tr>
+<td><code>fallback_model</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Switch to a cheaper model when the cap is hit, instead of stopping.</td>
+</tr>
+<tr>
+<td><code>hard_stop</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Stop the agent entirely at the cap.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pulse-proactive-suggestions"><code>pulse</code> — proactive suggestions<a class="headerlink" href="#pulse-proactive-suggestions" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>in_channels</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Push them to messaging channels.</td>
+</tr>
+<tr>
+<td><code>email_digest</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Send a daily digest.</td>
+</tr>
+<tr>
+<td><code>digest_time</code></td>
+<td>string</td>
+<td><code>"09:00"</code></td>
+<td>Local time for the digest.</td>
+</tr>
+<tr>
+<td><code>quiet_hours_start</code> / <code>quiet_hours_end</code></td>
+<td>string</td>
+<td><code>""</code></td>
+<td>e.g. <code>"22:00"</code> / <code>"08:00"</code>. Empty = no quiet hours.</td>
+</tr>
+<tr>
+<td><code>max_items_per_session</code></td>
+<td>integer</td>
+<td><code>5</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>max_items_per_day</code></td>
+<td>integer</td>
+<td><code>20</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generated_items_per_cycle</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>pulse_item_ttl_hours</code></td>
+<td>number</td>
+<td><code>168.0</code></td>
+<td>How long a suggestion stays relevant.</td>
+</tr>
+<tr>
+<td><code>min_turns_for_generation</code></td>
+<td>integer</td>
+<td><code>4</code></td>
+<td>Don't generate from very short conversations.</td>
+</tr>
+<tr>
+<td><code>curation_cadence</code></td>
+<td><code>"session"</code> | <code>"daily"</code> | <code>"weekly"</code></td>
+<td><code>"daily"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>curation_interval_hours</code></td>
+<td>number</td>
+<td><code>24.0</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>focus_topics</code></td>
+<td>string[]</td>
+<td><code>[]</code></td>
+<td>Bias suggestions toward these.</td>
+</tr>
+<tr>
+<td><code>sources</code></td>
+<td>string[]</td>
+<td><code>["agent","user","approvals","ops"]</code></td>
+<td>Where suggestions may come from.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cognition-the-cortex-engine-per-agent"><code>cognition</code> — the Cortex engine, per agent<a class="headerlink" href="#cognition-the-cortex-engine-per-agent" title="Permanent link">¶</a></h2>
+<p>Every boolean here is three-state: <code>null</code> (or omitted) means <strong>inherit the
+deployment default</strong>. That includes the master <code>enabled</code> switch, so "off for
+the fleet, on for one agent" works.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit; off)</td>
+<td>Master switch for this agent. <code>null</code> follows the deployment's <code>cognition.enabled</code>, which is off unless someone turned it on, so a new agent runs no Cortex. <code>true</code> runs Cortex for this agent even while the fleet is off; <code>false</code> keeps it off even while the fleet is on.</td>
+</tr>
+<tr>
+<td><code>fast_model</code> / <code>deep_model</code></td>
+<td>string | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Models for light and heavy background work.</td>
+</tr>
+<tr>
+<td><code>autonomous</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Whether it acts on its own initiative.</td>
+</tr>
+<tr>
+<td><code>auto_approve</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Whether its own actions skip the approval queue.</td>
+</tr>
+<tr>
+<td><code>intensity</code></td>
+<td><code>"relaxed"</code> | <code>"balanced"</code> | <code>"aggressive"</code> | null</td>
+<td><code>null</code> (inherit; relaxed)</td>
+<td>How much background work it does. <code>null</code> follows the deployment's <code>cognition.intensity</code>, <code>"relaxed"</code> unless changed.</td>
+</tr>
+<tr>
+<td><code>approval_required</code></td>
+<td>string[]</td>
+<td><code>["external_send","irreversible","identity_edit"]</code></td>
+<td>Categories that always need a human, whatever <code>auto_approve</code> says. <code>identity_edit</code> is any change to SOUL.md, AGENTS.md or IDENTITY.md; <code>external_send</code> is anything that sends something outside the deployment (email, calendar, posts, messages to other agents); <code>irreversible</code> is moving money or overwriting a stored secret. Applies both to the Fully Autonomous sweep of the approval queue and to tool calls made during a background run — a held item waits in <strong>Cortex → Self-Improve</strong> with its usual Approve / Reject buttons. Set it to <code>[]</code> for an agent whose owner wants everything unattended, or list only the categories to keep; unknown names are ignored.</td>
+</tr>
+<tr>
+<td><code>self_learning</code>, <code>brainstorming</code>, <code>idea_generation</code>, <code>prototyping</code>, <code>skills_optimization</code>, <code>workspace_optimization</code>, <code>memory_optimization</code>, <code>pulse</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Individual capabilities.</td>
+</tr>
+<tr>
+<td><code>deep_self_learning</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Use the deep model for distillation.</td>
+</tr>
+<tr>
+<td><code>memory_garden_cron</code></td>
+<td>string | null</td>
+<td><code>null</code> (inherit)</td>
+<td>When to tidy memory (merge duplicate facts in MEMORY.md, roll up old daily logs; snapshotted and undoable from Pulse). Standard 5-field cron, e.g. <code>"30 4 * * *"</code>. <strong>Leave it <code>null</code> to follow the deployment's <code>intensity</code> preset</strong> — once a day around 04:30 at every intensity, with the exact minute spread out per agent so a fleet does not all start at once. An explicit value is used exactly as written and is never spread.</td>
+</tr>
+<tr>
+<td><code>pulse_agent_cron</code></td>
+<td>string | null</td>
+<td><code>null</code> (inherit)</td>
+<td>When to generate Pulse suggestions. Standard 5-field cron. <code>null</code> follows the <code>intensity</code> preset (daily at 09:00 on <code>relaxed</code>, every 12 h on <code>balanced</code>, every 6 h on <code>aggressive</code>), spread per agent; an explicit value is used as written.</td>
+</tr>
+<tr>
+<td><code>idea_expand_cron</code></td>
+<td>string | null</td>
+<td><code>null</code></td>
+<td>Reserved for scheduled idea research — currently has no effect. Ideas are expanded when you ask for it or approve a Pulse suggestion; leave this <code>null</code>.</td>
+</tr>
+<tr>
+<td><code>workspace_optimize_cron</code></td>
+<td>string | null</td>
+<td><code>null</code> (inherit)</td>
+<td>When the self-optimization pass over the agent's identity and behavior files runs (snapshotted and undoable from Pulse). Standard 5-field cron. <code>null</code> follows the <code>intensity</code> preset (Sundays at 04:00 on <code>relaxed</code>/<code>balanced</code>, every third day on <code>aggressive</code>), spread per agent; an explicit value is used as written.</td>
+</tr>
+<tr>
+<td><code>skill_librarian_cron</code></td>
+<td>string | null</td>
+<td><code>null</code> (inherit)</td>
+<td>When the learned-skill library is tidied — duplicates merged, survivors polished (snapshotted and undoable). Standard 5-field cron. <code>null</code> follows the <code>intensity</code> preset (Sundays at 04:30 on <code>relaxed</code>/<code>balanced</code>, every third day on <code>aggressive</code>), spread per agent; an explicit value is used as written.</td>
+</tr>
+<tr>
+<td><code>max_deep_runs_per_day</code></td>
+<td>integer</td>
+<td><code>12</code></td>
+<td>Cost ceiling on heavy background work.</td>
+</tr>
+<tr>
+<td><code>promote_threshold</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 8)</td>
+<td>Score from 1 to 10 at or above which the Rate &amp; Promote phase moves an item it recommends promoting to the next funnel stage on its own (brainstorm → idea → prototype → project). Only applies while Fully Autonomous (<code>auto_approve</code>) is on; otherwise every candidate waits as a card in <strong>Cortex → Self-Improve</strong>. Whole number 1 to 10; out-of-range values are pulled to the nearest end. <code>null</code> follows the deployment's <code>cognition.promote_threshold</code>.</td>
+</tr>
+<tr>
+<td><code>max_promotions_per_run</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 1)</td>
+<td>How many items one Rate &amp; Promote run may promote. Each promotion is a deep run and also counts against the daily cap. Whole number 0 to 5; <code>0</code> rates without ever promoting.</td>
+</tr>
+<tr>
+<td><code>max_self_scheduled_tasks</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit; 6)</td>
+<td>How many follow-up steps this agent may have pending at once from <code>cortex_schedule</code>, the tool it uses to continue a prototype or project after a run (they appear in <strong>Scheduler</strong> named <code>Cortex: &lt;item&gt;</code>). Two per item and at most hourly regardless. Whole number 0 to 20; <code>0</code> turns self-scheduling off.</td>
+</tr>
+<tr>
+<td><code>auto_discard</code></td>
+<td>boolean | null</td>
+<td><code>null</code> (inherit; on)</td>
+<td>Whether a Fully Autonomous run may discard an item the reviewer rated 3 or lower with a "discard" recommendation. Reversible: the folder stays and <strong>Restore</strong> brings the item back. Has no effect while <code>auto_approve</code> is off.</td>
+</tr>
+<tr>
+<td><code>worker_max_iterations</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Step budget for each background reasoning run (Think phases, self-learning, the optimizers). Counted in internal steps — roughly 4 per round of thinking plus tool use, so the shipped default of 100 allows about 25 rounds per run. A run that exceeds it stops with a "hit its step limit" error and its work is discarded; raise this if that error keeps appearing, lower it to cap the cost of any single run. Accepts a whole number from 10 to 400; a value outside that range is pulled to the nearest end rather than rejected. <strong>Leave it unset (or <code>null</code>) to inherit the deployment-wide value</strong> set in Cortex → Autonomy under "All agents" — that is what most agents should do. Caps one run — how <em>many</em> runs happen per day is governed by <code>intensity</code> and the agent's <code>budget</code> — and a run also stops at <code>worker_timeout_seconds</code>, whichever comes first. Editable in the dashboard: <strong>Cortex → Autonomy → Step budget</strong>.</td>
+</tr>
+<tr>
+<td><code>worker_timeout_seconds</code></td>
+<td>integer | null</td>
+<td><code>null</code> (inherit)</td>
+<td>Wall-clock limit for each background reasoning run, in seconds. A run that exceeds it stops with a timeout and its partial work is discarded. Accepts a whole number from 30 to 7200; the shipped default is 1200 (20 minutes). <strong>Leave it unset (or <code>null</code>) to inherit the deployment-wide value.</strong> Raise it whenever you raise <code>worker_max_iterations</code> — a large step budget behind a small time limit simply fails on time instead, losing the same work under a different name. Editable in the dashboard: <strong>Cortex → Autonomy → Time limit</strong>.</td>
+</tr>
+<tr>
+<td><code>force_tier</code></td>
+<td><code>"fast"</code> | <code>"deep"</code> | null</td>
+<td><code>null</code></td>
+<td>Pin background work to one tier.</td>
+</tr>
+<tr>
+<td><code>enable_memory_gardener</code>, <code>enable_pulse_agent</code>, <code>enable_idea_expansion</code>, <code>enable_skillsmith</code>, <code>enable_workspace_optimizer</code>, <code>enable_skill_librarian</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>Individual background workers.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="wallet-on-chain-operations"><code>wallet</code> — on-chain operations<a class="headerlink" href="#wallet-on-chain-operations" title="Permanent link">¶</a></h2>
+<p>Off unless you need it.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>"cold"</code> | <code>"hot"</code></td>
+<td><code>"cold"</code></td>
+<td><code>cold</code> can read but not sign.</td>
+</tr>
+<tr>
+<td><code>chains</code></td>
+<td>string[]</td>
+<td><code>["ethereum"]</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>hot_mode_lock_minutes</code></td>
+<td>integer</td>
+<td><code>30</code></td>
+<td>Auto re-lock after this long.</td>
+</tr>
+<tr>
+<td><code>lock_on_session_end</code></td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>spending_limits</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Per-chain caps.</td>
+</tr>
+<tr>
+<td><code>require_approval</code></td>
+<td><code>"always"</code> | <code>"high_value_only"</code> | <code>"never"</code></td>
+<td><code>"always"</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="commands-slash-commands"><code>commands</code> — slash commands<a class="headerlink" href="#commands-slash-commands" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>object</td>
+<td><code>{}</code></td>
+<td>Only the deviations from the defaults, e.g. <code>{ "model": false }</code>.</td>
+</tr>
+<tr>
+<td><code>custom</code></td>
+<td>object[]</td>
+<td><code>[]</code></td>
+<td>Your own commands.</td>
+</tr>
+</tbody>
+</table>
+<p>Each custom command has <code>name</code> (lowercase, <code>[a-z0-9][a-z0-9_-]*</code>, must not
+collide with a built-in), <code>prompt</code> (supports <code>{args}</code>), and an optional
+<code>description</code>. This governs chat surfaces and the dashboard.</p>
+<p>What you set here is also <strong>what the messengers advertise</strong>. Each connector's
+slash menu — Telegram's <code>/</code> autocomplete, Discord's slash-command list — carries
+exactly the built-ins this agent exposes plus its custom commands, and <code>/help</code>
+lists the same set. Edits apply <strong>immediately, without restarting the agent</strong>;
+a messenger may cache its own autocomplete for a minute (on Telegram, reopen the
+chat to refresh it), but typing a command always follows the current setting.</p>
+<p>Two naming caveats for custom commands. Telegram's menu accepts only lowercase
+letters, digits and <code>_</code>, so a hyphenated <code>/daily-report</code> still works when typed
+but will not be listed there — name it <code>daily_report</code> to have it appear.
+Discord accepts hyphens, but skips a name longer than 32 characters.</p>
+<h2 id="shared_paths-sharing-files-between-agents"><code>shared_paths</code> — sharing files between agents<a class="headerlink" href="#shared_paths-sharing-files-between-agents" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>The path on the host.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>string</td>
+<td><strong>required</strong></td>
+<td>Where it appears for the agent. Normalised under <code>/shared/</code>.</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td><code>"ro"</code> | <code>"rw"</code></td>
+<td><code>"ro"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>persistence</code></td>
+<td><code>"session"</code> | <code>"persistent"</code></td>
+<td><code>"persistent"</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>subjects</code></td>
+<td>object[]</td>
+<td><code>[{type:"agent",name:"self"}]</code></td>
+<td>Who gets it: <code>{type: "agent"\|"subagent"\|"all_subagents", name}</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="backend-where-the-agents-tools-actually-run"><code>backend</code> — where the agent's tools actually run<a class="headerlink" href="#backend-where-the-agents-tools-actually-run" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>local_shell</code> <strong>(default)</strong></td>
+<td>Real filesystem plus a shell, rooted at the agent's workspace. What you want almost always.</td>
+</tr>
+<tr>
+<td><code>filesystem</code></td>
+<td>Files without a shell. Add <code>access_mode: "read"</code> for a read-only agent.</td>
+</tr>
+<tr>
+<td><code>state</code></td>
+<td>In-memory only — no real files. Testing.</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>A namespaced key-value store.</td>
+</tr>
+<tr>
+<td><code>composite</code></td>
+<td>Route different paths to different backends.</td>
+</tr>
+<tr>
+<td><code>lionclaw_docker</code></td>
+<td>Run the agent's tools in a container (the value keeps Olano's previous name, lionclaw). Options: <code>persistent</code>, <code>image</code>, <code>network</code> (<code>"none"</code> | <code>"bridge"</code> | <code>"host"</code>), <code>snapshot_on_stop</code>, <code>memory</code>, <code>cpus</code>. See the note below before choosing it.</td>
+</tr>
+<tr>
+<td><code>daytona</code>, <code>modal</code>, <code>runloop</code>, <code>agentcore</code>, <code>langsmith</code></td>
+<td>Hosted sandbox providers.</td>
+</tr>
+</tbody>
+</table>
+<p><code>local_shell</code> and <code>filesystem</code> take <code>root_dir</code> (default <code>"workspace"</code>).</p>
+<p><strong>Choosing <code>lionclaw_docker</code>.</strong> Most agents should stay on <code>local_shell</code>: on a
+managed deployment it <em>already</em> runs in the isolated container, so naming the
+docker backend by hand buys nothing and costs you the shorthand the dashboard's
+Environment dropdown understands. Reach for it only when you want to control the
+container settings directly.</p>
+<p>Whichever you pick, the container is only provided when the deployment has
+sandbox execution enabled. Without it the agent is downgraded to files-without-a-shell
+rather than being given a shell on the host — so <code>execute</code> and the file tools go
+away together. If an agent's file or shell tools stop working, check
+<strong>sandbox</strong> in the agent's diagnosis: it names the container, or the reason
+there isn't one.</p>
+<p>On a managed deployment three of the options are pinned and your value is
+ignored (a warning says so at startup): <code>network</code> cannot be <code>"host"</code>, <code>image</code> is
+the deployment's own sandbox image, and <code>persistent</code> is forced on. On your own
+self-hosted box all three are honoured as written.</p>
+<p><code>mounts</code> is accepted by the config but <strong>does nothing</strong> — what the container
+can see is the agent's workspace plus any shared paths you have configured.
+<code>egress_allow</code> and <code>egress_deny</code> on this block are the older home of the agent's
+outbound lists: they are still read, and combined with the top-level
+<code>egress_allow</code> / <code>egress_deny</code> described in <a href="#security"><code>security</code></a>, but they
+govern the agent's <strong>web tools</strong>, not the sandbox shell — a <code>curl</code> inside
+<code>execute</code> is decided by <code>network</code> and your host firewall, not by these lists.
+Move them to the top level of <code>agent.json5</code>, which is where the dashboard edits
+them; a config that still sets them here logs a reminder at startup.</p>
+<p><strong><code>sandbox</code> — this agent's share of the machine.</strong> A top-level block, separate
+from <code>backend</code>, that applies wherever this agent's shell runs in a sandbox:</p>
+<div class="highlight"><pre><span></span><code><span class="err">sandbox</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">memory</span><span class="p">:</span><span class="w"> </span><span class="s">"8g"</span><span class="p">,</span><span class="w"> </span><span class="nv">cpus</span><span class="p">:</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p><code>memory</code> is a size like <code>4g</code> or <code>2048m</code> (minimum <code>6m</code>); <code>cpus</code> is a number of
+cores, <code>0.1</code>–<code>64</code>, where <code>0.5</code> means half a core. Set one and the other still
+follows the deployment default, so raising an agent's memory does not quietly
+pin its CPU. Omit the block entirely and the agent inherits the deployment
+answer — normally 25% of the machine's RAM and 50% of its cores (see the
+<code>sandbox</code> key in <a href="../config-yaml/#root-keys">the <code>config.yaml</code> reference</a>). Use this for
+the one agent that runs heavy builds or data jobs; the limits are ceilings, so
+an agent that sits idle costs nothing regardless of what you set here.
+Changing a value rebuilds that agent's sandbox on its next start: its workspace
+survives, anything installed by hand inside the sandbox does not.</p>
+<h2 id="runtime-knobs">Runtime knobs<a class="headerlink" href="#runtime-knobs" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>acp_enabled</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Expose an HTTP endpoint so external code can drive this agent. Binds to localhost with <strong>no authentication</strong> — reach it over an SSH tunnel, never publish the port. For an authenticated remote surface use an inbound webhook instead.</td>
+</tr>
+<tr>
+<td><code>acp_port</code></td>
+<td>integer</td>
+<td><code>8765</code></td>
+<td>Agents sharing a port share one server.</td>
+</tr>
+<tr>
+<td><code>iteration_budget</code></td>
+<td>integer</td>
+<td><code>0</code></td>
+<td>Cap on reasoning steps per turn. <code>0</code> = no cap.</td>
+</tr>
+<tr>
+<td><code>truncation_retry_limit</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>Retries when a reply is cut off.</td>
+</tr>
+<tr>
+<td><code>tool_error_retry_limit</code></td>
+<td>integer</td>
+<td><code>3</code></td>
+<td>Circuit breaker for a repeatedly failing tool: the turn stops once the agent has made the identical failing call (same tool, same arguments) this many times within one turn. Every failure is handed back to the agent with the tool's error output, so it can fix the arguments or the cause and try again; the breaker only stops a call that is repeated unchanged. Identical calls the agent sends together in one step count as one attempt, so the agent always sees an error before the breaker can stop it. One failure before the limit, the failing result itself carries a warning that one more identical failure ends the turn. A successful <code>edit_file</code> or <code>write_file</code> resets the count: a test command that fails, gets a fix, and fails again is a new attempt, not a repeat. A command's full output is always saved to a log under the workspace (<code>.olano/artifacts/shell/</code>) when it is too long to show inline, and the result names the path; for a failing command the inline preview keeps the error and traceback lines rather than the first and last lines. <code>0</code> disables the breaker.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-makes-a-config-fail-to-load">What makes a config fail to load<a class="headerlink" href="#what-makes-a-config-fail-to-load" title="Permanent link">¶</a></h2>
+<p>Olano refuses to load a broken config rather than booting a half-configured
+agent. The common causes:</p>
+<ul>
+<li><strong>Legacy keys.</strong> <code>sandbox_backend</code>, a plain string <code>backend:</code>, or
+  <code>security.sandbox_mode</code> / <code>shell_use_docker</code> / <code>docker_image</code> /
+  <code>docker_network</code>. Use the <code>backend</code> object instead. <code>sandbox</code> is a live key
+  again, but only as a block of resource limits — <code>sandbox: true</code> or
+  <code>sandbox: "docker"</code> (the old on/off spelling) is still refused.</li>
+<li><strong>A utility model as a brain.</strong> <code>olano:vision</code> or the image group in <code>model</code>,
+  <code>cognition.fast_model</code> or <code>cognition.deep_model</code>.</li>
+<li><strong>Multi-user features without multi-user mode.</strong> <code>user_scheduling</code>,
+  <code>connections</code>, <code>user_credentials</code>, or a schedule entry with
+  <code>for_each_customer</code>, when <code>customer_service.enabled</code> / <code>memory.per_customer</code>
+  is off.</li>
+<li><strong>An invalid ignore pattern.</strong> A line in <code>message_policy.ignore_patterns</code>
+  that is not a valid regular expression — caught on save, so a rule can never
+  silently match nothing.</li>
+<li><strong>A dangling archetype reference.</strong> A <code>from_archetype</code> naming something that
+  does not resolve.</li>
+<li><strong>A malformed custom command name</strong>, or one that collides with a built-in.</li>
+<li><strong>A schedule entry with neither <code>message</code> nor <code>action</code></strong>, or <code>action</code> without
+  <code>for_each_customer</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../dashboard/admin/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Admin (admin only)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Admin (admin only)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../config-yaml/" class="md-footer__link md-footer__link--next" aria-label="Next: config.yaml reference">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                config.yaml reference
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

@@ -1,0 +1,3693 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.1/feature-guides/mobile-app/">
+      
+      
+        <link rel="prev" href="../cortex-and-pulse/">
+      
+      
+        <link rel="next" href="../budgets/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>The mobile app - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-mobile-app" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The mobile app
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked="">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trying-the-app-without-a-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trying the app without a deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four tabs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#while-the-agent-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        While the agent works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-conversation-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The conversation menu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The conversation menu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-an-agent-is-stopped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When an agent is stopped
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-agents-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An agent's page
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files-and-sharing-into-olano" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files and sharing into Olano
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-agents-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An agent's files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduled-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled tasks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-agents-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The agent's browser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-chats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group chats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#photos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Photos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dictation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dictation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voice-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-your-administrator-chooses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What your administrator chooses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hearing-replies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hearing replies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hands-free
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#siri-the-action-button-and-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Siri, the Action button and Shortcuts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#widgets-iphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Widgets (iPhone)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appearance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#locking-the-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locking the app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits-and-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credits and usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Notifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-a-notification-contains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a notification contains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#who-can-have-notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who can have notifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#connecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connecting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#trying-the-app-without-a-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trying the app without a deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-tabs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four tabs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#while-the-agent-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        While the agent works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-conversation-menu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The conversation menu
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The conversation menu">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-an-agent-is-stopped" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When an agent is stopped
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-agents-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An agent's page
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#files-and-sharing-into-olano" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Files and sharing into Olano
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#an-agents-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        An agent's files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scheduled-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scheduled tasks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alerts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alerts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-agents-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The agent's browser
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#group-chats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Group chats
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#photos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Photos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dictation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dictation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#voice-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Voice notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-your-administrator-chooses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What your administrator chooses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hearing-replies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hearing replies
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hands-free" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hands-free
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#siri-the-action-button-and-shortcuts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Siri, the Action button and Shortcuts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#widgets-iphone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Widgets (iPhone)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appearance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appearance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#locking-the-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Locking the app
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#credits-and-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Credits and usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Notifications
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Notifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-a-notification-contains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a notification contains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#who-can-have-notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who can have notifications
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/feature-guides/mobile-app.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="the-mobile-app">The mobile app<a class="headerlink" href="#the-mobile-app" title="Permanent link">¶</a></h1>
+<p>The Olano app puts your agents on your phone: conversations with them, what
+Cortex is working on, the approvals and alerts waiting for you, and
+notifications when an agent needs you. It runs on iPhone, iPad and Android
+phones and tablets, and on Apple silicon Macs as the iPad app, and comes from
+the App Store and Google Play.</p>
+<p>The app is built for the phone: a tab bar along the bottom, a back button and
+the swipe back gesture on every screen, pull down to refresh, and the look of
+the platform it runs on (iOS on an iPhone, Material on Android), in light or
+dark (see <a href="#appearance">Appearance</a>). It talks to your own deployment, with the
+same agents, conversations and permissions as the dashboard. Nothing about your
+agents is stored by Olano on the way.</p>
+<h2 id="connecting">Connecting<a class="headerlink" href="#connecting" title="Permanent link">¶</a></h2>
+<p>The first screen asks for <strong>your Olano address</strong>: the address you open your
+dashboard at in a browser, such as <code>acme.olano.run</code>. A bare name like <code>acme</code>
+means <code>acme.olano.run</code>; a full address (<code>https://agents.example.com</code>) works for
+a deployment on its own domain. The app checks that the address answers as an
+Olano deployment before it continues, and says so if it does not (no such
+address, a website that is not Olano, no network).</p>
+<p>You then sign in with the email and password you use for the dashboard. The
+sign-in is kept on the phone for two weeks of inactivity, so you sign in again
+only when it expires or you sign out. A deployment with no accounts yet asks
+you to finish setting it up in its dashboard first. A single-user deployment
+(no accounts at all) opens straight away.</p>
+<p>The app remembers the last few addresses you opened, so someone with more than
+one deployment switches between them with one tap. <strong>Settings, Switch
+deployment</strong> goes back to that screen.</p>
+<h3 id="trying-the-app-without-a-deployment">Trying the app without a deployment<a class="headerlink" href="#trying-the-app-without-a-deployment" title="Permanent link">¶</a></h3>
+<p>Under the address field, <strong>Try the demo</strong> opens a demo deployment Olano runs,
+with sample agents, already signed in: no address, email or password to type.
+Each visitor gets a demo account of their own, and no other visitor sees your
+conversations, but the agents themselves are shared with other visitors, so
+type nothing private there. Your demo account and its conversations are
+deleted after a day; after that, <strong>Enter the demo again</strong> on the sign-in
+screen opens a fresh one. <strong>Settings</strong> says when you are in the demo, and
+<strong>Switch deployment</strong> takes you back to connect your own. Olano may remove the
+demo entry at any time; it never changes anything about your own deployment.</p>
+<p>If the deployment cannot be reached when the app opens, it shows <strong>Can't
+connect</strong> with <strong>Try again</strong> and <strong>Use a different deployment</strong>. The usual
+causes are no connection, or the deployment restarting or stopped.</p>
+<h2 id="the-four-tabs">The four tabs<a class="headerlink" href="#the-four-tabs" title="Permanent link">¶</a></h2>
+<p>Your administrator may have hidden some of what is described here; see
+<a href="#what-your-administrator-chooses">What your administrator chooses</a>.</p>
+<p><strong>Chats</strong> lists the agents you have access to, each with its latest
+conversation. A green dot means the agent is running. The list is arranged the
+way the dashboard's sidebar is: <strong>Pinned</strong> at the top, then your own folders,
+then <strong>All agents</strong>, then <a href="#group-chats">group chats</a>. Tap a section's name to
+fold it shut. To arrange it:</p>
+<ul>
+<li><strong>Pin</strong> an agent by swiping its row to the right, or press and hold it and
+  choose <strong>Pin</strong>. Pinned agents stay at the top in the order you pinned them.</li>
+<li><strong>Folders</strong>: the <strong>+</strong> button at the top makes a new folder. Move an agent
+  into one by swiping its row to the left (<strong>Move</strong>), or press and hold it and
+  choose <strong>Move to</strong>. An agent is in one place at a time: pinned, in one
+  folder, or under All agents. The <strong>...</strong> button beside a folder's name
+  renames or deletes it; deleting a folder moves its agents back under All
+  agents.</li>
+<li><strong>Move Up</strong> and <strong>Move Down</strong> (press and hold an agent) change the order
+  within a section.</li>
+</ul>
+<p>The arrangement is yours: it is kept on the deployment for your account, so it
+follows you to another phone or a reinstall, and it is separate from how the
+dashboard's sidebar is arranged in your browser. Searching shows matches in
+every section, folded or not.</p>
+<p>Tap an agent to go straight back to the last conversation you had with it,
+like the dashboard's chat does: one you had in the app, the dashboard or a
+messenger. Scheduled runs, conversations with other agents, Cortex threads and
+calls from other systems never open this way. If you have no conversation with
+the agent yet, a new one opens. The agent's row shows that conversation's
+title.</p>
+<p>Every other thread is one step away: the <strong>...</strong> button at the top of a
+conversation, <strong>All Conversations</strong>. That list has every thread the agent
+has, newest first, twenty at a time: scrolling down loads the next twenty, so
+an agent with months of history opens as fast as a new one. The search bar at
+the top looks through the messages of the agent's conversations on the
+deployment, not just their titles, and lists the ones that mention the words
+with a line showing where; <strong>Search older conversations</strong> keeps looking
+further back when the history is long. The pencil button starts a new
+conversation. Each thread carries
+the same coloured badge the dashboard shows for where it came from: <strong>Mobile</strong>
+for a conversation had in this app, <strong>Dashboard</strong> for one in the dashboard,
+the messenger it arrived on (<strong>Telegram</strong>, <strong>WhatsApp</strong>, <strong>Email</strong>...), or how
+it started (<strong>Scheduled</strong>, <strong>Agent</strong> for a conversation between two agents,
+<strong>Cortex</strong>, <strong>External</strong> for a call from another system). Chips above the list
+show one source at a time (<strong>All</strong>, <strong>Dashboard</strong>, <strong>Mobile</strong>, each messenger,
+<strong>Scheduled</strong>, <strong>Agents</strong>), with how many threads each holds; the app remembers
+your choice for each agent. Swipe a thread to rename it, or to delete it if you
+are an administrator of that agent.</p>
+<p>In a conversation, the agent's reply streams in as it is written. What the
+agent did on the way (searched the web, read a file, asked another agent)
+shows as one line per step while it works and folds into "N steps" when it is
+done; tap that line to see the steps. A plan the agent made shows as a
+checklist. While the agent works and the message box is empty, the send button
+becomes a stop button; see <a href="#while-the-agent-works">While the agent works</a> for
+adding to what it is doing. If the agent needs your approval before an action,
+a card with <strong>Approve</strong> and <strong>Decline</strong> appears in the conversation.</p>
+<p>The message box is one card at the bottom of the screen: what you type on top,
+and under it <strong>+</strong>, the conversation's model, the microphone and the send
+button. On a phone the keyboard's return key starts a new line, and only the
+send button sends, so a message never goes out half written. With a hardware
+keyboard (an iPad's, or a keyboard paired with the phone) Enter sends and
+Shift+Enter starts a new line. <strong>+</strong> sends photos and files, and images the
+agent produces show in the conversation (see <a href="#photos">Photos</a> and
+<a href="#files-and-sharing-into-olano">Files</a>). The microphone beside the send button
+dictates (tap it: your words appear in the box as you speak, see
+<a href="#dictation">Dictation</a>) or records a voice note (hold it, see
+<a href="#voice-notes">Voice notes</a>). On a phone that cannot dictate, the microphone
+shows while the message box is empty and only records voice notes.</p>
+<p>Other files the agent hands you (a report it saved, a data file, a PDF) appear
+as cards under its reply; tap one to open it in the app. Markdown documents
+open formatted, data and code files (JSON, CSV, logs, scripts) open as text,
+and a PDF opens as a document on an iPhone. Files the app cannot show itself,
+such as Word or Excel documents, and PDFs on Android, open with <strong>Open in
+another app</strong>, which offers the phone's own choices (save to Files, mail it,
+open it in Word). The share button in the corner does the same for any file.</p>
+<p>When an agent asks you for an API key or a model provider's key, the form is
+drawn under its reply: paste the value and press <strong>Save to vault</strong>. It goes to
+the vault without becoming a message, and the agent is told the name once it
+is saved. When an agent needs you to sign in to a service, connect a
+messenger or edit a file, it sends a <strong>magic link</strong>: after you approve it, a
+card appears under its reply with <strong>Open</strong> and, usually, a six-digit PIN.
+<strong>Open</strong> copies the PIN and opens a secure page of your deployment in a
+browser over the app; paste the PIN there and follow the page. That page needs
+no sign-in of its own (the link and its PIN are the key), and the link expires
+after a while (fifteen minutes unless your deployment says otherwise). When
+you finish, the conversation shows <strong>Connected</strong> (or <strong>Didn't complete</strong>), and
+offers to restart the agent when the change needs one and you are an
+administrator. See <a href="../ask-the-agent/#magic-links-the-default-whenever-a-browser-is-needed">Magic links</a>.</p>
+<p>A new conversation offers a few ways to start, such as "What can you help me
+with?"; tap one to send it. Messages are grouped under the day they were sent
+(Today, Yesterday, then the date). A long conversation opens on its newest
+messages and fetches earlier ones as you scroll up, a little ahead of where
+you are, so they are usually in place by the time you get there; <strong>Start of
+conversation</strong> marks the first message. If they could not be fetched (no
+signal), a line at the top says so and a tap tries again. If you have scrolled
+up to read earlier messages, a round button with a down arrow takes you back
+to the latest one, with a dot on it when something new arrived.</p>
+<p>Next to <strong>+</strong> in the message box is the model the conversation runs on, with
+its reasoning level in grey when the model has one (for example "Olano Pro
+High"); the name turns orange when this conversation uses a model of its own
+choosing. Tap it to pick another model, or how hard the model thinks (Low,
+Medium, High and so on, as that model offers them; <strong>Default</strong> leaves it to the
+model). The choice applies to that conversation only, the same as the model
+picker in the dashboard's chat: every message you send in it uses that model,
+reopening the conversation continues on it, and a new conversation starts on
+the agent's own model again. The list offers the models your deployment can
+run: its default models, the Olano models, and those of any provider an
+administrator has added a key for. <strong>Agent default</strong> goes back to the agent's
+own model. If a conversation last used a model the deployment no longer
+offers, it continues on the agent's model and the app says so.</p>
+<p>Web addresses in a conversation are links, in the agent's replies and in your
+own messages, including an address in code formatting and one written as
+<code>www.example.com</code>. Tap one to open it in a browser over the app; press and hold
+one to <strong>Copy Link</strong> or <strong>Share Link</strong>. Anything in a reply that looks like web
+page markup is shown as text.</p>
+<p>Under each finished reply are buttons to <strong>copy</strong> it, <strong>hear</strong> it (see
+<a href="#hearing-replies">Hearing replies</a>) and <strong>share</strong> it to another app. Under your latest message are <strong>copy</strong> and <strong>edit</strong>: edit puts
+your words back in the message box to correct, and sending them sends a new
+message (the conversation's history is not rewritten, so the agent sees both).
+When a reply fails, <strong>Try again</strong> under it sends your message again. Pressing
+and holding any message offers the same choices, plus copying a voice note's
+transcript.</p>
+<p>To flag a reply that is offensive, harmful or wrong, press and hold it and
+choose <strong>Report</strong>, then a reason. The report is recorded on the deployment as
+negative feedback on that reply, with the reason kept beside it, and counted
+for the administrators in the dashboard's Insights; nothing leaves the
+deployment.</p>
+<p>A conversation keeps going on your deployment if you leave it, lock the phone
+or switch apps: come back and the app picks up where the reply has got to.</p>
+<p><strong>Cortex</strong> is what the agents have been working on by themselves. At the top,
+the <strong>Pulse</strong> card says how many findings the agents posted for you, the same
+news, research and ideas as the dashboard's Cortex Pulse; tap it for the cards. On each, <strong>Do it</strong> carries out the suggested next step, <strong>Later</strong>
+brings the card back in a day, <strong>Dismiss</strong> drops it. A card about work the
+agent already did on its own offers <strong>Keep</strong> and <strong>Undo</strong> instead: Keep
+accepts it, Undo restores the backup the agent took first. Later and Dismiss
+take the card away the moment you tap; Do it, Keep and Undo spin on the
+button while the agent answers, then the card goes and a short notice, above
+the tab bar, says what happened (when the step is a longer piece of work, the agent runs it in
+the background and posts the result here when it is done).</p>
+<p>Under it, the four stages in the order things move through them:
+<strong>Brainstorms</strong>, <strong>Ideas</strong>, <strong>Prototypes</strong> and <strong>Projects</strong>, each with how
+many items it holds. The list shows every stage; tap a stage to show only
+that one, and tap it again (or <strong>Show all</strong>) to see everything. Chips narrow
+the list to one agent when more than one has items. An item this phone has
+not opened yet is lightly tinted; opening it clears the tint.</p>
+<p>Triage happens on the list. Swipe a row to the right to <strong>approve</strong> it (move
+it to the next stage) and to the left to <strong>discard</strong> it: the word shows as the
+row slides, a full swipe does it, and a shorter swipe leaves the button there
+to tap. An approved item moves to the next stage straight away, marked as on
+its way while the agent writes it up; a discarded one leaves the list. To
+discard several at once, tap <strong>Select</strong>, tap the rows (or <strong>Select all</strong>),
+then <strong>Discard</strong> in the bar at the bottom and confirm.</p>
+<p>Open an item for its write-up and Cortex's rating, then <strong>Make it a</strong> (the
+next stage) to move it forward, <strong>Talk it over</strong> to discuss it with the agent,
+or <strong>Discard</strong>. Moving an item forward is a piece of writing the agent does,
+and it takes a minute or two: the button turns into <strong>Making it an idea…</strong>
+as soon as you tap, then a banner under the title follows the run (with the
+step the agent is on, when it reports one) and you can leave the page, since
+the list already shows the item under its new stage. When it is done the
+banner reads <strong>Now an idea</strong> with a button that opens the new item's page;
+if the run failed, the banner says why and the button offers the tap again.
+The first time, <strong>Talk it over</strong> opens a conversation with the
+item already described in the message box (what it is, its title and where
+its files are), so you only add your thoughts or questions after it; nothing
+is sent until you send it. Later it reopens that conversation where you left
+it. See <a href="../cortex-and-pulse/">Cortex and Pulse</a>.</p>
+<p><strong>Inbox</strong> has three parts:</p>
+<ul>
+<li><strong>Approvals</strong>: actions agents are waiting to take until someone approves
+  them, from a scheduled run, Cortex or a request from another agent, and Pulse
+  cards that need an approval. Answer each with <strong>Approve</strong> or <strong>Decline</strong>.</li>
+<li><strong>Alerts</strong>: the deployment's notifications, the same list as the bell in the
+  dashboard. The line under an alert says what tapping it does; swipe one to
+  dismiss it. See <a href="#alerts">Alerts</a>.</li>
+<li><strong>Issues</strong>: the issue tracker, every issue you can see, not only those an
+  alert pointed at. <strong>Open</strong> (the default), <strong>Assigned to me</strong> or <strong>All</strong>,
+  closed ones included; tap one to read it, comment, hand it to an agent or
+  close it (see <a href="#alerts">Alerts</a> for what an issue screen offers).</li>
+</ul>
+<p>The agents' Pulse findings are in the Cortex tab.</p>
+<p>The tab's badge counts approvals waiting plus unread alerts.</p>
+<p><strong>Settings</strong> shows who you are signed in as and where, the agents'
+<a href="#scheduled-tasks">scheduled tasks</a>, the app's <a href="#appearance">appearance</a>,
+<a href="#hearing-replies">voice</a>, the phone's notifications, <strong>Switch deployment</strong> and
+<strong>Sign out</strong>. What the app does not do (agent configuration, tools, files,
+connections and the rest) stays in the dashboard, in a browser.</p>
+<p>The app grants and removes no permission: a member sees the agents they have
+access to, an administrator sees all of them, exactly as in a browser.</p>
+<h2 id="while-the-agent-works">While the agent works<a class="headerlink" href="#while-the-agent-works" title="Permanent link">¶</a></h2>
+<p>You do not have to wait for a reply to finish before saying more. While the
+agent is working, type in the message box and a bar above it says the agent is
+working:</p>
+<ul>
+<li><strong>Send</strong> (the arrow) hands your message to the agent while it works. It reads
+  it at its next step, after the action it is in the middle of, and carries on
+  with it in mind; nothing is stopped or started over. Your message appears in
+  the conversation where the agent read it, marked <strong>Added while it worked</strong>.</li>
+<li><strong>Send after</strong> keeps the message until the reply is done, then sends it as
+  your next message.</li>
+<li><strong>Stop</strong> stops the agent.</li>
+</ul>
+<p>Messages waiting to be read show above the message box. <strong>Edit</strong> takes one
+back into the message box to change it, the cross cancels it; either works
+until the agent has read it. A message sent with the arrow just as the reply
+finishes goes out as your next message instead, so nothing is lost.</p>
+<h2 id="the-conversation-menu">The conversation menu<a class="headerlink" href="#the-conversation-menu" title="Permanent link">¶</a></h2>
+<p>The <strong>...</strong> button at the top of a conversation opens a sheet that names the
+agent and its model at the top, then groups what you can do. Rows with an arrow
+open another screen; the others act right away or ask one more question.</p>
+<p><strong>Conversation</strong></p>
+<ul>
+<li><strong>New Conversation</strong> starts a new one with the same agent.</li>
+<li><strong>Mode</strong> is how the agent goes about your requests in this conversation; the
+  current one shows on the right. <strong>Auto</strong> (the default) does the work, running
+  tools without asking. <strong>Plan first</strong> has the agent write a plan and wait:
+  under the plan are <strong>Approve &amp; run</strong>, which tells it to carry the plan out,
+  and the message box, to ask for changes instead. <strong>Ask before each step</strong>
+  asks for your approval before every tool the agent runs. A bar above the
+  message box shows the setting when it is not Auto. The app remembers the
+  choice for each agent on this phone; approving a plan goes back to Auto.</li>
+<li><strong>Rename</strong> gives the conversation a name of your own.</li>
+<li><strong>Compact</strong> replaces the conversation's older messages with a summary the
+  agent keeps, so a long conversation takes less of the agent's memory. It is
+  the same as <code>/compact</code> in the dashboard's chat.</li>
+</ul>
+<p><strong>Agent</strong></p>
+<ul>
+<li><strong>All Conversations</strong> lists this agent's conversations.</li>
+<li><strong>Files</strong> opens the <a href="#an-agents-files">agent's files</a>.</li>
+<li><strong>Scheduled Tasks</strong> lists this agent's <a href="#scheduled-tasks">scheduled tasks</a>.</li>
+<li><strong>Agent Info</strong> opens the <a href="#an-agents-page">agent's page</a>. Tapping the agent's
+  picture at the top of the conversation opens it too.</li>
+</ul>
+<p><strong>More</strong></p>
+<ul>
+<li><strong>Hands-Free Mode</strong> lets you talk with the agent without touching the phone
+  (see <a href="#hands-free">Hands-free</a>).</li>
+<li><strong>Add an Agent</strong> turns the conversation into a <a href="#group-chats">group chat</a>
+  with a second agent you pick. The conversation so far is copied into the
+  group, so the new agent can read it, and the agent you were talking to keeps
+  answering messages that name nobody. It appears when the deployment has group
+  chats turned on.</li>
+</ul>
+<h3 id="when-an-agent-is-stopped">When an agent is stopped<a class="headerlink" href="#when-an-agent-is-stopped" title="Permanent link">¶</a></h3>
+<p>An agent an administrator stopped (or that could not start, or that the
+deployment's plan holds back) is marked <strong>Stopped</strong>, <strong>Could not start</strong> or
+<strong>Held back</strong> in Chats. Its conversations still open and show everything said
+so far, but where the message box would be, the app says why it will not reply.
+An administrator sees a <strong>Start</strong> button there; anyone else is told to ask an
+administrator.</p>
+<h2 id="an-agents-page">An agent's page<a class="headerlink" href="#an-agents-page" title="Permanent link">¶</a></h2>
+<p>The agent's page says whether it is running and, when it is not answering,
+why: <strong>Could not start</strong> with the error it stopped on (a missing key, a model
+that cannot be reached), <strong>Held back</strong> with what holds it (a plan limit, for
+example), or <strong>Stopped</strong> when someone stopped it. Administrators also get:</p>
+<ul>
+<li><strong>Start</strong>: starts a stopped agent, or tries again after an error.</li>
+<li><strong>Restart</strong>: stops the agent and starts it again, for example after changing
+  one of its keys.</li>
+<li><strong>Stop</strong>: the agent stops answering messages, channels and scheduled tasks
+  until someone starts it again, and it stays stopped if the deployment
+  restarts.</li>
+</ul>
+<p>Members see the status and the reason, without the buttons. The page also
+leads to the agent's conversations, files and scheduled tasks.</p>
+<h2 id="files-and-sharing-into-olano">Files and sharing into Olano<a class="headerlink" href="#files-and-sharing-into-olano" title="Permanent link">¶</a></h2>
+<p>The <strong>+</strong> button next to the message box has <strong>Choose Files</strong> for documents:
+PDFs, Word, Excel and PowerPoint files, text and data files, up to 10 MB each.
+They wait above the message box with their size until you send; the cross
+removes one. You can send files with or without a message.</p>
+<p>The agent gets them the way the dashboard's chat sends them. A text or data
+file (a <code>.txt</code>, <code>.csv</code>, <code>.md</code>, <code>.json</code> and so on) is read into your message, so
+the agent sees its contents directly. Any other document is saved in the
+agent's workspace, and the agent reads it with its document tools. In the
+conversation your message shows the files by name, never their contents.</p>
+<p><strong>Sharing into Olano.</strong> From another app (a link from Safari, a photo, a PDF
+from Mail or Files, some text), choose Olano in the share menu: the app opens,
+asks which agent it is for, and puts it in a new conversation with that agent,
+ready to send with a message of your own. Nothing is sent until you send it. A
+link or text arrives in the message box, a photo or a file above it. If the app
+does not open by itself after sharing, open it: what you shared is waiting.</p>
+<h2 id="an-agents-files">An agent's files<a class="headerlink" href="#an-agents-files" title="Permanent link">¶</a></h2>
+<p><strong>Settings, Files</strong> lists your agents; pick one to see its files, the same
+folders as the dashboard's <strong>Files</strong> page. The conversation menu's <strong>Files</strong>
+opens the agent's files directly. Tap a folder to open it (the back button
+goes up one folder) and a file to read it: photos open full screen, Markdown is
+laid out, text and code are shown as they are, a PDF is drawn, and anything
+else can be handed to another app with the share button.</p>
+<p>The search box at the top finds files and folders by name across all of the
+agent's files, wherever you are. Folders the dashboard hides from its file list
+(version control, installed packages, caches) are left out here too.</p>
+<p>Administrators can upload a file from the phone with the button at the top:
+it goes into the folder that is open. A file with the same name there can be
+replaced, or kept beside the new one under a new name. Members can open and
+search files but not upload.</p>
+<h2 id="scheduled-tasks">Scheduled tasks<a class="headerlink" href="#scheduled-tasks" title="Permanent link">¶</a></h2>
+<p>A scheduled task is a message an agent gets on a timetable, such as "every
+weekday at 8, send me what is on my calendar". Each run is a conversation of
+its own, which you find in the agent's conversations with the <strong>Scheduled</strong>
+badge. Agents can set these up themselves when you ask them to; the app lets
+you see and manage them too.</p>
+<p><strong>Settings, Scheduled Tasks</strong> lists every agent's tasks, grouped by agent;
+<strong>Scheduled Tasks</strong> in a conversation's menu lists that agent's. Each row says
+when the task runs and when it runs next, or that it is paused. The switch on a
+row pauses or resumes it; swipe a row for <strong>Run now</strong>.</p>
+<p>Tap a task for its details: when it runs, the agent it runs as, the time zone
+its times are in, its instructions and its recent runs (tap a run to read what
+it produced, or why it failed). <strong>Run Now</strong> runs it straight away, whatever
+its schedule. The pencil button changes it, and <strong>Delete Task</strong> at the bottom
+removes it; its past runs stay in the agent's conversations.</p>
+<p>The <strong>+</strong> button adds a task: pick the agent, write what it should do (those
+words are the message the agent gets each time), optionally a name, and when
+it repeats: every day, week (on the days you pick) or month at a time, every
+few hours or minutes, or once on a date. The sentence under the choices reads
+the schedule back. A new task uses your phone's time zone; changing a task
+keeps the time zone it has. A task with a custom schedule made in the
+dashboard stays as it is unless you change it. Running more often than every
+five minutes shows a warning: each run is a full turn of the agent, which takes
+time and uses credits, and when a run is still going as the next one is due,
+that next run is skipped.</p>
+<p>You can manage the tasks of the agents you have access to, as in the
+dashboard's Scheduler.</p>
+<h2 id="alerts">Alerts<a class="headerlink" href="#alerts" title="Permanent link">¶</a></h2>
+<p>The Alerts part of the Inbox lists the deployment's notifications. Most of them
+come with a fix, and the line under each one says what tapping it does:</p>
+<ul>
+<li><strong>Open issue</strong>: an issue assigned to you opens in the app. Read it and its
+  comments, add a comment, or use the <strong>...</strong> button to <strong>Hand to an Agent</strong>
+  (it picks the issue up the next time it checks its issues, and comments as it
+  works), <strong>Talk It Over with an Agent</strong> (a new conversation about it), or
+  <strong>Close Issue</strong> and <strong>Reopen Issue</strong>.</li>
+<li><strong>Ask the agent to fix it</strong>: for problems an agent can fix with your help,
+  such as a service that needs reconnecting or an MCP server that needs signing
+  in again. Tapping opens a new conversation with that agent with a message
+  about the alert ready to send; the agent usually answers with a
+  <a href="../ask-the-agent/#magic-links-the-default-whenever-a-browser-is-needed">magic link</a>.</li>
+<li><strong>Repair the folders</strong>: when skills have folder names that do not match their
+  names, an administrator can repair them from the phone. A folder is renamed
+  to match a valid name; a name that is not valid (a title with spaces or
+  capitals) is set to its folder's name. The app reports what it repaired and
+  anything it left alone, and the alert clears once nothing is left.</li>
+<li><strong>Open Cortex</strong>, for a background run that failed.</li>
+<li><strong>Fixed on the dashboard</strong>: some problems, such as a locked vault, low disk
+  space or a usage budget, are fixed in the dashboard. The alert says where.</li>
+</ul>
+<p>Tapping an alert marks it read. Its menu always has <strong>Dismiss Alert</strong>.</p>
+<h2 id="the-agents-browser">The agent's browser<a class="headerlink" href="#the-agents-browser" title="Permanent link">¶</a></h2>
+<p>When your deployment runs the browser in <strong>live</strong> mode (see
+<a href="../browser/">Browser</a>), an agent that opens its browser shows it in the
+conversation as a small floating window: the page it is on, live, and a line
+saying who has it (<strong>The agent is browsing</strong>, <strong>You have control</strong>, <strong>The
+agent needs you</strong> when it asked for help, or <strong>Waiting for your OK in the
+chat</strong> when a click needs your approval). Drag the window to any corner. Its
+<strong>x</strong> hides it until the agent opens a new browser or asks for you again; the
+globe button at the top of the conversation opens the browser at any time,
+with a dot on it when the agent asked for you.</p>
+<p>Tap the window for the full view. While you watch, a dot shows where the agent
+is about to click or type, and two fingers (or a double tap) zoom in on the
+picture. <strong>Take control</strong> pauses the agent's browsing and lets you use the
+page yourself, for a sign-in, a security check or anything only a person
+should do:</p>
+<ul>
+<li><strong>tap</strong> to click (two or three quick taps for a double or triple click);</li>
+<li><strong>swipe</strong> to scroll;</li>
+<li><strong>rest your finger, then move it</strong> to press and drag;</li>
+<li>the <strong>keyboard</strong> button opens a box to type into the page, with Backspace,
+  Tab and Enter keys;</li>
+<li><strong>back</strong>, <strong>forward</strong> and <strong>reload</strong>, and tap the address to go somewhere
+  else. When the page has several tabs, the tabs button switches between
+  them.</li>
+</ul>
+<p>The picture is sent at the size the phone shows it and only as fast as the
+phone draws it, so taps get through on any page, however much it redraws
+(a sign-in's verification step, a feed): on a slow connection it turns a
+little rougher for a moment and sharpens again as soon as the phone keeps
+up. If a page is too busy to take a tap for a few seconds, the view says so;
+tap again, or press reload.</p>
+<p>Two buttons at the top of the full view keep what the screen shows, whether
+the agent is working or you are: <strong>Record</strong> makes a video of the browser
+(<strong>REC</strong> and a clock show while it runs, and <strong>Stop</strong> saves it in the agent's
+<code>recordings/</code> folder, which the toast opens in Files), and the camera button
+saves a picture of the page under <code>screenshots/</code>. A recording ends on its own
+after 30 minutes or when the browser closes. The agent can record itself too:
+ask it to record a demo of what it does.</p>
+<p>The page's own questions (a confirmation, a file to upload, a drop-down list,
+a date, time or colour to pick) come to you while you have control, as the
+phone's own pickers; and when a page asks the browser for something it does
+not have (your location, a camera, a microphone, leave to notify) you are
+told what it asked for and that it was declined, so a site that then behaves
+oddly is not a mystery. <strong>Hand back</strong> returns the browser to the agent; if it
+had asked for you, it is told you are done. <strong>Done</strong> closes the
+full view and leaves the browser as it is. With the browser in headless mode
+there is nothing to watch: the agent's screenshots arrive in its replies when
+it names them.</p>
+<h2 id="group-chats">Group chats<a class="headerlink" href="#group-chats" title="Permanent link">¶</a></h2>
+<p>A group chat is one conversation with two to six agents, the same group chats
+as in the dashboard. They are listed under <strong>Group chats</strong> at the bottom of the
+Chats tab, with the last message in each. Start one with <strong>+</strong>, <strong>New Group
+Chat</strong> (or <strong>Start a group chat with several agents</strong> when you have none): pick
+the agents and, optionally, a name. The first agent you pick answers messages
+that do not name anyone.</p>
+<p>To ask a particular agent, write <code>@</code> and its name; typing <code>@</code> suggests the
+members. Name several (<code>@nova and @aria, what do you think?</code>) and each answers
+in turn, in the order you named them, seeing the replies before its own. The
+line above the message box says who will answer. Each reply shows the agent's
+picture and name above it, and your own messages say who they went to.</p>
+<p>Agents in a group can also hand the conversation to each other after replying.
+While they do, a line above the message box says so, with <strong>Stop</strong> to end it
+once the current reply is finished.</p>
+<p>A one-to-one conversation becomes a group chat with <strong>Add an Agent</strong> in its
+<strong>...</strong> menu: the conversation so far comes along, so nobody has to repeat it.</p>
+<p>The <strong>i</strong> button at the top of a group chat opens its details: rename it, add
+an agent, remove one (swipe it to the left; a group keeps at least two), or
+delete the group chat. Group chats appear when the deployment has them turned
+on; an administrator turns them on or off, and decides whether agents may
+answer each other, at <strong>Config, Group chats</strong> in the dashboard (see
+<a href="../../config-yaml/#groups-multi-bot-conversations"><code>groups:</code></a>).</p>
+<h2 id="photos">Photos<a class="headerlink" href="#photos" title="Permanent link">¶</a></h2>
+<p>The <strong>+</strong> button next to the message box adds photos: <strong>Take Photo</strong> opens the
+camera, <strong>Choose Photos</strong> opens your photo library, where you can pick up to
+ten at once. The photos wait above the message box until you send them: tap one
+to see it larger, or its <strong>x</strong> to leave it out. Add a few words about what you
+want done with them, or send them on their own.</p>
+<p>Each photo is sent at a size suited to reading it (at most 2048 pixels on its
+longest side) and without its location or other details the camera recorded.
+For an administrator, each photo is saved in the agent's <code>uploads/</code> folder
+(where it also shows in the dashboard's Files view) with a note telling the
+agent where, and the agent decides from your message what to do with it: look
+at it with its vision tool, pass it on, or keep it. A member's photos are shown
+to the agent with that message only and not saved, so they do not come back
+when the conversation is reopened.</p>
+<p>In a conversation, one photo shows at its own shape and several as a grid.
+Tap a photo, yours or one the agent produced, to see it full screen: swipe
+sideways for the others in that message, pinch or double-tap to zoom, and swipe
+down (or tap the close button) to go back.</p>
+<p>The first time you take or choose a photo, your phone may ask whether Olano
+may use the camera or your photos. If you declined, allow it again in the
+phone's Settings, under Olano.</p>
+<h2 id="dictation">Dictation<a class="headerlink" href="#dictation" title="Permanent link">¶</a></h2>
+<p>Tap the microphone and talk: your words appear in the message box as you say
+them, and what you send is the text, never a recording. Your phone works the
+words out itself, so nothing you say leaves the phone until you send the
+message, and the agent gets text it can start on at once.</p>
+<p>While you dictate, the message box shows what has been heard so far, with four
+controls under it:</p>
+<ul>
+<li><strong>x</strong> throws away what you dictated this time. Anything you had typed
+  before stays in the box.</li>
+<li>The waveform moves while the phone hears you (bars) and goes flat (dots)
+  when you pause.</li>
+<li><strong>Stop</strong> (the square) stops listening and leaves the words in the box, so
+  you can correct them, type more, or tap the microphone again to keep
+  talking. Dictated words are added after whatever is already in the box.</li>
+<li><strong>Send</strong> (the arrow) stops listening and sends the message, the words still
+  being worked out included. While the agent is working, it adds them to what
+  the agent is doing, like a typed message.</li>
+</ul>
+<p>Dictation keeps listening through pauses until you stop it, for up to five
+minutes. Switching away from the app, or a phone call, stops it and leaves
+what was heard in the box.</p>
+<p>Dictation is offered where the phone can do it without sending your voice
+anywhere: an iPhone that recognizes your language on the phone itself, and an
+Android phone (Android 12 or later) with on-device speech recognition. It
+listens for the language your phone is set to; Android may need that
+language's speech recognition downloaded first (in the phone's settings for
+speech recognition, or by using voice typing once). On other phones a tap on
+the microphone records a voice note, as below. The first time you dictate,
+the phone asks whether Olano may use the microphone and, on an iPhone, speech
+recognition. To have a tap record a voice note instead, turn off <strong>Dictate
+with the microphone</strong> in the app's Settings.</p>
+<h2 id="voice-notes">Voice notes<a class="headerlink" href="#voice-notes" title="Permanent link">¶</a></h2>
+<p>There are two ways to record a voice note:</p>
+<ul>
+<li><strong>Hold</strong> the microphone and talk, then let go to send. Slide your finger left
+  to throw the recording away, or up to lock it, so it keeps recording without
+  your finger on it.</li>
+<li><strong>Tap</strong> the microphone to record hands-free, on a phone that cannot dictate
+  or with dictation turned off in Settings. A bin button throws the recording
+  away and the send button sends it.</li>
+</ul>
+<p>Where a tap dictates, a press becomes a voice note once it lasts longer than a
+tap, and the microphone is there whether or not you have typed anything.</p>
+<p>The dot beside the timer is grey while the phone opens the microphone and
+turns red, with a small tick under your finger, the moment it is listening:
+what you say from then on is in the note. After a note the microphone stays
+ready for about twenty seconds, so the next one starts at once (the phone's
+microphone indicator stays on for that long); it closes when you leave the
+app. A recording shorter than about 0.7 seconds is not sent, and a recording
+sends itself when it reaches five minutes. Leaving the conversation, or
+switching away from the app, throws away a recording you have not sent.</p>
+<p>By default the recording is sent to the deployment, which turns it into text
+(below). With <strong>Transcribe on this phone</strong> turned on in the app's Settings, an
+iPhone turns what you said into text itself, and the text is what is sent: the
+agent starts on your words at once, the recording stays on the phone, and
+nothing depends on the deployment's speech-to-text. Your administrator chooses
+the default, and may hide the switch. While the
+iPhone works it out, <strong>Transcribing…</strong> shows under the voice note, then your
+words (tap them to read all of them). The iPhone does this on the phone when it
+supports your language, and with Apple's speech recognition otherwise. It
+listens for the iPhone's own language (<strong>Settings, General, Language &amp;
+Region</strong>): if you speak another language to your agents, turn off <strong>Transcribe
+on this phone</strong> in the app's Settings, and the deployment transcribes
+your voice notes instead. The first time, the iPhone asks whether Olano may use
+speech recognition.</p>
+<p>Otherwise (on Android, with <strong>Transcribe on this phone</strong> turned off, when you
+declined speech recognition, or when the iPhone heard no words), the recording
+is sent to the deployment, which turns it into text with its speech-to-text
+service. The text appears under your voice note once the deployment has heard
+it. If speech-to-text is switched off or fails on your deployment, the voice
+note says it was not transcribed, and the agent is told it could not hear it.
+An administrator turns speech-to-text on in the dashboard, under <strong>Config,
+Speech</strong>.</p>
+<p>A recording sent to the deployment by an administrator is saved in the agent's
+<code>uploads/</code> folder, like a photo, and plays again when the conversation is
+reopened. A member's recording is used for its text only and not saved. When the
+recording was not sent (the iPhone transcribed it, or a member sent it), a
+reopened conversation shows what you said, marked as a voice note, without the
+recording.</p>
+<p>Tap a voice note's play button to hear it, or tap or drag along its waveform to
+jump to a point. While it plays, the speed button switches between 1x, 1.5x and
+2x. Starting another voice note pauses the first. Audio files an agent sends you
+play the same way.</p>
+<p>The first time you record, your phone asks whether Olano may use the
+microphone. If you declined, allow it again in the phone's Settings, under
+Olano.</p>
+<h2 id="what-your-administrator-chooses">What your administrator chooses<a class="headerlink" href="#what-your-administrator-chooses" title="Permanent link">¶</a></h2>
+<p>An administrator can shape the app for everyone on the deployment, in the
+dashboard under <strong>Config, Mobile app</strong>: hide the <strong>Cortex</strong> tab, the whole
+<strong>Inbox</strong> or any of its sections (Approvals, Alerts, Issues), and the
+<strong>Files</strong>, <strong>Credits and Usage</strong> and <strong>Transcribe on this phone</strong> rows in
+Settings, and choose where voice notes are transcribed for people who have not
+picked. The app checks for changes every time you open it or come back to it,
+so a change shows up without updating the app. If you are on a screen that has
+just been hidden, the app takes you to Chats (or back to Settings). Hiding only
+removes it from the app; nothing is deleted.</p>
+<h2 id="hearing-replies">Hearing replies<a class="headerlink" href="#hearing-replies" title="Permanent link">¶</a></h2>
+<p>The speaker button under a finished reply reads it aloud; tap it again to stop.
+Replies to your voice notes are read aloud as they arrive, so a conversation
+can go back and forth by voice. <strong>Read replies aloud</strong> in the app's Settings
+chooses when that happens:</p>
+<ul>
+<li><strong>After my voice notes</strong> (the default): a reply to a voice note is read aloud.</li>
+<li><strong>Always</strong>: every reply is read aloud as it arrives.</li>
+<li><strong>Never</strong>: replies are read only when you tap the speaker.</li>
+</ul>
+<p>The voice depends on the deployment. When an administrator has turned on text
+to speech (<strong>Config, Speech</strong> in the dashboard), replies are read in the voice
+chosen there, and each reading is billed like the deployment's other speech
+use. Otherwise the phone reads them in its own voice, at no cost; an iPhone
+picks the best voice it has for the language the reply is written in (better
+voices can be downloaded in the iPhone's <strong>Settings, Accessibility, Spoken
+Content, Voices</strong>).</p>
+<p>A reply is read the way a person would read it to you: code blocks are left
+out, a link is read as its text and a web address as the name of its site.
+Playing a voice note or starting a recording stops the reading, and so does
+leaving the app. These choices are kept on that phone only.</p>
+<h2 id="hands-free">Hands-free<a class="headerlink" href="#hands-free" title="Permanent link">¶</a></h2>
+<p><strong>Hands-Free Mode</strong> in a conversation's <strong>...</strong> menu is for when your hands and
+eyes are busy, such as driving or cooking. The phone listens; when you stop
+talking it sends what you said, reads the reply aloud when it arrives, and
+listens again. On a phone that can <a href="#dictation">dictate</a>, your words appear
+under the button as you say them and go as a text message, worked out on the
+phone itself, so nothing waits on the deployment's speech-to-text; a pause of
+about two seconds after your last word sends them. On other phones, or with
+<strong>Dictate with the microphone</strong> turned off in the app's Settings, what you say
+goes as a voice note. If dictation cannot start (the phone's speech
+recognition is turned off for Olano, say), the app says so and sends voice
+notes for the rest of that hands-free conversation. The message box gives way
+to one large button:</p>
+<ul>
+<li>While it listens, tapping it sends straight away instead of waiting for the
+  pause.</li>
+<li>While a reply is being read, tapping it stops the reading and listens.</li>
+<li>After about fifteen seconds of silence it pauses; tap it to talk again.</li>
+</ul>
+<p><strong>End Hands-Free</strong> brings the message box back, and so does leaving the app.
+Every reply is read aloud while hands-free is on, whatever <strong>Read replies
+aloud</strong> is set to, in the voice described in <a href="#hearing-replies">Hearing replies</a>,
+so a hands-free conversation costs nothing beyond the messages themselves.</p>
+<h2 id="siri-the-action-button-and-shortcuts">Siri, the Action button and Shortcuts<a class="headerlink" href="#siri-the-action-button-and-shortcuts" title="Permanent link">¶</a></h2>
+<p>On an iPhone, two things can be asked of the app from outside it. Both name
+one of your agents, and Siri learns the agents' names from the app, so say
+them as they appear in Chats.</p>
+<p><strong>Ask an agent</strong> sends what you say and reads the reply back, without the app
+opening. It takes two breaths: name the agent, then answer Siri's question.</p>
+<ul>
+<li>"Hey Siri, ask Jane in Olano". Siri asks "What do you want to ask?", and
+  you say the question.</li>
+<li>"Hey Siri, ask an agent in Olano" (or "Hey Siri, ask Olano"). Siri shows
+  your agents and asks which, then asks for the question.</li>
+</ul>
+<p>Keep the first sentence to the agent's name and the app's: words after it in
+the same breath ("...what is on my calendar") make Siri treat it as a text
+message to send, and it offers Messages instead. "Olano, ask Jane" and "ask
+Jane on Olano" work too. The two actions appear in the <strong>Shortcuts</strong> app under
+Olano once the app has been opened; if Siri still does not know an agent's
+name, open the app once so it learns the current names, or say "ask an agent
+in Olano" and choose.</p>
+<p>Siri speaks the reply in its own voice. A reply that is mostly code or links
+is read the way the app reads one: code is left out and a link is read as its
+site. A few words from Siri follow soon after you speak; when the agent takes
+longer, Siri says the agent is still working and the reply comes to the app
+instead, and to the phone as a <a href="#notifications">notification</a> when those are
+on. A question asked within half an hour of the last one continues the same
+conversation, so "and tomorrow?" means what you think; after that a fresh one
+starts. These conversations appear in Chats like any other.</p>
+<p><strong>Talk to an agent</strong> opens the app straight into <a href="#hands-free">Hands-free</a>
+with that agent, in a new conversation: it listens, sends what you say, reads
+the reply in the agent's voice when the deployment has one, and listens again.</p>
+<ul>
+<li>"Hey Siri, talk to Hannah in Olano"</li>
+<li><strong>Settings, Action Button, Shortcut</strong> on an iPhone with an Action button:
+  pick <strong>Talk to an Agent</strong> (or <strong>Ask an Agent</strong>) and the agent it should
+  use, and a press opens the conversation listening.</li>
+<li>The same two actions are in <strong>Control Center</strong>, on the Lock Screen, and in
+  the <strong>Shortcuts</strong> app, where <strong>Ask an Agent</strong> can be a step of your own
+  shortcut or automation: its reply is passed on as text (a morning briefing
+  that is read to you at seven, say).</li>
+</ul>
+<p>The actions need iOS 16.4 or later, the app signed in to a deployment, and
+work with whichever agents you can chat with. On Android, a long press on the
+app's icon offers <strong>Talk to ...</strong> for the first few agents, which opens the
+app the same way; those can be dragged to the home screen.</p>
+<p><strong>Settings, Siri and widgets, Default agent</strong> is the agent these reach when
+none is named: "Hey Siri, talk to Olano" suggests it first, the Action
+button and a Control Center control with no agent chosen open it, a widget
+shows it until you pick another, and on Android it is the first shortcut.
+Left at <strong>First in the list</strong>, it is whichever agent Chats lists first. The
+choice is kept on that phone.</p>
+<h2 id="widgets-iphone">Widgets (iPhone)<a class="headerlink" href="#widgets-iphone" title="Permanent link">¶</a></h2>
+<p>Touch and hold the Home Screen, tap <strong>Edit</strong>, then <strong>Add Widget</strong> and choose
+Olano. The widgets read the deployment on their own, with the session the app
+signed in with, so they keep up while the app is closed; they refresh every
+few minutes, and at once when you do something in the app or on a widget.
+They need iOS 18 and the app opened once after signing in. A widget added
+while the app was closed fills in the next time the app is opened.</p>
+<p>Every widget that shows one agent shows the <strong>default agent</strong> (<strong>Settings,
+Siri and widgets</strong>) until you pick another for it: touch and hold the widget
+and choose <strong>Edit Widget</strong>.</p>
+<ul>
+<li><strong>Ask</strong> (small, medium, Lock Screen): the simplest one, a way in. The
+  small one is a single "Ask Anna" pill that opens a new conversation with
+  the keyboard up. The medium one adds the composer's buttons: <strong>Message</strong>,
+  <strong>Photo</strong> (the camera opens), <strong>Photos</strong> (the picker opens) and <strong>Talk</strong>
+  (the conversation opens hands-free), so a question, a picture or a
+  conversation is one tap from the Home Screen.</li>
+<li><strong>Agent</strong> (small, medium, and every Lock Screen shape): one agent's
+  picture, its status, the last reply in your conversation with it, and how
+  many approvals it is waiting on. Tap it to open that conversation, the
+  same one a tap on the agent in Chats opens (a new one when you have none
+  yet; scheduled runs and the agent's other threads stay in its
+  conversation list). The medium one has <strong>Talk</strong>, which opens a new
+  conversation hands-free, and for administrators <strong>Start</strong> or <strong>Stop</strong>.</li>
+<li><strong>Quick asks</strong> (medium, large): an agent and up to three questions you set
+  when adding the widget, such as "Give me a short briefing of what matters
+  right now". A tap sends one; the reply appears in the widget when it
+  arrives (the large size keeps it in view). A widget cannot take typing, so
+  the questions are fixed; tap the agent to open the conversation for
+  anything else.</li>
+<li><strong>Approvals</strong> (small, medium, Lock Screen): what is waiting on you. The
+  medium one shows the oldest approval with <strong>Approve</strong> and <strong>Decline</strong> and a
+  countdown to when it expires; a high-risk action has no buttons, so you see
+  in the app exactly what would run. Tap to open the Inbox.</li>
+<li><strong>Team</strong> (medium, large): every agent with its status and the last word
+  in your conversation with it, each opening that conversation.</li>
+<li><strong>Pulse</strong> (small, medium, Lock Screen): the newest Pulse card from Cortex.</li>
+<li><strong>Next run</strong> (small, medium, Lock Screen): the next scheduled task,
+  counting down, with the ones after it.</li>
+</ul>
+<p>In <strong>Control Center</strong> (and the Lock Screen's two bottom buttons, and the
+Action button on an iPhone that has one), two controls can be added:
+<strong>Talk to an Agent</strong>, which opens the app listening to the chosen agent, and
+<strong>Message an Agent</strong>, which opens a new conversation with it. A control with
+no agent chosen reaches the default agent.</p>
+<p>What a widget shows is the last thing the deployment answered, so a reply
+written seconds ago may take a moment to appear; the app itself always shows
+the latest. Signing out in the app clears the widgets.</p>
+<h2 id="appearance">Appearance<a class="headerlink" href="#appearance" title="Permanent link">¶</a></h2>
+<p><strong>Settings, Appearance</strong> chooses how the app looks:</p>
+<ul>
+<li><strong>System</strong> (the default): light or dark following the phone's own setting,
+  changing with it.</li>
+<li><strong>Light</strong>: always light, whatever the phone is set to.</li>
+<li><strong>Dark</strong>: always dark, whatever the phone is set to.</li>
+<li><strong>Volt</strong>: always a black page with an electric chartreuse accent, whatever
+  the phone is set to. It is the dashboard's Volt theme, so a browser set to it
+  and the phone look alike; the status bar and keyboard follow it as they do
+  Dark.</li>
+</ul>
+<p>The choice is kept on that phone only, for every deployment it opens.</p>
+<h2 id="locking-the-app">Locking the app<a class="headerlink" href="#locking-the-app" title="Permanent link">¶</a></h2>
+<p>The app keeps you signed in for two weeks, and your agents can act on your
+accounts. <strong>Settings, Privacy, Lock with Face ID</strong> (Touch ID, or a fingerprint
+or face unlock on Android, depending on the phone) makes the app ask for it
+before anything shows: when the app opens, and when you come back to it. The
+phone's own passcode always works too. Turning it on asks once, to make sure
+the phone can unlock it.</p>
+<p><strong>Ask again</strong> chooses how long the app can be in the background before it asks
+again: <strong>Immediately</strong> (the default), or after 1, 5 or 15 minutes. While the
+app is in the background its screen is covered, so the phone's app switcher
+shows nothing either. The setting needs a passcode on the phone, and is kept
+on that phone only.</p>
+<h2 id="credits-and-usage">Credits and usage<a class="headerlink" href="#credits-and-usage" title="Permanent link">¶</a></h2>
+<p>On a deployment that runs on Olano credits, <strong>Settings, Credits and Usage</strong>
+shows the credits left, how much of this month's included credits are used and
+when they renew, any top-ups left, and what each Olano service (chat, images,
+speech and so on) used over the last 30 days. It is for reading only: buying
+credits is done from the dashboard. Deployments that use their own provider
+keys have no credits, and the row does not appear.</p>
+<h2 id="notifications">Notifications<a class="headerlink" href="#notifications" title="Permanent link">¶</a></h2>
+<p>Notifications reach you while the app is closed or in the background. While it
+is open on screen you see things happen live instead, so it does not also
+notify you.</p>
+<p>Turn them on in <strong>Settings, Push notifications</strong>; your phone asks for
+permission once. There are four kinds, and each phone chooses its own:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>When it notifies</th>
+<th>Who receives it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Replies</strong></td>
+<td>An agent finished answering a message you sent, and you were not looking at that conversation (the app was in the background and no browser had it open). Not sent for a reply you stopped.</td>
+<td>You, the person who sent the message.</td>
+</tr>
+<tr>
+<td><strong>Approvals</strong></td>
+<td>An agent is waiting for you to approve or reject an action: in a conversation you started, or in the Approvals inbox for an agent you can act on (a scheduled run, Cortex, a request from another agent).</td>
+<td>The person who started the conversation; for the inbox, every administrator and every member with access to that agent.</td>
+</tr>
+<tr>
+<td><strong>Cortex</strong></td>
+<td>Cortex wants approval for a change to an agent, or found something urgent. Ordinary findings wait in the Cortex tab.</td>
+<td>Administrators and members with access to that agent.</td>
+</tr>
+<tr>
+<td><strong>Alerts</strong></td>
+<td>A warning or error appeared on the bell, such as a channel that cannot start. Each problem notifies at most once every six hours.</td>
+<td>Administrators only.</td>
+</tr>
+</tbody>
+</table>
+<p>Tapping a notification opens what it is about: the conversation for a reply or
+an approval in a conversation, Pulse in the Cortex tab for a Cortex finding, and
+the Inbox for an inbox approval, a Cortex card that needs an approval, or an
+alert.</p>
+<p><strong>Answering from the notification.</strong> An approval notification has <strong>Approve</strong>
+and <strong>Decline</strong> buttons, and a reply notification has a <strong>Reply</strong> field: press
+and hold the notification (or pull it down) on an iPhone, or expand it on
+Android. The phone asks to be unlocked first, then the app answers without
+opening: the approval is decided, or your reply goes into that conversation as
+your next message, and the agent's answer arrives as another notification. An
+action marked high risk has no buttons, so that it is always looked at in the
+app first, and a reply that ran into a problem has no Reply field. If answering
+does not work (the deployment cannot be reached, or you need to sign in again),
+a notification says so; tap it to open the app. A reply sent while the agent is
+still working on your last message is not sent; the notification says so.</p>
+<p>An approval nobody answers is rejected when the agent's approval timeout runs
+out, five minutes unless the agent sets <code>security.hitl_timeout_seconds</code>
+(see <a href="../human-in-the-loop/">Human in the loop and approvals</a>). Keep
+<strong>Approvals</strong> on if you rely on answering them from your phone.</p>
+<h3 id="what-a-notification-contains">What a notification contains<a class="headerlink" href="#what-a-notification-contains" title="Permanent link">¶</a></h3>
+<p>By default a notification names the agent and the reason ("maria needs your
+approval", "Replied to your message.") and never contains what anyone wrote, or
+the details of the action awaiting approval beyond its name. An administrator
+can set <code>push.previews: true</code> in <a href="../../config-yaml/"><code>config.yaml</code></a> to include
+the start of replies and Cortex finding titles; that text then passes through
+Apple's or Google's notification service on its way to the phone.</p>
+<p>Signing out in the app, or switching deployment, stops that deployment's
+notifications on that phone. Deleting a person's account stops them on every
+phone they had.</p>
+<h3 id="who-can-have-notifications">Who can have notifications<a class="headerlink" href="#who-can-have-notifications" title="Permanent link">¶</a></h3>
+<p>Notifications are delivered through the Olano Cloud, so they work on
+deployments that run on Olano Cloud and are recent enough to send them. Any
+other deployment can still be used in the app for chat, Cortex and the inbox;
+<strong>Settings</strong> says why its notifications are unavailable. An administrator
+controls them for the whole deployment with the <code>push:</code> block in
+<a href="../../config-yaml/"><code>config.yaml</code></a>: switching them off, the previews above, the
+lowest Cortex priority that notifies, and the lowest alert level that notifies.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../cortex-and-pulse/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Cortex and Pulse">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Cortex and Pulse
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../budgets/" class="md-footer__link md-footer__link--next" aria-label="Next: Budgets">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Budgets
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

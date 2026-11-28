@@ -1,0 +1,2517 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.1/common-problems/">
+      
+      
+        <link rel="prev" href="../building-agents/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Common problems - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#common-problems" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Common problems
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../feature-guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/common-problems.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="common-problems">Common problems<a class="headerlink" href="#common-problems" title="Permanent link">¶</a></h1>
+<p><strong>My agent replies with an empty message, or stops mid-sentence.</strong>
+Check <strong>Multi-user → Message policy → Maximum reply length</strong>. A reply that hits
+that ceiling is cut where it hits it and is deliberately not continued. If it
+comes back <em>empty</em>, the model is a reasoning one and spent the whole ceiling
+thinking: raise the number above about 1024, or set <strong>Reasoning effort</strong> to
+<code>none</code> or <code>low</code> on the Overview tab.</p>
+<p><strong>My agent went silent for a real customer.</strong>
+Something in <strong>Multi-user → Message policy</strong> matched their message. In this
+dashboard an ignored message always shows a short note saying so, so send the
+same text here to see which case it was. A pattern is matched anywhere in the
+message and ignores case, so a broad one like <code>test</code> catches "is this the
+latest version?" — anchor it with <code>^…$</code> if you meant the whole message. If it
+was a silence <em>rule</em> instead, remember the agent is judging it, so an
+ambiguous rule produces ambiguous behaviour; make it a statement that is
+plainly true or false about one message. Setting <strong>What an ignored sender
+sees</strong> turns silence into one polite line, which is usually right when a real
+customer can act on the rule and wrong when the sender is a spammer.</p>
+<p><strong>Long messages to my own agent get refused.</strong>
+The message-length cap applies on the dashboard too, not only on messengers —
+deliberately, so that a cap you set is one you can see working. Raise or clear
+<strong>Maximum message length</strong>, or paste the long text into a file and point the
+agent at it. Slash commands are never screened, so <code>/</code> commands keep working
+whatever the cap is.</p>
+<p><strong>The agent introduces itself by the template's name, not the name I gave it.</strong>
+An agent created before titles existed may carry the archetype's label as its
+<strong>Display name</strong> ("Recruitment Specialist") with your name only as its handle
+(<code>hillary</code>) — and its prompt tells it it is <em>called</em> Recruitment Specialist.
+Open the agent, set <strong>Display name</strong> to the name you want and <strong>Title</strong> to the
+role (both on the Overview tab; the title also lives on the Talk to Agent
+tab); the next conversation introduces itself as "Hillary, Recruitment
+Specialist". Agents created now get this right from the start: the name you
+type is the display name and the template's label becomes the title.</p>
+<p><strong>No "New agent" button in the simple view.</strong>
+Admins always have it. For a member it means the deployment turned member bot
+creation off: an admin can switch it back on under <strong>Config → Member bot
+creation</strong> (it is on by default). A member who has the button but gets a
+"limit reached" message owns as many agents as the per-member limit allows —
+the same Config section raises it.</p>
+<p><strong>Can't find Sign out in the simple view.</strong>
+It is in the account menu — click your name at the bottom of the agent list;
+Sign out is the last item, always visible at the menu's foot. It only appears
+on team installs (with per-person sign-in); a single-user box has no session
+to sign out of. Theme and language are one dropdown each, so the menu is short
+enough that nothing in it scrolls; on older builds a tall menu could hide Sign
+out below the language list, and with the list collapsed to a strip of faces the
+menu itself was cut off at the strip's edge — update if you see either.</p>
+<p><strong>An agent never replies on Telegram/Slack/Discord.</strong>
+Almost always a missing or shared credential. A connector with no credential is
+skipped at boot and raises a dashboard notification naming the exact key to set.
+If two agents use the same platform, each needs its <strong>own</strong> token stored as a
+per-agent override — otherwise they authenticate as the same bot and one stops
+receiving messages. Set the token, then restart the agent.</p>
+<p><strong>The agent answered "Sorry, I had trouble processing that one — could you send
+your message again?"</strong>
+The connection to the model broke part-way through the reply. It is a network
+blip, not a problem with your deployment, your keys or your credit balance, and
+nothing needs changing: send the same message again and it almost always goes
+straight through. There is no need to start a new conversation — the thread is
+intact and the agent still has the context.</p>
+<p>Olano-managed models retry a dropped connection themselves before the agent says
+anything, so seeing this message means either the retries were used up or the
+answer had already begun arriving (a half-delivered reply is never re-sent — you
+would get the second half of one answer glued to the first half of another).
+Models you connected with your own API key have no such retry, so they show it
+more often. If it happens on <em>every</em> message rather than occasionally, the model
+provider itself is likely having an outage — check its status on the
+<strong>Providers</strong> page.</p>
+<p><strong>A command-line tool in the sandbox says it is not logged in (<code>gh</code>, <code>gog</code>, …).</strong>
+Expected, and not something to fix: the sandbox holds no credential, and Olano
+never signs a command-line tool in there (<a href="../config-yaml/#sandbox-tool-bundles">Sandbox tool bundles</a>).
+Use the built-in integration instead — the GitHub tools for repositories,
+issues and pull requests, the <code>git</code> toolkit to clone or push a private
+repository — after connecting GitHub once in <strong>Connections</strong> (Connect, or Sign
+in with a code) or by asking the agent for the link. If you really want the
+tool itself signed in, do it yourself from the <strong>Terminal</strong> tab; that sign-in
+is yours alone and lasts until the sandbox is rebuilt.</p>
+<p><strong>The GitHub CLI card is gone from Connections.</strong>
+It merged into the <strong>GitHub</strong> card, which now offers both <strong>Connect</strong> (an
+OAuth app — Olano's or your own) and <strong>Sign in with a code</strong> (no app needed),
+at the System scope and per agent. A connection made either way serves the
+GitHub tools, GitHub MCP servers and the <code>git</code> toolkit alike — it never signed
+anything in inside the sandbox, and it still does not.</p>
+<p><strong>An agent is refused with "the monthly budget for … is exhausted".</strong>
+It hit one of the six usage budgets — see
+<a href="../config-yaml/#usage_budgets-token-ceilings-and-budget-warnings"><code>usage_budgets:</code></a>. Open
+<strong>Config → Usage budgets</strong> to see which one and how full it is. A <em>token</em>
+budget is yours to raise or lift there, and the change applies to the next
+turn; a <em>cost</em> budget comes from your plan and resets with its window. Note
+token budgets count calls made on your own provider keys too, so an agent on
+its own API key can still be stopped by one. Notifications at 50%, 60%, 70%,
+80%, 90%, 95% and 99% warn you long before this happens — if this was the first
+you heard of it, check that budget notifications are on.</p>
+<p><strong>The agent says it cannot message someone by name.</strong>
+Agents address a chat or a person by the platform's own id. A name or handle
+works too, but only for chats and people whose messages have already reached
+<em>that</em> agent — each agent keeps its own directory of who it has heard from, so
+someone well known to one agent is unknown to another until they message it as
+well. On Telegram and Discord, where a chat id is always a number, a name the
+agent does not recognise now fails immediately and says what to do about it,
+rather than being sent and bouncing back as an unreadable error. Either have the
+person message the bot once, or give the agent the numeric id to use.</p>
+<p><strong>A reply says the model "could not read part of this conversation's history".</strong>
+Change a bot's model and the conversation carries on where it left off — the
+thread keeps everything the previous model wrote. A few models cannot read
+certain things an earlier model left behind (its private reasoning, an image
+attached in a shape it does not accept), and when that happens the whole thread
+stops working for that model rather than just one turn: retrying it fails the
+same way every time. Start a new chat and the bot works normally again; the old
+conversation stays readable, and switching that bot back to its previous model
+also restores it. If you would rather not lose the thread, switch the model
+back, ask the bot to summarise where things stand, and paste that into the new
+chat. This is rare, and mostly affects locally hosted models.</p>
+<p><strong>An agent is offline and will not start.</strong>
+Check the <strong>Logs</strong> page (account menu → Administration → Logs) for that agent.
+The usual causes: an invalid <code>agent.json5</code>
+(see <a href="../agent-json5/#what-makes-a-config-fail-to-load"><code>agent.json5</code> reference</a> for what gets rejected), a
+model string that names a provider with no usable key, or the agent having been
+deliberately stopped — a stopped agent stays offline across restarts until you
+start it again.</p>
+<p><strong>An MCP server shows as disconnected.</strong>
+Look at the <strong>MCP</strong> tab for the reason. If it says a sign-in is required, you
+have to authorize it — Olano will not retry a server that needs consent it does
+not have, because reconnecting cannot invent consent. Timeouts and errors are
+retried automatically with backoff; an explicit reload from the tab always wins
+over the retry schedule.</p>
+<p><strong>Approvals are piling up / the agent keeps asking permission.</strong>
+Its <code>security.profile</code> is stricter than the work needs, or <code>hitl_shell</code> /
+<code>hitl_write_tools</code> are on. Move it to a more permissive profile, or override the
+one noisy tool with <code>security.tools.&lt;name&gt;.approval: "never"</code>. Note that running
+commands in another agent's workspace is always approved individually and cannot
+be switched off.</p>
+<p><strong>The agent gave away or acted on something it should not have.</strong>
+Check <code>security.pii_action</code> (default <code>warn</code> only warns — set <code>redact</code> or
+<code>block</code>), <code>output_scan</code>, and <code>credential_scrub</code>. If the agent reads untrusted
+content like email or web pages, make sure <code>input_scan</code> is on and consider
+<code>web_scan</code>.</p>
+<p><strong>A dashboard tab is missing.</strong>
+Four are admin-only: Vault, Logs, Config, Admin. On a managed deployment, other
+tabs can be hidden by your plan's entitlements. If you are an admin and a
+section you expect is gone, that is why.</p>
+<p><strong>A Cortex Think phase says it "hit its step limit" (or, on older builds, shows
+"Recursion limit of N reached").</strong>
+The background run needed more rounds of thinking and tool use than its step
+budget allows, so it stopped before finishing and its work for that run was
+discarded. Run the phase again — a retry often plans more tightly. If it keeps
+happening, raise the <strong>Step budget</strong> in <strong>Cortex → Autonomy</strong>: the "All agents"
+column raises it for the whole deployment, the per-agent column for just this
+one (each unit of ~4 steps is roughly one round of thinking plus tool use).
+Raise the <strong>Time limit</strong> beside it at the same time — a bigger step budget
+behind the old time limit just fails on time instead. Note that a phase
+reporting "No active items to advance" or "No fresh idea to build" is a normal
+no-op, not a failure — the generative phases (Brainstorming, Ideas) have to
+succeed first to give the later phases material to work on.</p>
+<p><strong>A background run failed and I only found out by opening Cortex.</strong>
+You should not have to go looking. A background run that fails, times out or
+needs setup now raises a notification — the bell in the sidebar and the
+Notifications section on Overview — naming the agent, which run failed and what
+to do about it, with a link straight to Cortex. Repeats of the same failure
+collapse into one row with a count rather than filling the list, and the row
+clears itself the next time that run succeeds. Runs stopped by a guard rail you
+already configured (over the daily budget, or nested too deep) do not notify:
+they are working as intended and clear on their own.</p>
+<p><strong>An agent says it can't do something its MCP server should handle.</strong>
+Usually the connection to that server is down, and the most common reason is an
+OAuth grant that can no longer be renewed — the provider expired or revoked it.
+Olano retries everything it can on its own: it renews access tokens ahead of
+expiry, re-discovers a provider's token endpoint if the one it had stopped
+answering, and reconnects servers that failed with exponential backoff. What it
+cannot do is give consent on your behalf.</p>
+<p>When a grant reaches that point you get a notification — the bell in the
+sidebar and the Notifications section on Overview — saying which server needs
+re-authorizing for which agent, with a link straight to that agent's <strong>MCP</strong>
+tab. Open it and click <strong>Authorize</strong>. Reloading the server will not fix this one
+(the notification says so); only a fresh authorization will. The row clears
+itself as soon as the server connects again, and there is one row per agent per
+server, since each agent authorizes its servers independently. If you no longer
+need that server, switching it off or removing it on the <strong>MCP</strong> tab clears the
+row too, within a couple of minutes at most, and deleting the agent clears
+every notification about it.</p>
+<p>To check the state of every server without waiting for a notification, use
+<strong>Config → MCP connection health</strong>, the agent's own MCP tab, or <code>/mcps</code> in chat.</p>
+<p><strong>"Skill X does not follow Agent Skills specification: name must match
+directory name".</strong>
+A skill's <code>name:</code> in its <code>SKILL.md</code> differs from the folder containing it. The
+skill still loads and works, but the warning repeats on every agent start and a
+future update may stop loading it.</p>
+<p>The usual cause was an agent writing a skill with a title as its name
+(<code>Professional HTML Email Formatting</code> in a folder called
+<code>professional-html-email-formatting</code>). That no longer sticks: when an agent
+writes a skill, a title in <code>name:</code> is set to the folder's name on the spot, and
+every agent start and every background run does the same for skills written any
+other way. A skill switched off under its old name stays switched off.</p>
+<p>What is left gets a notification listing the affected skills: a valid name in
+a folder called something else. <strong>Repair</strong> (on the notification in the mobile
+app, or AgentFather's <code>olano_repair_skill_names</code>) renames each <strong>folder</strong> to
+match the skill's name, since the name is what the agent refers to. Repair
+leaves two cases alone and says so: a folder of that name already exists, or
+the skill is an agent's improved copy of another skill.</p>
+<p><strong>The agent says there are no Cortex items, but the folders are still there.</strong>
+The Cortex tab and the <code>cortex_*</code> tools read one index file per agent. If that
+file was damaged by two edits landing at the same moment (an older release could
+do that when the agent edited several items in one reply), it now repairs itself
+on the next read: the items reappear, and a copy of the damaged file is kept
+beside it with a <code>.corrupt-&lt;time&gt;</code> suffix that you can delete once things look
+right. If a tool answers that the index is <strong>unreadable</strong>, the file could not be
+repaired automatically; nothing has been changed or written over it. Open the
+agent's <strong>Files</strong> view, find <code>.olano/state/cortex/items.json</code>, and either fix the
+JSON or move the file aside; the item folders (<code>ideas/</code>, <code>prototypes/</code>,
+<code>projects/</code>, …) are untouched and the agent can re-add the items from them.</p>
+<p><strong>Out of credits, or usage higher than expected.</strong>
+Check <strong>Insights</strong> — the <strong>"Where credits went"</strong> card splits the window by
+kind of work (chat, Cortex background thinking, scheduled tasks, highlights,
+subagents…), <strong>"Credits by tier"</strong> shows which managed tier is spending, and
+the by-agent and by-model charts narrow it further. The usual cause is an
+agent on a higher tier than its work needs, or Cortex running at <code>aggressive</code>
+intensity across many agents. Move routine agents to <code>olano:turbo</code>, lower
+<code>cognition.intensity</code>, reduce <code>max_deep_runs_per_day</code>, and set per-agent
+<code>budget</code> caps. Buy more credits from Olano Cloud (on a self-hosted install
+running on an Olano API key, under Billing → Account credits).</p>
+<p><strong>An MCP sign-in on a self-hosted install says there is nowhere to return to.</strong>
+The provider needs a secure address to send you back to after you sign in. Paste
+an Olano API key on <strong>Providers → Olano</strong> (a few seconds later the box is
+registered with Olano's sign-in service and the sign-in works with no domain of
+its own), or give the box a public https address. If a key is already there and
+sign-ins still fail, the key may have been revoked on <code>cloud.olano.ai</code>, or the
+account may already have five self-hosted installs using the sign-in service;
+an install unused for 30 days frees its place on its own, and revoking an API
+key frees the installs that registered with it
+(<a href="../feature-guides/mcp-servers/">MCP servers</a>).</p>
+<p><strong>Olano models stopped working on a self-hosted install.</strong>
+Open <strong>Providers → Olano</strong>. If the card says the key was refused, it was
+revoked on <code>cloud.olano.ai</code> or pasted incompletely: create a new key under API
+keys and paste it whole. If it says the account is out of credits, buy more on
+the Billing page. If the card shows no form at all, the box resolved as a
+managed deployment, which bills its own credits (see
+<a href="../models-and-credits/#olano-credits-on-a-self-hosted-install">Models and credits</a>).</p>
+<p>Also note the two surfaces measure different windows by design: the deployment
+card at cloud.olano.ai shows the <strong>current billing period</strong> against your
+plan's monthly allowance (including the daily snapshot-storage charge, listed
+in the per-service view), while Insights charts the last-N-days window you
+selected, measured on the deployment itself. They agree on what was metered;
+they are not the same time span.</p>
+<p><strong>Credits charts jumped after an upgrade.</strong>
+Expected once: the first start after upgrading reconstructs historical Cortex
+background spend into the local record, so days that previously showed only
+chat now show the full picture. Nothing was re-billed — your balance is
+unchanged; only the charts got more complete.</p>
+<p><strong>The agent remembers something wrong.</strong>
+Edit <code>MEMORY.md</code> in the <strong>Memory</strong> or <strong>Files</strong> tab. It takes effect on the
+agent's next reply — no restart needed.</p>
+<p><strong>Disk is filling up.</strong>
+Expand the <strong>Overview</strong> tab's disk card. <strong>Where the space went</strong> names every
+group on the machine, so you can tell immediately whether the space is your
+data or the platform itself; <strong>Largest directories in the Olano home</strong> then
+drills into your data. Automatic cleanup runs on its own at the threshold in
+<code>disk_monitor:</code>, and <strong>Clean now</strong> runs it immediately — it reclaims superseded
+container images, caches and old logs. AgentFather reports the same with
+<code>olano_disk_report</code>. If a specific agent's workspace is the problem,
+its <code>trash/</code> and <code>scratch/</code> folders are safe to empty.</p>
+<p><strong>The disk says 60% used but the directory list only adds up to a few hundred
+megabytes.</strong>
+Those two numbers measure different things and both are right. The percentage is
+the whole machine; the directory list is only the Olano home. The gap is the
+container images, the swap file and the operating system — all of it named in
+<strong>Where the space went</strong> at the top of the same card.</p>
+<p><strong>A config change did not take effect.</strong>
+Most agent settings need that agent restarted; the dashboard shows when a
+restart is pending. The ports and team-accounts settings need the whole runtime
+restarted. Identity and instruction files (<code>AGENTS.md</code>, <code>SOUL.md</code>,
+<code>IDENTITY.md</code>, <code>TOOLS.md</code>) are picked up without a restart, within a couple of
+minutes.</p>
+<p><strong>A number I set in Config came back different.</strong>
+<code>config.yaml</code> values are clamped to their valid range rather than rejected, and
+an unparseable value falls back to the default silently. The value the dashboard
+shows after saving is the one in effect.</p>
+<p><strong>The Disk encryption card is missing from Config.</strong>
+The card exists only on a managed instance whose data lives on an encrypted
+volume (<a href="../feature-guides/privacy-and-security/">Privacy and security</a>). A self-hosted install never shows it,
+and neither does a managed instance created before encrypted volumes existed;
+the cloud console's Security tab shows the custody of each instance and marks
+such an instance as legacy. Nothing on the instance can turn the card on:
+encryption is decided when the instance is created.</p>
+<p><strong>The Disk encryption card says the encryption service is Unavailable.</strong>
+The service on the instance that performs the recovery-key actions is not
+answering. Your data stays encrypted and the instance keeps working; only the
+buttons on the card are paused. Press <strong>Refresh</strong> after a minute. If it stays
+unavailable, restart the instance from the cloud console (the volume unlocks
+again by itself at boot), and if that does not clear it, contact support.</p>
+<p><strong>A recovery key is stuck at "Pending confirmation", or I lost my recovery key.</strong>
+A key that was shown and never confirmed stays pending for fifteen minutes and
+then expires by itself; <strong>Cancel pending key</strong> removes it at once, and no other
+key can be created while one is pending. A lost key cannot be shown again by
+anyone, Olano included: while the instance runs, press <strong>Replace recovery
+key</strong>, store the new key, and confirm it; the lost one stops opening the volume
+the moment the new one is confirmed. Without any recovery key the volume can
+still be opened, by Olano's key service alone.</p>
+<p><strong>Nothing shows up in Langfuse.</strong>
+Open Config → Observability. The keys line must not say <em>No keys yet</em>, the
+switch must be on (or the agent's own Observability card must say <em>On</em>), and the
+agent card's <em>In effect now</em> line must say <em>traced</em>. Press <strong>Test connection</strong>:
+a refusal from Langfuse Cloud almost always means the keys belong to another
+region, so set the Langfuse address to that region (<code>https://cloud.langfuse.com</code>,
+<code>https://us.cloud.langfuse.com</code> or <code>https://jp.cloud.langfuse.com</code>). The Status
+line shows the last problem sending traces, if any.</p>
+<p><strong>Langfuse traces show <code>withheld_chars</code> instead of the conversation.</strong>
+That is the default capture mode, <em>Metadata only</em>: traces carry the structure,
+timings, tokens and names but no text. An admin can choose <em>Full content</em> in
+Config → Observability, or for one agent on its Observability card.</p>
+<p><strong>Some turns are missing from Langfuse.</strong>
+Check the <em>Share of turns traced</em> (Config, or the agent's card): below 1, only
+that share of turns is sent. Cortex background runs are skipped when <em>Trace
+background work</em> is off.</p>
+<p><strong>There is no Langfuse link under a reply.</strong>
+The link needs an admin account with <strong>Langfuse</strong> links switched on in Admin →
+Users (off by default), a traced reply, and a project the dashboard knows: press <strong>Test connection</strong> once in Config → Observability (or after
+saving an agent's own keys) so the project is remembered.</p>
+<p><strong>A reply has no thumbs up or down.</strong>
+Replies recorded before reply rating existed have none; newer replies in the
+same conversation do. Thumbs also appear only once a reply has finished.</p>
+<p><strong>A thumbs-down comment is not in Langfuse.</strong>
+Comments are sent only when traces include full content. With the default,
+<em>Metadata only</em>, Langfuse gets the score (-1) and the comment stays on the
+deployment. A vote reaches Langfuse only if that reply was traced and tracing is
+still on when the vote is cast.</p>
+<p><strong>A scheduled task did not run this morning, or ran late.</strong>
+Open <strong>Scheduler</strong>, the task, then <strong>History</strong>, and read the newest row. <em>Skipped:
+the previous run was still executing</em> means the earlier run of the same task was
+still going when the next one was due: open the task's recent conversations in
+the chat list to see what it was doing, shorten the work or split the task, and
+know that a run is stopped after <code>scheduler.max_run_minutes</code> (three hours by
+default) so the job frees itself. <em>Skipped: firing was missed by more than the grace period</em> means the
+runtime was busy or restarting for longer than <code>scheduler.misfire_grace_minutes</code>
+allows (six hours by default); within that window a late firing runs late, and
+its message says so. No row at all for the expected time means the task was not
+registered in this process: saving the task again registers it, and the bell
+carries a notice when the scheduler could not read its task list at startup.
+Both kinds of problem raise a notification on the bell that links to the task,
+and the notice clears on the task's next completed run. An agent that decided it
+was the wrong day for its work was missing the date: every run's message now
+opens with the current date and weekday in the task's timezone, so re-run the
+task and read its first lines in the run's conversation.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../building-agents/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Building agents from a conversation">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Building agents from a conversation
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

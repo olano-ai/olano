@@ -1,0 +1,2781 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.1/dashboard/">
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>The dashboard - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-dashboard" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The dashboard
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked="">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="./" class="md-nav__link md-nav__link--active">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../feature-guides/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/ask-the-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature-guides/a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#two-interfaces-full-dashboard-and-simple-chat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Two interfaces: full dashboard and simple chat
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-full-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The full dashboard
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The full dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#addresses-reload-and-back" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Addresses, reload and Back
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-a-setting-by-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding a setting by name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-it-on-a-phone-or-tablet" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installing it on a phone or tablet
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/dashboard/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="the-dashboard">The dashboard<a class="headerlink" href="#the-dashboard" title="Permanent link">¶</a></h1>
+<h2 id="two-interfaces-full-dashboard-and-simple-chat">Two interfaces: full dashboard and simple chat<a class="headerlink" href="#two-interfaces-full-dashboard-and-simple-chat" title="Permanent link">¶</a></h2>
+<p>Olano can show a person one of two entirely different screens after they sign
+in, chosen per account:</p>
+<ul>
+<li><strong>Full dashboard</strong> — the complete control panel described in the rest of this
+  section: every agent, the scheduler, files, memory, tools, connectors,
+  configuration and diagnostics. This is the default for <strong>every</strong> account,
+  including all existing ones, so nothing changes for anyone unless you change
+  it deliberately.</li>
+<li><strong>Simple chat</strong> — a stripped agent-chat app. A list of the agents that person has
+  been given, the conversation with the selected one, attachments, voice, and
+  the agent's profile. No settings, no diagnostics, no token counts, no model
+  pickers. Suited to staff who only need to talk to an agent and would find the
+  full console noisy.</li>
+</ul>
+<p>People can also <strong>create agents of their own</strong> here: the <strong>New agent</strong> button in
+  the agent list (and on the you-have-no-agents screen) builds one from a template
+  or from a plain-words description. It asks for a <strong>name</strong> — a real name,
+  like "Hillary" — and shows the permanent handle it will generate from it;
+  a template's own label becomes the agent's <strong>title</strong> (shown under its name in
+  the profile and chat header), never its name. A <strong>Model</strong> dropdown lists only
+  the models this deployment can run right now — the deployment defaults, the
+  Olano tiers and any provider connected with its own key — pre-selected to
+  <strong>Default · Turbo</strong>; with a template picked, <strong>Template's own model</strong> keeps
+  the one it was designed for. Admins always have the button;
+  members have it while member bot creation is on, which it is by default —
+  see the <code>self_serve_agents:</code> block in <a href="../config-yaml/"><code>config.yaml</code> reference</a> and
+  <strong>Config → Member bot creation</strong>.</p>
+<p>By default the simple view shows replies only, with a single "working on it"
+  line while the agent acts. A <strong>detail button in the chat header</strong> cycles three
+  levels — Quiet, Normal (one compact line per tool the agent uses), Verbose
+  (each tool's full input and result, the same rendering the full dashboard
+  shows) — and typing <code>/quiet</code>, <code>/normal</code> or <code>/verbose</code> does the same. The
+  choice is remembered per browser. Typing <code>/context</code> shows the same
+  context-usage card the full dashboard's chat offers: how much of the agent's
+  working memory this conversation and its setup are using.</p>
+<p>When the agent asks <strong>another agent</strong> for something, that "working on it" line is
+  replaced by a more specific one — <em>"maria is thinking…"</em>, with that agent's own
+  face beside it — and it clears the moment the answer comes back. It shows at
+  every level, Quiet included, because it is about who is working rather than
+  about tools. Without it the chat looks frozen for as long as the other agent
+  takes, which can be a while. What that agent says comes back inside this agent's
+  reply rather than as a message of its own.</p>
+<p>The agent list is built for real fleets. The selected agent's chats unfold under
+  its row, each labelled with where it came from — <strong>SCHEDULED</strong>, <strong>TELEGRAM</strong>,
+  <strong>WHATSAPP</strong>, <strong>AGENT</strong> and so on, the same badges the full dashboard's
+  conversation list uses; an ordinary chat typed here carries no badge. A row of <strong>filter
+  chips</strong> (All · Chats · Telegram · Scheduled · Agents · …) narrows the list to
+  one source — the way to hide a chatty schedule's runs — and the choice is
+  remembered per agent on that browser. The list under an agent shows only the most
+  recent handful; <strong>"Show all N chats"</strong> opens the full list in the right-hand
+  panel, with a search box, the same filter chips, and paging ("Show more") so
+  an agent with hundreds of conversations stays fast. <strong>Selecting an agent opens
+  its latest conversation</strong> — the newest one a person is in, typed here or
+  arrived over a messenger, then the newest of any kind, and a fresh chat only
+  when there is nothing at all (a fresh chat is not saved until you send
+  something, so reopening an agent never piles up empty ones); switching agents
+  and back keeps the chat you had open. A <strong>chevron</strong> at the end of every
+  agent row folds or unfolds its chats in place: on the selected agent it is
+  the fold, on any other it selects that agent and unfolds its chats without
+  leaving the list. It shows on hover on a desktop (always on the selected
+  row) and is always visible on a phone, where it is how you browse an agent's
+  chats from the drawer — tap the chevron, then the chat you want; tapping the
+  agent's <em>name</em> goes to its latest chat and closes the drawer. On a desktop,
+  clicking the selected agent's row also folds its chats away (click again to
+  unfold); <strong>right-clicking any agent</strong>
+  opens a quick menu — new chat, see all chats, its profile, pin/unpin, move
+  the row up or down, mark its unread as read; <strong>right-clicking a chat</strong> offers
+  to rename, open or delete it. On a wide screen the whole list
+  can be <strong>resized by dragging its right edge</strong> (double-click the edge to
+  reset); the width is remembered per browser.</p>
+<p><strong>Arranging it.</strong> Each of the three headings — <strong>Pinned</strong>, <strong>All agents</strong>,
+  <strong>Group chats</strong> — folds away on a click and stays folded on that browser, so
+  a long list can be cut down to the part you use. Agents can be <strong>dragged up and
+  down</strong> to the order you want, and dragged across the divider between Pinned
+  and All agents to pin or unpin them; that order is remembered per browser too,
+  and an untouched list stays alphabetical. Dragging is off while the search box
+  has something in it (the order it would write covers agents the filter is
+  hiding) — use <strong>Move up</strong> / <strong>Move down</strong> on the right-click menu instead,
+  which is also the way to do it from a phone or a keyboard.</p>
+<p><strong>Offline agents fold away.</strong> Under <strong>All agents</strong>, the agents that can
+  answer come first. Agents that are <strong>paused</strong> (someone pressed Stop) or
+  <strong>not running</strong> sit behind one <strong>N offline</strong> row at the foot of the list,
+  closed until you click it; the choice is remembered on this browser. Opened,
+  those rows are drawn dimmed. A few agents never fold: pinned ones, the agent
+  you have open, and any with unread replies. When nothing under All agents is
+  running (while the deployment starts up, say), the rows are listed flat
+  instead, and while the search box has text in it every match shows, folded
+  or not. The dot on each face says where an agent stands: <strong>green</strong> answers
+  right away, <strong>amber</strong> is starting, stopping or not available on this
+  deployment, <strong>red</strong> failed to start, and <strong>grey</strong> is paused or not running.
+  For amber and red the reason is written on the row itself, under the name.</p>
+<p>The button beside the <strong>Agents</strong> heading <strong>collapses the list to a strip of
+  faces</strong>: names, previews, search and the open agent's chats go, the three
+  headings stay, and clicking a face switches agents. Handy when a conversation
+  wants the width; the same button brings the list back, at the width you had
+  set.</p>
+<p><strong>Right-clicking the empty space</strong> below the list offers the two things this
+  rail can create — <strong>New agent</strong> and <strong>New group</strong> — which is the fast way to
+  either from anywhere in the list. (Right-clicking a <em>row</em> still offers that
+  row's own actions; see above.)</p>
+<p>A <strong>notification bell</strong> sits at the head of the list, the same one the full
+  dashboard carries and fed by the same source: anything this deployment needs a
+  person for — a channel that failed to start, a connector asking to be signed
+  in, an action waiting on an approval — shows a count there and lists itself
+  when you click it. <strong>View all</strong> opens the Overview panel below.</p>
+<p><strong>More.</strong> Below the group section, under a divider, a collapsible <strong>More</strong>
+  group holds five of the full dashboard's pages — <strong>Overview</strong>, <strong>Insights</strong>,
+  <strong>Issues</strong>, <strong>Cortex</strong> and <strong>Files</strong> — and opens them in place of the
+  conversation. They are the same pages, not cut-down versions: Overview is the
+  deployment snapshot with its notifications and approvals, Insights is usage and
+  spend, Issues is the tracker, Cortex is what the agent has been thinking about,
+  and Files is its workspace. Picking an agent, one of its chats, a group, or
+  <strong>New chat</strong> while a page is open returns to the conversation (on a phone the
+  drawer closes on it, as it does over a chat), and the browser's Back button
+  brings the page back. A page a deployment has switched off in <strong>Config</strong> is
+  not listed here either.</p>
+<p>More starts <strong>closed</strong> on a browser that has never opened it, and after that it
+  is whatever you left it — open it and it stays open across reloads, close it and
+  it stays closed. Pages can also be <strong>dragged out of More</strong> into the space just
+  above it, exactly as the full dashboard's own nav items can, so the one or two
+  you actually use stay visible with More shut; drag them back in to undo it.
+  Right-clicking a page offers the same move, which is how to do it from a phone
+  or a keyboard. The arrangement is remembered per browser and is separate from
+  the full dashboard's own — rearranging one does not disturb the other.</p>
+<p>The account menu at the bottom of the agent list holds theme and language —
+  one dropdown each — and, on a team install, <strong>Sign out</strong>; for an admin it also
+  has the <strong>Simple view</strong> switch, which flips back to the full dashboard. It
+  opens whole with the list collapsed to a strip too, hanging off the strip
+  rather than being cut to its width.</p>
+<p>Set it per person in <strong>Admin → Users</strong>, in the <strong>Interface</strong> column. On a
+single-user install (no team accounts) the equivalent switch is the <code>ui_mode</code>
+key in <code>config.yaml</code> — see <a href="../config-yaml/"><code>config.yaml</code> reference</a>.</p>
+<p><strong>This is a display choice, not a permission.</strong> Moving someone to Simple chat
+does not restrict what they are allowed to do, and moving them to the full
+dashboard does not grant them anything. What a person may actually see and do
+is decided entirely by their <strong>role</strong> (admin or member) and by which agents
+they have been given access to, and those rules are enforced by the server
+whichever interface is on their screen. Use the Interface setting to reduce
+clutter; use Role and per-agent access to control access.</p>
+<h2 id="the-full-dashboard">The full dashboard<a class="headerlink" href="#the-full-dashboard" title="Permanent link">¶</a></h2>
+<p>The dashboard is the control panel for the whole deployment. The sidebar lists
+every section; you can reorder it by dragging, and the search box (top left)
+jumps to a section, an agent, a task, or an individual setting by name.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="overview/">Overview</a></td>
+<td>Which agents are online, notifications, and the Approvals inbox.</td>
+</tr>
+<tr>
+<td><a href="insights/">Insights</a></td>
+<td>Token and cost usage over time, per agent and per model.</td>
+</tr>
+<tr>
+<td><a href="chat/">Chat</a></td>
+<td>Talk to any agent you have access to, one thread per conversation.</td>
+</tr>
+<tr>
+<td><a href="agents/">Agents</a></td>
+<td>The roster: create, start, stop and edit agents.</td>
+</tr>
+<tr>
+<td><a href="cortex/">Cortex</a></td>
+<td>The background work agents do between conversations.</td>
+</tr>
+<tr>
+<td><a href="scheduler/">Scheduler</a></td>
+<td>Every scheduled job: what runs, when, and how it went.</td>
+</tr>
+<tr>
+<td><a href="issues/">Issues</a></td>
+<td>A work tracker shared by agents and people.</td>
+</tr>
+<tr>
+<td><a href="revisions/">Revisions</a></td>
+<td>Version history of configuration and markdown files.</td>
+</tr>
+<tr>
+<td><a href="calendar/">Calendar</a></td>
+<td>Scheduled work laid out on a calendar.</td>
+</tr>
+<tr>
+<td><a href="files/">Files</a></td>
+<td>Browse and edit agent workspaces.</td>
+</tr>
+<tr>
+<td><a href="memory/">Memory</a></td>
+<td>What each agent remembers, and where you correct it.</td>
+</tr>
+<tr>
+<td><a href="notes/">Notes</a></td>
+<td>Each agent's linked markdown wiki.</td>
+</tr>
+<tr>
+<td><a href="knowledge/">Knowledge</a></td>
+<td>Documents indexed so agents can search them by meaning.</td>
+</tr>
+<tr>
+<td><a href="tools/">Tools</a></td>
+<td>Every tool on the deployment, and why a locked one is locked.</td>
+</tr>
+<tr>
+<td><a href="providers/">Providers</a></td>
+<td>Model providers and which of them are usable here.</td>
+</tr>
+<tr>
+<td><a href="connections/">Connections</a></td>
+<td>Sign agents in to GitHub, Google, Microsoft 365 and more.</td>
+</tr>
+<tr>
+<td><a href="vault/">Vault</a></td>
+<td>Encrypted API keys, tokens and passwords. Admin only.</td>
+</tr>
+<tr>
+<td><a href="agent-to-agent/">Agent to Agent</a></td>
+<td>Messages between agents, and calls from outside the deployment.</td>
+</tr>
+<tr>
+<td><a href="org-chart/">Org Chart</a></td>
+<td>Who manages whom, which also decides who may message whom.</td>
+</tr>
+<tr>
+<td><a href="logs/">Logs</a></td>
+<td>Runtime logs by agent and severity. Admin only.</td>
+</tr>
+<tr>
+<td><a href="terminal/">Terminal</a></td>
+<td>A shell in an agent's workspace, in the browser.</td>
+</tr>
+<tr>
+<td><a href="playground/">Playground</a></td>
+<td>Try prompts against an agent without touching a real conversation.</td>
+</tr>
+<tr>
+<td><a href="config/">Config</a></td>
+<td>Deployment-wide settings. Admin only.</td>
+</tr>
+<tr>
+<td><a href="admin/">Admin</a></td>
+<td>Accounts, roles and per-agent access. Admin only.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="addresses-reload-and-back">Addresses, reload and Back<a class="headerlink" href="#addresses-reload-and-back" title="Permanent link">¶</a></h3>
+<p>Every page's address says where you are, so <strong>reloading the page, copying the
+link, or using the browser's Back and Forward buttons</strong> lands you in the same
+place. The address names:</p>
+<ul>
+<li><strong>The agent</strong>, on pages that are about one agent: <code>/chat/&lt;agent&gt;</code>,
+  <code>/memory/&lt;agent&gt;</code>, <code>/notes/&lt;agent&gt;</code>, <code>/knowledge/&lt;agent&gt;</code>,
+  <code>/terminal/&lt;agent&gt;</code>, <code>/cortex/&lt;agent&gt;</code> and <code>/agents/&lt;agent&gt;</code>. On pages that
+  cover every agent (Files, Connections, Scheduler, Logs, Overview) the agent is
+  optional and only narrows the page: <code>/scheduler/&lt;agent&gt;</code> shows that agent's
+  jobs, <code>/scheduler</code> shows everyone's.</li>
+<li><strong>The tab</strong> inside a page: <code>/agents/&lt;agent&gt;/tools</code>, <code>/cortex/&lt;agent&gt;/ideas</code>,
+  <code>/knowledge/&lt;agent&gt;/sources</code>, <code>/insights/drill</code>, <code>/calendar/week</code>.</li>
+<li><strong>What is open</strong>: the conversation (<code>?thread=</code>), the file in Files
+  (<code>?path=</code>), the issue (<code>?issue=</code>), the note (<code>?note=</code>), the Cortex item, the
+  scheduled task (<code>?task=</code>), the Agent to Agent conversation (<code>?pair=</code>), the
+  revision, the Org Chart node.</li>
+</ul>
+<p>Moving somewhere (another conversation, another agent, another tab, opening an
+item) is a step the Back button returns from. Filtering or searching is not:
+Back never replays your typing. Opening a page from the sidebar still returns
+you to the tab and item you were last on.</p>
+<p>Older links keep working: an address in an earlier form (for example a
+notification that says <code>?tab=mcp</code>, or a bookmark of <code>/chat?thread=…</code>) is
+rewritten to the current one when it opens. A link naming an agent that no
+longer exists, or that your account cannot see, opens the same page for your
+current agent instead, with a notice.</p>
+<h3 id="finding-a-setting-by-name">Finding a setting by name<a class="headerlink" href="#finding-a-setting-by-name" title="Permanent link">¶</a></h3>
+<p>The search box — or <strong>⌘K</strong> / <strong>Ctrl+K</strong> from anywhere — also searches the
+deployment's settings, not just the list of sections. Type what the setting is
+called ("voice replies", "sandbox memory", "link lifetime", "deep model") and
+the results list the matching controls under a <strong>Settings</strong> heading, each
+showing the section it lives in (for example <em>Config › Speech</em>). Choosing one
+opens that page and scrolls straight to the control, highlighting it for a
+moment so you can see which of the page's many fields you were sent to.</p>
+<p>Searching matches a setting's name, the section it sits in, common synonyms,
+and its help text — so a word you remember from the description finds it even
+when you don't recall the exact label. Several words narrow the results rather
+than widening them: "telegram allowed" finds only settings matching both.</p>
+<p>Settings you are not allowed to change never appear: the whole Config page is
+admin-only, so a member account searching for "sandbox memory" gets no result
+for it rather than a link that then refuses them.</p>
+<p>The sidebar has three parts. At the top, the search box and, right under it,
+the <strong>New agent</strong> button. Then <strong>your agents</strong>, the same list the simple chat
+shell shows: a <strong>Pinned</strong> heading, any groups you have made, <strong>All agents</strong> and,
+when group chats are on, <strong>Group chats</strong>. There is no separate agent dropdown:
+clicking an agent here selects it everywhere (the pages that are about one
+agent — Memory, Notes, Knowledge, Terminal — also carry their own picker in
+their top bar). Hover an agent to reveal its <strong>pin</strong> button (always visible on
+a touch screen): pinning keeps it under Pinned, on this device; click again to
+unpin. Right-click an agent for the rest — new chat, all chats, its page, move
+up or down, move to a group — and right-click <strong>anywhere else on the sidebar</strong>
+(a heading, the empty space, even the bar's foot) to make a <strong>new group</strong> to
+sort agents into. Below the agents, under a rule, a collapsible <strong>More</strong> group
+holds every day-to-day section: Overview, Insights, Cortex and Issues lead it,
+then the rest. Drag any tab to reorder More; that order is saved to your
+account, so it follows you to any browser you sign in from.</p>
+<p>The setup and administration pages are not tabs at all. They live in the
+<strong>account menu</strong> — click your name at the bottom-left of the sidebar — in two
+groups: <strong>Setup</strong> holds Providers, Connections and Tools; <strong>Administration</strong>
+(admins only) holds Vault, Logs, Config and Admin. While one of those pages is
+open, your avatar carries the highlight the tabs would otherwise show. Every one
+of them is also a keystroke away in the ⌘K search.</p>
+<p>The same menu holds <strong>Theme</strong> and <strong>Language</strong>, one dropdown each; both apply
+the moment you pick and are remembered per browser. Thirteen themes. The two
+house themes lead the list, and the other eleven follow dark-first:</p>
+<table>
+<thead>
+<tr>
+<th>Theme</th>
+<th>Page</th>
+<th>Accent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Olano Dark</strong> (the default)</td>
+<td>warm charcoal</td>
+<td>Olano orange</td>
+</tr>
+<tr>
+<td><strong>Olano Light</strong></td>
+<td>neutral off-white</td>
+<td>Olano orange</td>
+</tr>
+<tr>
+<td><strong>Midnight</strong></td>
+<td>deep navy</td>
+<td>azure</td>
+</tr>
+<tr>
+<td><strong>Mocha</strong></td>
+<td>espresso brown</td>
+<td>copper</td>
+</tr>
+<tr>
+<td><strong>Cool Black</strong></td>
+<td>pure black</td>
+<td>green</td>
+</tr>
+<tr>
+<td><strong>Volt</strong></td>
+<td>black, dark-grey cards</td>
+<td>electric chartreuse, with black type on buttons</td>
+</tr>
+<tr>
+<td><strong>Black &amp; White</strong></td>
+<td>white</td>
+<td>black — no colour but the states</td>
+</tr>
+<tr>
+<td><strong>Harbor</strong></td>
+<td>cool slate</td>
+<td>deep teal</td>
+</tr>
+<tr>
+<td><strong>Sepia</strong></td>
+<td>warm parchment — nothing in it is pure white</td>
+<td>umber</td>
+</tr>
+<tr>
+<td><strong>Sakura</strong></td>
+<td>blush pink</td>
+<td>deep rose</td>
+</tr>
+<tr>
+<td><strong>Pastel Green</strong></td>
+<td>soft sage</td>
+<td>emerald</td>
+</tr>
+<tr>
+<td><strong>Singapore</strong></td>
+<td>red blush, white cards</td>
+<td>the flag's red</td>
+</tr>
+<tr>
+<td><strong>High Contrast</strong></td>
+<td>white</td>
+<td>deep blue, with visible hairlines everywhere</td>
+</tr>
+</tbody>
+</table>
+<p>Cortex keeps its violet in every one of them. <strong>High Contrast</strong> is the
+accessibility choice rather than a taste one: body text is black on white and
+every status colour is pushed well past the usual readability floor. <strong>Sepia</strong>
+is the one to pick for long reading at night — no surface in it is pure white,
+so nothing on the page glares. <strong>Volt</strong> is the same theme the mobile app offers
+under that name, so a phone and a browser can match. The sun/moon button beside
+the bell at the top of the sidebar cycles through the same thirteen.</p>
+<p>There is no separate <em>Chat</em> tab: <strong>click an agent</strong> to open the chat with it
+(the full chat, with its mode, detail, model and reasoning controls). An
+agent's row shows a pulsing dot while it is working on a reply and a count of
+replies that landed while you were elsewhere. Type "chat" into the search box
+if you want the chat page by name.</p>
+<p><strong>Clicking an agent opens its latest conversation</strong>, not an empty one: the most
+recent chat a person is in — typed in the dashboard or arrived over a messenger
+such as Telegram or WhatsApp — wins, then the most recent thread of any kind (a
+scheduled run, an exchange with another agent), and only an agent with no
+history at all starts a fresh chat. A fresh chat is not saved until you send
+something, so opening an agent again and again never litters its list with
+empty conversations. Switching agents and back keeps the conversation you had
+open. The address names both the agent and the conversation
+(<code>/chat/&lt;agent&gt;?thread=…</code>), so a reload, a copied link or the browser's Back
+button reopens exactly that conversation with that agent.</p>
+<p><strong>The selected agent unfolds into its recent chats</strong> right under its name, the
+way the simple view's rail does: a <strong>New chat</strong> row, a row of filter chips
+(<strong>All</strong>, <strong>Chats</strong> for conversations typed in the dashboard, <strong>Mobile</strong> for
+those had in the Olano mobile app, one chip per messaging app the agent talks
+on, <strong>Scheduled</strong>, <strong>Agents</strong>), the newest few
+conversations badged with where they came from, and <strong>Show all N chats</strong> —
+which opens the chat page's full list with search and multi-select delete. The
+chips only appear once the agent has more than one kind of chat, and the one
+you pick is remembered per agent on this device (the simple view reads the same
+choice). <strong>Click a chat</strong> to open it; <strong>right-click it</strong> for <strong>Open</strong>,
+<strong>Rename…</strong> (a name of your own, in place — Enter saves, Escape cancels; leave
+it empty to go back to the automatic title) and <strong>Delete chat</strong> (after a
+confirmation; admins of the agent only). The trash can on a hovered row deletes
+too. The <strong>chevron</strong> at the end of every agent row folds or unfolds its chats
+without leaving the page you are on — on a phone it is always visible, and it
+is how you browse an agent's chats from the drawer: tap the chevron, then the
+chat you want. Tapping the agent's <em>name</em> opens its latest chat instead.</p>
+<p><strong>Right-click an agent</strong> for its menu: <strong>New chat</strong> (a fresh conversation),
+<strong>Show / Hide its chats</strong> (the chevron's fold, for keyboards and long-presses),
+<strong>See all chats</strong> (the chat page with its conversation list open), <strong>About
+this agent</strong> (its page — profile, model, tools, channels), <strong>Pin</strong> / <strong>Unpin</strong>,
+<strong>Move up</strong> / <strong>Move down</strong>, <strong>Move to</strong> a group, and <strong>Mark N new as read</strong>
+when it has unread replies. Every item explains itself in its tooltip.</p>
+<p><strong>Groups</strong> are sections you make yourself to sort agents into — "Sales",
+"Personal". Right-click the empty space in the agent list (or any heading) and
+choose <strong>New group…</strong>, type a name and press Enter. Right-click a group's
+heading to <strong>Rename</strong> it or <strong>Delete</strong> it; only an <em>empty</em> group can be
+deleted — move its agents out first — and Pinned and All agents can never be.
+An agent is only ever in one place: pinning it takes it out of its group, and
+moving it into a group unpins it. Click any heading to fold that section
+away. Pins, groups and their order are remembered <strong>in this browser only</strong>;
+they change nothing about the agents themselves. With a row focused, the Up
+and Down arrow keys move through the list and Home and End jump to its ends.</p>
+<p><strong>Offline agents fold away</strong> here too. Under <strong>All agents</strong>, the agents that
+can answer come first, and the ones that are <strong>paused</strong> (someone pressed
+<strong>Stop</strong> on the agent's page) or <strong>not running</strong> sit behind one <strong>N offline</strong>
+row, closed until you click it and remembered on this browser. Opened, they are
+drawn dimmed. Pinned agents, agents in your own groups, the agent you have open
+and agents with unread replies always show, whatever their state, and when
+nothing under All agents is running the rows are listed flat. The dot on each
+face: <strong>green</strong> answers right away, <strong>amber</strong> is starting, stopping or not
+available on this deployment (for example over its agent limit), <strong>red</strong> failed
+to start, <strong>grey</strong> is paused or not running. Hover a row for what its dot means
+and, for amber and red, why. In the collapsed strip the row shows just the
+count.</p>
+<p>Admins — and members, while <strong>Config → Member bot creation</strong> is on — also
+get a <strong>New agent</strong> button under the search box (or <strong>⌘N</strong> / <strong>Ctrl+N</strong>). It
+is the same short flow as the simple shell's: a name, what the agent should be
+good at (a template, or from scratch), and which <strong>model</strong> it runs on. The
+model dropdown lists only what this deployment can run right now — the
+deployment defaults (Default · Turbo / Pro / Max), the Olano managed tiers
+(billed in credits, no key needed) and any provider you have connected with
+your own key — and comes pre-selected to <strong>Default · Turbo</strong>, the fast everyday
+tier. With a template picked, <strong>Template's own model</strong> keeps the model the
+template was designed for. The model can be changed later from the agent's
+page.</p>
+<p>Four sections are <strong>admin-only</strong> and never appear for member accounts: Vault,
+Logs, Config, Admin. On a managed cloud deployment, other tabs can also be
+hidden by your plan's entitlements — if a section you expect is missing and you
+are an admin, that is why.</p>
+<h3 id="installing-it-on-a-phone-or-tablet">Installing it on a phone or tablet<a class="headerlink" href="#installing-it-on-a-phone-or-tablet" title="Permanent link">¶</a></h3>
+<p>There is also an <strong>Olano app</strong> for iPhone, iPad, Android and Apple silicon
+Macs, from the App Store and Google Play: chats, Cortex and an inbox of
+approvals and alerts, built for the phone, with notifications; see
+<a href="../feature-guides/mobile-app/">The mobile app</a>. Everything below is about
+the browser version, which needs no store at all.</p>
+<p>The dashboard can be added to a phone's home screen and then behaves like an
+app: its own icon, full screen with no browser address bar, and the sign-in
+kept between launches. There is nothing to download — it is the same dashboard
+at the same address, and both interfaces (full dashboard and simple chat) work
+this way.</p>
+<figure>
+  <a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../assets/screenshots/chat-mobile.webp" data-desc-position="bottom"><img alt="The dashboard chat on a phone-sized screen, showing a table in the agent's answer and the saved report card" loading="lazy" src="../assets/screenshots/chat-mobile.webp"></a>
+<br>
+<figcaption>The same chat on a phone.</figcaption>
+</figure>
+<ul>
+<li><strong>iPhone and iPad.</strong> Open the dashboard in Safari, tap the <strong>Share</strong> button in
+  the toolbar, scroll down to <strong>Add to Home Screen</strong>, and tap <strong>Add</strong>. Safari is
+  the only browser on iOS that can do this. A prompt at the bottom of the screen
+  offers the same steps the first time you visit on a phone; dismissing it is
+  remembered.</li>
+<li><strong>Android.</strong> Chrome shows an <strong>Install</strong> button in the same prompt, and also
+  offers <em>Install app</em> in its own menu. Once installed, Olano appears in the
+  Android share sheet: sharing a link or a note from another app opens the chat
+  with that text already in the message box, waiting for you to add to it and
+  send. Nothing is ever sent automatically.</li>
+<li><strong>Desktop.</strong> Chrome and Edge can install it too, from the icon at the right of
+  the address bar. There is no prompt for this — a browser tab is a perfectly
+  good home for the dashboard on a computer.</li>
+</ul>
+<p>An installed copy keeps working well enough to read the last screen you were on
+when the network drops, but it is not an offline app: agents run on the
+deployment, so sending a message needs a connection. When a new version of the
+dashboard has been deployed, a small <strong>A new version of Olano is ready</strong> bar
+appears with a <strong>Reload</strong> button; the update is applied when you choose it, so
+it can never interrupt a message you are part-way through writing.</p>
+<p>Installing requires the dashboard to be served over <strong>https</strong>, which cloud
+deployments always are. A self-hosted box reached over plain <code>http</code> (or by IP
+address on a home network) cannot be installed — it still works normally in the
+browser.</p>
+<p>The installed app follows the phone's screen shape: on an iPhone it runs edge to
+edge, filling the screen from the top to the bottom edge, with the header clear
+of the status bar and the message box clear of the home indicator — no unused
+band at either end. It measures the screen it is actually on, so the same is
+true on every iPhone and Android size, on an iPad, and after rotating the
+device. Both the full dashboard and simple chat behave this way.</p>
+<p><strong>If a screen ever says "This view failed to load"</strong>, press <strong>Reload</strong> on the
+card. That clears the app's stored copy of the old version and fetches the
+current one — it is the fix for a page that was left open across a deployment.
+If it keeps happening on the same screen, close the app entirely and open it
+again.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../getting-started/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Getting started">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Getting started
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="overview/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Overview
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>

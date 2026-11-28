@@ -1,0 +1,2676 @@
+<!DOCTYPE html><html lang="en" class="no-js"><head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Olano user guide: the dashboard, the agent.json5 and config.yaml references, feature guides, models and credits, and Olano Cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://docs.olano.ai/1.1/feature-guides/ask-the-agent/">
+      
+      
+        <link rel="prev" href="../budgets/">
+      
+      
+        <link rel="next" href="../a2a-and-mcp/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
+    
+    
+      
+        <title>Ask the agent - Olano Docs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"><script src="../../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ask-the-agent-self-configuration-magic-links-and-admin-tools" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden="">
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Olano Docs" class="md-header__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Olano Docs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ask the agent
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to dark mode" type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="deep-orange" aria-label="Switch to light mode" type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden="">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix="">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Olano Docs" class="md-nav__button md-logo" aria-label="Olano Docs" data-md-component="logo">
+      
+  <img src="../../assets/mark.svg" alt="logo">
+
+    </a>
+    Olano Docs
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/olano-ai/olano" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"></path></svg>
+  </div>
+  <div class="md-source__repository">
+    olano-ai/olano
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix="">
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../what-olano-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What Olano is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../dashboard/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The dashboard
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    The dashboard
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/insights/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Insights
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/chat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/cortex/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/scheduler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/calendar/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Calendar
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/memory/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/knowledge/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Knowledge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tools
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/providers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Providers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/connections/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Connections
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vault (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent to Agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/org-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Org Chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logs (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/terminal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/playground/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playground
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../dashboard/admin/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin (admin only)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../agent-json5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agent.json5 reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    config.yaml reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../organization-yaml/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    organization.yaml, the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked="">
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Feature guides
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Feature guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix="">
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agent-to-agent/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Agent-to-agent and the org chart
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../human-in-the-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Human in the loop and approvals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../privacy-and-security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Privacy and security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-user/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-user
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../subscriptions-and-monetization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Subscriptions and monetization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mcp-servers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCP servers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Browser control
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../webhooks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Webhooks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pages, sites and web apps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scheduler-and-heartbeat/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduler and heartbeat
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../memory-and-self-learning/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Memory and self-learning
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../issues/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Issues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../revisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Revisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../channels-and-connectors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Channels and connectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cortex-and-pulse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cortex and Pulse
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The mobile app
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../budgets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Budgets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ask the agent
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#magic-links-the-default-whenever-a-browser-is-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Magic links — the default whenever a browser is needed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-self_-tools-what-a-bot-may-change-about-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self_* tools — what a bot may change about itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agentfather-the-olano_-tools-for-the-whole-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AgentFather — the olano_* tools for the whole deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AgentFather — the olano_* tools for the whole deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-an-agent-before-you-rely-on-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing an agent before you rely on it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reviewing-cortex-across-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reviewing Cortex across agents
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a2a-and-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Beyond the deployment, A2A and MCP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models-and-credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Models and credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../olano-cloud/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Olano Cloud
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../building-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building agents from a conversation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../common-problems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Common problems
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+      
+        <li class="md-nav__item">
+  <a href="#magic-links-the-default-whenever-a-browser-is-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Magic links — the default whenever a browser is needed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-self_-tools-what-a-bot-may-change-about-itself" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The self_* tools — what a bot may change about itself
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#agentfather-the-olano_-tools-for-the-whole-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AgentFather — the olano_* tools for the whole deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AgentFather — the olano_* tools for the whole deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-an-agent-before-you-rely-on-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing an agent before you rely on it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reviewing-cortex-across-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reviewing Cortex across agents
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/olano-ai/olano/edit/main/docs/user-guide/feature-guides/ask-the-agent.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
+    </a>
+  
+  
+
+
+<h1 id="ask-the-agent-self-configuration-magic-links-and-admin-tools">Ask the agent: self-configuration, magic links and admin tools<a class="headerlink" href="#ask-the-agent-self-configuration-magic-links-and-admin-tools" title="Permanent link">¶</a></h1>
+<p>Every agent can reconfigure <strong>itself</strong> when asked to in a conversation — on
+any surface, the simple chat view included — and can hand a person a <strong>magic
+link</strong> whenever a browser is needed. AgentFather can do the same for the whole
+deployment. This is the default way to connect, configure and operate Olano:
+an agent never asks you to open a terminal, and there is no command line to
+learn.</p>
+<p>Ask a bot to:</p>
+<ul>
+<li><em>"Connect yourself to Notion"</em> — every connection starts with the finder:
+  the bot lists the supported ways to reach the service (a channel, an MCP
+  server from the directory, a built-in toolkit — see
+  <a href="../mcp-servers/">MCP servers</a>), adds the one you pick to itself, and hands you the
+  sign-in: a <strong>Connect button card</strong> in the dashboard chat, a tappable link on
+  messaging channels. You sign in from your own browser — Olano's app, your
+  own OAuth app, or a code you type on your phone; the connection completes on
+  its own and the bot's new tools appear after that. API keys are collected
+  through a secure page and stored in the vault — never pasted into the chat
+  or a config file. Something the bot cannot find in any catalog is external:
+  it will read the project's page and tell you what it is before anything is
+  installed, and it will never sign it in for you.</li>
+<li><em>"Get yourself on Telegram"</em> — it sends you one link whose page walks you
+  through the bot token (validated live) or, for <strong>WhatsApp</strong> and <strong>WeChat
+  (Weixin)</strong>, shows a <strong>QR code to scan</strong> — in the dashboard chat and on
+  messaging channels alike. The channel and the token land in its config and
+  vault, and it restarts to go live.</li>
+<li><em>"Switch to a cheaper model"</em> / <em>"Rewrite your instructions to always answer
+  in Spanish"</em> / <em>"Add a research assistant"</em> — it lists real options, saves
+  the change, and restarts itself when you say so. Prompt edits land in
+  <strong>Config → Revisions</strong> under the agent's name, ready to roll back.</li>
+<li><em>"What could you become?"</em> — it browses the archetype library of ready-made
+  experts and teams and suggests specialists worth adding.</li>
+<li><em>"Which skills do you have?"</em> / <em>"Stop using the spreadsheet skill"</em> — it
+  lists its skills with their on/off state and switches individual ones off (or
+  back on) for itself. Only a switch: it never installs, edits or deletes a
+  skill, and turning off a common skill leaves every other agent's copy alone.
+  See <a href="../../dashboard/agents/#switching-a-skill-on-or-off">Switching a skill on or off</a>.</li>
+</ul>
+<h2 id="magic-links-the-default-whenever-a-browser-is-needed">Magic links — the default whenever a browser is needed<a class="headerlink" href="#magic-links-the-default-whenever-a-browser-is-needed" title="Permanent link">¶</a></h2>
+<p>A magic link is a short-lived, PIN-protected page the agent sends into the
+chat; whoever opens it finishes one task on their own phone or laptop, and the
+chat is told the outcome (<a href="../../config-yaml/#magic_links-secure-links-for-connecting-people"><code>magic_links:</code></a>
+has the knobs). Every agent has these tools by default:</p>
+<table>
+<thead>
+<tr>
+<th>Ask</th>
+<th>Tool</th>
+<th>What the person sees</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sign in to a service, an MCP server or an official connector (GitHub, Google, OpenAI Codex, Microsoft 365, Slack, Notion, …)</td>
+<td><code>magic_link_connect_service</code></td>
+<td>the provider's own consent screen, or a one-time code to type on the provider's device page — whichever method the service offers and the bot picked (Olano's app, your own OAuth app, a code, or a secure form for a key); an MCP server that needs an OAuth app of your own (HubSpot) first asks for its Client ID and secret on the same page, or offers Composio instead (<a href="../mcp-servers/">MCP servers</a>); the connection serves the service's tools, MCP servers and the git tools at once, no restart</td>
+</tr>
+<tr>
+<td>Hand over an API key, token or password</td>
+<td><code>magic_link_request_secret</code></td>
+<td>a secure form; the value goes straight into the vault, the bot only learns its name. In the dashboard chat and the mobile app the form appears right under the reply (no link to open, no PIN to type); on a messenger it is a link</td>
+</tr>
+<tr>
+<td>Connect a messenger</td>
+<td><code>magic_link_connect_channels</code></td>
+<td>one page per platform: QR for WhatsApp/WeChat, a validated bot token for Telegram/Discord/Slack</td>
+</tr>
+<tr>
+<td>Edit the bot's instructions</td>
+<td><code>magic_link_edit_instructions</code></td>
+<td>a one-page editor; saving applies live, no restart</td>
+</tr>
+<tr>
+<td>Edit a file</td>
+<td><code>magic_link_request_file_edit</code></td>
+<td>a one-page editor showing the file's current contents</td>
+</tr>
+<tr>
+<td>Open the dashboard on a phone</td>
+<td><code>magic_link_open_dashboard</code></td>
+<td>a one-time sign-in focused on a section (prompt, vault, connections, providers, config, files, overview)</td>
+</tr>
+<tr>
+<td>Check a link you sent</td>
+<td><code>magic_link_status</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Only the bot's owners can ask for a link (on a messenger, the channel's
+allowed-users list), group chats are refused, and on the stricter security
+profiles every link raises an approval card first. <strong>Never paste a key into a
+chat</strong> — if a bot asks you to, it has been misconfigured; the link is the
+route.</p>
+<p><strong>In the dashboard chat and the mobile app, a key request is a card, not a
+link.</strong> You are already signed in there, so when a bot asks for an API key or
+a provider key the secure form is drawn under its reply: paste the value, pick
+the provider if it asks, and press <strong>Save to vault</strong>. The value goes to the
+vault the same way the link's page would send it, never as a message in the
+conversation, and the bot is told the name once it is saved. Sign-ins to a
+service (the provider's consent screen), messenger pairing and the editors
+still open as a page, because those need a browser of their own. A request
+that was not filled in stays a card until the link expires; ask the bot again
+for a fresh one.</p>
+<h2 id="the-self_-tools-what-a-bot-may-change-about-itself">The <code>self_*</code> tools — what a bot may change about itself<a class="headerlink" href="#the-self_-tools-what-a-bot-may-change-about-itself" title="Permanent link">¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Tools</th>
+<th>Restart?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Know thyself</td>
+<td><code>self_get_config</code> (always on while any capability is)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Browse archetype library</td>
+<td><code>self_list_archetypes</code>, <code>self_read_archetype</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Change its own model</td>
+<td><code>self_list_models</code>, <code>self_set_model</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Edit its own instructions</td>
+<td><code>self_update_prompt</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Restart itself</td>
+<td><code>self_restart</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Add subagents</td>
+<td><code>self_list_subagents</code>, <code>self_add_subagent</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Connect services</td>
+<td><code>self_find_integration</code> (every supported way to reach a service, ranked, with the exact next steps), <code>self_add_toolkit</code>, <code>self_remove_toolkit</code>, <code>self_inspect_external</code> (read an outside project's documentation before anything is installed); <code>self_search_mcp_directory</code>, <code>self_list_mcp_servers</code> (each server's live state, stored sign-in and what would bring it back), <code>self_list_mcp_tools</code> (every tool a server offers, switched-off ones marked), <code>self_reload_mcp_servers</code> (reconnect and re-bind tools without a restart), <code>self_add_mcp_server</code>, <code>self_remove_mcp_server</code>, <code>self_authorize_mcp_server</code></td>
+<td>yes for a toolkit or server; a sign-in or a reload applies on its own</td>
+</tr>
+<tr>
+<td>Be reachable from outside</td>
+<td><code>self_set_external_access</code> (publish itself over MCP / A2A with a public description — administrators only), <code>magic_link_mint_access_token</code> (send an admin a page that mints a caller token, shown once there)</td>
+<td>yes; the token link applies on its own</td>
+</tr>
+<tr>
+<td>Connect messaging platforms</td>
+<td><code>self_list_platforms</code>, <code>self_connect_platform</code>, <code>self_connect_whatsapp</code>, <code>self_connect_weixin</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Manage its own skills</td>
+<td><code>self_list_skills</code>, <code>self_enable_skill</code>, <code>self_disable_skill</code></td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Send magic links</td>
+<td>the <code>magic_link_*</code> family above</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>What a bot may change about itself is controlled per capability — everything
+on by default — in <strong>Config → Agent self-configuration</strong> (whole deployment)
+and per agent under <strong>Agents → agent → Chat self-configuration</strong> (three-state:
+Inherit / On / Off). See <a href="../../config-yaml/"><code>agent_autonomy:</code></a>. A
+single tool can also be switched off for one agent on its <strong>Tools</strong> tab, by
+AgentFather (<code>olano_update_agent</code> with <code>disabled_tools</code>), or for every agent
+with <code>default_internal_tools: false</code>. A bot never gains power over <em>other</em>
+agents this way: each one can only touch itself. Agents in customer-service
+mode inherit everything off.</p>
+<p><strong>Only the bot's owners can ask for a change.</strong> Whoever creates a bot owns it;
+deployment admins count as owners of every bot, and more owners are granted in
+<strong>Admin → Access</strong>. Someone who was merely given access to chat with the bot
+can still ask what it <em>could</em> do — list models, browse services and templates
+— but a request to actually change something comes back as a refusal telling
+them to ask an owner. On a messaging channel the bot's <strong>allowed users</strong> list
+plays the same role, so the person who set the bot up can still configure it
+from their phone.</p>
+<h2 id="agentfather-the-olano_-tools-for-the-whole-deployment">AgentFather — the <code>olano_*</code> tools for the whole deployment<a class="headerlink" href="#agentfather-the-olano_-tools-for-the-whole-deployment" title="Permanent link">¶</a></h2>
+<p>One agent, <strong>AgentFather</strong>, holds the tools that reach beyond itself. It is
+human-only (other agents cannot message it), every write raises an approval
+card, and it narrates what you are approving. Ask it to:</p>
+<table>
+<thead>
+<tr>
+<th>Job</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>See and change any agent</td>
+<td><code>olano_list_agents</code>, <code>olano_get_agent</code>, <code>olano_create_agent</code>, <code>olano_update_agent</code>, <code>olano_delete_agent</code>; <code>olano_start_agent</code> / <code>olano_stop_agent</code> / <code>olano_restart_agent</code></td>
+</tr>
+<tr>
+<td>Build from the catalog</td>
+<td><code>olano_list_builtin_agents</code>, <code>olano_list_archetypes</code>, <code>olano_read_archetype</code>, <code>olano_scaffold_archetype</code>; <code>olano_list_models</code></td>
+</tr>
+<tr>
+<td>Tools and connections for any agent</td>
+<td><code>olano_find_integration</code> (every supported way to reach a service for an agent), <code>olano_add_toolkit</code>, <code>olano_remove_toolkit</code>, <code>olano_inspect_external</code>; <code>olano_list_tools</code>, <code>olano_list_bundles</code>, <code>olano_list_integrations</code>, <code>olano_find_tools</code>, <code>olano_set_tool_enabled</code>; <code>olano_search_mcp_directory</code>, <code>olano_get_mcp_directory_entry</code>, <code>olano_test_mcp_server</code>, <code>olano_add_mcp_server</code>, <code>olano_remove_mcp_server</code>, <code>olano_authorize_mcp_server</code>, <code>olano_mcp_oauth_status</code>; <code>olano_list_platforms</code>; the <code>magic_link_*</code> tools aimed at another agent</td>
+</tr>
+<tr>
+<td>External access for any agent</td>
+<td><code>olano_set_agent_external_access</code> (publish or unpublish an agent over MCP / A2A and set its public description — administrators only); tokens are minted on the dashboard or with <code>magic_link_mint_access_token</code></td>
+</tr>
+<tr>
+<td>Skills and subagents</td>
+<td><code>olano_list_skills</code>, <code>olano_list_builtin_skills</code>, <code>olano_create_skill</code>, <code>olano_install_skill</code>, <code>olano_repair_skill_names</code>; <code>olano_list_subagents</code>, <code>olano_add_subagent</code>, <code>olano_toggle_subagent</code></td>
+</tr>
+<tr>
+<td>Teammates and access</td>
+<td><code>olano_list_users</code>, <code>olano_get_user</code>, <code>olano_create_user</code> (an invite link, never a password), <code>olano_reset_user_password</code>, <code>olano_set_user_role</code>, <code>olano_update_user</code>, <code>olano_delete_user</code>, <code>olano_grant_agent_access</code>, <code>olano_revoke_agent_access</code>, <code>olano_access_overview</code></td>
+</tr>
+<tr>
+<td>Diagnose</td>
+<td><code>olano_diagnose_agent</code>, <code>olano_runtime_status</code>, <code>olano_agent_status</code>, <code>olano_agent_activity</code>, <code>olano_agent_errors</code>, <code>olano_recent_errors</code>, <code>olano_tail_log</code>, <code>olano_list_sessions</code>, <code>olano_read_session</code>, <code>olano_mcp_status</code>, <code>olano_doctor</code></td>
+</tr>
+<tr>
+<td>Deployment settings, disk, memory, updates</td>
+<td><code>olano_get_home_config</code>, <code>olano_update_home_config</code> (every <code>config.yaml</code> block); <code>olano_disk_report</code>, <code>olano_disk_monitor</code>, <code>olano_memory_report</code>, <code>olano_memory_monitor</code>; <code>olano_update</code></td>
+</tr>
+<tr>
+<td>Another agent's files</td>
+<td><code>olano_list_agent_workspace</code>, <code>olano_read_agent_file</code>, <code>olano_write_agent_file</code>, <code>olano_run_agent_command</code></td>
+</tr>
+<tr>
+<td>Try an agent out</td>
+<td><code>olano_test_agent</code> (send it a test message and see its reply and every tool it used; see below)</td>
+</tr>
+<tr>
+<td>Review any agent's Cortex</td>
+<td><code>olano_cortex_list</code>, <code>olano_cortex_view</code>, <code>olano_cortex_discard</code>, <code>olano_cortex_restore</code>, <code>olano_cortex_promote</code> (see below)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="testing-an-agent-before-you-rely-on-it">Testing an agent before you rely on it<a class="headerlink" href="#testing-an-agent-before-you-rely-on-it" title="Permanent link">¶</a></h3>
+<p>Ask AgentFather to <em>"test the support agent with a refund question"</em> and it
+sends that agent a message on a separate <strong>test thread</strong>, then reads back the
+reply and every tool the agent called, with what each one returned. It uses
+this after building or changing an agent: it tests, adjusts the agent, tests
+again, and tells you what it tried and what happened rather than what it
+expects to happen. A test can be one message or a whole conversation, since
+AgentFather can keep sending follow-ups on the same test thread.</p>
+<p>It can also test <strong>instructions that are not saved yet</strong>, to compare a prompt
+rewrite before applying it, and test against the agent's <strong>saved
+configuration</strong> so a tool or MCP server it just added can be tried before the
+agent restarts. An agent that is stopped can be tested too. Nothing a test does
+changes the agent's instructions or configuration.</p>
+<ul>
+<li><strong>Administrators only.</strong> It runs from a conversation with AgentFather, never
+  from a scheduled run, another agent or an outside caller, and you approve
+  each test individually: the card names the agent and the message.</li>
+<li><strong>The agent's tools run for real</strong>, and a test costs a normal turn of that
+  agent's model. Anything the agent needs approval for raises its own card.</li>
+<li><strong>The agent under test cannot change itself</strong> (its instructions, model or
+  connections) during the test.</li>
+<li><strong>Test threads stay separate from real conversations.</strong> They appear in that
+  agent's conversation list with the <em>Autonomous</em> badge (the <strong>Agents</strong> filter
+  shows them), so you can read the whole exchange, and they are never added to
+  the agent's long-term memory.</li>
+<li>A test turn stops after 10 minutes unless AgentFather asks for a different
+  limit (at most 30).</li>
+</ul>
+<h3 id="reviewing-cortex-across-agents">Reviewing Cortex across agents<a class="headerlink" href="#reviewing-cortex-across-agents" title="Permanent link">¶</a></h3>
+<p>Every agent with <a href="../cortex-and-pulse/">Cortex</a> on keeps a funnel of
+brainstorms, ideas, prototypes and projects. AgentFather can review it with you
+so you do not have to open each agent's Cortex view. Ask, for example:</p>
+<ul>
+<li><em>"What has the research agent been brainstorming? Which of those are worth
+  keeping?"</em> It lists the items with Cortex's scores, reads the ones that
+  matter and recommends what to keep, promote or drop, with reasons.</li>
+<li><em>"Which ideas across all agents score 4 or lower?"</em> One list for the whole
+  deployment.</li>
+<li><em>"Show me what the research agent discarded"</em>, or <em>"show everything,
+  promoted and discarded included"</em>. Lists show only the items still in play
+  unless you ask for discarded, promoted or all items, and AgentFather can
+  tell you how many it left out.</li>
+<li><em>"Discard all of the research agent's brainstorms"</em>, or only those scored 3
+  or lower. It shows you what the discard would touch before doing it.</li>
+<li><em>"Promote the pricing-page idea to a prototype"</em>, or <em>"turn that prototype
+  into a project"</em>.</li>
+</ul>
+<p>What it does is exactly what the buttons on a Cortex card do:</p>
+<ul>
+<li><strong>Discard</strong> keeps the item's folder; <em>"restore those"</em> brings items back.
+  Items that were already promoted, and items a promotion or exploration is
+  working on right now, are left alone and named in the answer.</li>
+<li><strong>Promote</strong> moves an item one stage down the funnel, or straight to a project
+  when you say so. The work is done by <strong>that agent</strong>, with its own models,
+  workspace and spending budget (a promotion is refused when that budget is
+  spent), exactly as if you had clicked the card. A prototype or project can take a few minutes; the item's card shows the run
+  while it is going, and asking twice joins the same run instead of starting a
+  second one.</li>
+<li>Every discard, restore and promotion raises an approval card naming the agent
+  and the items. Only administrators can use these, and the change is recorded
+  in that agent's Cortex activity log.</li>
+</ul>
+<p>The playbooks AgentFather follows ship as two skills only it can see:
+<strong>olano-agent-builder</strong> (designing and building an agent from a conversation,
+<a href="../../building-agents/">Building agents from a conversation</a>) and <strong>olano-admin</strong>
+(operating the deployment). Every other agent gets <strong>olano-agent</strong> (how to do
+the things above for itself — one finder, one ladder), <strong>olano-platform</strong> (the
+map of the platform) and <strong>olano-cloud</strong> (plans, credits and usage).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden="">
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer">
+        
+          
+          <a href="../budgets/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Budgets">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Budgets
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../a2a-and-mcp/" class="md-footer__link md-footer__link--next" aria-label="Next: Beyond the deployment, A2A and MCP">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Beyond the deployment, A2A and MCP
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"></path></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Olano AI
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/olano-ai/olano" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://cloud.olano.ai" target="_blank" rel="noopener" title="cloud.olano.ai" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 336c0 79.5 64.5 144 144 144h304c70.7 0 128-57.3 128-128 0-51.6-30.5-96.1-74.5-116.3 6.7-13.1 10.5-28 10.5-43.7 0-53-43-96-96-96-17.7 0-34.2 4.8-48.4 13.1C343.5 63.3 295.4 32 240 32 160.5 32 96 96.5 96 176c0 8 .7 15.9 1.9 23.5C41 218.7 0 272.6 0 336"></path></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "content.tooltips"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "latest", "provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": false, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
