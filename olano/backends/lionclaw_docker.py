@@ -237,14 +237,16 @@ def _container_signature(
         # schema 4 (the document toolchain: LibreOffice, tesseract, qpdf,
         # ImageMagick and the fonts LibreOffice substitutes by name) and
         # schema 5 (the everyday shell: zip/unzip, xz, 7z, file, less, procps,
-        # iproute2, dig, ssh, rsync, make and friends).
+        # iproute2, dig, ssh, rsync, make and friends) and schema 6 (Node.js 24
+        # from the official image in place of Debian's Node 18, which npx-run
+        # MCP servers needing Node 20+ died on at startup).
         # The runtime-written interpreter shims (interpreter_shims.py) needed
         # NO bump: same mount, and PATH is set per exec, so an existing
         # container picks them up on its next command — and the skill fonts the
         # runtime seeds beside them (ensure_skill_fonts) ride that same mount,
         # so they are not what moved this to 4 either. Don't bump "to be safe"
         # — a bump recreates every agent's container on the next restart.
-        "schema": 5,
+        "schema": 6,
         "image": image,
         "network": network,
         "workspace_root": str(workspace_root.resolve()),

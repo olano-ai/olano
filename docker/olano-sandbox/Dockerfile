@@ -12,6 +12,18 @@ RUN git clone --depth 1 --branch ${GOGCLI_REF} https://github.com/steipete/gogcl
     && install -Dm755 ./bin/gog /out/gog
 
 
+# ── Node.js ───────────────────────────────────────────────────────────────────
+# Node comes from the official image, not Debian's `nodejs` package. Bookworm
+# ships Node 18 (end of life since April 2025), and every npx-launched stdio MCP
+# server runs here: a box's directory offered servers that declared Node 20, 22
+# or 24 and died at startup in this container (2026-11-28: 85 of 117 vetted
+# keyless servers failed to start on 18 and started on 24). Copying the binary
+# and npm out of the matching Debian release keeps the glibc the same and needs
+# no third-party apt repository. Bump the tag deliberately; the signature's
+# "schema" moves with it (lionclaw_docker._container_signature).
+FROM node:24.22.3-bookworm-slim AS node-runtime
+
+
 FROM debian:bookworm-slim
 
 # The document/OCR toolchain. ON by default: the built-in docx/pptx/xlsx/pdf
@@ -99,8 +111,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-venv \
     python-is-python3 \
-    nodejs \
-    npm \
     ffmpeg \
     poppler-utils \
     pandoc \
@@ -147,6 +157,16 @@ RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
       > /etc/apt/sources.list.d/github-cli.list \
     && apt-get update && apt-get install -y --no-install-recommends gh \
     && rm -rf /var/lib/apt/lists/*
+
+# Node.js 24 + npm from the node-runtime stage above, at the paths the official
+# image uses. /usr/local/bin is ahead of /usr/bin on PATH, and Debian's nodejs is
+# no longer installed, so there is one `node` in the image.
+COPY --from=node-runtime /usr/local/bin/node /usr/local/bin/node
+COPY --from=node-runtime /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/npm
+RUN ln -s ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -s ../lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && ln -s node /usr/local/bin/nodejs \
+    && node --version && npm --version
 
 # `uv` (fast Python installer, on the shell allowlist) plus the small global npm
 # CLIs — `yarn` and `@openjobs/cli` (the `openjobs` binary, used by the OpenJobs

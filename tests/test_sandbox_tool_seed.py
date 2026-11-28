@@ -221,14 +221,14 @@ def test_interpreter_shims_are_appended_never_prepended():
 def test_container_signature_schema_matches_the_baked_image_content():
     """The signature hashes the image TAG, so a re-pulled image never recreates
     a container on its own — a schema bump is the only thing that does. Schema 4
-    is the document toolchain, schema 5 the everyday shell; pinning the number here means baking something
+    is the document toolchain, schema 5 the everyday shell, schema 6 Node.js 24; pinning the number here means baking something
     new into the image without bumping it fails a test rather than shipping
     binaries no existing box can see."""
     import inspect
 
     from olano.backends.lionclaw_docker import _container_signature
 
-    assert '"schema": 5' in inspect.getsource(_container_signature)
+    assert '"schema": 6' in inspect.getsource(_container_signature)
 
 
 # The everyday shell, package by package. bookworm-slim ships none of these,
