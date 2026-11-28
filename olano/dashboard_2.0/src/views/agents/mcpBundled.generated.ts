@@ -39,6 +39,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "hubspot",
     "name": "HubSpot",
+    "description": "Connect HubSpot CRM, marketing, and sales data.",
     "kind": "preset",
     "category": "CRM & Marketing",
     "transport": "http",
@@ -55,6 +56,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "stripe",
     "name": "Stripe",
+    "description": "Query and manage your Stripe payments account.",
     "kind": "preset",
     "category": "Payments",
     "transport": "http",
@@ -69,6 +71,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "notion",
     "name": "Notion",
+    "description": "Read and write across your Notion workspace.",
     "kind": "preset",
     "category": "Docs & Knowledge",
     "transport": "http",
@@ -82,6 +85,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "linear",
     "name": "Linear",
+    "description": "Manage Linear issues, projects, and cycles.",
     "kind": "preset",
     "category": "Dev",
     "transport": "http",
@@ -95,6 +99,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "sentry",
     "name": "Sentry",
+    "description": "Inspect Sentry issues, events, and releases.",
     "kind": "preset",
     "category": "Dev",
     "transport": "http",
@@ -108,6 +113,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "github",
     "name": "GitHub",
+    "description": "Work with GitHub repos, issues, and pull requests.",
     "kind": "preset",
     "category": "Dev",
     "transport": "http",
@@ -122,6 +128,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "intercom",
     "name": "Intercom",
+    "description": "Reach Intercom conversations and contacts.",
     "kind": "preset",
     "category": "CRM & Marketing",
     "transport": "http",
@@ -136,6 +143,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "paypal",
     "name": "PayPal",
+    "description": "Access PayPal transactions and invoicing.",
     "kind": "preset",
     "category": "Payments",
     "transport": "http",
@@ -149,6 +157,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "square",
     "name": "Square",
+    "description": "Manage Square payments, catalog, and orders.",
     "kind": "preset",
     "category": "Payments",
     "transport": "sse",
@@ -162,6 +171,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "canva",
     "name": "Canva",
+    "description": "Create and edit designs in your Canva account.",
     "kind": "preset",
     "category": "Design & Content",
     "transport": "http",
@@ -178,6 +188,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "webflow",
     "name": "Webflow",
+    "description": "Manage Webflow sites, CMS, and content.",
     "kind": "preset",
     "category": "Commerce & Sites",
     "transport": "http",
@@ -191,6 +202,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "wix",
     "name": "Wix",
+    "description": "Work with your Wix sites, stores, and bookings.",
     "kind": "preset",
     "category": "Commerce & Sites",
     "transport": "http",
@@ -204,6 +216,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "asana",
     "name": "Asana",
+    "description": "Manage Asana tasks, projects, and portfolios.",
     "kind": "preset",
     "category": "Dev",
     "transport": "http",
@@ -220,6 +233,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "atlassian",
     "name": "Atlassian (Jira & Confluence)",
+    "description": "Reach Jira issues and Confluence pages.",
     "kind": "preset",
     "category": "Docs & Knowledge",
     "transport": "http",
@@ -234,6 +248,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "vercel",
     "name": "Vercel",
+    "description": "Inspect Vercel projects and deployments.",
     "kind": "preset",
     "category": "Automation & Infra",
     "transport": "http",
@@ -247,6 +262,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
   {
     "slug": "zapier",
     "name": "Zapier",
+    "description": "Trigger Zapier workflows across 9,000+ apps.",
     "kind": "preset",
     "category": "Automation & Infra",
     "transport": "http",
@@ -282,11 +298,11 @@ export const BUNDLED_SERVERS: BundledServer[] = [
     "oauthClient": "preregistered",
     "url": "https://task-mcp.parallel.ai/mcp",
     "logoUrl": "https://www.google.com/s2/favicons?domain=parallel.ai&sz=128",
-    "homepageUrl": "https://parallel.ai",
+    "homepageUrl": "https://parallel.ai/",
     "docsUrl": "https://docs.parallel.ai/integrations/mcp/quickstart",
     "appConsoleUrl": "https://platform.parallel.ai",
     "appConsoleLabel": "Parallel Platform → API keys",
-    "notes": "Authentication required (paid). Accepts a browser OAuth flow, or a Parallel API key from platform.parallel.ai sent as an Authorization: Bearer token."
+    "notes": "Authentication required (paid). Accepts a browser OAuth flow, or a Parallel API key from platform.parallel.ai sent as an Authorization: Bearer token. Streamable HTTP. Tools: createDeepResearch, createTaskGroup, getStatus, getResultMarkdown."
   },
   {
     "slug": "composio",
@@ -304,6 +320,73 @@ export const BUNDLED_SERVERS: BundledServer[] = [
     "notes": "Hosted remote with managed one-click OAuth via login.composio.dev (no API keys, nothing local). Custom per-toolkit instances also run at backend.composio.dev/v3/mcp/{server_id} with an x-api-key header."
   },
   {
+    "slug": "huggingface",
+    "name": "Hugging Face",
+    "description": "Search models, datasets, and Spaces on the Hugging Face Hub.",
+    "kind": "preset",
+    "category": "Dev",
+    "transport": "http",
+    "url": "https://huggingface.co/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=huggingface.co&sz=128",
+    "homepageUrl": "https://huggingface.co",
+    "docsUrl": "https://huggingface.co/docs/hub/en/agents-mcp",
+    "notes": "Public server: search models, datasets and Spaces with no account. To use your own Hugging Face account (private repositories, gated models), add https://huggingface.co/mcp as a custom server and choose OAuth."
+  },
+  {
+    "slug": "deepwiki",
+    "name": "DeepWiki",
+    "description": "Ask questions and read AI-generated docs for any indexed public GitHub repo",
+    "kind": "preset",
+    "category": "AI & Data",
+    "transport": "http",
+    "url": "https://mcp.deepwiki.com/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=deepwiki.com&sz=128",
+    "homepageUrl": "https://deepwiki.com",
+    "docsUrl": "https://github.com/mcp/cognitionai/deepwiki",
+    "notes": "By Cognition (makers of Devin). No auth, no signup. Tools: ask_question, read_wiki_structure, read_wiki_contents. Legacy SSE endpoint https://mcp.deepwiki.com/sse is being deprecated in favor of /mcp."
+  },
+  {
+    "slug": "cloudflare-docs",
+    "name": "Cloudflare Documentation",
+    "description": "Search up-to-date Cloudflare developer docs and references.",
+    "kind": "preset",
+    "category": "Docs & Knowledge",
+    "transport": "http",
+    "url": "https://docs.mcp.cloudflare.com/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128",
+    "homepageUrl": "https://www.cloudflare.com",
+    "docsUrl": "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
+    "notes": "Public server — no authentication required."
+  },
+  {
+    "slug": "microsoft-learn",
+    "name": "Microsoft Learn",
+    "description": "Search official Microsoft and Azure docs and code samples.",
+    "kind": "preset",
+    "category": "Docs & Knowledge",
+    "transport": "http",
+    "url": "https://learn.microsoft.com/api/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=microsoft.com&sz=128",
+    "homepageUrl": "https://learn.microsoft.com",
+    "docsUrl": "https://learn.microsoft.com/training/support/mcp",
+    "notes": "Public server — no authentication required."
+  },
+  {
+    "slug": "supabase",
+    "name": "Supabase",
+    "description": "Manage Supabase projects, design tables, run SQL, and query your database via AI",
+    "kind": "preset",
+    "category": "Databases",
+    "transport": "http",
+    "auth": "oauth",
+    "oauthClient": "dcr",
+    "url": "https://mcp.supabase.com/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=supabase.com&sz=128",
+    "homepageUrl": "https://supabase.com",
+    "docsUrl": "https://supabase.com/docs/guides/getting-started/mcp",
+    "notes": "Hosted remote server; MCP client browser-logs-in via dynamic client registration. Add ?project_ref=... to scope. Local CLI serves at http://localhost:54321/mcp."
+  },
+  {
     "slug": "everything-stdio",
     "name": "Everything",
     "description": "Reference MCP server with tools, prompts, and resources.",
@@ -315,6 +398,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
       "-y",
       "@modelcontextprotocol/server-everything"
     ],
+    "logoUrl": "https://www.google.com/s2/favicons?domain=modelcontextprotocol.io&sz=128",
     "badge": "stdio · npx",
     "exampleJson": "{\"mcpServers\":{\"everything\":{\"command\":\"npx\",\"args\":[\"-y\",\"@modelcontextprotocol/server-everything\"]}}}"
   },
@@ -331,6 +415,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
       "--local-timezone",
       "Asia/Singapore"
     ],
+    "logoUrl": "https://www.google.com/s2/favicons?domain=modelcontextprotocol.io&sz=128",
     "badge": "stdio · python/uvx",
     "exampleJson": "{\"mcpServers\":{\"time\":{\"command\":\"uvx\",\"args\":[\"mcp-server-time\",\"--local-timezone\",\"Asia/Singapore\"]}}}"
   },
@@ -341,6 +426,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
     "kind": "example",
     "transport": "sse",
     "url": "http://localhost:3001/sse",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=modelcontextprotocol.io&sz=128",
     "badge": "sse · local",
     "runCommand": "npx -y @modelcontextprotocol/server-everything sse"
   },
@@ -351,6 +437,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
     "kind": "example",
     "transport": "http",
     "url": "http://localhost:3001/mcp",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=modelcontextprotocol.io&sz=128",
     "badge": "http · local",
     "runCommand": "npx -y @modelcontextprotocol/server-everything streamableHttp"
   },
@@ -362,6 +449,7 @@ export const BUNDLED_SERVERS: BundledServer[] = [
     "transport": "http",
     "auth": "oauth",
     "url": "https://mcp.stripe.com",
+    "logoUrl": "https://www.google.com/s2/favicons?domain=stripe.com&sz=128",
     "badge": "http · oauth",
     "exampleJson": "{\"servers\":{\"stripe\":{\"type\":\"http\",\"url\":\"https://mcp.stripe.com\"}}}"
   },
