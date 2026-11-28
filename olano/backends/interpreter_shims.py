@@ -67,10 +67,12 @@ CONTAINER_TOOL_LAYER_PATH = (
 #: an env var names, because the installer expects them and will not make them.
 #: Keyed by the ``CONTAINER_TOOL_LAYER_ENV`` entry they hang off; relative to it.
 #:
-#: ``npm_config_prefix``: npm never creates its prefix, and npm 9 — Debian
-#: bookworm's, i.e. the sandbox image's — ``lstat``s ``<prefix>/lib`` on every
-#: ``npx`` (measured: ``npm/`` alone moves the ENOENT one level down to
-#: ``npm/lib``; ``npm/lib`` is sufficient). ``lib/node_modules`` + ``bin`` is
+#: ``npm_config_prefix``: npm never creates its prefix, and npm 9 and 10 (the
+#: sandbox image's until it moved to Node 24's npm 11, and still the host
+#: lane's) ``lstat`` ``<prefix>/lib`` on every ``npx`` (measured: ``npm/`` alone
+#: moves the ENOENT one level down to ``npm/lib``; ``npm/lib`` is sufficient).
+#: npm 11 runs ``npx`` without it (measured 2026-11-28), but an older image a
+#: box has not re-pulled still needs it, so the skeleton stays. ``lib/node_modules`` + ``bin`` is
 #: the exact tree ``npm install -g`` produces, so a later npm that looks one
 #: level deeper still finds it. pip needs nothing: ``PIP_USER`` +
 #: ``PYTHONUSERBASE`` is a user base, a tree Python builds on demand.

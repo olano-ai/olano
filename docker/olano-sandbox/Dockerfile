@@ -262,7 +262,7 @@ RUN groupadd -g 1000 sandbox \
 # cache/ bin/ too. It does: builder.ensure_tool_layer_layout, from the layout
 # interpreter_shims.tool_layer_layout() derives off the same env/PATH that
 # name these targets (+ npm's lib/node_modules and bin skeleton, which npm 9
-# lstats on every `npx` and never creates). This mkdir only matters for a
+# and 10 lstat on every `npx` and never create; npm 11 does not need it). This mkdir only matters for a
 # container run with NO mount; the derived layout is the one that counts.
 RUN mkdir -p /opt/agent-tools/python /opt/agent-tools/npm /opt/agent-tools/cache /opt/agent-tools/bin /shared \
     && chown -R 1000:1000 /opt/agent-tools /shared

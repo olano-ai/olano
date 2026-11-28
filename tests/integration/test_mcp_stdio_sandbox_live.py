@@ -233,3 +233,86 @@ async def test_full_mcp_handshake_through_planned_launch(tmp_path, monkeypatch):
     assert await asyncio.to_thread(_wait_for, lambda: not _containers_for(agent)), (
         "sandbox container survived the MCP session"
     )
+
+
+# ── Node.js in the image ──────────────────────────────────────────────────────
+#
+# Every npx-launched stdio MCP server runs on the image's `node`. Debian
+# bookworm's `nodejs` is 18, and servers that declare Node 20, 22 or 24 died at
+# startup there while the directory still offered them (2026-11-28: 85 of 117
+# vetted keyless servers). The image now ships Node 24 from the official image.
+
+#: An official reference server whose published package declares Node >=24, so
+#: it starts only on an image that really carries it. Pinned: a moving version
+#: would make this test about the package instead of the image.
+NODE24_SERVER = "@modelcontextprotocol/server-memory@2.0.1"
+
+
+def test_sandbox_node_is_24_or_newer(tmp_path):
+    """The image's `node` and `npx`, as the stdio lane runs them (uid 1000)."""
+    from olano.backends.lionclaw_docker import mcp_stdio_shell_script
+
+    agent = _unique_agent()
+    script = mcp_stdio_shell_script("node", ["-e", "process.stdout.write(process.versions.node)"])
+    proc = subprocess.run(
+        [*_run_argv(agent, tmp_path, []), "sh", "-c", script],
+        env=mcp_setup._minimal_cli_env(),
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert int(proc.stdout.strip().split(".")[0]) >= 24, proc.stdout
+    npx = subprocess.run(
+        [*_run_argv(agent, tmp_path, []), "sh", "-c", mcp_stdio_shell_script("npx", ["--version"])],
+        env=mcp_setup._minimal_cli_env(),
+        capture_output=True,
+        text=True,
+        timeout=180,
+    )
+    assert npx.returncode == 0, npx.stderr
+
+
+async def test_npx_server_needing_node_24_handshakes(tmp_path, monkeypatch):
+    """A real npx-launched server through plan_stdio_launch: npm resolves into
+    the shared tool layer's prefix and cache, and the server starts on the
+    image's Node. Needs the npm registry, like every npx server on a box."""
+    from pathlib import Path
+
+    agent = _unique_agent()
+    builder._ensure_sandbox_shared_dir(tmp_path, recursive=True)
+    monkeypatch.setattr(mcp_setup, "_stdio_launch_decision", lambda: ("sandboxed", None))
+    monkeypatch.setattr(mcp_setup, "_stdio_sandbox_image", lambda: SANDBOX_IMAGE)
+    monkeypatch.setattr(mcp_setup, "_agent_workspace_root", lambda a: tmp_path)
+    monkeypatch.setattr(mcp_setup, "_prepare_stdio_sandbox_paths", lambda a, ws: None)
+    monkeypatch.setattr(mcp_setup, "agent_declared_env", lambda env, a: {})
+
+    plan = mcp_setup.plan_stdio_launch("npx", ["-y", NODE24_SERVER], {}, agent)
+    assert plan.invocation is not None and plan.invocation.sandboxed
+    # What _prepare_stdio_sandbox_paths does on a box: the layer the run mounts.
+    tool_dirs = [
+        a.rsplit(":/opt/agent-tools", 1)[0]
+        for a in plan.invocation.args
+        if a.endswith(":/opt/agent-tools:rw")
+    ]
+    assert tool_dirs, plan.invocation.args
+    builder.ensure_tool_layer_layout(Path(tool_dirs[0]))
+
+    from mcp import ClientSession, StdioServerParameters
+    from mcp.client.stdio import stdio_client
+
+    params = StdioServerParameters(
+        command=plan.invocation.command, args=plan.invocation.args, env=plan.invocation.env
+    )
+
+    async def _tools() -> list[str]:
+        async with stdio_client(params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                return [t.name for t in (await session.list_tools()).tools]
+
+    names = await asyncio.wait_for(_tools(), timeout=300)
+    assert "create_entities" in names, names
+    assert await asyncio.to_thread(_wait_for, lambda: not _containers_for(agent)), (
+        "sandbox container survived the MCP session"
+    )
