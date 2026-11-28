@@ -47,7 +47,7 @@ def offline(monkeypatch):
 def test_bundled_directory_shape(offline) -> None:
     d = mcp_registry.get_directory()
     assert d["source"] == "bundled"
-    assert len(d["presets"]) == 19
+    assert len(d["presets"]) == 24
     assert len(d["examples"]) == 6
     # Every entry is fully normalized (all fields present).
     for entry in d["presets"] + d["examples"]:

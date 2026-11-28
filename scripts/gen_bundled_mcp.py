@@ -20,8 +20,8 @@ two different ids (``parallel`` vs ``parallel-search``), four field
 disagreements on that row, a category invented on one side only, and an entry
 present in both fallbacks and in no cloud row at all.
 
-**The snapshot stays curated.** The live catalog is ~500 rows; this baseline is
-~25 and is meant to be a known-good starting point, not a mirror. PINNED_SLUGS
+**The snapshot stays curated.** The live catalog is hundreds of rows; this baseline is
+small and is meant to be a known-good starting point, not a mirror. PINNED_SLUGS
 decides *which* rows are in it; the fetch refreshes *their* field values. Add a
 slug here to include it, and re-run.
 """
@@ -62,6 +62,11 @@ PINNED_SLUGS: tuple[str, ...] = (
     "parallel",
     "parallel-task",
     "composio",
+    "huggingface",
+    "deepwiki",
+    "cloudflare-docs",
+    "microsoft-learn",
+    "supabase",
     # examples — copy-paste starters, including local stdio servers
     "everything-stdio",
     "time-python-stdio",
